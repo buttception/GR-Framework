@@ -5,7 +5,7 @@
 #include "Mtx44.h"
 #include "PlayerInfo/PlayerInfo.h"
 #include "GroundEntity.h"
-#include "FPSCamera.h"
+#include "TopDownCamera.h"
 #include "Mesh.h"
 #include "MatrixStack.h"
 #include "GenericEntity.h"
@@ -33,12 +33,11 @@ private:
 	ShaderProgram* currProg;
 	Player* playerInfo;
 	GroundEntity* groundEntity;
-	FPSCamera *camera;
+	TopDownCamera *camera;
 	TextEntity* textObj[3];
 	Light* lights[2];
 
 	GenericEntity* theCube;
-	Keyboard* keyboard;
 	static SceneText* sInstance; // The pointer to the object that gets registered
 
 

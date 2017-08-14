@@ -5,7 +5,7 @@ curr_posX(0.0), curr_posY(0.0),
 prev_posX(0.0), prev_posY(0.0),
 currBtnStatus(0), prevBtnStatus(0),
 xoffset(0), yoffset(0),
-keepMouseCentered(true)
+keepMouseCentered(false)
 {
 }
 

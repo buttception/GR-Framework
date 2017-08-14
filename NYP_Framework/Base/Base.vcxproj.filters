@@ -9,43 +9,33 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
-    <Filter Include="Shader">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
     <Filter Include="PlayerInfo">
       <UniqueIdentifier>{ee63a848-364d-4119-9628-05cc3d6a4b17}</UniqueIdentifier>
     </Filter>
     <Filter Include="SkyBox">
       <UniqueIdentifier>{37a125cd-b9e3-4b31-923e-1226145f54a1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Camera">
+      <UniqueIdentifier>{fdcf28ea-3356-41fe-a61f-39d08fab70e2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Manager">
+      <UniqueIdentifier>{2bc9355a-6bb6-4b16-b20c-45a8ee041c9b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene">
+      <UniqueIdentifier>{a6518177-e2cc-4197-80fd-4a938131e205}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Entity">
+      <UniqueIdentifier>{b3c412a2-1c3a-4b7f-adaa-956c9c0991b3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Controller">
+      <UniqueIdentifier>{09e1ed6f-cea5-42e7-82c2-0bb3fae23b2a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphic">
+      <UniqueIdentifier>{42ba4856-f45a-4bdc-9950-bde030c1ce20}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Application.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\SceneText.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\FPSCamera.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\OBJMesh.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\GroundEntity.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\TextEntity.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\SpriteEntity.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Light.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\PlayerInfo\PlayerInfo.cpp">
@@ -54,48 +44,54 @@
     <ClCompile Include="Source\SkyBox\SkyBoxEntity.cpp">
       <Filter>SkyBox</Filter>
     </ClCompile>
-    <ClCompile Include="Source\EntityManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\GenericEntity.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Source\FPSCamera.cpp">
+      <Filter>Camera</Filter>
     </ClCompile>
     <ClCompile Include="Source\CollisionManager.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\EntityManager.cpp">
+      <Filter>Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SceneText.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GenericEntity.cpp">
+      <Filter>Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GroundEntity.cpp">
+      <Filter>Entity</Filter>
     </ClCompile>
     <ClCompile Include="Source\HardwareAbstraction\Controller.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Controller</Filter>
     </ClCompile>
     <ClCompile Include="Source\HardwareAbstraction\Keyboard.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Controller</Filter>
     </ClCompile>
     <ClCompile Include="Source\HardwareAbstraction\Mouse.cpp">
+      <Filter>Controller</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\main.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\OBJMesh.cpp">
+      <Filter>Graphic</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Light.cpp">
+      <Filter>Graphic</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SpriteEntity.cpp">
+      <Filter>Graphic</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\TextEntity.cpp">
+      <Filter>Graphic</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\TopDownCamera.cpp">
+      <Filter>Camera</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\SceneText.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\FPSCamera.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\OBJMesh.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GroundEntity.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\TextEntity.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\SpriteEntity.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Light.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Source\PlayerInfo\PlayerInfo.h">
@@ -104,23 +100,47 @@
     <ClInclude Include="Source\SkyBox\SkyBoxEntity.h">
       <Filter>SkyBox</Filter>
     </ClInclude>
-    <ClInclude Include="Source\EntityManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GenericEntity.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Source\FPSCamera.h">
+      <Filter>Camera</Filter>
     </ClInclude>
     <ClInclude Include="Source\CollisionManager.h">
-      <Filter>Header Files</Filter>
+      <Filter>Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\EntityManager.h">
+      <Filter>Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SceneText.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GenericEntity.h">
+      <Filter>Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GroundEntity.h">
+      <Filter>Entity</Filter>
     </ClInclude>
     <ClInclude Include="Source\HardwareAbstraction\Controller.h">
-      <Filter>Header Files</Filter>
+      <Filter>Controller</Filter>
     </ClInclude>
     <ClInclude Include="Source\HardwareAbstraction\Keyboard.h">
-      <Filter>Header Files</Filter>
+      <Filter>Controller</Filter>
     </ClInclude>
     <ClInclude Include="Source\HardwareAbstraction\Mouse.h">
-      <Filter>Header Files</Filter>
+      <Filter>Controller</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Light.h">
+      <Filter>Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\OBJMesh.h">
+      <Filter>Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SpriteEntity.h">
+      <Filter>Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\TextEntity.h">
+      <Filter>Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\TopDownCamera.h">
+      <Filter>Camera</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

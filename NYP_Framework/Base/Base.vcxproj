@@ -28,6 +28,7 @@
     <ClCompile Include="Source\SkyBox\SkyBoxEntity.cpp" />
     <ClCompile Include="Source\SpriteEntity.cpp" />
     <ClCompile Include="Source\TextEntity.cpp" />
+    <ClCompile Include="Source\TopDownCamera.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h" />
@@ -46,6 +47,7 @@
     <ClInclude Include="Source\SkyBox\SkyBoxEntity.h" />
     <ClInclude Include="Source\SpriteEntity.h" />
     <ClInclude Include="Source\TextEntity.h" />
+    <ClInclude Include="Source\TopDownCamera.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{9B172635-4E2B-46F1-A403-08F4194D00F5}</ProjectGuid>

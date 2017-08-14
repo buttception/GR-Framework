@@ -1,8 +1,11 @@
 #pragma once
 #include "Vector3.h"
 #include "../FPSCamera.h"
+#include "../TopDownCamera.h"
 #include "../GroundEntity.h"
 #include "SingletonTemplate.h"
+
+class Keyboard;
 
 class Player : public Singleton<Player>
 {
@@ -65,8 +68,8 @@ public:
 	void Constrain(void);
 
 	// Handling Camera
-	FPSCamera* getCamera();
-	void AttachCamera(FPSCamera* _cameraPtr);
+	CameraBase* getCamera();
+	void AttachCamera(CameraBase* _cameraPtr);
 	void DetachCamera();
 
 private:
@@ -88,5 +91,6 @@ private:
 	bool m_bFallDownwards;
 	double m_dFallAcceleration;
 
-	FPSCamera* attachedCamera;
+	CameraBase* attachedCamera;
+	Keyboard* keyboard;
 };

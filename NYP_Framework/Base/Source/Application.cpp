@@ -105,9 +105,9 @@ void Application::Init()
 	}
 
 	// Hide the cursor
-	glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
-	glfwSetMouseButtonCallback(m_window, &Application::MouseButtonCallbacks);
-	glfwSetScrollCallback(m_window, &Application::MouseScrollCallbacks);
+	//glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+	//glfwSetMouseButtonCallback(m_window, &Application::MouseButtonCallbacks);
+	//glfwSetScrollCallback(m_window, &Application::MouseScrollCallbacks);
 
 	// Init systems
 	GraphicsManager::GetInstance()->Init();
@@ -160,6 +160,7 @@ void Application::UpdateInput()
 
 void Application::PostInputUpdate()
 {
+	// Disable mouse centering
 	// If mouse is centered, need to update the center position for next frame
 	if (MouseController::GetInstance()->GetKeepMouseCentered())
 	{

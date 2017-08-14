@@ -4,6 +4,7 @@
 #include "MouseController.h"
 #include "KeyboardController.h"
 #include "Mtx44.h"
+#include "../HardwareAbstraction/Keyboard.h"
 
 // Allocating and initializing Player's static data member.  
 // The pointer is allocated but not the object's constructor.
@@ -40,6 +41,9 @@ void Player::Init(void)
 	// Set Boundary
 	maxBoundary.Set(1,1,1);
 	minBoundary.Set(-1, -1, -1);
+
+	this->keyboard = new Keyboard();
+	keyboard->Create();
 }
 
 // Returns true if the player is on ground
@@ -220,20 +224,17 @@ void Player::Update(double dt)
 	double camera_yaw = mouse_diff_x * 0.0174555555555556;		// 3.142 / 180.0
 	double camera_pitch = mouse_diff_y * 0.0174555555555556;	// 3.142 / 180.0
 
+	keyboard->Read(dt);
+
 	if (attachedCamera == NULL)
 		std::cout << "No camera attached! Please make sure to attach one" << std::endl;
 	direction = attachedCamera->GetCameraTarget() - attachedCamera->GetCameraPos();
-	//lock player movement to the ground only
-	//direction.y = 0;
 	direction.Normalize();
 
 	Vector3 up(0, 1, 0);
 
-	// Update the position if the WASD buttons were activated
-	if (KeyboardController::GetInstance()->IsKeyDown('W') ||
-		KeyboardController::GetInstance()->IsKeyDown('A') ||
-		KeyboardController::GetInstance()->IsKeyDown('S') ||
-		KeyboardController::GetInstance()->IsKeyDown('D'))
+	//if it is a FPS Camera
+	if (dynamic_cast<FPSCamera*>(attachedCamera))
 	{
 		Vector3 rightUV;
 		if (KeyboardController::GetInstance()->IsKeyDown('W'))
@@ -261,12 +262,24 @@ void Player::Update(double dt)
 		// Constrain the position
 		Constrain();
 	}
-
-	// If the user presses SPACEBAR, then make him jump
-	if (KeyboardController::GetInstance()->IsKeyDown(VK_SPACE) &&
-		position.y == m_pTerrain->GetTerrainHeight(position))
-	{
-
+	else if (dynamic_cast<TopDownCamera*>(attachedCamera)) {
+		if (KeyboardController::GetInstance()->IsKeyDown('W'))
+		{
+			position += Vector3(1, 0, 0) * (float)m_dSpeed * (float)dt;
+		}
+		else if (KeyboardController::GetInstance()->IsKeyDown('S'))
+		{
+			position -= Vector3(1, 0, 0) * (float)m_dSpeed * (float)dt;
+		}
+		if (KeyboardController::GetInstance()->IsKeyDown('A'))
+		{
+			position -= Vector3(0, 0, 1) * (float)m_dSpeed * (float)dt;
+		}
+		else if (KeyboardController::GetInstance()->IsKeyDown('D'))
+		{
+			position += Vector3(0, 0, 1) * (float)m_dSpeed * (float)dt;
+		}
+		Constrain();
 	}
 
 	// Update the weapons
@@ -297,10 +310,17 @@ void Player::Update(double dt)
 	// If a camera is attached to this playerInfo class, then update it
 	if (attachedCamera)
 	{
-		Vector3 cameraView = attachedCamera->GetCameraTarget() - attachedCamera->GetCameraPos();
-		attachedCamera->SetCameraPos(position);
-		attachedCamera->SetCameraTarget(position + cameraView.Normalized());
-		attachedCamera->Update(dt);
+		if (dynamic_cast<FPSCamera*>(attachedCamera)) {
+			Vector3 cameraView = attachedCamera->GetCameraTarget() - attachedCamera->GetCameraPos();
+			attachedCamera->SetCameraPos(position);
+			attachedCamera->SetCameraTarget(position + cameraView.Normalized());
+			dynamic_cast<FPSCamera*>(attachedCamera)->Update(dt);
+		}
+		else if (dynamic_cast<TopDownCamera*>(attachedCamera)) {
+			attachedCamera->SetCameraPos(position + dynamic_cast<TopDownCamera*>(attachedCamera)->GetHeight());
+			attachedCamera->SetCameraTarget(position);
+			dynamic_cast<TopDownCamera*>(attachedCamera)->Update(dt);
+		}
 	}
 }
 
@@ -325,19 +345,27 @@ void Player::Constrain(void)
 
 }
 
-FPSCamera * Player::getCamera()
+CameraBase * Player::getCamera()
 {
 	return attachedCamera;
 }
 
-void Player::AttachCamera(FPSCamera* _cameraPtr)
+void Player::AttachCamera(CameraBase* _cameraPtr)
 {
 	attachedCamera = _cameraPtr;
-	Vector3 target = position + Vector3(1, 0, 0);
-	Vector3 view = target - position;
-	Vector3 up = Vector3(0,0,1).Cross(view).Normalized();
-	attachedCamera->Init(position, target, up);
-	std::cout << up << std::endl;
+	if (dynamic_cast<FPSCamera*>(attachedCamera)) {
+		Vector3 target = position + Vector3(1, 0, 0);
+		Vector3 view = target - position;
+		Vector3 up = Vector3(0, 0, 1).Cross(view).Normalized();
+		dynamic_cast<FPSCamera*>(attachedCamera)->Init(position, target, up);
+		std::cout << "FPS Camera loaded" << std::endl;
+	}
+	else if (dynamic_cast<TopDownCamera*>(attachedCamera)){
+		Vector3 target = position;
+		Vector3 up(1, 0, 0);
+		dynamic_cast<TopDownCamera*>(attachedCamera)->Init(Vector3(position.x, position.y + 20, position.z), target, up, 50);
+		std::cout << "Top down camera Loaded" << std::endl;
+	}
 }
 
 void Player::DetachCamera()

@@ -191,11 +191,9 @@ void SceneText::Init()
 	//theEditor = new Editor();
 
 	Player::GetInstance()->Init();
-	camera = new FPSCamera();
+	camera = new TopDownCamera();
 	Player::GetInstance()->AttachCamera(camera);
 	GraphicsManager::GetInstance()->AttachCamera(Player::GetInstance()->getCamera());
-	this->keyboard = new Keyboard();
-	keyboard->Create();
 
 	//light testing
 	light_depth_mesh = MeshBuilder::GetInstance()->GenerateQuad("light_depth_mesh", Color(1, 0, 1), 1);
@@ -207,8 +205,6 @@ void SceneText::Update(double dt)
 {
 	// Update our entities
 	EntityManager::GetInstance()->Update(dt);
-
-	keyboard->Read(dt);
 
 	// THIS WHOLE CHUNK TILL <THERE> CAN REMOVE INTO ENTITIES LOGIC! Or maybe into a scene function to keep the update clean
 	if(KeyboardController::GetInstance()->IsKeyDown('1'))
@@ -368,9 +364,9 @@ void SceneText::RenderPassMain()
 
 	Light* light = dynamic_cast<Light*>(g->GetLight("lights[0]"));
 	ms.PushMatrix();
-	ms.Translate(light->position.x,
-		light->position.y,
-		light->position.z);
+	ms.Translate(Player::GetInstance()->GetPos().x,
+		Player::GetInstance()->GetPos().y,
+		Player::GetInstance()->GetPos().z);
 	ms.Scale(0.1f, 0.1f, 0.1f);
 	RenderHelper::RenderMesh(MeshList::GetInstance()->GetMesh("sphere"));
 	ms.PopMatrix();
