@@ -33,6 +33,9 @@
     <Filter Include="Graphic">
       <UniqueIdentifier>{42ba4856-f45a-4bdc-9950-bde030c1ce20}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sound Engine">
+      <UniqueIdentifier>{e634f44d-6d18-402f-aae6-dc86e4e2a969}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Application.cpp">
@@ -89,6 +92,9 @@
     <ClCompile Include="Source\TopDownCamera.cpp">
       <Filter>Camera</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Sound_Engine.cpp">
+      <Filter>Sound Engine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h">
@@ -141,6 +147,9 @@
     </ClInclude>
     <ClInclude Include="Source\TopDownCamera.h">
       <Filter>Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Sound_Engine.h">
+      <Filter>Sound Engine</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

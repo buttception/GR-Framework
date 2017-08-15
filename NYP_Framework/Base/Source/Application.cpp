@@ -116,6 +116,8 @@ void Application::Init()
 
 }
 
+
+
 void Application::Run()
 {
 	SceneManager::GetInstance()->SetActiveScene("Start");
