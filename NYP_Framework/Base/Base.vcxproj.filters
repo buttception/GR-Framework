@@ -89,6 +89,12 @@
     <ClCompile Include="Source\TopDownCamera.cpp">
       <Filter>Camera</Filter>
     </ClCompile>
+    <ClCompile Include="Source\BuildingManager.cpp">
+      <Filter>Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\BuildingEntity.cpp">
+      <Filter>Entity</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h">
@@ -141,6 +147,12 @@
     </ClInclude>
     <ClInclude Include="Source\TopDownCamera.h">
       <Filter>Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\BuildingManager.h">
+      <Filter>Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\BuildingEntity.h">
+      <Filter>Entity</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

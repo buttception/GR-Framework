@@ -5,6 +5,7 @@
 #include "KeyboardController.h"
 #include "Mtx44.h"
 #include "../HardwareAbstraction/Keyboard.h"
+#include "../BuildingManager.h"
 
 // Allocating and initializing Player's static data member.  
 // The pointer is allocated but not the object's constructor.
@@ -32,11 +33,11 @@ Player::~Player(void)
 // Initialise this class instance
 void Player::Init(void)
 {
-	// Set the default values
-	defaultPosition.Set(0,0,10);
-
 	// Set the current values
-	position.Set(0, 0, 10);
+	position.Set(MAX_CELLS * CELL_SIZE / 2, 0, MAX_CELLS * CELL_SIZE / 2);
+
+	// Set the default values
+	defaultPosition = position;
 
 	// Set Boundary
 	maxBoundary.Set(1,1,1);
@@ -263,23 +264,23 @@ void Player::Update(double dt)
 		Constrain();
 	}
 	else if (dynamic_cast<TopDownCamera*>(attachedCamera)) {
-		if (KeyboardController::GetInstance()->IsKeyDown('W'))
+		if (KeyboardController::GetInstance()->IsKeyDown('D'))
 		{
 			position += Vector3(1, 0, 0) * (float)m_dSpeed * (float)dt;
 		}
-		else if (KeyboardController::GetInstance()->IsKeyDown('S'))
+		else if (KeyboardController::GetInstance()->IsKeyDown('A'))
 		{
 			position -= Vector3(1, 0, 0) * (float)m_dSpeed * (float)dt;
 		}
-		if (KeyboardController::GetInstance()->IsKeyDown('A'))
+		if (KeyboardController::GetInstance()->IsKeyDown('W'))
 		{
 			position -= Vector3(0, 0, 1) * (float)m_dSpeed * (float)dt;
 		}
-		else if (KeyboardController::GetInstance()->IsKeyDown('D'))
+		else if (KeyboardController::GetInstance()->IsKeyDown('S'))
 		{
 			position += Vector3(0, 0, 1) * (float)m_dSpeed * (float)dt;
 		}
-		Constrain();
+		//Constrain();
 	}
 
 	// Update the weapons
@@ -290,6 +291,7 @@ void Player::Update(double dt)
 	// if Mouse Buttons were activated, then act on them
 	if (MouseController::GetInstance()->IsButtonPressed(MouseController::LMB))
 	{
+		std::cout << "Left mouse down" << std::endl;
 	}
 	else if (MouseController::GetInstance()->IsButtonPressed(MouseController::RMB))
 	{
@@ -362,8 +364,8 @@ void Player::AttachCamera(CameraBase* _cameraPtr)
 	}
 	else if (dynamic_cast<TopDownCamera*>(attachedCamera)){
 		Vector3 target = position;
-		Vector3 up(1, 0, 0);
-		dynamic_cast<TopDownCamera*>(attachedCamera)->Init(Vector3(position.x, position.y + 20, position.z), target, up, 50);
+		Vector3 up(0, 0, -1);
+		dynamic_cast<TopDownCamera*>(attachedCamera)->Init(Vector3(position.x, position.y + 20, position.z), target, up, 100);
 		std::cout << "Top down camera Loaded" << std::endl;
 	}
 }

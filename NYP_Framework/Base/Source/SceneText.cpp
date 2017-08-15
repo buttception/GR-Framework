@@ -21,6 +21,7 @@
 #include "Light.h"
 #include "SkyBox/SkyBoxEntity.h"
 #include "HardwareAbstraction\Keyboard.h"
+#include "BuildingManager.h" 
 
 #include <iostream>
 #include "RenderHelper.h"
@@ -170,9 +171,10 @@ void SceneText::Init()
 											 "SKYBOX_TOP", "SKYBOX_BOTTOM");*/
 
 	// Customise the ground entity
-	groundEntity->SetPosition(Vector3(0, -10, 0));
-	groundEntity->SetScale(Vector3(100.0f, 100.0f, 10.0f));
-	groundEntity->SetGrids(Vector3(4.f, 1.0f, 4.f));
+	//grid renders more quad, doesnt change quad texcoord
+	groundEntity->SetPosition(Vector3(CELL_SIZE * MAX_CELLS / 2, 0, -CELL_SIZE * MAX_CELLS / 2));
+	groundEntity->SetScale(Vector3(CELL_SIZE * MAX_CELLS, CELL_SIZE * MAX_CELLS, 1.f));
+	groundEntity->SetGrids(Vector3(1.f, 1.0f, 1.f));
 
 
 	// Setup the 2D entities
@@ -272,8 +274,9 @@ void SceneText::Update(double dt)
 	// Update the player position into textObj[2]
 	std::ostringstream ss1;
 	ss1.precision(4);
-	ss1 << "Player:";
+	ss1 << "Player:" << Player::GetInstance()->GetPos();
 	textObj[2]->SetText(ss1.str());
+
 }
 
 void SceneText::Render()
