@@ -123,10 +123,16 @@ void SceneText::Init()
 	// Tell the graphics manager to use the shader we just loaded
 	GraphicsManager::GetInstance()->SetActiveShader("default");
 
+	MeshBuilder::GetInstance()->GenerateQuad("GRASS_DARKGREEN", Color(1, 1, 1), 1.f);
+	MeshList::GetInstance()->GetMesh("GRASS_DARKGREEN")->textureID[0] = LoadTGA("Image//grass_darkgreen.tga");
+
+	MeshBuilder::GetInstance()->GenerateQuad("GRASS_LIGHTGREEN", Color(1, 1, 1), 1.f);
+	MeshList::GetInstance()->GetMesh("GRASS_LIGHTGREEN")->textureID[0] = LoadTGA("Image//grass_lightgreen.tga");
+
 	lights[0] = new Light();
 	GraphicsManager::GetInstance()->AddLight("lights[0]", lights[0]);
 	lights[0]->type = Light::LIGHT_DIRECTIONAL;
-	lights[0]->position.Set(0, 20, 0);
+	lights[0]->position.Set(0, 1, 0);
 	lights[0]->color.Set(1, 1, 1);
 	lights[0]->power = 1;
 	lights[0]->kC = 1.f;
@@ -137,14 +143,6 @@ void SceneText::Init()
 	lights[0]->exponent = 3.f;
 	lights[0]->spotDirection.Set(0.f, 1.f, 0.f);
 	lights[0]->name = "lights[0]";
-
-	lights[1] = new Light();
-	GraphicsManager::GetInstance()->AddLight("lights[1]", lights[1]);
-	lights[1]->type = Light::LIGHT_DIRECTIONAL;
-	lights[1]->position.Set(1, 1, 0);
-	lights[1]->color.Set(1, 1, 0.5f);
-	lights[1]->power = 0.4f;
-	lights[1]->name = "lights[1]";
 
 	currProg->UpdateInt("numLights", 2);
 	currProg->UpdateInt("textEnabled", 0);
@@ -163,7 +161,7 @@ void SceneText::Init()
 	GenericEntity* aCube = Create::Entity("cube", Vector3(-20.0f, 0.0f, -20.0f));
 	aCube->SetCollider(true);
 	aCube->SetAABB(Vector3(0.5f, 0.5f, 0.5f), Vector3(-0.5f, -0.5f, -0.5f));
-//	groundEntity = Create::Ground("GRASS_DARKGREEN", "GEO_GRASS_LIGHTGREEN");
+	groundEntity = Create::Ground("GRASS_DARKGREEN", "GRASS_LIGHTGREEN");
 //	Create::Text3DObject("text", Vector3(0.0f, 0.0f, 0.0f), "DM2210", Vector3(10.0f, 10.0f, 10.0f), Color(0, 1, 1));
 	Create::Sprite2DObject("crosshair", Vector3(0.0f, 0.0f, 0.0f), Vector3(10.0f, 10.0f, 10.0f));
 
@@ -172,9 +170,9 @@ void SceneText::Init()
 											 "SKYBOX_TOP", "SKYBOX_BOTTOM");*/
 
 	// Customise the ground entity
-//	groundEntity->SetPosition(Vector3(0, -10, 0));
-//	groundEntity->SetScale(Vector3(100.0f, 100.0f, 100.0f));
-	//groundEntity->SetGrids(Vector3(10.0f, 1.0f, 10.0f));
+	groundEntity->SetPosition(Vector3(0, -10, 0));
+	groundEntity->SetScale(Vector3(100.0f, 100.0f, 10.0f));
+	groundEntity->SetGrids(Vector3(4.f, 1.0f, 4.f));
 
 
 	// Setup the 2D entities
@@ -186,19 +184,12 @@ void SceneText::Init()
 	{
 		textObj[i] = Create::Text2DObject("text", Vector3(-halfWindowWidth, -halfWindowHeight + fontSize*i + halfFontSize, 0.0f), "", Vector3(fontSize, fontSize, fontSize), Color(0.0f,1.0f,0.0f));
 	}
-	textObj[0]->SetText("HELLO WORLD");
-
-	//theEditor = new Editor();
 
 	Player::GetInstance()->Init();
 	camera = new TopDownCamera();
+	fpscamera = new FPSCamera();
 	Player::GetInstance()->AttachCamera(camera);
 	GraphicsManager::GetInstance()->AttachCamera(Player::GetInstance()->getCamera());
-
-	//light testing
-	light_depth_mesh = MeshBuilder::GetInstance()->GenerateQuad("light_depth_mesh", Color(1, 0, 1), 1);
-	light_depth_mesh->textureID[0] = GraphicsManager::GetInstance()->m_lightDepthFBO.GetTexture();
-	//light_depth_mesh->textureID[0] = LoadTGA("Image//calibri.tga");
 }
 
 void SceneText::Update(double dt)
@@ -229,18 +220,16 @@ void SceneText::Update(double dt)
 		lights[0]->type = Light::LIGHT_SPOT;
 	}
 
-	if(KeyboardController::GetInstance()->IsKeyDown('I'))
-		lights[0]->position.z -= (float)(10.f * dt);
-	if(KeyboardController::GetInstance()->IsKeyDown('K'))
-		lights[0]->position.z += (float)(10.f * dt);
-	if(KeyboardController::GetInstance()->IsKeyDown('J'))
-		lights[0]->position.x -= (float)(10.f * dt);
-	if(KeyboardController::GetInstance()->IsKeyDown('L'))
-		lights[0]->position.x += (float)(10.f * dt);
-	if(KeyboardController::GetInstance()->IsKeyDown('O'))
-		lights[0]->position.y -= (float)(10.f * dt);
-	if(KeyboardController::GetInstance()->IsKeyDown('P'))
-		lights[0]->position.y += (float)(10.f * dt);
+	if (KeyboardController::GetInstance()->IsKeyDown('O')) {
+		Mtx44 rotate;
+		rotate.SetToRotation(90 * dt, 1, 0, 0);
+		lights[0]->position = rotate * lights[0]->position;
+	}
+	else if (KeyboardController::GetInstance()->IsKeyDown('L')){
+		Mtx44 rotate;
+		rotate.SetToRotation(-90 * dt, 1, 0, 0);
+		lights[0]->position = rotate * lights[0]->position;
+	}
 
 	// if the left mouse button was released
 	if (MouseController::GetInstance()->IsButtonReleased(MouseController::LMB))
@@ -325,7 +314,7 @@ void SceneText::RenderPassGPass()
 	//These matrices should change when light position or direction changes
 	Light* light = dynamic_cast<Light*>(g->GetLight("lights[0]"));
 	if (light->type == Light::LIGHT_DIRECTIONAL)
-		g->m_lightDepthProj.SetToOrtho(-10, 10, -10, 10, -10, 20);
+		g->m_lightDepthProj.SetToOrtho(-100, 100, -100, 100, -100, 200);
 	else
 		g->m_lightDepthProj.SetToPerspective(90, 1.f, 0.1, 10);
 
@@ -363,20 +352,6 @@ void SceneText::RenderPassMain()
 	ms.LoadIdentity();
 
 	Light* light = dynamic_cast<Light*>(g->GetLight("lights[0]"));
-	ms.PushMatrix();
-	ms.Translate(Player::GetInstance()->GetPos().x,
-		Player::GetInstance()->GetPos().y,
-		Player::GetInstance()->GetPos().z);
-	ms.Scale(0.1f, 0.1f, 0.1f);
-	RenderHelper::RenderMesh(MeshList::GetInstance()->GetMesh("sphere"));
-	ms.PopMatrix();
-
-	ms.PushMatrix();
-	ms.Translate(0, 0, -10);
-	//ms.Rotate(-90, 1, 0, 0);
-	ms.Scale(10, 10, 10);
-	RenderHelper::RenderMesh(light_depth_mesh);
-	ms.PopMatrix();
 
 	//placed down so alpha will work properly on ldq.
 	RenderWorld();
@@ -385,6 +360,7 @@ void SceneText::RenderPassMain()
 	int halfWindowHeight = Application::GetInstance().GetWindowHeight() / 2;
 	GraphicsManager::GetInstance()->SetOrthographicProjection(-halfWindowWidth, halfWindowWidth, -halfWindowHeight, halfWindowHeight, -10, 10);
 	GraphicsManager::GetInstance()->DetachCamera();
+
 	EntityManager::GetInstance()->RenderUI();
 
 	//RenderHelper::RenderTextOnScreen(text, std::to_string(fps), Color(0, 1, 0), 2, 0, 0);
@@ -396,17 +372,7 @@ void SceneText::RenderWorld()
 
 	MS& ms = GraphicsManager::GetInstance()->GetModelStack();
 
-	ms.PushMatrix();
-	ms.Scale(0.1f, 0.1f, 0.1f);
-	RenderHelper::RenderMeshWithLight(MeshList::GetInstance()->GetMesh("sphere"));
-	ms.PopMatrix();
-
-	ms.PushMatrix();
-	ms.Translate(0, -5, 0);
-	ms.Rotate(-90, 1, 0, 0);
-	ms.Scale(10, 10, 10);
-	RenderHelper::RenderMeshWithLight(MeshList::GetInstance()->GetMesh("quad"));
-	ms.PopMatrix();
+	EntityManager::GetInstance()->RenderUI();
 }
 
 void SceneText::Exit()
@@ -417,5 +383,4 @@ void SceneText::Exit()
 
 	// Delete the lights
 	delete lights[0];
-	delete lights[1];
 }
