@@ -1,13 +1,27 @@
 #include "BuildingEntity.h"
 #include "EntityManager.h"
 #include "BuildingManager.h"
+#include "MeshBuilder.h"
+#include "GraphicsManager.h"
+#include "RenderHelper.h"
 
-BuildingEntity::BuildingEntity()
+BuildingEntity::BuildingEntity(const std::string _meshName) : GenericEntity(MeshList::GetInstance()->GetMesh(_meshName))
 {
+	modelMesh = MeshList::GetInstance()->GetMesh(_meshName);
 }
 
 BuildingEntity::~BuildingEntity()
 {
+}
+
+void BuildingEntity::Render()
+{
+	MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
+	modelStack.PushMatrix();
+	modelStack.Translate(position.x, position.y, position.z);
+	modelStack.Scale(scale.x, scale.y, scale.z);
+	RenderHelper::RenderMesh(modelMesh);
+	modelStack.PopMatrix();
 }
 
 int BuildingEntity::GetHealth()
@@ -40,12 +54,18 @@ void BuildingEntity::SetRotation(float _value)
 	rotation = _value;
 }
 
-BuildingEntity* Create::Building(BuildingEntity::BUILDING_TYPE _type, Vector3 pos)
+int BuildingEntity::GetGridX()
 {
-	BuildingEntity* b = new BuildingEntity();
-	b->type = _type;
-	b->SetPosition(pos);
-	EntityManager::GetInstance()->AddEntity(b);
+	return gridX;
+}
 
-	return b;
+int BuildingEntity::GetGridZ()
+{
+	return gridZ;
+}
+
+void BuildingEntity::SetGrid(int _x, int _z)
+{
+	gridX = _x;
+	gridZ = _z;
 }

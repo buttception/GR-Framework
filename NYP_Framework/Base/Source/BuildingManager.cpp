@@ -2,71 +2,83 @@
 
 BuildingManager::BuildingManager()
 {
+	for (int i = 0; i < MAX_CELLS; ++i) {
+		for (int j = 0; j < MAX_CELLS; ++j) {
+			buildingArray[i][j] = new BuildingTile();
+		}
+	}
 }
 
 BuildingManager::~BuildingManager()
 {
 }
 
-void BuildingManager::CreateBuilding(BuildingEntity::BUILDING_TYPE type, Vector3 pos)
+void BuildingManager::AddWall(int _x, int _y, int direction)
 {
-	BuildingEntity* b = Create::Building(type, pos);
-	AddBuilding(b);
-}
-
-void BuildingManager::AddBuilding(BuildingEntity * _add)
-{
-	//decides which tile to put it into
-	int x = _add->GetPosition().x / CELL_SIZE;
-	int y = _add->GetPosition().z / CELL_SIZE;
-
-	if (x < 0 || x >= MAX_CELLS || y < 0 || y >= MAX_CELLS) {
-		std::cout << "Object is outside the map" << std::endl;
+	// where _x and _y is 0 to 49
+	if (_x >= MAX_CELLS || _y >= MAX_CELLS) {
+		std::cout << "Wall placement exceeds max cell size" << std::endl;
 		return;
 	}
 
-	//only put wall at the top and left
-	float cellPosX = CELL_SIZE * (x - 1) + CELL_SIZE / 2;
-	float cellPosY = CELL_SIZE * (y - 1) + CELL_SIZE / 2;
+	BuildingEntity* wall = new BuildingEntity("wall");
+	wall->SetScale(Vector3(20, 1, 2));
+	wall->SetHealth(100);
+	wall->SetGrid(_x, _y);
+	wall->SetLevel(1);
+	wall->type = BuildingEntity::BUILDING_WALL;
+	wall->SetCollider(true);
 
-	bool right;
-	bool left;
-	bool top;
-	bool bottom;
-	right = bottom = top = left = false;
-	
-	//logic fucking wrong
-	if (_add->GetPosition().x > cellPosX) {
-		if (x + 1 > MAX_CELLS - 1)
-			right = true;
-		else {
-			x += 1;
-			left = true;
+	//where 1 -> left, 2 -> top, 3 -> right, 4 ->bottom
+	if (direction >= 1 && direction <= 2) {
+		//if it is left or top, just add the wall
+		if (direction == 1) {
+			wall->SetScale(Vector3(2, 1, 20));
+			wall->SetPosition(Vector3(_x * CELL_SIZE, 0, _y * CELL_SIZE + CELL_SIZE / 2));
+			buildingArray[_x][_y]->AddWall(wall, 1);
+		}
+		if (direction == 2) {
+			wall->SetScale(Vector3(20, 1, 2));
+			wall->SetPosition(Vector3((_x + 1) * CELL_SIZE - CELL_SIZE/2, 0, (_y + 1)* CELL_SIZE));
+			buildingArray[_x][_y]->AddWall(wall, 2);
 		}
 	}
-	else if (_add->GetPosition().z < cellPosY) {
-		if (y + 1 > MAX_CELLS - 1)
-			bottom = true;
+	else if (direction == 3) {
+		wall->SetScale(Vector3(2, 1, 20));
+		//if it is on the right, which is the next tile set unless is end
+		if (_x + 1 != MAX_CELLS)
+			AddWall(_x + 1, _y, 1);
 		else {
-			y += 1;
-			top = true;
+			wall->SetPosition(Vector3(MAX_CELLS * CELL_SIZE, 0, _y * CELL_SIZE + CELL_SIZE / 2));
+			buildingArray[_x][_y]->AddWall(wall, 3);
 		}
 	}
-	if (_add->GetPosition().x < cellPosX) {
-		left = true;
+	else if (direction == 4) {
+		wall->SetScale(Vector3(20, 1, 2));
+		//if it is on the bottom, which is the bottom tile set unless is end
+		if (_y >= 0)
+			AddWall(_x, _y - 1, 2);
+		else {
+			wall->SetPosition(Vector3(_x * CELL_SIZE + CELL_SIZE / 2, 0, MAX_CELLS * CELL_SIZE));
+			buildingArray[_x][_y]->AddWall(wall, 4);
+		}
 	}
-	else if (_add->GetPosition().z > cellPosY) {
-		top = true;
+	else {
+		std::cout << "Invalid building direction" << std::endl;
+		delete wall;
+		return;
 	}
 
-	// left = 0
-	// top =  1
-	// right = 2
-	// bottom = 3
-	
+	if (direction == 1 || direction == 3) {
+		Vector3 max(wall->GetPosition().x + wall->GetScale().x / 2, 1, wall->GetPosition().z + wall->GetScale().z / 2);
+		Vector3 min(wall->GetPosition().x - wall->GetScale().x / 2, 1, wall->GetPosition().z - wall->GetScale().z / 2);
+		wall->SetAABB(max, min);
+	}
+		
+	if (direction == 2 || direction == 4) {
+		Vector3 max(wall->GetPosition().z + wall->GetScale().z / 2, 1, wall->GetPosition().x + wall->GetScale().x / 2);
+		Vector3 min(wall->GetPosition().z - wall->GetScale().z / 2, 1, wall->GetPosition().x - wall->GetScale().x / 2);
+		wall->SetAABB(max, min);
+	}
 }
 
-bool BuildingManager::RemoveBuilding(BuildingEntity * _remove)
-{
-	return false;
-}

@@ -154,6 +154,9 @@ void Player::Update(double dt)
 			dynamic_cast<TopDownCamera*>(attachedCamera)->Update(dt);
 		}
 	}
+
+	//testing cout
+	std::cout << (int)(position.x / CELL_SIZE) << ", " << (int)(position.z / CELL_SIZE) << std::endl;
 }
 
 // Constrain the position within the borders
@@ -194,8 +197,8 @@ void Player::AttachCamera(CameraBase* _cameraPtr)
 	}
 	else if (dynamic_cast<TopDownCamera*>(attachedCamera)){
 		Vector3 target = position;
-		Vector3 up(0, 0, -1);
-		dynamic_cast<TopDownCamera*>(attachedCamera)->Init(Vector3(position.x, position.y + 20, position.z), target, up, 100);
+		Vector3 up(0, 0, 1);
+		dynamic_cast<TopDownCamera*>(attachedCamera)->Init(Vector3(position.x, position.y + 20, position.z), target, up, -100);
 		std::cout << "Top down camera Loaded" << std::endl;
 	}
 }
@@ -207,34 +210,38 @@ void Player::DetachCamera()
 
 bool Player::MoveFrontBack(const float deltaTime, const bool direction, const float speedMultiplier)
 {
-	if (direction)
-	{
-		position -= Vector3(0, 0, 1) * (float)m_dSpeed * (float)speedMultiplier * (float)deltaTime;
-		Constrain();
-		return true;
-	}
-	else
-	{
-		position += Vector3(0, 0, 1) * (float)m_dSpeed * (float)speedMultiplier * (float)deltaTime;
-		Constrain();
-		return true;
+	if (dynamic_cast<TopDownCamera*>(attachedCamera)) {
+		if (direction)
+		{
+			position += Vector3(0, 0, 1) * (float)m_dSpeed * (float)speedMultiplier * (float)deltaTime;
+			Constrain();
+			return true;
+		}
+		else
+		{
+			position -= Vector3(0, 0, 1) * (float)m_dSpeed * (float)speedMultiplier * (float)deltaTime;
+			Constrain();
+			return true;
+		}
 	}
 	return false;
 }
 
 bool Player::MoveLeftRight(const float deltaTime, const bool direction, const float speedMultiplier)
 {
-	if (!direction)
-	{
-		position -= Vector3(1, 0, 0) * (float)m_dSpeed * (float)speedMultiplier * (float)deltaTime;
-		Constrain();
-		return true;
-	}
-	else
-	{
-		position += Vector3(1, 0, 0) * (float)m_dSpeed * (float)speedMultiplier * (float)deltaTime;
-		Constrain();
-		return true;
+	if (dynamic_cast<TopDownCamera*>(attachedCamera)) {
+		if (!direction)
+		{
+			position -= Vector3(1, 0, 0) * (float)m_dSpeed * (float)speedMultiplier * (float)deltaTime;
+			Constrain();
+			return true;
+		}
+		else
+		{
+			position += Vector3(1, 0, 0) * (float)m_dSpeed * (float)speedMultiplier * (float)deltaTime;
+			Constrain();
+			return true;
+		}
 	}
 	return false;
 }

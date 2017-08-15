@@ -40,6 +40,8 @@ void GenericEntity::SetAABB(Vector3 maxAABB, Vector3 minAABB)
 {
 	this->maxAABB = maxAABB;
 	this->minAABB = minAABB;
+	if (!m_bAABB)
+		m_bAABB = true;
 }
 
 GenericEntity* Create::Entity(	const std::string& _meshName, 

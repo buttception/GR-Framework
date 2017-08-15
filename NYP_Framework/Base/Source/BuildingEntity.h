@@ -2,11 +2,15 @@
 #ifndef BUILDING_ENTITY_H
 #define BUILDING_ENTITY_H
 
-#include "EntityBase.h"
-#include "Collider\Collider.h"
+#include "GenericEntity.h"
 
-class BuildingEntity : public EntityBase , public Collision{
+class Mesh;
+
+class BuildingEntity : public GenericEntity {
 public:
+	BuildingEntity(const std::string _meshName);
+	virtual ~BuildingEntity();
+
 	enum BUILDING_TYPE {
 		BUILDING_WALL,
 		BUILDING_DOOR,
@@ -14,8 +18,7 @@ public:
 		BUILDING_FLOOR
 	}type;
 
-	BuildingEntity();
-	virtual ~BuildingEntity();
+	void Render();
 
 	int GetHealth();
 	void SetHealth(int _value);
@@ -26,15 +29,15 @@ public:
 	float GetRotation();
 	void SetRotation(float _value);
 
+	int GetGridX();
+	int GetGridZ();
+	void SetGrid(int _x, int _z);
+
 private:
 	int health;
 	int level;
 	float rotation;
 	int gridX, gridZ;
 };
-
-namespace Create {
-	BuildingEntity* Building(BuildingEntity::BUILDING_TYPE _type, Vector3 pos);
-}
 
 #endif

@@ -139,10 +139,12 @@ void SceneText::Init()
 	MeshBuilder::GetInstance()->GenerateQuad("GRASS_LIGHTGREEN", Color(1, 1, 1), 1.f);
 	MeshList::GetInstance()->GetMesh("GRASS_LIGHTGREEN")->textureID[0] = LoadTGA("Image//grass_lightgreen.tga");
 
+	MeshBuilder::GetInstance()->GenerateCube("wall", Color(1, 1, 1), 1.f);
+
 	lights[0] = new Light();
 	GraphicsManager::GetInstance()->AddLight("lights[0]", lights[0]);
 	lights[0]->type = Light::LIGHT_DIRECTIONAL;
-	lights[0]->position.Set(0, 1, 0);
+	lights[0]->position.Set(1, 0, 0);
 	lights[0]->color.Set(1, 1, 1);
 	lights[0]->power = 1;
 	lights[0]->kC = 1.f;
@@ -171,7 +173,7 @@ void SceneText::Init()
 	GenericEntity* aCube = Create::Entity("cube", Vector3(-20.0f, 0.0f, -20.0f));
 	aCube->SetCollider(true);
 	aCube->SetAABB(Vector3(0.5f, 0.5f, 0.5f), Vector3(-0.5f, -0.5f, -0.5f));
-	groundEntity = Create::Ground("GRASS_DARKGREEN", "GRASS_LIGHTGREEN");
+	//groundEntity = Create::Ground("GRASS_DARKGREEN", "GRASS_LIGHTGREEN");
 //	Create::Text3DObject("text", Vector3(0.0f, 0.0f, 0.0f), "DM2210", Vector3(10.0f, 10.0f, 10.0f), Color(0, 1, 1));
 	Create::Sprite2DObject("crosshair", Vector3(0.0f, 0.0f, 0.0f), Vector3(10.0f, 10.0f, 10.0f));
 
@@ -181,9 +183,11 @@ void SceneText::Init()
 
 	// Customise the ground entity
 	//grid renders more quad, doesnt change quad texcoord
-	groundEntity->SetPosition(Vector3(CELL_SIZE * MAX_CELLS / 2, 0, -CELL_SIZE * MAX_CELLS / 2));
-	groundEntity->SetScale(Vector3(CELL_SIZE * MAX_CELLS, CELL_SIZE * MAX_CELLS, 1.f));
-	groundEntity->SetGrids(Vector3(1.f, 1.0f, 1.f));
+	//groundEntity->SetPosition(Vector3(CELL_SIZE * MAX_CELLS / 2, 0, -CELL_SIZE * MAX_CELLS / 2));
+	//groundEntity->SetScale(Vector3(CELL_SIZE * MAX_CELLS, CELL_SIZE * MAX_CELLS, 1.f));
+	//groundEntity->SetGrids(Vector3(1.f, 1.0f, 1.f));
+	ground = MeshBuilder::GetInstance()->GenerateQuad("ground", Color(1, 1, 1), 1.f);
+	ground->textureID[0] = LoadTGA("Image//grass_lightgreen.tga");
 
 
 	// Setup the 2D entities
@@ -262,6 +266,32 @@ void SceneText::Update(double dt)
 		Mtx44 rotate;
 		rotate.SetToRotation(-90 * dt, 1, 0, 0);
 		lights[0]->position = rotate * lights[0]->position;
+	}
+
+	if (KeyboardController::GetInstance()->IsKeyPressed(VK_LEFT)) {
+		BuildingManager::GetInstance()->AddWall((int)(Player::GetInstance()->GetPos().x / CELL_SIZE), (int)(Player::GetInstance()->GetPos().z / CELL_SIZE), 1);
+	}
+	if (KeyboardController::GetInstance()->IsKeyPressed(VK_UP)) {
+		BuildingManager::GetInstance()->AddWall((int)(Player::GetInstance()->GetPos().x / CELL_SIZE), (int)(Player::GetInstance()->GetPos().z / CELL_SIZE), 2);
+	}
+	if (KeyboardController::GetInstance()->IsKeyPressed(VK_RIGHT)) {
+		BuildingManager::GetInstance()->AddWall((int)(Player::GetInstance()->GetPos().x / CELL_SIZE), (int)(Player::GetInstance()->GetPos().z / CELL_SIZE), 3);
+	}
+	if (KeyboardController::GetInstance()->IsKeyPressed(VK_DOWN)) {
+		BuildingManager::GetInstance()->AddWall((int)(Player::GetInstance()->GetPos().x / CELL_SIZE), (int)(Player::GetInstance()->GetPos().z / CELL_SIZE), 4);
+	}
+
+	if (KeyboardController::GetInstance()->IsKeyPressed(VK_F1)){
+		//Debug mode
+		//MouseController::GetInstance()->SetKeepMouseCentered(true);
+		Player::GetInstance()->DetachCamera();
+		Player::GetInstance()->AttachCamera(fpscamera);
+	}
+	if (KeyboardController::GetInstance()->IsKeyPressed(VK_F2)) {
+		//Debug mode
+		//MouseController::GetInstance()->SetKeepMouseCentered(false);
+		Player::GetInstance()->DetachCamera();
+		Player::GetInstance()->AttachCamera(camera);
 	}
 
 	// if the left mouse button was released
@@ -405,6 +435,12 @@ void SceneText::RenderWorld()
 	EntityManager::GetInstance()->Render();
 
 	MS& ms = GraphicsManager::GetInstance()->GetModelStack();
+	ms.PushMatrix();
+	ms.Translate(MAX_CELLS * CELL_SIZE / 2, 0, MAX_CELLS * CELL_SIZE / 2);
+	ms.Rotate(90, 1, 0, 0);
+	ms.Scale(MAX_CELLS * CELL_SIZE, MAX_CELLS * CELL_SIZE, MAX_CELLS * CELL_SIZE);
+	RenderHelper::RenderMeshWithLight(ground);
+	ms.PopMatrix();
 
 	EntityManager::GetInstance()->RenderUI();
 }

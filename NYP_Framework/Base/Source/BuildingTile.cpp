@@ -1,6 +1,12 @@
 #include "BuildingTile.h"
+#include "EntityManager.h"
 
 BuildingTile::BuildingTile()
+	:leftWall(nullptr)
+	,rightWall(nullptr)
+	,topWall(nullptr)
+	,bottomWall(nullptr)
+	,floor(nullptr)
 {
 }
 
@@ -8,25 +14,49 @@ BuildingTile::~BuildingTile()
 {
 }
 
-void BuildingTile::AddTile(BuildingEntity * entity, int direction)
+void BuildingTile::AddWall(BuildingEntity * entity, int direction)
 {
-	if (direction == 4) {
-		if (!floor)
-			floor = entity;
-		else
-			std::cout << "Floor already occupied";
+	//where 1 -> left, 2 -> top, 3 -> right, 4 ->bottom
+	switch (direction) {
+	case 1:
+		if (leftWall) {
+			std::cout << "Position occupied" << std::endl;
+			return;
+		}
+		leftWall = entity;
+		break;
+	case 2:
+		if (topWall) {
+			std::cout << "Position occupied" << std::endl;
+			return;
+		}
+		topWall = entity;
+		break;
+	case 3:
+		if (rightWall) {
+			std::cout << "Position occupied" << std::endl;
+			return;
+		}
+		rightWall = entity;
+		break;
+	case 4:
+		if (bottomWall) {
+			std::cout << "Position occupied" << std::endl;
+			return;
+		}
+		bottomWall = entity;
+		break;
+	default:
+		return;
 	}
+	std::cout << "wall placed down" << std::endl;
+
+	EntityManager::GetInstance()->AddEntity(entity);
 }
 
-bool BuildingTile::RemoveTile(BuildingEntity * entity)
+bool BuildingTile::RemoveBuilding(BuildingEntity * entity)
 {
-	for (int i = 0; i < 4; ++i) {
-		if (wallList[i] == entity) {
-			wallList[i]->SetIsDone(true);
-			wallList[i] = NULL;
-			return true;
-		}
-	}
+	
 
 	return false;
 }

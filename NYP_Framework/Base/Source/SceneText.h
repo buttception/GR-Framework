@@ -9,6 +9,7 @@
 #include "Mesh.h"
 #include "MatrixStack.h"
 #include "GenericEntity.h"
+#include "BuildingManager.h"
 
 class ShaderProgram;
 class SceneManager;
@@ -45,6 +46,8 @@ private:
 	void RenderPassGPass();//PRE RENDER PASS
 	void RenderPassMain();//MAIN RENDER PASS
 	void RenderWorld();
+
+	Mesh* ground;
 
 	float worldWidth, worldHeight;
 };

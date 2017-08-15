@@ -11,11 +11,14 @@ public:
 	BuildingTile();
 	virtual ~BuildingTile();
 
-	void AddTile(BuildingEntity* entity, int direction);
-	bool RemoveTile(BuildingEntity* entity);
+	void AddWall(BuildingEntity* entity, int direction);
+	bool RemoveBuilding(BuildingEntity* entity);
 
 private:
-	BuildingEntity* wallList[4];
+	BuildingEntity* leftWall;
+	BuildingEntity* rightWall;
+	BuildingEntity* bottomWall;
+	BuildingEntity* topWall;
 	BuildingEntity* floor;
 };
 
