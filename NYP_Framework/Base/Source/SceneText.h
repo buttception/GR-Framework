@@ -34,6 +34,7 @@ private:
 	Player* playerInfo;
 	GroundEntity* groundEntity;
 	TopDownCamera *camera;
+	FPSCamera* fpscamera;
 	TextEntity* textObj[3];
 	Light* lights[2];
 
@@ -44,7 +45,6 @@ private:
 	void RenderPassGPass();//PRE RENDER PASS
 	void RenderPassMain();//MAIN RENDER PASS
 	void RenderWorld();
-	Mesh* light_depth_mesh;
 };
 
 #endif

@@ -48,9 +48,9 @@ void GroundEntity::Render()
 			// the y- and z- components are swapped because of the way that MVP is calculated inside RenderMesh
 			modelStack.Translate(x - (grids.x * size.x) / 2, z - (grids.z * size.z) / 2, 0.0f);
 			if (((x * (int)(grids.x - 1) + z) % 2) == 0)
-				RenderHelper::RenderMesh(modelMesh[0]);
+				RenderHelper::RenderMeshWithLight(modelMesh[0]);
 			else
-				RenderHelper::RenderMesh(modelMesh[1]);
+				RenderHelper::RenderMeshWithLight(modelMesh[1]);
 			modelStack.PopMatrix();
 		}
 	}
@@ -89,12 +89,16 @@ Vector3 GroundEntity::GetMinBoundary(void)
 GroundEntity* Create::Ground(const std::string& _meshName1, const std::string& _meshName2)
 {
 	Mesh* modelMesh1 = MeshList::GetInstance()->GetMesh(_meshName1);
-	if (modelMesh1 == nullptr)
+	if (modelMesh1 == nullptr) {
+		std::cout << _meshName1 << " is not found, please check if it is available\n";
 		return nullptr;
+	}
 
 	Mesh* modelMesh2 = MeshList::GetInstance()->GetMesh(_meshName2);
-	if (modelMesh2 == nullptr)
+	if (modelMesh2 == nullptr) {
+		std::cout << _meshName2 << " is not found, please check if it is available\n";
 		return nullptr;
+	}
 
 	GroundEntity* result = new GroundEntity(modelMesh1, modelMesh2);
 	EntityManager::GetInstance()->AddEntity(result);
