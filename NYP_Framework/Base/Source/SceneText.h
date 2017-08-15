@@ -45,6 +45,8 @@ private:
 	void RenderPassGPass();//PRE RENDER PASS
 	void RenderPassMain();//MAIN RENDER PASS
 	void RenderWorld();
+
+	float worldWidth, worldHeight;
 };
 
 #endif

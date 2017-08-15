@@ -6,6 +6,8 @@
 #include "Mtx44.h"
 #include "../HardwareAbstraction/Keyboard.h"
 #include "../BuildingManager.h"
+#include "../HardwareAbstraction/Mouse.h"
+#include "../Sound_Engine.h"
 
 // Allocating and initializing Player's static data member.  
 // The pointer is allocated but not the object's constructor.
@@ -13,15 +15,10 @@
 Player::Player(void)
 	: m_dSpeed(40.0)
 	, m_dAcceleration(10.0)
-	, m_bJumpUpwards(false)
-	, m_dJumpSpeed(10.0)
-	, m_dJumpAcceleration(-10.0)
-	, m_bFallDownwards(false)
-	, m_dFallSpeed(0.0)
-	, m_dFallAcceleration(-10.0)
 	, m_dElapsedTime(0.0)
 	, attachedCamera(NULL)
 	, m_pTerrain(NULL)
+	, speedMultiplier(1.0)
 {
 }
 
@@ -44,53 +41,13 @@ void Player::Init(void)
 	minBoundary.Set(-1, -1, -1);
 
 	this->keyboard = new Keyboard();
-	keyboard->Create();
-}
-
-// Returns true if the player is on ground
-bool Player::isOnGround(void)
-{
+	keyboard->Create(this);
+	this->mouse = new Mouse();
+	mouse->Create(this);
 
 
-
-	return false;
-}
-
-// Returns true if the player is jumping upwards
-bool Player::isJumpUpwards(void)
-{
-
-
-
-	return false;
-}
-
-// Returns true if the player is on freefall
-bool Player::isFreeFall(void)
-{
-
-
-
-	return false;
-}
-
-// Set the player's status to free fall mode
-void Player::SetOnFreeFall(bool isOnFreeFall)
-{
-
-
-
-
-
-}
-
-// Set the player to jumping upwards
-void Player::SetToJumpUpwards(bool isOnJumpUpwards)
-{
-
-
-
-
+	CSoundEngine::GetInstance()->Init();
+	//CSoundEngine::GetInstance()->Addthefuckingsound("HELLO", "Image//Hello.mp3");
 
 }
 
@@ -98,18 +55,6 @@ void Player::SetToJumpUpwards(bool isOnJumpUpwards)
 void Player::SetPos(const Vector3& pos)
 {
 	position = pos;
-}
-
-// Set m_dJumpAcceleration of the player
-void Player::SetJumpAcceleration(const double m_dJumpAcceleration)
-{
-	this->m_dJumpAcceleration = m_dJumpAcceleration;
-}
-
-// Set Fall Acceleration of the player
-void Player::SetFallAcceleration(const double m_dFallAcceleration)
-{
-	this->m_dFallAcceleration = m_dFallAcceleration;
 }
 
 // Set the boundary for the player info
@@ -130,88 +75,17 @@ void Player::SetTerrain(GroundEntity* m_pTerrain)
 
 }
 
-// Stop the player's movement
-void Player::StopVerticalMovement(void)
-{
-	m_bJumpUpwards = false;
-	m_bFallDownwards = false;
-}
-
 // Reset this player instance to default
 void Player::Reset(void)
 {
 	// Set the current values to default values
 	position = defaultPosition;
-
-	// Stop vertical movement too
-	StopVerticalMovement();
 }
 
 // Get position x of the player
 Vector3 Player::GetPos(void) const
 {
 	return position;
-}
-
-// Get m_dJumpAcceleration of the player
-double Player::GetJumpAcceleration(void) const
-{
-	return m_dJumpAcceleration;
-}
-
-// Update Jump Upwards
-void Player::UpdateJumpUpwards(double dt)
-{
-	if (m_bJumpUpwards == false)
-		return;
-
-	// Update the jump's elapsed time
-
-	// Update position and target y values
-	// Use SUVAT equation to update the change in position and target
-	// s = u * t + 0.5 * a * t ^ 2
-
-
-	// Use this equation to calculate final velocity, v
-	// SUVAT: v = u + a * t;
-	// v is m_dJumpSpeed AFTER updating using SUVAT where u is the initial speed and is equal to m_dJumpSpeed
-
-	// Check if the jump speed is less than zero, then it should be falling
-	if (m_dJumpSpeed < 0.0)
-	{
-
-
-
-
-	}
-}
-
-// Update FreeFall
-void Player::UpdateFreeFall(double dt)
-{
-	if (m_bFallDownwards == false)
-		return;
-
-	// Update the jump's elapsed time
-
-	// Update position and target y values
-	// Use SUVAT equation to update the change in position and target
-	// s = u * t + 0.5 * a * t ^ 2
-
-
-	// Use this equation to calculate final velocity, v
-	// SUVAT: v = u + a * t;
-	// v is m_dJumpSpeed AFTER updating using SUVAT where u is the initial speed and is equal to m_dJumpSpeed
-
-	// Check if the jump speed is below terrain, then it should be reset to terrain height
-	if (position.y < m_pTerrain->GetTerrainHeight(position))
-	{
-
-
-
-
-
-	}
 }
 
 /********************************************************************************
@@ -225,7 +99,8 @@ void Player::Update(double dt)
 	double camera_yaw = mouse_diff_x * 0.0174555555555556;		// 3.142 / 180.0
 	double camera_pitch = mouse_diff_y * 0.0174555555555556;	// 3.142 / 180.0
 
-	keyboard->Read(dt);
+	keyboard->Read((float)dt);
+	mouse->Read((float)dt);
 
 	if (attachedCamera == NULL)
 		std::cout << "No camera attached! Please make sure to attach one" << std::endl;
@@ -240,47 +115,28 @@ void Player::Update(double dt)
 		Vector3 rightUV;
 		if (KeyboardController::GetInstance()->IsKeyDown('W'))
 		{
-			position += direction.Normalized() * (float)m_dSpeed * (float)dt;
+			position += direction.Normalized() * (float)m_dSpeed * (float)speedMultiplier * (float)dt;
 		}
 		else if (KeyboardController::GetInstance()->IsKeyDown('S'))
 		{
-			position -= direction.Normalized() * (float)m_dSpeed * (float)dt;
+			position -= direction.Normalized() * (float)m_dSpeed * (float)speedMultiplier * (float)dt;
 		}
 		if (KeyboardController::GetInstance()->IsKeyDown('A'))
 		{
 			rightUV = (direction.Normalized()).Cross(up);
 			rightUV.y = 0;
 			rightUV.Normalize();
-			position -= rightUV * (float)m_dSpeed * (float)dt;
+			position -= rightUV * (float)m_dSpeed * (float)speedMultiplier * (float)dt;
 		}
 		else if (KeyboardController::GetInstance()->IsKeyDown('D'))
 		{
 			rightUV = (direction.Normalized()).Cross(up);
 			rightUV.y = 0;
 			rightUV.Normalize();
-			position += rightUV * (float)m_dSpeed * (float)dt;
+			position += rightUV * (float)m_dSpeed * (float)speedMultiplier * (float)dt;
 		}
 		// Constrain the position
 		Constrain();
-	}
-	else if (dynamic_cast<TopDownCamera*>(attachedCamera)) {
-		if (KeyboardController::GetInstance()->IsKeyDown('D'))
-		{
-			position += Vector3(1, 0, 0) * (float)m_dSpeed * (float)dt;
-		}
-		else if (KeyboardController::GetInstance()->IsKeyDown('A'))
-		{
-			position -= Vector3(1, 0, 0) * (float)m_dSpeed * (float)dt;
-		}
-		if (KeyboardController::GetInstance()->IsKeyDown('W'))
-		{
-			position -= Vector3(0, 0, 1) * (float)m_dSpeed * (float)dt;
-		}
-		else if (KeyboardController::GetInstance()->IsKeyDown('S'))
-		{
-			position += Vector3(0, 0, 1) * (float)m_dSpeed * (float)dt;
-		}
-		//Constrain();
 	}
 
 	// Update the weapons
@@ -373,4 +229,38 @@ void Player::AttachCamera(CameraBase* _cameraPtr)
 void Player::DetachCamera()
 {
 	attachedCamera = nullptr;
+}
+
+bool Player::MoveFrontBack(const float deltaTime, const bool direction, const float speedMultiplier)
+{
+	if (direction)
+	{
+		position -= Vector3(0, 0, 1) * (float)m_dSpeed * (float)speedMultiplier * (float)deltaTime;
+		Constrain();
+		return true;
+	}
+	else
+	{
+		position += Vector3(0, 0, 1) * (float)m_dSpeed * (float)speedMultiplier * (float)deltaTime;
+		Constrain();
+		return true;
+	}
+	return false;
+}
+
+bool Player::MoveLeftRight(const float deltaTime, const bool direction, const float speedMultiplier)
+{
+	if (!direction)
+	{
+		position -= Vector3(1, 0, 0) * (float)m_dSpeed * (float)speedMultiplier * (float)deltaTime;
+		Constrain();
+		return true;
+	}
+	else
+	{
+		position += Vector3(1, 0, 0) * (float)m_dSpeed * (float)speedMultiplier * (float)deltaTime;
+		Constrain();
+		return true;
+	}
+	return false;
 }

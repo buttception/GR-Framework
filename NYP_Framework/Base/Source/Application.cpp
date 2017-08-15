@@ -106,14 +106,17 @@ void Application::Init()
 
 	// Hide the cursor
 	//glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
-	//glfwSetMouseButtonCallback(m_window, &Application::MouseButtonCallbacks);
-	//glfwSetScrollCallback(m_window, &Application::MouseScrollCallbacks);
+
+	glfwSetMouseButtonCallback(m_window, &Application::MouseButtonCallbacks);
+	glfwSetScrollCallback(m_window, &Application::MouseScrollCallbacks);
 
 	// Init systems
 	GraphicsManager::GetInstance()->Init();
 	InitAllMeshes();
 
 }
+
+
 
 void Application::Run()
 {

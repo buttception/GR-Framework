@@ -22,9 +22,15 @@
 #include "SkyBox/SkyBoxEntity.h"
 #include "HardwareAbstraction\Keyboard.h"
 #include "BuildingManager.h" 
+#include "../Source/Sound_Engine.h"
+using namespace irrklang;
+#pragma comment(lib,"irrKlang.lib")
+ISoundEngine*Hello = createIrrKlangDevice();
 
 #include <iostream>
 #include "RenderHelper.h"
+
+
 
 SceneText* SceneText::sInstance = new SceneText(SceneManager::GetInstance());
 
@@ -43,6 +49,9 @@ SceneText::~SceneText()
 
 void SceneText::Init()
 {
+	worldHeight = 100.f;
+	worldWidth = worldHeight * (float)Application::GetInstance().GetWindowWidth() / Application::GetInstance().GetWindowHeight();
+
 	currProg = GraphicsManager::GetInstance()->LoadShader("default", "Shader//Shadow.vertexshader", "Shader//Shadow.fragmentshader");
 	
 	// Tell the shader program to store these uniform locations
@@ -192,10 +201,32 @@ void SceneText::Init()
 	fpscamera = new FPSCamera();
 	Player::GetInstance()->AttachCamera(camera);
 	GraphicsManager::GetInstance()->AttachCamera(Player::GetInstance()->getCamera());
+
+
+	//light testing
+	/*light_depth_mesh = MeshBuilder::GetInstance()->GenerateQuad("light_depth_mesh", Color(1, 0, 1), 1);
+	light_depth_mesh->textureID[0] = GraphicsManager::GetInstance()->m_lightDepthFBO.GetTexture();*/
+	//light_depth_mesh->textureID[0] = LoadTGA("Image//calibri.tga");
+
+
+
+	Hello->play2D("Image//Hello.mp3", GL_TRUE);
+
 }
 
 void SceneText::Update(double dt)
 {
+	//convert mouse pos on window onto world
+	double mouseX, mouseY;
+	MouseController::GetInstance()->GetMousePosition(mouseX, mouseY);
+	MouseController::GetInstance()->UpdateMousePosition(mouseX / Application::GetInstance().GetWindowWidth() * worldWidth,
+		(Application::GetInstance().GetWindowHeight() - mouseY) / Application::GetInstance().GetWindowHeight() * worldHeight);
+	MouseController::GetInstance()->GetMousePosition(mouseX, mouseY);
+	mouseX += Player::GetInstance()->GetPos().x;
+	mouseY += Player::GetInstance()->GetPos().z;
+	//std::cout << "mouseX: " << mouseX;
+	//std::cout << "mouseY: " << mouseY << std::endl;
+
 	// Update our entities
 	EntityManager::GetInstance()->Update(dt);
 
