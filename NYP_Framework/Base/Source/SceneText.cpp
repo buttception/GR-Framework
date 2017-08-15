@@ -21,9 +21,18 @@
 #include "Light.h"
 #include "SkyBox/SkyBoxEntity.h"
 #include "HardwareAbstraction\Keyboard.h"
+#include "../Source/Sound_Engine.h"
+using namespace irrklang;
+#pragma comment(lib,"irrKlang.lib")
+ISoundEngine*Hello = createIrrKlangDevice();
+
+
+
 
 #include <iostream>
 #include "RenderHelper.h"
+
+
 
 SceneText* SceneText::sInstance = new SceneText(SceneManager::GetInstance());
 
@@ -199,6 +208,10 @@ void SceneText::Init()
 	light_depth_mesh = MeshBuilder::GetInstance()->GenerateQuad("light_depth_mesh", Color(1, 0, 1), 1);
 	light_depth_mesh->textureID[0] = GraphicsManager::GetInstance()->m_lightDepthFBO.GetTexture();
 	//light_depth_mesh->textureID[0] = LoadTGA("Image//calibri.tga");
+
+
+
+	Hello->play2D("Image//Hello.mp3", GL_TRUE);
 }
 
 void SceneText::Update(double dt)

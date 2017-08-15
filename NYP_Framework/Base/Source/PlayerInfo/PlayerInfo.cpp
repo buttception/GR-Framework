@@ -5,6 +5,7 @@
 #include "KeyboardController.h"
 #include "Mtx44.h"
 #include "../HardwareAbstraction/Keyboard.h"
+#include "../Sound_Engine.h"
 
 // Allocating and initializing Player's static data member.  
 // The pointer is allocated but not the object's constructor.
@@ -44,6 +45,12 @@ void Player::Init(void)
 
 	this->keyboard = new Keyboard();
 	keyboard->Create();
+
+
+	CSoundEngine::GetInstance()->Init();
+	//CSoundEngine::GetInstance()->Addthefuckingsound("HELLO", "Image//Hello.mp3");
+	
+
 }
 
 // Returns true if the player is on ground
