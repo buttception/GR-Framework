@@ -97,9 +97,12 @@
     </ClCompile>
     <ClCompile Include="Source\BuildingEntity.cpp">
       <Filter>Entity</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="Source\Sound_Engine.cpp">
       <Filter>Sound Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\BuildingTile.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -159,9 +162,12 @@
     </ClInclude>
     <ClInclude Include="Source\BuildingEntity.h">
       <Filter>Entity</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="Source\Sound_Engine.h">
       <Filter>Sound Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\BuildingTile.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

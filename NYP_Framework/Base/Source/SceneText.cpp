@@ -210,7 +210,7 @@ void SceneText::Init()
 
 
 
-	Hello->play2D("Image//Hello.mp3", GL_TRUE);
+	//Hello->play2D("Image//Hello.mp3", GL_TRUE);
 
 }
 

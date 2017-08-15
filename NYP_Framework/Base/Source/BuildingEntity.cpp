@@ -1,4 +1,6 @@
 #include "BuildingEntity.h"
+#include "EntityManager.h"
+#include "BuildingManager.h"
 
 BuildingEntity::BuildingEntity()
 {
@@ -43,7 +45,7 @@ BuildingEntity* Create::Building(BuildingEntity::BUILDING_TYPE _type, Vector3 po
 	BuildingEntity* b = new BuildingEntity();
 	b->type = _type;
 	b->SetPosition(pos);
-
+	EntityManager::GetInstance()->AddEntity(b);
 
 	return b;
 }
