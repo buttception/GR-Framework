@@ -139,32 +139,6 @@ void Player::Update(double dt)
 		Constrain();
 	}
 
-	// Update the weapons
-	if (KeyboardController::GetInstance()->IsKeyReleased('R'))
-	{
-	}
-
-	// if Mouse Buttons were activated, then act on them
-	if (MouseController::GetInstance()->IsButtonPressed(MouseController::LMB))
-	{
-		std::cout << "Left mouse down" << std::endl;
-	}
-	else if (MouseController::GetInstance()->IsButtonPressed(MouseController::RMB))
-	{
-
-	}
-
-	// If the user presses R key, then reset the view to default values
-	if (KeyboardController::GetInstance()->IsKeyDown('P'))
-	{
-		Reset();
-	}
-	else
-	{
-
-
-	}
-
 	// If a camera is attached to this playerInfo class, then update it
 	if (attachedCamera)
 	{
