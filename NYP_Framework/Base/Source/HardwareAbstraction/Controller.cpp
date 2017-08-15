@@ -28,6 +28,11 @@ bool Controller::Create(Player* thePlayerInfo)
 	this->controllerfunc[CONTROLLER_MOVEBACK] = &Controller::MoveBack;
 	this->controllerfunc[CONTROLLER_MOVELEFT] = &Controller::MoveLeft;
 	this->controllerfunc[CONTROLLER_MOVERIGHT] = &Controller::MoveRight;
+	this->controllerfunc[CONTROLLER_INTERACT] = &Controller::Interact;
+	this->controllerfunc[CONTROLLER_RELOAD] = &Controller::Reload;
+	this->controllerfunc[CONTROLLER_RESET] = &Controller::Reset;
+	this->controllerfunc[CONTROLLER_FIRE] = &Controller::Fire;
+	this->controllerfunc[CONTROLLER_AIM] = &Controller::Aim;
 
 	return false;
 }
@@ -42,24 +47,54 @@ int Controller::Read(const const float deltaTime)
 
 bool Controller::MoveFront(double dt)
 {
-	std::cout << "Front" << std::endl;
+	thePlayerInfo->MoveFrontBack(dt, true);
 	return false;
 }
 
 bool Controller::MoveBack(double dt)
 {
-	std::cout << "Back" << std::endl;
+	thePlayerInfo->MoveFrontBack(dt, false);
 	return false;
 }
 
 bool Controller::MoveLeft(double dt)
 {
-	std::cout << "Left" << std::endl;
+	thePlayerInfo->MoveLeftRight(dt, false);
 	return false;
 }
 
 bool Controller::MoveRight(double dt)
 {
-	std::cout << "Right" << std::endl;
+	thePlayerInfo->MoveLeftRight(dt, true);
+	return false;
+}
+
+bool Controller::Interact(double dt)
+{
+	std::cout << "Interact" << std::endl;
+	return false;
+}
+
+bool Controller::Reload(double dt)
+{
+	std::cout << "Reload" << std::endl;
+	return false;
+}
+
+bool Controller::Reset(double dt)
+{
+	thePlayerInfo->Reset();
+	return false;
+}
+
+bool Controller::Fire(double dt)
+{
+	std::cout << "Fire" << std::endl;
+	return false;
+}
+
+bool Controller::Aim(double dt)
+{
+	std::cout << "Aim" << std::endl;
 	return false;
 }

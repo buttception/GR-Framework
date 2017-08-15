@@ -15,6 +15,14 @@ public:
         CONTROLLER_MOVEBACK,
         CONTROLLER_MOVELEFT,
         CONTROLLER_MOVERIGHT,
+		CONTROLLER_RUN,
+
+		CONTROLLER_INTERACT,
+
+		CONTROLLER_RELOAD,
+		CONTROLLER_RESET,
+		CONTROLLER_FIRE,
+		CONTROLLER_AIM,
 
         NUM_CONRTOLLER,
     };
@@ -33,7 +41,11 @@ public:
 	virtual bool MoveBack(double dt);
 	virtual bool MoveLeft(double dt);
 	virtual bool MoveRight(double dt);
-
+	virtual bool Interact(double dt);
+	virtual bool Reload(double dt);
+	virtual bool Reset(double dt);
+	virtual bool Fire(double dt);
+	virtual bool Aim(double dt);
 
 };
 

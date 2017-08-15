@@ -25,6 +25,10 @@ bool Keyboard::Create(Player* thePlayerInfo)
 	KeyList[CONTROLLER_MOVEBACK] = 'S';
 	KeyList[CONTROLLER_MOVELEFT] = 'A';
 	KeyList[CONTROLLER_MOVERIGHT] = 'D';
+	KeyList[CONTROLLER_RUN] = VK_LSHIFT;
+	KeyList[CONTROLLER_INTERACT] = 'E';
+	KeyList[CONTROLLER_RELOAD] = 'R';
+	KeyList[CONTROLLER_RESET] = 'P';
 
 	return false;
 }
@@ -42,8 +46,23 @@ int Keyboard::Read(const float deltaTime)
 	if (_CONTROLLER_KEYBOARD_DEBUG)
 	return 0;
 
-	for (int i = 0;i < NUM_CONRTOLLER;++i)
+	for (int i = 0;i < CONTROLLER_FIRE;++i)
 	{
+		if (i >= 0 && i <= 3)
+		{
+			if (KeyboardController::GetInstance()->IsKeyDown(KeyList[CONTROLLER_RUN]))
+			{
+				if (KeyboardController::GetInstance()->IsKeyDown(KeyList[CONTROLLER_MOVEFRONT]))
+					thePlayerInfo->MoveFrontBack(deltaTime, true, 2.0);
+				if (KeyboardController::GetInstance()->IsKeyDown(KeyList[CONTROLLER_MOVEBACK]))
+					thePlayerInfo->MoveFrontBack(deltaTime, false, 2.0);
+				if (KeyboardController::GetInstance()->IsKeyDown(KeyList[CONTROLLER_MOVELEFT]))
+					thePlayerInfo->MoveLeftRight(deltaTime, false, 2.0);
+				if (KeyboardController::GetInstance()->IsKeyDown(KeyList[CONTROLLER_MOVERIGHT]))
+					thePlayerInfo->MoveLeftRight(deltaTime, true, 2.0);
+				break;
+			}
+		}
 		if (KeyboardController::GetInstance()->IsKeyDown(KeyList[i]))
 		{
 			(this->*(controllerfunc[i]))(deltaTime);

@@ -42,6 +42,9 @@ SceneText::~SceneText()
 
 void SceneText::Init()
 {
+	worldHeight = 100.f;
+	worldWidth = worldHeight * (float)Application::GetInstance().GetWindowWidth() / Application::GetInstance().GetWindowHeight();
+
 	currProg = GraphicsManager::GetInstance()->LoadShader("default", "Shader//Shadow.vertexshader", "Shader//Shadow.fragmentshader");
 	
 	// Tell the shader program to store these uniform locations
@@ -172,7 +175,7 @@ void SceneText::Init()
 	// Customise the ground entity
 	groundEntity->SetPosition(Vector3(0, -10, 0));
 	groundEntity->SetScale(Vector3(100.0f, 100.0f, 10.0f));
-	groundEntity->SetGrids(Vector3(4.f, 1.0f, 4.f));
+	groundEntity->SetGrids(Vector3(10.f, 1.0f, 10.f));
 
 
 	// Setup the 2D entities
@@ -194,6 +197,17 @@ void SceneText::Init()
 
 void SceneText::Update(double dt)
 {
+	//convert mouse pos on window onto world
+	double mouseX, mouseY;
+	MouseController::GetInstance()->GetMousePosition(mouseX, mouseY);
+	MouseController::GetInstance()->UpdateMousePosition(mouseX / Application::GetInstance().GetWindowWidth() * worldWidth,
+		(Application::GetInstance().GetWindowHeight() - mouseY) / Application::GetInstance().GetWindowHeight() * worldHeight);
+	MouseController::GetInstance()->GetMousePosition(mouseX, mouseY);
+	mouseX += Player::GetInstance()->GetPos().x;
+	mouseY += Player::GetInstance()->GetPos().z;
+	//std::cout << "mouseX: " << mouseX;
+	//std::cout << "mouseY: " << mouseY << std::endl;
+
 	// Update our entities
 	EntityManager::GetInstance()->Update(dt);
 
