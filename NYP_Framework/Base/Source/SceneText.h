@@ -52,6 +52,7 @@ private:
 	Mesh* light_depth_mesh;
 
 	float worldWidth, worldHeight;
+	bool isDay;
 };
 
 #endif

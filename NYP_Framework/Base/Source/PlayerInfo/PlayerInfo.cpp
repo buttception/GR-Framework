@@ -47,7 +47,7 @@ void Player::Init(void)
 
 
 	CSoundEngine::GetInstance()->Init();
-	//CSoundEngine::GetInstance()->Addthefuckingsound("HELLO", "Image//Hello.mp3");
+	CSoundEngine::GetInstance()->Addthefuckingsound("HELLO", "Image//Hello.mp3");
 
 }
 
@@ -157,6 +157,9 @@ void Player::Update(double dt)
 
 	//testing cout
 	std::cout << (int)(position.x / CELL_SIZE) << ", " << (int)(position.z / CELL_SIZE) << std::endl;
+
+
+
 }
 
 // Constrain the position within the borders
