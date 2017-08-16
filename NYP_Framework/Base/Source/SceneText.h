@@ -50,6 +50,7 @@ private:
 	Mesh* ground;
 
 	float worldWidth, worldHeight;
+	bool isDay;
 };
 
 #endif
