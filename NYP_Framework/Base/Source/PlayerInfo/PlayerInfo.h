@@ -4,6 +4,8 @@
 #include "../TopDownCamera.h"
 #include "../GroundEntity.h"
 #include "SingletonTemplate.h"
+#include "../Minimap.h"
+#include "../Application.h"
 
 class Keyboard;
 class Mouse;

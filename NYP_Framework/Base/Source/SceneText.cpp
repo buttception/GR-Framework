@@ -39,12 +39,15 @@ SceneText::SceneText()
 }
 
 SceneText::SceneText(SceneManager* _sceneMgr)
+	: theMiniMap(NULL)
 {
 	_sceneMgr->AddScene("Start", this);
 }
 
 SceneText::~SceneText()
 {
+	if (theMiniMap)
+		delete theMiniMap;
 }
 
 void SceneText::Init()
@@ -142,6 +145,13 @@ void SceneText::Init()
 	MeshBuilder::GetInstance()->GenerateOBJ("wall", "OBJ//cube.obj");
 
 	sun = MeshBuilder::GetInstance()->GenerateSphere("sphere", Color(1, 1, 1), 24, 24, 1);
+
+	theMiniMap = Create::Minimap();
+	theMiniMap->SetBackground(MeshBuilder::GetInstance()->GenerateQuad("miniMap", Color(1, 1, 1), 1.f));
+	theMiniMap->GetBackground()->textureID[0] = LoadTGA("Image//grass_lightgreen.tga");
+	theMiniMap->SetAvatar(MeshBuilder::GetInstance()->GenerateQuad("MINIMAPAVATAR", Color(1, 1, 1), 0.125f));
+	theMiniMap->GetAvatar()->textureID[0] = LoadTGA("Image//Avatar.tga");
+	theMiniMap->SetSize(1.3f, 1.f);
 
 	lights[0] = new Light();
 	GraphicsManager::GetInstance()->AddLight("lights[0]", lights[0]);
@@ -296,6 +306,13 @@ void SceneText::Update(double dt)
 	float up_angle = Math::RadianToDegree(acosf(playerMouse_Direction.Dot(Up_Direction) / (playerMouse_Direction.Length() * Up_Direction.Length())));
 	float left_angle = Math::RadianToDegree(acosf(playerMouse_Direction.Dot(Left_Direction) / (playerMouse_Direction.Length() * Left_Direction.Length())));
 	
+	//for minimap icon to rotate
+	playerMouse_Direction.Normalize();
+	float angle = Math::RadianToDegree(acosf(playerMouse_Direction.Dot(Up_Direction) / (playerMouse_Direction.Length() * Up_Direction.Length())));
+	if (playerMouse_Direction.x < 0)
+		angle = -angle;
+	CMinimap::GetInstance()->SetAngle(angle);
+
 	//Build wall according to angles formed with pre-detemined vectors based on mouse and player positions
 	if (MouseController::GetInstance()->IsButtonReleased(MouseController::LMB) && isDay)
 	{
@@ -448,6 +465,7 @@ void SceneText::RenderPassMain()
 
 	EntityManager::GetInstance()->RenderUI();
 
+	theMiniMap->RenderUI();
 	//RenderHelper::RenderTextOnScreen(text, std::to_string(fps), Color(0, 1, 0), 2, 0, 0);
 }
 

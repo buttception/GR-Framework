@@ -10,6 +10,7 @@
 #include "MatrixStack.h"
 #include "GenericEntity.h"
 #include "BuildingManager.h"
+#include "Minimap.h"
 
 class ShaderProgram;
 class SceneManager;
@@ -50,6 +51,7 @@ private:
 	Mesh* ground;
 	Mesh* sun;
 	Mesh* light_depth_mesh;
+	CMinimap* theMiniMap;
 
 	float worldWidth, worldHeight;
 	bool isDay;
