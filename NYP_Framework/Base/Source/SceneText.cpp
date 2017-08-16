@@ -23,9 +23,9 @@
 #include "HardwareAbstraction\Keyboard.h"
 #include "BuildingManager.h" 
 #include "../Source/Sound_Engine.h"
-using namespace irrklang;
-#pragma comment(lib,"irrKlang.lib")
-ISoundEngine*Hello = createIrrKlangDevice();
+//using namespace irrklang;
+//#pragma comment(lib,"irrKlang.lib")
+//ISoundEngine*Hello = createIrrKlangDevice();
 
 #include <iostream>
 #include "RenderHelper.h"
@@ -337,6 +337,10 @@ void SceneText::Update(double dt)
 	ss1.precision(4);
 	ss1 << "Player:" << Player::GetInstance()->GetPos();
 	textObj[2]->SetText(ss1.str());
+
+
+	CSoundEngine::GetInstance()->playthesound("HELLO", 3);
+	//std::cout << "Song Playing" << std::endl;
 
 }
 
