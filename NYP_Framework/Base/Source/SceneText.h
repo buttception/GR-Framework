@@ -10,14 +10,14 @@
 #include "MatrixStack.h"
 #include "GenericEntity.h"
 #include "BuildingManager.h"
-#include "Minimap.h"
+
 
 class ShaderProgram;
 class SceneManager;
 class TextEntity;
 class Light;
 class Keyboard;
-
+class CMinimap;
 class SceneText : public Scene
 {	
 public:

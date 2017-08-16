@@ -1,4 +1,5 @@
-#pragma once
+#ifndef MINIMAP_H
+#define MINIMAP_H
 
 #include "EntityBase.h"
 #include "SingletonTemplate.h"
@@ -6,10 +7,9 @@
 
 class CMinimap : public EntityBase, public Singleton<CMinimap>
 {
+	friend Singleton;
 public:
 
-	CMinimap(void);
-	virtual ~CMinimap(void);
 
 	Mesh* m_cMinimap_Background;
 	Mesh* m_cMinimap_Avatar;
@@ -55,9 +55,15 @@ protected:
 	float m_fPos_x, m_fPos_y;
 	// Minimap size
 	float m_fSize_x, m_fSize_y;
+
+	CMinimap(void);
+	virtual ~CMinimap(void);
+
 };
 
 namespace Create
 {
 	CMinimap* Minimap();
 };
+
+#endif

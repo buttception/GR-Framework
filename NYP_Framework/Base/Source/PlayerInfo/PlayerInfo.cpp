@@ -14,6 +14,7 @@
 
 Player::Player(void)
 	: m_dSpeed(40.0)
+	, GenericEntity(NULL)
 	, m_dAcceleration(10.0)
 	, m_dElapsedTime(0.0)
 	, attachedCamera(NULL)
@@ -39,6 +40,9 @@ void Player::Init(void)
 	// Set Boundary
 	maxBoundary.Set(1,1,1);
 	minBoundary.Set(-1, -1, -1);
+
+	SetAABB(Vector3(position.x + 5, position.y + 5, position.z + 5), Vector3(position.x - 5, position.y - 5, position.z - 5));
+	SetCollider(true);
 
 	this->keyboard = new Keyboard();
 	keyboard->Create(this);
@@ -155,6 +159,8 @@ void Player::Update(double dt)
 		}
 	}
 
+	SetAABB(Vector3(position.x + 5, position.y + 5, position.z + 5), Vector3(position.x - 5, position.y - 5, position.z - 5));
+
 	//testing cout
 	//std::cout << (int)(position.x / CELL_SIZE) << ", " << (int)(position.z / CELL_SIZE) << std::endl;
 
@@ -248,4 +254,9 @@ bool Player::MoveLeftRight(const float deltaTime, const bool direction, const fl
 		}
 	}
 	return false;
+}
+
+void Player::CollisionResponse(EntityBase *thatEntity)
+{
+	std::cout << "collided with wall" << std::endl;
 }
