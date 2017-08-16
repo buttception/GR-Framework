@@ -197,8 +197,8 @@ void Player::AttachCamera(CameraBase* _cameraPtr)
 	}
 	else if (dynamic_cast<TopDownCamera*>(attachedCamera)){
 		Vector3 target = position;
-		Vector3 up(0, 0, 1);
-		dynamic_cast<TopDownCamera*>(attachedCamera)->Init(Vector3(position.x, position.y + 20, position.z), target, up, -100);
+		Vector3 up(0, 0, -1);
+		dynamic_cast<TopDownCamera*>(attachedCamera)->Init(Vector3(position.x, position.y + 20, position.z), target, up, 100);
 		std::cout << "Top down camera Loaded" << std::endl;
 	}
 }
@@ -213,13 +213,13 @@ bool Player::MoveFrontBack(const float deltaTime, const bool direction, const fl
 	if (dynamic_cast<TopDownCamera*>(attachedCamera)) {
 		if (direction)
 		{
-			position += Vector3(0, 0, 1) * (float)m_dSpeed * (float)speedMultiplier * (float)deltaTime;
+			position -= Vector3(0, 0, 1) * (float)m_dSpeed * (float)speedMultiplier * (float)deltaTime;
 			Constrain();
 			return true;
 		}
 		else
 		{
-			position -= Vector3(0, 0, 1) * (float)m_dSpeed * (float)speedMultiplier * (float)deltaTime;
+			position += Vector3(0, 0, 1) * (float)m_dSpeed * (float)speedMultiplier * (float)deltaTime;
 			Constrain();
 			return true;
 		}

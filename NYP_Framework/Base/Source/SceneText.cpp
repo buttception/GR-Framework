@@ -144,7 +144,7 @@ void SceneText::Init()
 	lights[0] = new Light();
 	GraphicsManager::GetInstance()->AddLight("lights[0]", lights[0]);
 	lights[0]->type = Light::LIGHT_DIRECTIONAL;
-	lights[0]->position.Set(1, 0, 0);
+	lights[0]->position.Set(0, MAX_CELLS * CELL_SIZE, 0);
 	lights[0]->color.Set(1, 1, 1);
 	lights[0]->power = 1;
 	lights[0]->kC = 1.f;
@@ -378,7 +378,7 @@ void SceneText::RenderPassGPass()
 	//These matrices should change when light position or direction changes
 	Light* light = dynamic_cast<Light*>(g->GetLight("lights[0]"));
 	if (light->type == Light::LIGHT_DIRECTIONAL)
-		g->m_lightDepthProj.SetToOrtho(-100, 100, -100, 100, -100, 200);
+		g->m_lightDepthProj.SetToOrtho(-MAX_CELLS * CELL_SIZE, MAX_CELLS * CELL_SIZE, -MAX_CELLS * CELL_SIZE, MAX_CELLS * CELL_SIZE, -MAX_CELLS * CELL_SIZE, MAX_CELLS * CELL_SIZE);
 	else
 		g->m_lightDepthProj.SetToPerspective(90, 1.f, 0.1, 10);
 
@@ -432,16 +432,15 @@ void SceneText::RenderPassMain()
 
 void SceneText::RenderWorld()
 {
-	EntityManager::GetInstance()->Render();
-
 	MS& ms = GraphicsManager::GetInstance()->GetModelStack();
 	ms.PushMatrix();
 	ms.Translate(MAX_CELLS * CELL_SIZE / 2, 0, MAX_CELLS * CELL_SIZE / 2);
-	ms.Rotate(90, 1, 0, 0);
+	ms.Rotate(-90, 1, 0, 0);
 	ms.Scale(MAX_CELLS * CELL_SIZE, MAX_CELLS * CELL_SIZE, MAX_CELLS * CELL_SIZE);
 	RenderHelper::RenderMeshWithLight(ground);
 	ms.PopMatrix();
 
+	EntityManager::GetInstance()->Render();
 	EntityManager::GetInstance()->RenderUI();
 }
 

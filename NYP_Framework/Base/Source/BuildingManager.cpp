@@ -33,33 +33,33 @@ void BuildingManager::AddWall(int _x, int _y, int direction)
 	if (direction >= 1 && direction <= 2) {
 		//if it is left or top, just add the wall
 		if (direction == 1) {
-			wall->SetScale(Vector3(2, 1, 20));
-			wall->SetPosition(Vector3(_x * CELL_SIZE, 0, _y * CELL_SIZE + CELL_SIZE / 2));
+			wall->SetScale(Vector3(2, 5, 20));
+			wall->SetPosition(Vector3(_x * CELL_SIZE, wall->GetScale().y / 2, _y * CELL_SIZE + CELL_SIZE / 2));
 			buildingArray[_x][_y]->AddWall(wall, 1);
 		}
 		if (direction == 2) {
-			wall->SetScale(Vector3(20, 1, 2));
-			wall->SetPosition(Vector3((_x + 1) * CELL_SIZE - CELL_SIZE/2, 0, (_y + 1)* CELL_SIZE));
+			wall->SetScale(Vector3(20, 5, 2));
+			wall->SetPosition(Vector3(_x * CELL_SIZE + CELL_SIZE/2, wall->GetScale().y / 2, _y* CELL_SIZE));
 			buildingArray[_x][_y]->AddWall(wall, 2);
 		}
 	}
 	else if (direction == 3) {
-		wall->SetScale(Vector3(2, 1, 20));
+		wall->SetScale(Vector3(2, 5, 20));
 		//if it is on the right, which is the next tile set unless is end
 		if (_x + 1 != MAX_CELLS)
 			AddWall(_x + 1, _y, 1);
 		else {
-			wall->SetPosition(Vector3(MAX_CELLS * CELL_SIZE, 0, _y * CELL_SIZE + CELL_SIZE / 2));
+			wall->SetPosition(Vector3(MAX_CELLS * CELL_SIZE, wall->GetScale().y / 2, _y * CELL_SIZE + CELL_SIZE / 2));
 			buildingArray[_x][_y]->AddWall(wall, 3);
 		}
 	}
 	else if (direction == 4) {
-		wall->SetScale(Vector3(20, 1, 2));
+		wall->SetScale(Vector3(20, 5, 2));
 		//if it is on the bottom, which is the bottom tile set unless is end
 		if (_y >= 0)
-			AddWall(_x, _y - 1, 2);
+			AddWall(_x, _y + 1, 2);
 		else {
-			wall->SetPosition(Vector3(_x * CELL_SIZE + CELL_SIZE / 2, 0, MAX_CELLS * CELL_SIZE));
+			wall->SetPosition(Vector3(_x * CELL_SIZE + CELL_SIZE / 2, wall->GetScale().y / 2, MAX_CELLS * CELL_SIZE));
 			buildingArray[_x][_y]->AddWall(wall, 4);
 		}
 	}
