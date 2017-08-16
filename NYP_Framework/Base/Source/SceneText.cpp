@@ -215,7 +215,7 @@ void SceneText::Init()
 
 
 	//Hello->play2D("Image//Hello.mp3", GL_TRUE);
-
+	isDay = true;
 }
 
 void SceneText::Update(double dt)
@@ -223,11 +223,12 @@ void SceneText::Update(double dt)
 	//convert mouse pos on window onto world
 	double mouseX, mouseY;
 	MouseController::GetInstance()->GetMousePosition(mouseX, mouseY);
-	MouseController::GetInstance()->UpdateMousePosition(mouseX / Application::GetInstance().GetWindowWidth() * worldWidth,
-		(Application::GetInstance().GetWindowHeight() - mouseY) / Application::GetInstance().GetWindowHeight() * worldHeight);
+	MouseController::GetInstance()->UpdateMousePosition(mouseX, Application::GetInstance().GetWindowHeight() - mouseY);
+	//MouseController::GetInstance()->UpdateMousePosition(mouseX / Application::GetInstance().GetWindowWidth() * worldWidth,
+	//	(Application::GetInstance().GetWindowHeight() - mouseY) / Application::GetInstance().GetWindowHeight() * worldHeight);
 	MouseController::GetInstance()->GetMousePosition(mouseX, mouseY);
-	mouseX += Player::GetInstance()->GetPos().x;
-	mouseY += Player::GetInstance()->GetPos().z;
+	//mouseX += Player::GetInstance()->GetPos().x;
+	//mouseY += Player::GetInstance()->GetPos().z;
 	//std::cout << "mouseX: " << mouseX;
 	//std::cout << "mouseY: " << mouseY << std::endl;
 
@@ -268,19 +269,6 @@ void SceneText::Update(double dt)
 		lights[0]->position = rotate * lights[0]->position;
 	}
 
-	if (KeyboardController::GetInstance()->IsKeyPressed(VK_LEFT)) {
-		BuildingManager::GetInstance()->AddWall((int)(Player::GetInstance()->GetPos().x / CELL_SIZE), (int)(Player::GetInstance()->GetPos().z / CELL_SIZE), 1);
-	}
-	if (KeyboardController::GetInstance()->IsKeyPressed(VK_UP)) {
-		BuildingManager::GetInstance()->AddWall((int)(Player::GetInstance()->GetPos().x / CELL_SIZE), (int)(Player::GetInstance()->GetPos().z / CELL_SIZE), 2);
-	}
-	if (KeyboardController::GetInstance()->IsKeyPressed(VK_RIGHT)) {
-		BuildingManager::GetInstance()->AddWall((int)(Player::GetInstance()->GetPos().x / CELL_SIZE), (int)(Player::GetInstance()->GetPos().z / CELL_SIZE), 3);
-	}
-	if (KeyboardController::GetInstance()->IsKeyPressed(VK_DOWN)) {
-		BuildingManager::GetInstance()->AddWall((int)(Player::GetInstance()->GetPos().x / CELL_SIZE), (int)(Player::GetInstance()->GetPos().z / CELL_SIZE), 4);
-	}
-
 	if (KeyboardController::GetInstance()->IsKeyPressed(VK_F1)){
 		//Debug mode
 		//MouseController::GetInstance()->SetKeepMouseCentered(true);
@@ -293,11 +281,34 @@ void SceneText::Update(double dt)
 		Player::GetInstance()->DetachCamera();
 		Player::GetInstance()->AttachCamera(camera);
 	}
+	// Debug purpose - changing to day / night
+	if (KeyboardController::GetInstance()->IsKeyPressed(VK_F3) && isDay)
+		isDay = false;
+	if (KeyboardController::GetInstance()->IsKeyPressed(VK_F4) && !isDay)
+		isDay = true;
 
-	// if the left mouse button was released
-	if (MouseController::GetInstance()->IsButtonReleased(MouseController::LMB))
+	//vectors and angles for wall-building with mouse
+	Vector3 Up_Direction = Vector3(400.f, 600.f, 0.f) - Vector3(400.f, 300.f, 0.f);
+	Vector3 Left_Direction = Vector3(0.f, 300.f, 0.f) - Vector3(400.f, 300.f, 0.f);
+	Vector3 playerMouse_Direction = Vector3((float)mouseX, (float)mouseY, 0.f) - Vector3(400.f, 300.f, 0.f);
+	float up_angle = Math::RadianToDegree(acosf(playerMouse_Direction.Dot(Up_Direction) / (playerMouse_Direction.Length() * Up_Direction.Length())));
+	float left_angle = Math::RadianToDegree(acosf(playerMouse_Direction.Dot(Left_Direction) / (playerMouse_Direction.Length() * Left_Direction.Length())));
+	
+	//Build wall according to angles formed with pre-detemined vectors based on mouse and player positions
+	if (MouseController::GetInstance()->IsButtonReleased(MouseController::LMB) && isDay)
 	{
-		std::cout << "Left Mouse Button was released!" << std::endl;
+		// Up
+		if (up_angle <= 53.f)
+			BuildingManager::GetInstance()->AddWall((int)(Player::GetInstance()->GetPos().x / CELL_SIZE), (int)(Player::GetInstance()->GetPos().z / CELL_SIZE), 2);
+		// Left
+		else if(left_angle <= 36.f)
+			BuildingManager::GetInstance()->AddWall((int)(Player::GetInstance()->GetPos().x / CELL_SIZE), (int)(Player::GetInstance()->GetPos().z / CELL_SIZE), 1);
+		// Right
+		else if(left_angle >= 142.f)
+			BuildingManager::GetInstance()->AddWall((int)(Player::GetInstance()->GetPos().x / CELL_SIZE), (int)(Player::GetInstance()->GetPos().z / CELL_SIZE), 3);
+		// Down
+		else if(up_angle >= 125.f)
+			BuildingManager::GetInstance()->AddWall((int)(Player::GetInstance()->GetPos().x / CELL_SIZE), (int)(Player::GetInstance()->GetPos().z / CELL_SIZE), 4);
 	}
 	if (MouseController::GetInstance()->IsButtonReleased(MouseController::RMB))
 	{
