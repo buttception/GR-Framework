@@ -128,7 +128,7 @@ void SceneText::Init()
 
 	GraphicsManager::GetInstance()->gPass_params[GraphicsManager::GPASS_UNIFORM_TYPE::U_LIGHT_DEPTH_MVP_GPASS] =
 		glGetUniformLocation(GraphicsManager::GetInstance()->m_gPassShaderID, "lightDepthMVP");
-	GraphicsManager::GetInstance()->m_lightDepthFBO.Init(1024, 1024);
+	GraphicsManager::GetInstance()->m_lightDepthFBO.Init(4000, 4000);
 
 	// Tell the graphics manager to use the shader we just loaded
 	GraphicsManager::GetInstance()->SetActiveShader("default");
@@ -139,7 +139,9 @@ void SceneText::Init()
 	MeshBuilder::GetInstance()->GenerateQuad("GRASS_LIGHTGREEN", Color(1, 1, 1), 1.f);
 	MeshList::GetInstance()->GetMesh("GRASS_LIGHTGREEN")->textureID[0] = LoadTGA("Image//grass_lightgreen.tga");
 
-	MeshBuilder::GetInstance()->GenerateCube("wall", Color(1, 1, 1), 1.f);
+	MeshBuilder::GetInstance()->GenerateOBJ("wall", "OBJ//cube.obj");
+
+	sun = MeshBuilder::GetInstance()->GenerateSphere("sphere", Color(1, 1, 1), 24, 24, 1);
 
 	lights[0] = new Light();
 	GraphicsManager::GetInstance()->AddLight("lights[0]", lights[0]);
@@ -208,8 +210,8 @@ void SceneText::Init()
 
 
 	//light testing
-	/*light_depth_mesh = MeshBuilder::GetInstance()->GenerateQuad("light_depth_mesh", Color(1, 0, 1), 1);
-	light_depth_mesh->textureID[0] = GraphicsManager::GetInstance()->m_lightDepthFBO.GetTexture();*/
+	light_depth_mesh = MeshBuilder::GetInstance()->GenerateQuad("light_depth_mesh", Color(1, 0, 1), 1);
+	light_depth_mesh->textureID[0] = GraphicsManager::GetInstance()->m_lightDepthFBO.GetTexture();
 	//light_depth_mesh->textureID[0] = LoadTGA("Image//calibri.tga");
 
 
@@ -377,14 +379,18 @@ void SceneText::RenderPassGPass()
 	glUseProgram(g->m_gPassShaderID);
 	//These matrices should change when light position or direction changes
 	Light* light = dynamic_cast<Light*>(g->GetLight("lights[0]"));
-	if (light->type == Light::LIGHT_DIRECTIONAL)
-		g->m_lightDepthProj.SetToOrtho(-MAX_CELLS * CELL_SIZE, MAX_CELLS * CELL_SIZE, -MAX_CELLS * CELL_SIZE, MAX_CELLS * CELL_SIZE, -MAX_CELLS * CELL_SIZE, MAX_CELLS * CELL_SIZE);
+	if (light->type == Light::LIGHT_DIRECTIONAL) {
+		g->m_lightDepthProj.SetToOrtho(0, MAX_CELLS * CELL_SIZE, -MAX_CELLS * CELL_SIZE, 0, -MAX_CELLS * CELL_SIZE , MAX_CELLS * CELL_SIZE * 2);
+		//g->m_lightDepthProj.SetToOrtho(-100, 100, -100, 100, -100, 100);
+	}
 	else
 		g->m_lightDepthProj.SetToPerspective(90, 1.f, 0.1, 10);
 
 
+	Vector3 up = Vector3(1, 0, 0).Cross(Vector3(-lights[0]->position.x, -lights[0]->position.y, -lights[0]->position.z)).Normalized();
+
 	g->m_lightDepthView.SetToLookAt(light->position.x,
-		light->position.y, light->position.z, 0, 0, 0, 0, 1, 0);
+		light->position.y, light->position.z, 0, 0, 0, up.x, up.y, up.z);
 
 	RenderWorld();
 }
@@ -440,8 +446,19 @@ void SceneText::RenderWorld()
 	RenderHelper::RenderMeshWithLight(ground);
 	ms.PopMatrix();
 
+	ms.PushMatrix();
+	ms.Translate(lights[0]->position.x / 2, lights[0]->position.y / 2, lights[0]->position.z / 2);
+	ms.Scale(50.f, 50.f, 50.f);
+	RenderHelper::RenderMesh(sun);
+	ms.PopMatrix();
+
+	ms.PushMatrix();
+	ms.Translate(0, 50, 0);
+	ms.Scale(50, 50, 50);	
+	RenderHelper::RenderMesh(light_depth_mesh);
+	ms.PopMatrix();
+
 	EntityManager::GetInstance()->Render();
-	EntityManager::GetInstance()->RenderUI();
 }
 
 void SceneText::Exit()

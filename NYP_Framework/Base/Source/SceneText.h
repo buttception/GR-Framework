@@ -48,6 +48,8 @@ private:
 	void RenderWorld();
 
 	Mesh* ground;
+	Mesh* sun;
+	Mesh* light_depth_mesh;
 
 	float worldWidth, worldHeight;
 };
