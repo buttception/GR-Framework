@@ -128,7 +128,7 @@ void SceneText::Init()
 
 	GraphicsManager::GetInstance()->gPass_params[GraphicsManager::GPASS_UNIFORM_TYPE::U_LIGHT_DEPTH_MVP_GPASS] =
 		glGetUniformLocation(GraphicsManager::GetInstance()->m_gPassShaderID, "lightDepthMVP");
-	GraphicsManager::GetInstance()->m_lightDepthFBO.Init(4000, 4000);
+	GraphicsManager::GetInstance()->m_lightDepthFBO.Init(2048, 2048);
 
 	// Tell the graphics manager to use the shader we just loaded
 	GraphicsManager::GetInstance()->SetActiveShader("default");
@@ -210,7 +210,7 @@ void SceneText::Init()
 
 
 	//light testing
-	light_depth_mesh = MeshBuilder::GetInstance()->GenerateQuad("light_depth_mesh", Color(1, 0, 1), 1);
+	light_depth_mesh = MeshBuilder::GetInstance()->GenerateQuad("light_depth_mewsh", Color(1, 0, 1), 1);
 	light_depth_mesh->textureID[0] = GraphicsManager::GetInstance()->m_lightDepthFBO.GetTexture();
 	//light_depth_mesh->textureID[0] = LoadTGA("Image//calibri.tga");
 
@@ -447,7 +447,6 @@ void SceneText::RenderPassMain()
 	GraphicsManager::GetInstance()->DetachCamera();
 
 	EntityManager::GetInstance()->RenderUI();
-
 	//RenderHelper::RenderTextOnScreen(text, std::to_string(fps), Color(0, 1, 0), 2, 0, 0);
 }
 
