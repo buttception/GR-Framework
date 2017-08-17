@@ -52,8 +52,8 @@
     <ClInclude Include="Source\HardwareAbstraction\Keyboard.h" />
     <ClInclude Include="Source\HardwareAbstraction\Mouse.h" />
     <ClInclude Include="Source\Light.h" />
-    <ClInclude Include="Source\Minimap.h" />
     <ClInclude Include="Source\LoadTextData.h" />
+    <ClInclude Include="Source\Minimap.h" />
     <ClInclude Include="Source\OBJMesh.h" />
     <ClInclude Include="Source\PlayerInfo\PlayerInfo.h" />
     <ClInclude Include="Source\SceneMainMenu.h" />
