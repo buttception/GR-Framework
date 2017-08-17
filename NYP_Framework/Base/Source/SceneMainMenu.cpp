@@ -76,6 +76,7 @@ void SceneMainMenu::Init()
 		Vector3(25.0f, 25.0f, 25.0f));
 
 	BONER->play2D("Image//Relax.mp3" , GL_TRUE);
+	std::cout << "Main Menu Song Playing" << std::endl;
 }
 void SceneMainMenu::Update(double dt)
 {
@@ -218,4 +219,5 @@ void SceneMainMenu::Exit()
 	//CSoundEngine::GetInstance()->removethesound("HELLO");
 
 	BONER->stopAllSounds();
+	std::cout << "Main Menu Song Stopped Playing" << std::endl;
 }
