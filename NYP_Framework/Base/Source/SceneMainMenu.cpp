@@ -179,7 +179,7 @@ void SceneMainMenu::Update(double dt)
 	}
 
 
-	CSoundEngine::GetInstance()->playthesound("HELLO", 3);
+	//CSoundEngine::GetInstance()->playthesound("HELLO", 3);
 }
 
 void SceneMainMenu::Render()

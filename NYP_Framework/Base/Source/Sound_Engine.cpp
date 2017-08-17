@@ -106,3 +106,44 @@ void CSoundEngine::playthesound(const std::string & _soundIndex, float volume)
 		isthesoundEngine->setSoundVolume(volume);
 	}
 }
+
+//void CSoundEngine::setVolume(int newvolume, float volume)
+//{
+//	if (newvolume < 0 || newvolume > 100)
+//	{
+//		volume = 50;
+//	}
+//
+//}
+//
+//void CSoundEngine::increase_volume()
+//{
+//	volume += 10;
+//
+//	if (volume > 100)
+//	{
+//		volume = 100;
+//	}
+//	
+//
+//}
+//
+//void CSoundEngine::increase_volume(int increament , float volume)
+//{
+//	volume += increament;
+//	if (volume > 100)
+//	{
+//		volume = 100;
+//	}
+//
+//}
+//
+//void CSoundEngine::decrease_volume()
+//{
+//}
+//
+//void CSoundEngine::decrease_volume(int decrement ,float volume)
+//{
+//}
+
+
