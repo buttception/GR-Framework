@@ -46,7 +46,7 @@ int Keyboard::Read(const float deltaTime)
 	if (_CONTROLLER_KEYBOARD_DEBUG)
 	return 0;
 
-	for (int i = 0;i < CONTROLLER_FIRE;++i)
+	for (int i = 0;i < CONTROLLER_LEFTCLICK;++i)
 	{
 		if (i >= 0 && i <= 3)
 		{

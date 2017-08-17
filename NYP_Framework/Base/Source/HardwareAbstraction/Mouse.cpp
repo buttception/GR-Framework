@@ -24,7 +24,7 @@ bool Mouse::Create(Player* thePlayerInfo)
 	if (_CONTROLLER_MOUSE_DEBUG)
 		cout << "Mouse::Create()" << endl;
 
-	KeyList[CONTROLLER_FIRE] = MouseController::LMB;
+	KeyList[CONTROLLER_LEFTCLICK] = MouseController::LMB;
 	KeyList[CONTROLLER_AIM] = MouseController::RMB;
 
 	return false;
@@ -43,9 +43,9 @@ int Mouse::Read(const float deltaTime)
 	//cout << "mouseX: " << mousePosX << endl;
 	//cout << "mouseY: " << mousePosY << endl;
 
-	for (int i = CONTROLLER_FIRE;i < NUM_CONRTOLLER;++i)
+	for (int i = CONTROLLER_LEFTCLICK;i < NUM_CONRTOLLER;++i)
 	{
-		if (MouseController::GetInstance()->IsButtonDown(KeyList[i]))
+		if (MouseController::GetInstance()->IsButtonReleased(KeyList[i]))
 		{
 			(this->*(controllerfunc[i]))(deltaTime);
 		}

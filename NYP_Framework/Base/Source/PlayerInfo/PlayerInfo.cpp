@@ -8,7 +8,9 @@
 #include "../BuildingManager.h"
 #include "../HardwareAbstraction/Mouse.h"
 #include "../Sound_Engine.h"
+#include "../SceneText.h"
 
+bool SceneText::isDay = true;
 // Allocating and initializing Player's static data member.  
 // The pointer is allocated but not the object's constructor.
 
@@ -56,6 +58,8 @@ void Player::Init(void)
 	
 	//CSoundEngine::GetInstance()->Addthefuckingsound("HI", "Image//Hello.mp3");
 
+	playerHealth = 100.f;
+	material = 3000;
 }
 
 // Set position
@@ -167,6 +171,8 @@ void Player::Update(double dt)
 	//testing cout
 	//std::cout << (int)(position.x / CELL_SIZE) << ", " << (int)(position.z / CELL_SIZE) << std::endl;
 
+	if (KeyboardController::GetInstance()->IsKeyPressed(VK_F5) && !SceneText::isDay)
+		playerHealth = Math::Max(0.f, playerHealth - 10.f);
 
 	CMinimap::GetInstance()->SetPosition(position.x * CMinimap::GetInstance()->GetSize_x() / Application::GetInstance().GetWindowWidth(),
 		(Application::GetInstance().GetWindowHeight() - position.z) * CMinimap::GetInstance()->GetSize_y() / Application::GetInstance().GetWindowHeight());
@@ -255,6 +261,40 @@ bool Player::MoveLeftRight(const float deltaTime, const bool direction, const fl
 			Constrain();
 			return true;
 		}
+	}
+	return false;
+}
+
+bool Player::LeftClick()
+{
+	//convert mouse pos on window onto world
+	double mouseX, mouseY;
+	MouseController::GetInstance()->GetMousePosition(mouseX, mouseY);
+	MouseController::GetInstance()->UpdateMousePosition(mouseX, mouseY);//Application::GetInstance().GetWindowHeight() - 
+	MouseController::GetInstance()->GetMousePosition(mouseX, mouseY);
+
+	Vector3 Up_Direction = Vector3(400.f, 600.f, 0.f) - Vector3(400.f, 300.f, 0.f);
+	Vector3 Left_Direction = Vector3(0.f, 300.f, 0.f) - Vector3(400.f, 300.f, 0.f);
+	Vector3 playerMouse_Direction = Vector3((float)mouseX, (float)mouseY, 0.f) - Vector3(400.f, 300.f, 0.f);
+	float up_angle = Math::RadianToDegree(acosf(playerMouse_Direction.Dot(Up_Direction) / (playerMouse_Direction.Length() * Up_Direction.Length())));
+	float left_angle = Math::RadianToDegree(acosf(playerMouse_Direction.Dot(Left_Direction) / (playerMouse_Direction.Length() * Left_Direction.Length())));
+
+	//Build wall according to angles formed with pre-detemined vectors based on mouse and player positions
+	if (SceneText::isDay)
+	{
+		// Up
+		if (up_angle <= 53.f)
+			BuildingManager::GetInstance()->AddWall((int)(Player::GetInstance()->GetPos().x / CELL_SIZE), (int)(Player::GetInstance()->GetPos().z / CELL_SIZE), 2);
+		// Left
+		else if (left_angle <= 36.f)
+			BuildingManager::GetInstance()->AddWall((int)(Player::GetInstance()->GetPos().x / CELL_SIZE), (int)(Player::GetInstance()->GetPos().z / CELL_SIZE), 1);
+		// Right
+		else if (left_angle >= 142.f)
+			BuildingManager::GetInstance()->AddWall((int)(Player::GetInstance()->GetPos().x / CELL_SIZE), (int)(Player::GetInstance()->GetPos().z / CELL_SIZE), 3);
+		// Down
+		else if (up_angle >= 125.f)
+			BuildingManager::GetInstance()->AddWall((int)(Player::GetInstance()->GetPos().x / CELL_SIZE), (int)(Player::GetInstance()->GetPos().z / CELL_SIZE), 4);
+		return true;
 	}
 	return false;
 }
