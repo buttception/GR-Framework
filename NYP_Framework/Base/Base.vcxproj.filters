@@ -187,5 +187,8 @@
     <ClInclude Include="Source\FontType.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Minimap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

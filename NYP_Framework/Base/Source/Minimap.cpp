@@ -133,9 +133,12 @@ void CMinimap::RenderUI()
 		// Scale the current transformation
 		modelStack.Scale(scale.x, scale.y, scale.z);
 
+		if (!isResizing)
+		{
+			SetSize(1.3f, 1.f);
 			modelStack.PushMatrix();
-				if (m_cMinimap_Background)
-					RenderHelper::RenderMesh(m_cMinimap_Background);
+			if (m_cMinimap_Background)
+				RenderHelper::RenderMesh(m_cMinimap_Background);
 			modelStack.PopMatrix();
 
 			// Disable depth test
@@ -148,10 +151,36 @@ void CMinimap::RenderUI()
 			if (m_cMinimap_Avatar)
 				RenderHelper::RenderMesh(m_cMinimap_Avatar);
 			modelStack.PopMatrix();
-			
+
 			// Enable depth test
 			glEnable(GL_DEPTH_TEST);
+		}
+		else
+		{
+			SetSize(3.6f, 3.f);
+			modelStack.PushMatrix();
+			modelStack.Translate(-3.35f, -2.35f, 0.f);
+			modelStack.Scale(2.5f, 2.5f, 1.f);
+			if (m_cMinimap_Background)
+				RenderHelper::RenderMesh(m_cMinimap_Background);
+			modelStack.PopMatrix();
 
+			// Disable depth test
+			glDisable(GL_DEPTH_TEST);
+
+			// Display the Avatar
+			modelStack.PushMatrix();
+			modelStack.Translate(-3.3f, -2.35f, 0.f);
+			modelStack.Translate(m_fPos_x - 1.2f, m_fPos_y - 1.8f, 0.f);
+			modelStack.Rotate(m_fAngle, 0.0f, 0.0f, -1.0f);
+			modelStack.Scale(3.f, 3.f, 1.f);
+			if (m_cMinimap_Avatar)
+				RenderHelper::RenderMesh(m_cMinimap_Avatar);
+			modelStack.PopMatrix();
+
+			// Enable depth test
+			glEnable(GL_DEPTH_TEST);
+		}
 	modelStack.PopMatrix();
 }
 

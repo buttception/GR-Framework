@@ -160,7 +160,6 @@ void SceneText::Init()
 	theMiniMap->GetBackground()->textureID[0] = LoadTGA("Image//grass_lightgreen.tga");
 	theMiniMap->SetAvatar(MeshBuilder::GetInstance()->GenerateQuad("MINIMAPAVATAR", Color(1, 1, 1), 0.125f));
 	theMiniMap->GetAvatar()->textureID[0] = LoadTGA("Image//Avatar.tga");
-	theMiniMap->SetSize(1.3f, 1.f);
 
 	lights[0] = new Light();
 	GraphicsManager::GetInstance()->AddLight("lights[0]", lights[0]);
@@ -382,6 +381,9 @@ void SceneText::Update(double dt)
 	ss << "Player:" << Player::GetInstance()->GetPos();
 	textObj[1]->SetText(ss.str());
 
+	CSoundEngine::GetInstance()->playthesound("HELLO", 0.01);
+	//std::cout << "Song Playing" << std::endl;
+
 	ss.str("");
 	ss.precision(0);
 	if (isDay)
@@ -426,10 +428,6 @@ void SceneText::Update(double dt)
 	ss.str("");
 	ss << "Material: " << Player::material;
 	textObj[3]->SetText(ss.str());
-
-	//CSoundEngine::GetInstance()->playthesound("HELLO", 3);
-	//std::cout << "Song Playing" << std::endl;
-
 }
 
 void SceneText::Render()
@@ -577,7 +575,7 @@ void SceneText::RenderWorld()
 	ms.Translate(CELL_SIZE / 2 * MAX_CELLS, 10, CELL_SIZE / 2 * MAX_CELLS);
 	ms.Rotate(-90, 1, 0, 0);
 	ms.Scale(50, 50, 50);	
-	RenderHelper::RenderMesh(light_depth_mesh);
+	//RenderHelper::RenderMesh(light_depth_mesh);
 	ms.PopMatrix();
 
 	EntityManager::GetInstance()->Render();
