@@ -48,6 +48,8 @@ public:
 
 	virtual void RenderUI();
 
+	static bool isResizing;
+
 protected:
 	// Rotation from First Angle
 	float m_fAngle;

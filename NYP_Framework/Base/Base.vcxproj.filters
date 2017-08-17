@@ -106,7 +106,7 @@
     </ClCompile>
     <ClCompile Include="Source\SceneMainMenu.cpp">
       <Filter>Scene</Filter>
-	  </ClCompile>
+    </ClCompile>
     <ClCompile Include="Source\Minimap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -177,6 +177,9 @@
     </ClInclude>
     <ClInclude Include="Source\SceneMainMenu.h">
       <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Minimap.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

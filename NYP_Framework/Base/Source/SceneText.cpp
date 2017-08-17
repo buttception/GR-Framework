@@ -158,7 +158,6 @@ void SceneText::Init()
 	theMiniMap->GetBackground()->textureID[0] = LoadTGA("Image//grass_lightgreen.tga");
 	theMiniMap->SetAvatar(MeshBuilder::GetInstance()->GenerateQuad("MINIMAPAVATAR", Color(1, 1, 1), 0.125f));
 	theMiniMap->GetAvatar()->textureID[0] = LoadTGA("Image//Avatar.tga");
-	theMiniMap->SetSize(1.3f, 1.f);
 
 	lights[0] = new Light();
 	GraphicsManager::GetInstance()->AddLight("lights[0]", lights[0]);

@@ -33,6 +33,7 @@ bool Controller::Create(Player* thePlayerInfo)
 	this->controllerfunc[CONTROLLER_RESET] = &Controller::Reset;
 	this->controllerfunc[CONTROLLER_LEFTCLICK] = &Controller::LeftClick;
 	this->controllerfunc[CONTROLLER_AIM] = &Controller::Aim;
+	this->controllerfunc[CONTROLLER_MAPRESIZE] = &Controller::MapResize;
 
 	return false;
 }
@@ -96,5 +97,11 @@ bool Controller::LeftClick(double dt)
 bool Controller::Aim(double dt)
 {
 	std::cout << "Aim" << std::endl;
+	return false;
+}
+
+bool Controller::MapResize(double dt)
+{
+	thePlayerInfo->MapResize();
 	return false;
 }
