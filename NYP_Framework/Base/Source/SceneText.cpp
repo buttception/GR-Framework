@@ -351,7 +351,7 @@ void SceneText::Update(double dt)
 
 
 	CSoundEngine::GetInstance()->playthesound("HELLO", 3);
-	//std::cout << "Song Playing" << std::endl;
+	std::cout << "Song Playing" << std::endl;
 
 }
 
@@ -437,6 +437,7 @@ void SceneText::RenderPassMain()
 
 	int halfWindowWidth = Application::GetInstance().GetWindowWidth() / 2;
 	int halfWindowHeight = Application::GetInstance().GetWindowHeight() / 2;
+
 	GraphicsManager::GetInstance()->SetOrthographicProjection(-halfWindowWidth, halfWindowWidth, -halfWindowHeight, halfWindowHeight, -10, 10);
 	GraphicsManager::GetInstance()->DetachCamera();
 
