@@ -29,6 +29,7 @@ bool Keyboard::Create(Player* thePlayerInfo)
 	KeyList[CONTROLLER_INTERACT] = 'E';
 	KeyList[CONTROLLER_RELOAD] = 'R';
 	KeyList[CONTROLLER_RESET] = 'P';
+	KeyList[CONTROLLER_MAPRESIZE] = 'M';
 
 	return false;
 }
@@ -48,7 +49,7 @@ int Keyboard::Read(const float deltaTime)
 
 	for (int i = 0;i < CONTROLLER_LEFTCLICK;++i)
 	{
-		if (i >= 0 && i <= 3)
+		if (i >= 0 && i <= 4)
 		{
 			if (KeyboardController::GetInstance()->IsKeyDown(KeyList[CONTROLLER_RUN]))
 			{
@@ -62,8 +63,10 @@ int Keyboard::Read(const float deltaTime)
 					thePlayerInfo->MoveLeftRight(deltaTime, true, 2.0);
 				break;
 			}
+			if (KeyboardController::GetInstance()->IsKeyDown(KeyList[i]))
+				(this->*(controllerfunc[i]))(deltaTime);
 		}
-		if (KeyboardController::GetInstance()->IsKeyDown(KeyList[i]))
+		else if (KeyboardController::GetInstance()->IsKeyReleased(KeyList[i]))
 		{
 			(this->*(controllerfunc[i]))(deltaTime);
 		}

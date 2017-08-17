@@ -21,6 +21,8 @@ public:
 
 		CONTROLLER_RELOAD,
 		CONTROLLER_RESET,
+		CONTROLLER_MAPRESIZE,
+
 		CONTROLLER_LEFTCLICK,
 		CONTROLLER_AIM,
 
@@ -46,6 +48,7 @@ public:
 	virtual bool Reset(double dt);
 	virtual bool LeftClick(double dt);
 	virtual bool Aim(double dt);
+	virtual bool MapResize(double dt);
 
 };
 

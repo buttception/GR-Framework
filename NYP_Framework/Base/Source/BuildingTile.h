@@ -11,7 +11,15 @@ public:
 	BuildingTile();
 	virtual ~BuildingTile();
 
-	void AddWall(BuildingEntity* entity, int direction);
+	enum TILE_SIDE {
+		NONE = 0,
+		LEFT,
+		TOP, 
+		RIGHT,
+		BOTTOM
+	}side;
+
+	void AddWall(BuildingEntity* entity, TILE_SIDE direction);
 	bool RemoveBuilding(BuildingEntity* entity);
 
 private:

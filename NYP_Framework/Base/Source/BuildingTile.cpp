@@ -18,32 +18,32 @@ BuildingTile::~BuildingTile()
 {
 }
 
-void BuildingTile::AddWall(BuildingEntity * entity, int direction)
+void BuildingTile::AddWall(BuildingEntity * entity, TILE_SIDE direction)
 {
 	//where 1 -> left, 2 -> top, 3 -> right, 4 ->bottom
 	switch (direction) {
-	case 1:
+	case LEFT:
 		if (leftWall) {
 			std::cout << "Position occupied" << std::endl;
 			return;
 		}
 		leftWall = entity;
 		break;
-	case 2:
+	case TOP:
 		if (topWall) {
 			std::cout << "Position occupied" << std::endl;
 			return;
 		}
 		topWall = entity;
 		break;
-	case 3:
+	case RIGHT:
 		if (rightWall) {
 			std::cout << "Position occupied" << std::endl;
 			return;
 		}
 		rightWall = entity;
 		break;
-	case 4:
+	case BOTTOM:
 		if (bottomWall) {
 			std::cout << "Position occupied" << std::endl;
 			return;

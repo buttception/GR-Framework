@@ -3,6 +3,10 @@
 #include "GraphicsManager.h"
 #include "ShaderProgram.h"
 #include "MatrixStack.h"
+#include "../../Base/Source/Application.h"
+#include "../../Base/Source/FontType.h"
+
+extern FontType fontType;
 
 void RenderHelper::RenderMesh(Mesh* _mesh)
 {
@@ -159,7 +163,7 @@ void RenderHelper::RenderText(Mesh* _mesh, const std::string& _text, Color _colo
 	// Trivial Rejection : Unable to render without mesh or texture
 	if (!_mesh || _mesh->textureID <= 0)
 		return;
-
+	
 	ShaderProgram* currProg = GraphicsManager::GetInstance()->GetActiveShader();
 
 	currProg->UpdateInt("textEnabled", 1);
@@ -171,11 +175,14 @@ void RenderHelper::RenderText(Mesh* _mesh, const std::string& _text, Color _colo
 	GraphicsManager::GetInstance()->UpdateTexture(0, _mesh->textureID[0]);
 	currProg->UpdateInt("colorTexture", 0);
 
+	float nextcharacterwidth = 0.f;
 	for (unsigned i = 0; i < _text.length(); ++i)
 	{
+		char character = _text[i];
 		Mtx44 characterSpacing, MVP;
 		//characterSpacing.SetToTranslation((i+0.5f) * 1.0f, 0, 0); // 1.0f is the spacing of each character, you may change this value
-		characterSpacing.SetToTranslation((float)(1 + (int)i), 0.0f, 0.0f); // 1.0f is the spacing of each character, you may change this value
+		characterSpacing.SetToTranslation(/*(float)(1 + (int)i)*/nextcharacterwidth + 0.5f, 0.0f, 0.0f); // 1.0f is the spacing of each character, you may change this value
+		nextcharacterwidth += fontType.textWidth[character];
 		MVP = GraphicsManager::GetInstance()->GetProjectionMatrix() * GraphicsManager::GetInstance()->GetViewMatrix() * GraphicsManager::GetInstance()->GetModelStack().Top() * characterSpacing;
 		currProg->UpdateMatrix44("MVP", &MVP.a[0]);
 

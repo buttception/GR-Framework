@@ -9,8 +9,10 @@
 #include "../HardwareAbstraction/Mouse.h"
 #include "../Sound_Engine.h"
 #include "../SceneText.h"
+#include "../Minimap.h"
 
 bool SceneText::isDay = true;
+bool CMinimap::isResizing = false;
 // Allocating and initializing Player's static data member.  
 // The pointer is allocated but not the object's constructor.
 
@@ -296,6 +298,15 @@ bool Player::LeftClick()
 			BuildingManager::GetInstance()->AddWall((int)(Player::GetInstance()->GetPos().x / CELL_SIZE), (int)(Player::GetInstance()->GetPos().z / CELL_SIZE), 4);
 		return true;
 	}
+	return false;
+}
+
+bool Player::MapResize()
+{
+	if (CMinimap::isResizing)
+		CMinimap::isResizing = false;
+	else
+		CMinimap::isResizing = true;
 	return false;
 }
 
