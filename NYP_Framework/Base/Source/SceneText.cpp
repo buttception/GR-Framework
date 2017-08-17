@@ -306,11 +306,18 @@ void SceneText::Update(double dt)
 	float left_angle = Math::RadianToDegree(acosf(playerMouse_Direction.Dot(Left_Direction) / (playerMouse_Direction.Length() * Left_Direction.Length())));
 	
 	//for minimap icon to rotate
-	playerMouse_Direction.Normalize();
-	float angle = Math::RadianToDegree(acosf(playerMouse_Direction.Dot(Up_Direction) / (playerMouse_Direction.Length() * Up_Direction.Length())));
-	if (playerMouse_Direction.x < 0)
-		angle = -angle;
-	CMinimap::GetInstance()->SetAngle(angle);
+	try
+	{
+		playerMouse_Direction.Normalize();
+		float angle = Math::RadianToDegree(acosf(playerMouse_Direction.Dot(Up_Direction) / (playerMouse_Direction.Length() * Up_Direction.Length())));
+		if (playerMouse_Direction.x < 0)
+			angle = -angle;
+		CMinimap::GetInstance()->SetAngle(angle);
+	}
+	catch (DivideByZero)
+	{
+		std::cout << "Cannot move mouse to center, divide by zero(Normalize for minimap icon to rotate)" << std::endl;
+	}
 
 	//Build wall according to angles formed with pre-detemined vectors based on mouse and player positions
 	if (MouseController::GetInstance()->IsButtonReleased(MouseController::LMB) && isDay)
@@ -368,7 +375,7 @@ void SceneText::Update(double dt)
 	textObj[2]->SetText(ss1.str());
 
 
-	CSoundEngine::GetInstance()->playthesound("HELLO", 3);
+	//CSoundEngine::GetInstance()->playthesound("HELLO", 3);
 	//std::cout << "Song Playing" << std::endl;
 
 }
