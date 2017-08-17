@@ -227,6 +227,8 @@ void SceneText::Init()
 
 	//Hello->play2D("Image//Hello.mp3", GL_TRUE);
 	isDay = true;
+	time = 10.00;
+	noOfDays = 1;
 }
 
 void SceneText::Update(double dt)
@@ -235,13 +237,7 @@ void SceneText::Update(double dt)
 	double mouseX, mouseY;
 	MouseController::GetInstance()->GetMousePosition(mouseX, mouseY);
 	MouseController::GetInstance()->UpdateMousePosition(mouseX, Application::GetInstance().GetWindowHeight() - mouseY);
-	//MouseController::GetInstance()->UpdateMousePosition(mouseX / Application::GetInstance().GetWindowWidth() * worldWidth,
-	//	(Application::GetInstance().GetWindowHeight() - mouseY) / Application::GetInstance().GetWindowHeight() * worldHeight);
 	MouseController::GetInstance()->GetMousePosition(mouseX, mouseY);
-	//mouseX += Player::GetInstance()->GetPos().x;
-	//mouseY += Player::GetInstance()->GetPos().z;
-	//std::cout << "mouseX: " << mouseX;
-	//std::cout << "mouseY: " << mouseY << std::endl;
 
 	// Update our entities
 	EntityManager::GetInstance()->Update(dt);
@@ -294,9 +290,29 @@ void SceneText::Update(double dt)
 	}
 	// Debug purpose - changing to day / night
 	if (KeyboardController::GetInstance()->IsKeyPressed(VK_F3) && isDay)
+	{
 		isDay = false;
+		time = 10.00;
+	}
 	if (KeyboardController::GetInstance()->IsKeyPressed(VK_F4) && !isDay)
+	{
 		isDay = true;
+		time = 10.00;
+		noOfDays++;
+	}
+	//day night shift
+	time -= dt;
+	if (time <= 0.00 && isDay)
+	{
+		time = 10.00;
+		isDay = false;
+	}
+	if (time <= 0.00 && !isDay)
+	{
+		time = 10.00;
+		isDay = true;
+		noOfDays++;
+	}
 
 	//vectors and angles for wall-building with mouse
 	Vector3 Up_Direction = Vector3(400.f, 600.f, 0.f) - Vector3(400.f, 300.f, 0.f);
@@ -366,15 +382,54 @@ void SceneText::Update(double dt)
 	ss.precision(5);
 	float fps = (float)(1.f / dt);
 	ss << "FPS: " << fps;
-	textObj[1]->SetText(ss.str());
+	textObj[0]->SetText(ss.str());
 
 	// Update the player position into textObj[2]
-	std::ostringstream ss1;
-	ss1.precision(4);
-	ss1 << "Player:" << Player::GetInstance()->GetPos();
-	textObj[2]->SetText(ss1.str());
+	ss.str("");
+	ss.precision(4);
+	ss << "Player:" << Player::GetInstance()->GetPos();
+	textObj[1]->SetText(ss.str());
 
-
+	ss.str("");
+	ss.precision(4);
+	if (isDay)
+	{
+		switch (noOfDays)
+		{
+		case 1:
+			ss << noOfDays << "st Day " << time;
+			break;
+		case 2:
+			ss << noOfDays << "nd Day " << time;
+			break;
+		case 3:
+			ss << noOfDays << "rd Day " << time;
+			break;
+		default:
+			ss << noOfDays << "th Day " << time;
+			break;
+		}
+		textObj[2]->SetText(ss.str());
+	}
+	else
+	{
+		switch (noOfDays)
+		{
+		case 1:
+			ss << noOfDays << "st Night " << time;
+			break;
+		case 2:
+			ss << noOfDays << "nd Night " << time;
+			break;
+		case 3:
+			ss << noOfDays << "rd Night " << time;
+			break;
+		default:
+			ss << noOfDays << "th Night " << time;
+			break;
+		}
+		textObj[2]->SetText(ss.str());
+	}
 	//CSoundEngine::GetInstance()->playthesound("HELLO", 3);
 	//std::cout << "Song Playing" << std::endl;
 

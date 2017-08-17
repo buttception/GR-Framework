@@ -55,6 +55,8 @@ private:
 
 	float worldWidth, worldHeight;
 	bool isDay;
+	double time;
+	int noOfDays;
 };
 
 #endif
