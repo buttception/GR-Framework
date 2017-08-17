@@ -277,25 +277,26 @@ bool Player::LeftClick()
 	MouseController::GetInstance()->GetMousePosition(mouseX, mouseY);
 
 	Vector3 Up_Direction = Vector3(400.f, 600.f, 0.f) - Vector3(400.f, 300.f, 0.f);
-	Vector3 Left_Direction = Vector3(0.f, 300.f, 0.f) - Vector3(400.f, 300.f, 0.f);
 	Vector3 playerMouse_Direction = Vector3((float)mouseX, (float)mouseY, 0.f) - Vector3(400.f, 300.f, 0.f);
-	float up_angle = Math::RadianToDegree(acosf(playerMouse_Direction.Dot(Up_Direction) / (playerMouse_Direction.Length() * Up_Direction.Length())));
-	float left_angle = Math::RadianToDegree(acosf(playerMouse_Direction.Dot(Left_Direction) / (playerMouse_Direction.Length() * Left_Direction.Length())));
-
+	playerMouse_Direction.Normalize();
+	float angle = Math::RadianToDegree(acosf(playerMouse_Direction.Dot(Up_Direction) / (playerMouse_Direction.Length() * Up_Direction.Length())));
+	if (playerMouse_Direction.x < 0)
+		angle = -angle;
+	
 	//Build wall according to angles formed with pre-detemined vectors based on mouse and player positions
 	if (SceneText::isDay)
 	{
 		// Up
-		if (up_angle <= 53.f)
+		if (angle >= -53.f && angle <= 53.f)
 			BuildingManager::GetInstance()->AddWall((int)(Player::GetInstance()->GetPos().x / CELL_SIZE), (int)(Player::GetInstance()->GetPos().z / CELL_SIZE), BuildingTile::TOP);
 		// Left
-		else if (left_angle <= 36.f)
+		else if (angle >= -127.f && angle <= -53.f)
 			BuildingManager::GetInstance()->AddWall((int)(Player::GetInstance()->GetPos().x / CELL_SIZE), (int)(Player::GetInstance()->GetPos().z / CELL_SIZE), BuildingTile::LEFT);
 		// Right
-		else if (left_angle >= 142.f)
+		else if (angle >= 53.f && angle <= 127.f)
 			BuildingManager::GetInstance()->AddWall((int)(Player::GetInstance()->GetPos().x / CELL_SIZE), (int)(Player::GetInstance()->GetPos().z / CELL_SIZE), BuildingTile::RIGHT);
 		// Down
-		else if (up_angle >= 125.f)
+		else if ((angle >= -180.f && angle <= -127.f) || (angle >= 127.f && angle <= 180.f))
 			BuildingManager::GetInstance()->AddWall((int)(Player::GetInstance()->GetPos().x / CELL_SIZE), (int)(Player::GetInstance()->GetPos().z / CELL_SIZE), BuildingTile::BOTTOM);
 		return true;
 	}
