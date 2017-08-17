@@ -104,6 +104,7 @@ void CSoundEngine::playthesound(const std::string & _soundIndex, float volume)
 	{
 		isthesoundEngine->play2D(aSound.c_str(), false, false);
 		isthesoundEngine->setSoundVolume(volume);
+		
 	}
 }
 

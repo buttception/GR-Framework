@@ -56,7 +56,7 @@ void Player::Init(void)
 
 	CSoundEngine::GetInstance()->Init();
 	CSoundEngine::GetInstance()->Addthefuckingsound("HELLO", "Image//Hello.mp3");
-	CSoundEngine::GetInstance()->Addthefuckingsound("Build", "Image//Relax.mp3");
+	CSoundEngine::GetInstance()->Addthefuckingsound("Build", "Image//wood1.ogg");
 	
 	//CSoundEngine::GetInstance()->Addthefuckingsound("HI", "Image//Hello.mp3");
 
