@@ -381,7 +381,7 @@ void SceneText::Update(double dt)
 	textObj[1]->SetText(ss.str());
 
 
-	CSoundEngine::GetInstance()->playthesound("HELLO", 0.1);
+	//CSoundEngine::GetInstance()->playthesound("HELLO", 0.01);
 	std::cout << "Song Playing" << std::endl;
 
 
@@ -430,7 +430,7 @@ void SceneText::Update(double dt)
 	ss << "Material: " << Player::material;
 	textObj[3]->SetText(ss.str());
 
-	CSoundEngine::GetInstance()->playthesound("HELLO", 3);
+	//CSoundEngine::GetInstance()->playthesound("HELLO", 3);
 	//std::cout << "Song Playing" << std::endl;
 
 }
