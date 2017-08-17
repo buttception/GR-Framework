@@ -3,7 +3,7 @@
 #define BUILDING_MANAGER_H
 
 #define MAX_CELLS 25
-#define CELL_SIZE 20
+#define CELL_SIZE 15
 
 #include <list>
 

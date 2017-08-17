@@ -21,7 +21,7 @@ public:
 
 		CONTROLLER_RELOAD,
 		CONTROLLER_RESET,
-		CONTROLLER_FIRE,
+		CONTROLLER_LEFTCLICK,
 		CONTROLLER_AIM,
 
         NUM_CONRTOLLER,
@@ -44,7 +44,7 @@ public:
 	virtual bool Interact(double dt);
 	virtual bool Reload(double dt);
 	virtual bool Reset(double dt);
-	virtual bool Fire(double dt);
+	virtual bool LeftClick(double dt);
 	virtual bool Aim(double dt);
 
 };
