@@ -10,6 +10,7 @@
 
 class Keyboard;
 class Mouse;
+class SceneText;
 
 class Player : public Singleton<Player>, public GenericEntity
 {
@@ -47,9 +48,11 @@ public:
 	// Movement
 	bool MoveFrontBack(const float deltaTime, const bool direction, const float speedMultiplier = 1.0f);
 	bool MoveLeftRight(const float deltaTime, const bool direction, const float speedMultiplier = 1.0f);
-
+	bool LeftClick();
 	void CollisionResponse(EntityBase* thatEntity);
 
+	static int material;
+	static float playerHealth;
 private:
 	Vector3 defaultPosition;
 	Vector3 position, direction;

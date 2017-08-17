@@ -34,6 +34,9 @@
 
 SceneText* SceneText::sInstance = new SceneText(SceneManager::GetInstance());
 
+float Player::playerHealth = 100.f;
+int Player::material = 3000;
+
 SceneText::SceneText()
 {
 }
@@ -145,6 +148,11 @@ void SceneText::Init()
 
 	sun = MeshBuilder::GetInstance()->GenerateSphere("sphere", Color(1, 1, 1), 24, 24, 1);
 
+	generatorCoreHealthBar = MeshBuilder::GetInstance()->GenerateQuad("generatorCoreHealthBar", Color(1, 0, 0), 1.f);
+	generatorCoreScale = 790.f;
+
+	playerHealthBar = MeshBuilder::GetInstance()->GenerateQuad("playerHealthBar", Color(1, 0.64706f, 0), 1.f);
+
 	theMiniMap = Create::Minimap();
 	theMiniMap->SetBackground(MeshBuilder::GetInstance()->GenerateQuad("miniMap", Color(1, 1, 1), 1.f));
 	theMiniMap->GetBackground()->textureID[0] = LoadTGA("Image//grass_lightgreen.tga");
@@ -206,7 +214,7 @@ void SceneText::Init()
 	float halfWindowHeight = Application::GetInstance().GetWindowHeight() / 2.0f;
 	float fontSize = 25.0f;
 	float halfFontSize = fontSize / 2.0f;
-	for (int i = 0; i < 3; ++i)
+	for (int i = 0; i < 4; ++i)
 	{
 		textObj[i] = Create::Text2DObject("text", Vector3(-halfWindowWidth, -halfWindowHeight + fontSize*i + halfFontSize, 0.0f), "", Vector3(fontSize, fontSize, fontSize), Color(0.0f,1.0f,0.0f));
 	}
@@ -233,12 +241,6 @@ void SceneText::Init()
 
 void SceneText::Update(double dt)
 {
-	//convert mouse pos on window onto world
-	double mouseX, mouseY;
-	MouseController::GetInstance()->GetMousePosition(mouseX, mouseY);
-	MouseController::GetInstance()->UpdateMousePosition(mouseX, Application::GetInstance().GetWindowHeight() - mouseY);
-	MouseController::GetInstance()->GetMousePosition(mouseX, mouseY);
-
 	// Update our entities
 	EntityManager::GetInstance()->Update(dt);
 
@@ -299,6 +301,7 @@ void SceneText::Update(double dt)
 		isDay = true;
 		time = 10.00;
 		noOfDays++;
+		generatorCoreScale = Math::Max(0.f, generatorCoreScale - 80.f); // decrease generator core health on top
 	}
 	//day night shift
 	time -= dt;
@@ -314,14 +317,17 @@ void SceneText::Update(double dt)
 		noOfDays++;
 	}
 
-	//vectors and angles for wall-building with mouse
+	//convert mouse pos on window onto world
+	double mouseX, mouseY;
+	MouseController::GetInstance()->GetMousePosition(mouseX, mouseY);
+	MouseController::GetInstance()->UpdateMousePosition(mouseX, Application::GetInstance().GetWindowHeight() - mouseY);
+	MouseController::GetInstance()->GetMousePosition(mouseX, mouseY);
+
+	//for minimap icon to rotate
 	Vector3 Up_Direction = Vector3(400.f, 600.f, 0.f) - Vector3(400.f, 300.f, 0.f);
-	Vector3 Left_Direction = Vector3(0.f, 300.f, 0.f) - Vector3(400.f, 300.f, 0.f);
 	Vector3 playerMouse_Direction = Vector3((float)mouseX, (float)mouseY, 0.f) - Vector3(400.f, 300.f, 0.f);
 	float up_angle = Math::RadianToDegree(acosf(playerMouse_Direction.Dot(Up_Direction) / (playerMouse_Direction.Length() * Up_Direction.Length())));
-	float left_angle = Math::RadianToDegree(acosf(playerMouse_Direction.Dot(Left_Direction) / (playerMouse_Direction.Length() * Left_Direction.Length())));
 	
-	//for minimap icon to rotate
 	try
 	{
 		playerMouse_Direction.Normalize();
@@ -335,22 +341,6 @@ void SceneText::Update(double dt)
 		std::cout << "Cannot move mouse to center, divide by zero(Normalize for minimap icon to rotate)" << std::endl;
 	}
 
-	//Build wall according to angles formed with pre-detemined vectors based on mouse and player positions
-	if (MouseController::GetInstance()->IsButtonReleased(MouseController::LMB) && isDay)
-	{
-		// Up
-		if (up_angle <= 53.f)
-			BuildingManager::GetInstance()->AddWall((int)(Player::GetInstance()->GetPos().x / CELL_SIZE), (int)(Player::GetInstance()->GetPos().z / CELL_SIZE), 2);
-		// Left
-		else if(left_angle <= 36.f)
-			BuildingManager::GetInstance()->AddWall((int)(Player::GetInstance()->GetPos().x / CELL_SIZE), (int)(Player::GetInstance()->GetPos().z / CELL_SIZE), 1);
-		// Right
-		else if(left_angle >= 142.f)
-			BuildingManager::GetInstance()->AddWall((int)(Player::GetInstance()->GetPos().x / CELL_SIZE), (int)(Player::GetInstance()->GetPos().z / CELL_SIZE), 3);
-		// Down
-		else if(up_angle >= 125.f)
-			BuildingManager::GetInstance()->AddWall((int)(Player::GetInstance()->GetPos().x / CELL_SIZE), (int)(Player::GetInstance()->GetPos().z / CELL_SIZE), 4);
-	}
 	if (MouseController::GetInstance()->IsButtonReleased(MouseController::RMB))
 	{
 		std::cout << "Right Mouse Button was released!" << std::endl;
@@ -390,11 +380,8 @@ void SceneText::Update(double dt)
 	ss << "Player:" << Player::GetInstance()->GetPos();
 	textObj[1]->SetText(ss.str());
 
-	CSoundEngine::GetInstance()->playthesound("HELLO", 3);
-	std::cout << "Song Playing" << std::endl;
-
 	ss.str("");
-	ss.precision(4);
+	ss.precision(3);
 	if (isDay)
 	{
 		switch (noOfDays)
@@ -433,7 +420,12 @@ void SceneText::Update(double dt)
 		}
 		textObj[2]->SetText(ss.str());
 	}
-	//CSoundEngine::GetInstance()->playthesound("HELLO", 3);
+
+	ss.str("");
+	ss << "Material: " << Player::material;
+	textObj[3]->SetText(ss.str());
+
+	CSoundEngine::GetInstance()->playthesound("HELLO", 3);
 	//std::cout << "Song Playing" << std::endl;
 
 }
@@ -531,6 +523,19 @@ void SceneText::RenderPassMain()
 	EntityManager::GetInstance()->RenderUI();
 
 	theMiniMap->RenderUI();
+
+	ms.PushMatrix();
+	ms.Translate(0, 290.f, 0);
+	ms.Scale(generatorCoreScale, 10.f, 0);
+	RenderHelper::RenderMesh(generatorCoreHealthBar);
+	ms.PopMatrix();
+
+	ms.PushMatrix();
+	ms.Translate(-395.f, 270.f, 0);
+	ms.Scale(Player::playerHealth, 10.f, 0);
+	RenderHelper::RenderMesh(playerHealthBar);
+	ms.PopMatrix();
+
 	//RenderHelper::RenderTextOnScreen(text, std::to_string(fps), Color(0, 1, 0), 2, 0, 0);
 }
 

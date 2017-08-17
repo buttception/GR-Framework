@@ -29,6 +29,7 @@ public:
 	virtual void Render();
 	virtual void Exit();
 
+	static bool isDay;
 private:
 	SceneText(SceneManager* _sceneMgr); // This is used to register to SceneManager
 
@@ -37,7 +38,7 @@ private:
 	GroundEntity* groundEntity;
 	TopDownCamera *camera;
 	FPSCamera* fpscamera;
-	TextEntity* textObj[3];
+	TextEntity* textObj[4];
 	Light* lights[2];
 
 	GenericEntity* theCube;
@@ -51,12 +52,16 @@ private:
 	Mesh* ground;
 	Mesh* sun;
 	Mesh* light_depth_mesh;
+	Mesh* generatorCoreHealthBar;
+	Mesh* playerHealthBar;
 	CMinimap* theMiniMap;
 
 	float worldWidth, worldHeight;
-	bool isDay;
+	
 	double time;
 	int noOfDays;
+
+	float generatorCoreScale;
 };
 
 #endif

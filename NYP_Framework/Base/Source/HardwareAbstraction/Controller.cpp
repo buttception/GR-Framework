@@ -31,7 +31,7 @@ bool Controller::Create(Player* thePlayerInfo)
 	this->controllerfunc[CONTROLLER_INTERACT] = &Controller::Interact;
 	this->controllerfunc[CONTROLLER_RELOAD] = &Controller::Reload;
 	this->controllerfunc[CONTROLLER_RESET] = &Controller::Reset;
-	this->controllerfunc[CONTROLLER_FIRE] = &Controller::Fire;
+	this->controllerfunc[CONTROLLER_LEFTCLICK] = &Controller::LeftClick;
 	this->controllerfunc[CONTROLLER_AIM] = &Controller::Aim;
 
 	return false;
@@ -87,9 +87,9 @@ bool Controller::Reset(double dt)
 	return false;
 }
 
-bool Controller::Fire(double dt)
+bool Controller::LeftClick(double dt)
 {
-	std::cout << "Fire" << std::endl;
+	thePlayerInfo->LeftClick();
 	return false;
 }
 
