@@ -14,6 +14,8 @@ protected:
 	//The library map of souunds created
 	std::map<std::string, std::string> soundMap;
 
+	int volume;
+
 
 public:
 	CSoundEngine();
@@ -35,6 +37,14 @@ public:
 	bool removethesound(const std::string& _soundIndex);
 	void playthesound(const std::string& _soundIndex,float volume);
 
+
+
+	//Volume Control
+	void setVolume(int newvolume,float volume);
+	void increase_volume();
+	void increase_volume(int increament , float volume);
+	void decrease_volume();
+	void decrease_volume(int decrement , float volume);
 
 
 };

@@ -383,6 +383,11 @@ void SceneText::Update(double dt)
 	ss << "Player:" << Player::GetInstance()->GetPos();
 	textObj[1]->SetText(ss.str());
 
+
+	CSoundEngine::GetInstance()->playthesound("HELLO", 0.1);
+	std::cout << "Song Playing" << std::endl;
+
+
 	ss.str("");
 	ss.precision(0);
 	if (isDay)

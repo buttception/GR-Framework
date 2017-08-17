@@ -1,6 +1,9 @@
 #include "BuildingTile.h"
 #include "EntityManager.h"
+
+#include "Sound_Engine.h"
 #include "PlayerInfo\PlayerInfo.h"
+
 
 BuildingTile::BuildingTile()
 	:leftWall(nullptr)
@@ -53,6 +56,9 @@ void BuildingTile::AddWall(BuildingEntity * entity, TILE_SIDE direction)
 	std::cout << "wall placed down" << std::endl;
 	Player::material = Math::Max(0, Player::material - 100);
 	EntityManager::GetInstance()->AddEntity(entity);
+	CSoundEngine::GetInstance()->playthesound("Build", 0.4);
+	std::cout << "Buld sound Played" << std::endl;
+	
 }
 
 bool BuildingTile::RemoveBuilding(BuildingEntity * entity)

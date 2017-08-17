@@ -54,6 +54,8 @@ void Player::Init(void)
 
 	CSoundEngine::GetInstance()->Init();
 	CSoundEngine::GetInstance()->Addthefuckingsound("HELLO", "Image//Hello.mp3");
+	CSoundEngine::GetInstance()->Addthefuckingsound("Build", "Image//Relax.mp3");
+	
 	//CSoundEngine::GetInstance()->Addthefuckingsound("HI", "Image//Hello.mp3");
 
 	playerHealth = 100.f;
