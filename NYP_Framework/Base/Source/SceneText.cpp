@@ -165,7 +165,7 @@ void SceneText::Init()
 	lights[0] = new Light();
 	GraphicsManager::GetInstance()->AddLight("lights[0]", lights[0]);
 	lights[0]->type = Light::LIGHT_DIRECTIONAL;
-	lights[0]->position.Set(0, MAX_CELLS * CELL_SIZE, 0);
+	lights[0]->position.Set(MAX_CELLS * CELL_SIZE / 2, MAX_CELLS * CELL_SIZE, 0);
 	lights[0]->color.Set(1, 1, 1);
 	lights[0]->power = 1;
 	lights[0]->kC = 1.f;
@@ -225,7 +225,7 @@ void SceneText::Init()
 	camera = new TopDownCamera();
 	fpscamera = new FPSCamera();
 	Player::GetInstance()->AttachCamera(camera);
-	GraphicsManager::GetInstance()->AttachCamera(Player::GetInstance()->getCamera());
+	GraphicsManager::GetInstance()->AttachCamera(camera);
 
 
 	//light testing
@@ -269,29 +269,28 @@ void SceneText::Update(double dt)
 		lights[0]->type = Light::LIGHT_SPOT;
 	}
 
-	if (KeyboardController::GetInstance()->IsKeyDown('O')) {
-		Mtx44 rotate;
-		rotate.SetToRotation(90 * dt, 1, 0, 0);
-		lights[0]->position = rotate * lights[0]->position;
-	}
-	else if (KeyboardController::GetInstance()->IsKeyDown('L')){
-		Mtx44 rotate;
-		rotate.SetToRotation(-90 * dt, 1, 0, 0);
-		lights[0]->position = rotate * lights[0]->position;
-	}
+	float speed = 180 / 10;
+	Mtx44 rotate;
+	rotate.SetToRotation(speed * dt, 1, 0, 0);
+	Vector3 pos(lights[0]->position.x, lights[0]->position.y, lights[0]->position.z);
+	lights[0]->position = rotate * lights[0]->position;
 
-	if (KeyboardController::GetInstance()->IsKeyPressed(VK_F1)){
-		//Debug mode
-		//MouseController::GetInstance()->SetKeepMouseCentered(true);
-		Player::GetInstance()->DetachCamera();
-		Player::GetInstance()->AttachCamera(fpscamera);
-	}
-	if (KeyboardController::GetInstance()->IsKeyPressed(VK_F2)) {
-		//Debug mode
-		//MouseController::GetInstance()->SetKeepMouseCentered(false);
-		Player::GetInstance()->DetachCamera();
-		Player::GetInstance()->AttachCamera(camera);
-	}
+	//if (KeyboardController::GetInstance()->IsKeyPressed(VK_F1)){
+	//	//Debug mode
+	//	//MouseController::GetInstance()->SetKeepMouseCentered(true);
+	//	Player::GetInstance()->DetachCamera();
+	//	Player::GetInstance()->AttachCamera(fpscamera);
+	//	GraphicsManager::GetInstance()->DetachCamera();
+	//	GraphicsManager::GetInstance()->AttachCamera(fpscamera);
+	//}
+	//if (KeyboardController::GetInstance()->IsKeyPressed(VK_F2)) {
+	//	//Debug mode
+	//	//MouseController::GetInstance()->SetKeepMouseCentered(false);
+	//	Player::GetInstance()->DetachCamera();
+	//	Player::GetInstance()->AttachCamera(camera);
+	//	GraphicsManager::GetInstance()->DetachCamera();
+	//	GraphicsManager::GetInstance()->AttachCamera(camera);
+	//}
 	// Debug purpose - changing to day / night
 	if (KeyboardController::GetInstance()->IsKeyPressed(VK_F3) && isDay)
 	{
@@ -383,11 +382,6 @@ void SceneText::Update(double dt)
 	ss << "Player:" << Player::GetInstance()->GetPos();
 	textObj[1]->SetText(ss.str());
 
-
-	CSoundEngine::GetInstance()->playthesound("HELLO", 0.1);
-	std::cout << "Song Playing" << std::endl;
-
-
 	ss.str("");
 	ss.precision(0);
 	if (isDay)
@@ -433,7 +427,7 @@ void SceneText::Update(double dt)
 	ss << "Material: " << Player::material;
 	textObj[3]->SetText(ss.str());
 
-	CSoundEngine::GetInstance()->playthesound("HELLO", 3);
+	//CSoundEngine::GetInstance()->playthesound("HELLO", 3);
 	//std::cout << "Song Playing" << std::endl;
 
 }
@@ -476,17 +470,32 @@ void SceneText::RenderPassGPass()
 	//These matrices should change when light position or direction changes
 	Light* light = dynamic_cast<Light*>(g->GetLight("lights[0]"));
 	if (light->type == Light::LIGHT_DIRECTIONAL) {
-		g->m_lightDepthProj.SetToOrtho(0, MAX_CELLS * CELL_SIZE, -MAX_CELLS * CELL_SIZE, 0, -MAX_CELLS * CELL_SIZE , MAX_CELLS * CELL_SIZE * 2);
+		g->m_lightDepthProj.SetToOrtho(-MAX_CELLS * CELL_SIZE / 2, MAX_CELLS * CELL_SIZE / 2, -MAX_CELLS * CELL_SIZE / 2, MAX_CELLS * CELL_SIZE / 2, -MAX_CELLS * CELL_SIZE, MAX_CELLS * CELL_SIZE * 2);
 		//g->m_lightDepthProj.SetToOrtho(-100, 100, -100, 100, -100, 100);
 	}
 	else
 		g->m_lightDepthProj.SetToPerspective(90, 1.f, 0.1, 10);
 
 
-	Vector3 up = Vector3(1, 0, 0).Cross(Vector3(-lights[0]->position.x, -lights[0]->position.y, -lights[0]->position.z)).Normalized();
+	//Vector3 up = Vector3(-1, 0, 0).Cross(Vector3(-lights[0]->position.x, -lights[0]->position.y, -lights[0]->position.z)).Normalized();
 
-	g->m_lightDepthView.SetToLookAt(light->position.x,
-		light->position.y, light->position.z, 0, 0, 0, up.x, up.y, up.z);
+	////g->m_lightDepthView.SetToLookAt(lights[0]->position.x,
+	////	lights[0]->position.y, lights[0]->position.z, 0, 0, 0, up.x, up.y, up.z);
+
+	//g->m_lightDepthView.SetToLookAt(lights[0]->position.x,
+	//	lights[0]->position.y, lights[0]->position.z, MAX_CELLS * CELL_SIZE / 2, 0, MAX_CELLS * CELL_SIZE / 2, up.x, up.y, up.z);
+
+	//std::cout << light->position.x << ", " << light->position.y << ", " << light->position.z << std::endl;
+
+	Vector3 temp(lights[0]->position.x, lights[0]->position.y, lights[0]->position.z);
+	Mtx44 rotate;
+	rotate.SetToRotation(-90, 1, 0, 0);
+	temp = rotate * temp;
+
+	Vector3 up = Vector3(-1, 0, 0).Cross(Vector3(-temp.x, -temp.y, -temp.z)).Normalized();
+
+	g->m_lightDepthView.SetToLookAt(temp.x,
+		temp.y, temp.z, MAX_CELLS * CELL_SIZE / 2, 0, MAX_CELLS * CELL_SIZE / 2, up.x, up.y, up.z);
 
 	RenderWorld();
 }
@@ -513,7 +522,7 @@ void SceneText::RenderPassMain()
 	GraphicsManager::GetInstance()->UpdateLightUniforms();
 
 	GraphicsManager::GetInstance()->SetPerspectiveProjection(45.0f, 4.0f / 3.0f, 0.1f, 10000.0f);
-	GraphicsManager::GetInstance()->AttachCamera(Player::GetInstance()->getCamera());
+	GraphicsManager::GetInstance()->AttachCamera(camera);
 
 	ms.LoadIdentity();
 
@@ -561,11 +570,12 @@ void SceneText::RenderWorld()
 	ms.PushMatrix();
 	ms.Translate(lights[0]->position.x / 2, lights[0]->position.y / 2, lights[0]->position.z / 2);
 	ms.Scale(50.f, 50.f, 50.f);
-	RenderHelper::RenderMesh(sun);
+	//RenderHelper::RenderMesh(sun);
 	ms.PopMatrix();
 
 	ms.PushMatrix();
-	ms.Translate(0, 50, 0);
+	ms.Translate(CELL_SIZE / 2 * MAX_CELLS, 10, CELL_SIZE / 2 * MAX_CELLS);
+	ms.Rotate(-90, 1, 0, 0);
 	ms.Scale(50, 50, 50);	
 	RenderHelper::RenderMesh(light_depth_mesh);
 	ms.PopMatrix();

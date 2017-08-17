@@ -22,6 +22,7 @@ Player::Player(void)
 	, attachedCamera(NULL)
 	, m_pTerrain(NULL)
 	, speedMultiplier(1.0)
+	, size(1)
 {
 }
 
@@ -43,7 +44,7 @@ void Player::Init(void)
 	maxBoundary.Set(1,1,1);
 	minBoundary.Set(-1, -1, -1);
 
-	SetAABB(Vector3(position.x + 5, position.y + 5, position.z + 5), Vector3(position.x - 5, position.y - 5, position.z - 5));
+	SetAABB(Vector3(position.x + size / 2, position.y + size / 2, position.z + size / 2), Vector3(position.x - size / 2, position.y - size / 2, position.z - size / 2));
 	SetCollider(true);
 
 	this->keyboard = new Keyboard();
@@ -55,8 +56,7 @@ void Player::Init(void)
 	CSoundEngine::GetInstance()->Init();
 	CSoundEngine::GetInstance()->Addthefuckingsound("HELLO", "Image//Hello.mp3");
 	CSoundEngine::GetInstance()->Addthefuckingsound("Build", "Image//Relax.mp3");
-	
-	//CSoundEngine::GetInstance()->Addthefuckingsound("HI", "Image//Hello.mp3");
+
 
 	playerHealth = 100.f;
 	material = 3000;
@@ -115,58 +115,58 @@ void Player::Update(double dt)
 
 	if (attachedCamera == NULL)
 		std::cout << "No camera attached! Please make sure to attach one" << std::endl;
-	direction = attachedCamera->GetCameraTarget() - attachedCamera->GetCameraPos();
-	direction.Normalize();
+	//direction = attachedCamera->GetCameraTarget() - attachedCamera->GetCameraPos();
+	//direction.Normalize();
 
 	Vector3 up(0, 1, 0);
 
 	//if it is a FPS Camera
-	if (dynamic_cast<FPSCamera*>(attachedCamera))
-	{
-		Vector3 rightUV;
-		if (KeyboardController::GetInstance()->IsKeyDown('W'))
-		{
-			position += direction.Normalized() * (float)m_dSpeed * (float)speedMultiplier * (float)dt;
-		}
-		else if (KeyboardController::GetInstance()->IsKeyDown('S'))
-		{
-			position -= direction.Normalized() * (float)m_dSpeed * (float)speedMultiplier * (float)dt;
-		}
-		if (KeyboardController::GetInstance()->IsKeyDown('A'))
-		{
-			rightUV = (direction.Normalized()).Cross(up);
-			rightUV.y = 0;
-			rightUV.Normalize();
-			position -= rightUV * (float)m_dSpeed * (float)speedMultiplier * (float)dt;
-		}
-		else if (KeyboardController::GetInstance()->IsKeyDown('D'))
-		{
-			rightUV = (direction.Normalized()).Cross(up);
-			rightUV.y = 0;
-			rightUV.Normalize();
-			position += rightUV * (float)m_dSpeed * (float)speedMultiplier * (float)dt;
-		}
-		// Constrain the position
-		Constrain();
-	}
+	//if (dynamic_cast<FPSCamera*>(attachedCamera))
+	//{
+	//	Vector3 rightUV;
+	//	if (KeyboardController::GetInstance()->IsKeyDown('W'))
+	//	{
+	//		position += direction.Normalized() * (float)m_dSpeed * (float)speedMultiplier * (float)dt;
+	//	}
+	//	else if (KeyboardController::GetInstance()->IsKeyDown('S'))
+	//	{
+	//		position -= direction.Normalized() * (float)m_dSpeed * (float)speedMultiplier * (float)dt;
+	//	}
+	//	if (KeyboardController::GetInstance()->IsKeyDown('A'))
+	//	{
+	//		rightUV = (direction.Normalized()).Cross(up);
+	//		rightUV.y = 0;
+	//		rightUV.Normalize();
+	//		position -= rightUV * (float)m_dSpeed * (float)speedMultiplier * (float)dt;
+	//	}
+	//	else if (KeyboardController::GetInstance()->IsKeyDown('D'))
+	//	{
+	//		rightUV = (direction.Normalized()).Cross(up);
+	//		rightUV.y = 0;
+	//		rightUV.Normalize();
+	//		position += rightUV * (float)m_dSpeed * (float)speedMultiplier * (float)dt;
+	//	}
+	//	// Constrain the position
+	//	Constrain();
+	//}
 
 	// If a camera is attached to this playerInfo class, then update it
 	if (attachedCamera)
 	{
-		if (dynamic_cast<FPSCamera*>(attachedCamera)) {
+		/*if (dynamic_cast<FPSCamera*>(attachedCamera)) {
 			Vector3 cameraView = attachedCamera->GetCameraTarget() - attachedCamera->GetCameraPos();
 			attachedCamera->SetCameraPos(position);
 			attachedCamera->SetCameraTarget(position + cameraView.Normalized());
 			dynamic_cast<FPSCamera*>(attachedCamera)->Update(dt);
-		}
-		else if (dynamic_cast<TopDownCamera*>(attachedCamera)) {
+		}*/
+		if (dynamic_cast<TopDownCamera*>(attachedCamera)) {
 			attachedCamera->SetCameraPos(position + dynamic_cast<TopDownCamera*>(attachedCamera)->GetHeight());
 			attachedCamera->SetCameraTarget(position);
 			dynamic_cast<TopDownCamera*>(attachedCamera)->Update(dt);
 		}
 	}
 
-	SetAABB(Vector3(position.x + 5, position.y + 5, position.z + 5), Vector3(position.x - 5, position.y - 5, position.z - 5));
+	SetAABB(Vector3(position.x + size / 2, position.y + size / 2, position.z + size / 2), Vector3(position.x - size / 2, position.y - size / 2, position.z - size / 2));
 
 	//testing cout
 	//std::cout << (int)(position.x / CELL_SIZE) << ", " << (int)(position.z / CELL_SIZE) << std::endl;
@@ -207,14 +207,14 @@ CameraBase * Player::getCamera()
 void Player::AttachCamera(CameraBase* _cameraPtr)
 {
 	attachedCamera = _cameraPtr;
-	if (dynamic_cast<FPSCamera*>(attachedCamera)) {
+	/*if (dynamic_cast<FPSCamera*>(attachedCamera)) {
 		Vector3 target = position + Vector3(1, 0, 0);
 		Vector3 view = target - position;
 		Vector3 up = Vector3(0, 0, 1).Cross(view).Normalized();
 		dynamic_cast<FPSCamera*>(attachedCamera)->Init(position, target, up);
 		std::cout << "FPS Camera loaded" << std::endl;
-	}
-	else if (dynamic_cast<TopDownCamera*>(attachedCamera)){
+	}*/
+	if (dynamic_cast<TopDownCamera*>(attachedCamera)){
 		Vector3 target = position;
 		Vector3 up(0, 0, -1);
 		dynamic_cast<TopDownCamera*>(attachedCamera)->Init(Vector3(position.x, position.y + 20, position.z), target, up, 100);
@@ -230,6 +230,7 @@ void Player::DetachCamera()
 bool Player::MoveFrontBack(const float deltaTime, const bool direction, const float speedMultiplier)
 {
 	if (dynamic_cast<TopDownCamera*>(attachedCamera)) {
+		defaultPosition.z = position.z;
 		if (direction)
 		{
 			position -= Vector3(0, 0, 1) * (float)m_dSpeed * (float)speedMultiplier * (float)deltaTime;
@@ -249,6 +250,7 @@ bool Player::MoveFrontBack(const float deltaTime, const bool direction, const fl
 bool Player::MoveLeftRight(const float deltaTime, const bool direction, const float speedMultiplier)
 {
 	if (dynamic_cast<TopDownCamera*>(attachedCamera)) {
+		defaultPosition.x = position.x;
 		if (!direction)
 		{
 			position -= Vector3(1, 0, 0) * (float)m_dSpeed * (float)speedMultiplier * (float)deltaTime;
@@ -284,16 +286,16 @@ bool Player::LeftClick()
 	{
 		// Up
 		if (up_angle <= 53.f)
-			BuildingManager::GetInstance()->AddWall((int)(Player::GetInstance()->GetPos().x / CELL_SIZE), (int)(Player::GetInstance()->GetPos().z / CELL_SIZE), 2);
+			BuildingManager::GetInstance()->AddWall((int)(Player::GetInstance()->GetPos().x / CELL_SIZE), (int)(Player::GetInstance()->GetPos().z / CELL_SIZE), BuildingTile::TOP);
 		// Left
 		else if (left_angle <= 36.f)
-			BuildingManager::GetInstance()->AddWall((int)(Player::GetInstance()->GetPos().x / CELL_SIZE), (int)(Player::GetInstance()->GetPos().z / CELL_SIZE), 1);
+			BuildingManager::GetInstance()->AddWall((int)(Player::GetInstance()->GetPos().x / CELL_SIZE), (int)(Player::GetInstance()->GetPos().z / CELL_SIZE), BuildingTile::LEFT);
 		// Right
 		else if (left_angle >= 142.f)
-			BuildingManager::GetInstance()->AddWall((int)(Player::GetInstance()->GetPos().x / CELL_SIZE), (int)(Player::GetInstance()->GetPos().z / CELL_SIZE), 3);
+			BuildingManager::GetInstance()->AddWall((int)(Player::GetInstance()->GetPos().x / CELL_SIZE), (int)(Player::GetInstance()->GetPos().z / CELL_SIZE), BuildingTile::RIGHT);
 		// Down
 		else if (up_angle >= 125.f)
-			BuildingManager::GetInstance()->AddWall((int)(Player::GetInstance()->GetPos().x / CELL_SIZE), (int)(Player::GetInstance()->GetPos().z / CELL_SIZE), 4);
+			BuildingManager::GetInstance()->AddWall((int)(Player::GetInstance()->GetPos().x / CELL_SIZE), (int)(Player::GetInstance()->GetPos().z / CELL_SIZE), BuildingTile::BOTTOM);
 		return true;
 	}
 	return false;
@@ -301,5 +303,6 @@ bool Player::LeftClick()
 
 void Player::CollisionResponse(EntityBase *thatEntity)
 {
-	std::cout << "collided with wall" << std::endl;
+	//std::cout << "collided with wall" << std::endl;
+	position = defaultPosition;
 }

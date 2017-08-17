@@ -58,6 +58,7 @@ private:
 	Vector3 position, direction;
 	Vector3 maxBoundary, minBoundary;
 	GroundEntity* m_pTerrain;
+	float size;
 
 	double m_dSpeed;
 	double m_dAcceleration;
