@@ -1,4 +1,5 @@
 #include "CollisionManager.h"
+#include "PlayerInfo\PlayerInfo.h"
 
 bool CollisionManager::CheckPointToSphereCollision(Vector3 point, EntityBase * ThatEntity)
 {
@@ -95,6 +96,10 @@ void CollisionManager::Update(std::list<EntityBase*> collisionList)
 				thisEntity->CollisionResponse(thatEntity);
 			}
 		}
+		if (CheckAABBCollision(*it, Player::GetInstance())) {
+			Player::GetInstance()->CollisionResponse(*it);
+		}
+		
 	}
 }
 

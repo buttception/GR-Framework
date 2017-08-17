@@ -16,7 +16,7 @@ BuildingManager::~BuildingManager()
 void BuildingManager::AddWall(int _x, int _y, int direction)
 {
 	// where _x and _y is 0 to 49
-	if (_x >= MAX_CELLS || _y >= MAX_CELLS) {
+	if (_x >= MAX_CELLS || _y >= MAX_CELLS || _x < 0 || _y < 0) {
 		std::cout << "Wall placement exceeds max cell size" << std::endl;
 		return;
 	}

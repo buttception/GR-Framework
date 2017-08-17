@@ -30,7 +30,7 @@
 #include <iostream>
 #include "RenderHelper.h"
 
-
+#include "Minimap.h"
 
 SceneText* SceneText::sInstance = new SceneText(SceneManager::GetInstance());
 
@@ -39,12 +39,14 @@ SceneText::SceneText()
 }
 
 SceneText::SceneText(SceneManager* _sceneMgr)
+	: theMiniMap(NULL)
 {
 	_sceneMgr->AddScene("Start", this);
 }
 
 SceneText::~SceneText()
 {
+	CMinimap::Destroy();
 }
 
 void SceneText::Init()
@@ -128,7 +130,7 @@ void SceneText::Init()
 
 	GraphicsManager::GetInstance()->gPass_params[GraphicsManager::GPASS_UNIFORM_TYPE::U_LIGHT_DEPTH_MVP_GPASS] =
 		glGetUniformLocation(GraphicsManager::GetInstance()->m_gPassShaderID, "lightDepthMVP");
-	GraphicsManager::GetInstance()->m_lightDepthFBO.Init(1024, 1024);
+	GraphicsManager::GetInstance()->m_lightDepthFBO.Init(2048, 2048);
 
 	// Tell the graphics manager to use the shader we just loaded
 	GraphicsManager::GetInstance()->SetActiveShader("default");
@@ -139,7 +141,16 @@ void SceneText::Init()
 	MeshBuilder::GetInstance()->GenerateQuad("GRASS_LIGHTGREEN", Color(1, 1, 1), 1.f);
 	MeshList::GetInstance()->GetMesh("GRASS_LIGHTGREEN")->textureID[0] = LoadTGA("Image//grass_lightgreen.tga");
 
-	MeshBuilder::GetInstance()->GenerateCube("wall", Color(1, 1, 1), 1.f);
+	MeshBuilder::GetInstance()->GenerateOBJ("wall", "OBJ//cube.obj");
+
+	sun = MeshBuilder::GetInstance()->GenerateSphere("sphere", Color(1, 1, 1), 24, 24, 1);
+
+	theMiniMap = Create::Minimap();
+	theMiniMap->SetBackground(MeshBuilder::GetInstance()->GenerateQuad("miniMap", Color(1, 1, 1), 1.f));
+	theMiniMap->GetBackground()->textureID[0] = LoadTGA("Image//grass_lightgreen.tga");
+	theMiniMap->SetAvatar(MeshBuilder::GetInstance()->GenerateQuad("MINIMAPAVATAR", Color(1, 1, 1), 0.125f));
+	theMiniMap->GetAvatar()->textureID[0] = LoadTGA("Image//Avatar.tga");
+	theMiniMap->SetSize(1.3f, 1.f);
 
 	lights[0] = new Light();
 	GraphicsManager::GetInstance()->AddLight("lights[0]", lights[0]);
@@ -208,14 +219,16 @@ void SceneText::Init()
 
 
 	//light testing
-	/*light_depth_mesh = MeshBuilder::GetInstance()->GenerateQuad("light_depth_mesh", Color(1, 0, 1), 1);
-	light_depth_mesh->textureID[0] = GraphicsManager::GetInstance()->m_lightDepthFBO.GetTexture();*/
+	light_depth_mesh = MeshBuilder::GetInstance()->GenerateQuad("light_depth_mewsh", Color(1, 0, 1), 1);
+	light_depth_mesh->textureID[0] = GraphicsManager::GetInstance()->m_lightDepthFBO.GetTexture();
 	//light_depth_mesh->textureID[0] = LoadTGA("Image//calibri.tga");
 
 
 
 	//Hello->play2D("Image//Hello.mp3", GL_TRUE);
 	isDay = true;
+	time = 10.00;
+	noOfDays = 1;
 }
 
 void SceneText::Update(double dt)
@@ -224,13 +237,7 @@ void SceneText::Update(double dt)
 	double mouseX, mouseY;
 	MouseController::GetInstance()->GetMousePosition(mouseX, mouseY);
 	MouseController::GetInstance()->UpdateMousePosition(mouseX, Application::GetInstance().GetWindowHeight() - mouseY);
-	//MouseController::GetInstance()->UpdateMousePosition(mouseX / Application::GetInstance().GetWindowWidth() * worldWidth,
-	//	(Application::GetInstance().GetWindowHeight() - mouseY) / Application::GetInstance().GetWindowHeight() * worldHeight);
 	MouseController::GetInstance()->GetMousePosition(mouseX, mouseY);
-	//mouseX += Player::GetInstance()->GetPos().x;
-	//mouseY += Player::GetInstance()->GetPos().z;
-	//std::cout << "mouseX: " << mouseX;
-	//std::cout << "mouseY: " << mouseY << std::endl;
 
 	// Update our entities
 	EntityManager::GetInstance()->Update(dt);
@@ -283,9 +290,29 @@ void SceneText::Update(double dt)
 	}
 	// Debug purpose - changing to day / night
 	if (KeyboardController::GetInstance()->IsKeyPressed(VK_F3) && isDay)
+	{
 		isDay = false;
+		time = 10.00;
+	}
 	if (KeyboardController::GetInstance()->IsKeyPressed(VK_F4) && !isDay)
+	{
 		isDay = true;
+		time = 10.00;
+		noOfDays++;
+	}
+	//day night shift
+	time -= dt;
+	if (time <= 0.00 && isDay)
+	{
+		time = 10.00;
+		isDay = false;
+	}
+	if (time <= 0.00 && !isDay)
+	{
+		time = 10.00;
+		isDay = true;
+		noOfDays++;
+	}
 
 	//vectors and angles for wall-building with mouse
 	Vector3 Up_Direction = Vector3(400.f, 600.f, 0.f) - Vector3(400.f, 300.f, 0.f);
@@ -294,6 +321,20 @@ void SceneText::Update(double dt)
 	float up_angle = Math::RadianToDegree(acosf(playerMouse_Direction.Dot(Up_Direction) / (playerMouse_Direction.Length() * Up_Direction.Length())));
 	float left_angle = Math::RadianToDegree(acosf(playerMouse_Direction.Dot(Left_Direction) / (playerMouse_Direction.Length() * Left_Direction.Length())));
 	
+	//for minimap icon to rotate
+	try
+	{
+		playerMouse_Direction.Normalize();
+		float angle = Math::RadianToDegree(acosf(playerMouse_Direction.Dot(Up_Direction) / (playerMouse_Direction.Length() * Up_Direction.Length())));
+		if (playerMouse_Direction.x < 0)
+			angle = -angle;
+		CMinimap::GetInstance()->SetAngle(angle);
+	}
+	catch (DivideByZero)
+	{
+		std::cout << "Cannot move mouse to center, divide by zero(Normalize for minimap icon to rotate)" << std::endl;
+	}
+
 	//Build wall according to angles formed with pre-detemined vectors based on mouse and player positions
 	if (MouseController::GetInstance()->IsButtonReleased(MouseController::LMB) && isDay)
 	{
@@ -341,17 +382,59 @@ void SceneText::Update(double dt)
 	ss.precision(5);
 	float fps = (float)(1.f / dt);
 	ss << "FPS: " << fps;
-	textObj[1]->SetText(ss.str());
+	textObj[0]->SetText(ss.str());
 
 	// Update the player position into textObj[2]
-	std::ostringstream ss1;
-	ss1.precision(4);
-	ss1 << "Player:" << Player::GetInstance()->GetPos();
-	textObj[2]->SetText(ss1.str());
-
+	ss.str("");
+	ss.precision(4);
+	ss << "Player:" << Player::GetInstance()->GetPos();
+	textObj[1]->SetText(ss.str());
 
 	CSoundEngine::GetInstance()->playthesound("HELLO", 3);
 	std::cout << "Song Playing" << std::endl;
+
+	ss.str("");
+	ss.precision(4);
+	if (isDay)
+	{
+		switch (noOfDays)
+		{
+		case 1:
+			ss << noOfDays << "st Day " << time;
+			break;
+		case 2:
+			ss << noOfDays << "nd Day " << time;
+			break;
+		case 3:
+			ss << noOfDays << "rd Day " << time;
+			break;
+		default:
+			ss << noOfDays << "th Day " << time;
+			break;
+		}
+		textObj[2]->SetText(ss.str());
+	}
+	else
+	{
+		switch (noOfDays)
+		{
+		case 1:
+			ss << noOfDays << "st Night " << time;
+			break;
+		case 2:
+			ss << noOfDays << "nd Night " << time;
+			break;
+		case 3:
+			ss << noOfDays << "rd Night " << time;
+			break;
+		default:
+			ss << noOfDays << "th Night " << time;
+			break;
+		}
+		textObj[2]->SetText(ss.str());
+	}
+	//CSoundEngine::GetInstance()->playthesound("HELLO", 3);
+	//std::cout << "Song Playing" << std::endl;
 
 }
 
@@ -392,14 +475,18 @@ void SceneText::RenderPassGPass()
 	glUseProgram(g->m_gPassShaderID);
 	//These matrices should change when light position or direction changes
 	Light* light = dynamic_cast<Light*>(g->GetLight("lights[0]"));
-	if (light->type == Light::LIGHT_DIRECTIONAL)
-		g->m_lightDepthProj.SetToOrtho(-MAX_CELLS * CELL_SIZE, MAX_CELLS * CELL_SIZE, -MAX_CELLS * CELL_SIZE, MAX_CELLS * CELL_SIZE, -MAX_CELLS * CELL_SIZE, MAX_CELLS * CELL_SIZE);
+	if (light->type == Light::LIGHT_DIRECTIONAL) {
+		g->m_lightDepthProj.SetToOrtho(0, MAX_CELLS * CELL_SIZE, -MAX_CELLS * CELL_SIZE, 0, -MAX_CELLS * CELL_SIZE , MAX_CELLS * CELL_SIZE * 2);
+		//g->m_lightDepthProj.SetToOrtho(-100, 100, -100, 100, -100, 100);
+	}
 	else
 		g->m_lightDepthProj.SetToPerspective(90, 1.f, 0.1, 10);
 
 
+	Vector3 up = Vector3(1, 0, 0).Cross(Vector3(-lights[0]->position.x, -lights[0]->position.y, -lights[0]->position.z)).Normalized();
+
 	g->m_lightDepthView.SetToLookAt(light->position.x,
-		light->position.y, light->position.z, 0, 0, 0, 0, 1, 0);
+		light->position.y, light->position.z, 0, 0, 0, up.x, up.y, up.z);
 
 	RenderWorld();
 }
@@ -443,6 +530,7 @@ void SceneText::RenderPassMain()
 
 	EntityManager::GetInstance()->RenderUI();
 
+	theMiniMap->RenderUI();
 	//RenderHelper::RenderTextOnScreen(text, std::to_string(fps), Color(0, 1, 0), 2, 0, 0);
 }
 
@@ -456,8 +544,19 @@ void SceneText::RenderWorld()
 	RenderHelper::RenderMeshWithLight(ground);
 	ms.PopMatrix();
 
+	ms.PushMatrix();
+	ms.Translate(lights[0]->position.x / 2, lights[0]->position.y / 2, lights[0]->position.z / 2);
+	ms.Scale(50.f, 50.f, 50.f);
+	RenderHelper::RenderMesh(sun);
+	ms.PopMatrix();
+
+	ms.PushMatrix();
+	ms.Translate(0, 50, 0);
+	ms.Scale(50, 50, 50);	
+	RenderHelper::RenderMesh(light_depth_mesh);
+	ms.PopMatrix();
+
 	EntityManager::GetInstance()->Render();
-	EntityManager::GetInstance()->RenderUI();
 }
 
 void SceneText::Exit()

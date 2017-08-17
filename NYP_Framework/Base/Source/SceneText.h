@@ -11,12 +11,13 @@
 #include "GenericEntity.h"
 #include "BuildingManager.h"
 
+
 class ShaderProgram;
 class SceneManager;
 class TextEntity;
 class Light;
 class Keyboard;
-
+class CMinimap;
 class SceneText : public Scene
 {	
 public:
@@ -48,9 +49,14 @@ private:
 	void RenderWorld();
 
 	Mesh* ground;
+	Mesh* sun;
+	Mesh* light_depth_mesh;
+	CMinimap* theMiniMap;
 
 	float worldWidth, worldHeight;
 	bool isDay;
+	double time;
+	int noOfDays;
 };
 
 #endif

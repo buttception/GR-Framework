@@ -3,12 +3,15 @@
 #include "../FPSCamera.h"
 #include "../TopDownCamera.h"
 #include "../GroundEntity.h"
+#include "../GenericEntity.h"
 #include "SingletonTemplate.h"
+#include "../Minimap.h"
+#include "../Application.h"
 
 class Keyboard;
 class Mouse;
 
-class Player : public Singleton<Player>
+class Player : public Singleton<Player>, public GenericEntity
 {
 	friend Singleton<Player>;
 public:
@@ -44,6 +47,8 @@ public:
 	// Movement
 	bool MoveFrontBack(const float deltaTime, const bool direction, const float speedMultiplier = 1.0f);
 	bool MoveLeftRight(const float deltaTime, const bool direction, const float speedMultiplier = 1.0f);
+
+	void CollisionResponse(EntityBase* thatEntity);
 
 private:
 	Vector3 defaultPosition;
