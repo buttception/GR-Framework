@@ -278,27 +278,34 @@ bool Player::LeftClick()
 
 	Vector3 Up_Direction = Vector3(400.f, 600.f, 0.f) - Vector3(400.f, 300.f, 0.f);
 	Vector3 playerMouse_Direction = Vector3((float)mouseX, (float)mouseY, 0.f) - Vector3(400.f, 300.f, 0.f);
-	playerMouse_Direction.Normalize();
-	float angle = Math::RadianToDegree(acosf(playerMouse_Direction.Dot(Up_Direction) / (playerMouse_Direction.Length() * Up_Direction.Length())));
-	if (playerMouse_Direction.x < 0)
-		angle = -angle;
-	
-	//Build wall according to angles formed with pre-detemined vectors based on mouse and player positions
-	if (SceneText::isDay)
+	try
 	{
-		// Up
-		if (angle >= -53.f && angle <= 53.f)
-			BuildingManager::GetInstance()->AddWall((int)(Player::GetInstance()->GetPos().x / CELL_SIZE), (int)(Player::GetInstance()->GetPos().z / CELL_SIZE), BuildingTile::TOP);
-		// Left
-		else if (angle >= -127.f && angle <= -53.f)
-			BuildingManager::GetInstance()->AddWall((int)(Player::GetInstance()->GetPos().x / CELL_SIZE), (int)(Player::GetInstance()->GetPos().z / CELL_SIZE), BuildingTile::LEFT);
-		// Right
-		else if (angle >= 53.f && angle <= 127.f)
-			BuildingManager::GetInstance()->AddWall((int)(Player::GetInstance()->GetPos().x / CELL_SIZE), (int)(Player::GetInstance()->GetPos().z / CELL_SIZE), BuildingTile::RIGHT);
-		// Down
-		else if ((angle >= -180.f && angle <= -127.f) || (angle >= 127.f && angle <= 180.f))
-			BuildingManager::GetInstance()->AddWall((int)(Player::GetInstance()->GetPos().x / CELL_SIZE), (int)(Player::GetInstance()->GetPos().z / CELL_SIZE), BuildingTile::BOTTOM);
-		return true;
+		playerMouse_Direction.Normalize();
+		float angle = Math::RadianToDegree(acosf(playerMouse_Direction.Dot(Up_Direction) / (playerMouse_Direction.Length() * Up_Direction.Length())));
+		if (playerMouse_Direction.x < 0)
+			angle = -angle;
+
+		//Build wall according to angles formed with pre-detemined vectors based on mouse and player positions
+		if (SceneText::isDay)
+		{
+			// Up
+			if (angle >= -53.f && angle <= 53.f)
+				BuildingManager::GetInstance()->AddWall((int)(Player::GetInstance()->GetPos().x / CELL_SIZE), (int)(Player::GetInstance()->GetPos().z / CELL_SIZE), BuildingTile::TOP);
+			// Left
+			else if (angle >= -127.f && angle <= -53.f)
+				BuildingManager::GetInstance()->AddWall((int)(Player::GetInstance()->GetPos().x / CELL_SIZE), (int)(Player::GetInstance()->GetPos().z / CELL_SIZE), BuildingTile::LEFT);
+			// Right
+			else if (angle >= 53.f && angle <= 127.f)
+				BuildingManager::GetInstance()->AddWall((int)(Player::GetInstance()->GetPos().x / CELL_SIZE), (int)(Player::GetInstance()->GetPos().z / CELL_SIZE), BuildingTile::RIGHT);
+			// Down
+			else if ((angle >= -180.f && angle <= -127.f) || (angle >= 127.f && angle <= 180.f))
+				BuildingManager::GetInstance()->AddWall((int)(Player::GetInstance()->GetPos().x / CELL_SIZE), (int)(Player::GetInstance()->GetPos().z / CELL_SIZE), BuildingTile::BOTTOM);
+			return true;
+		}
+	}
+	catch (DivideByZero)
+	{
+		std::cout << "Cannot move mouse to center, divide by zero(Normalize for placing buildings)" << std::endl;
 	}
 	return false;
 }
