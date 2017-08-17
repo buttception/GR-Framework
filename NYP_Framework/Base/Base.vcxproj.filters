@@ -110,6 +110,9 @@
     <ClCompile Include="Source\Minimap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Source\LoadTextData.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h">
@@ -179,6 +182,11 @@
       <Filter>Scene</Filter>
     </ClInclude>
     <ClInclude Include="Source\Minimap.h">
+	</ClInclude>
+    <ClInclude Include="Source\LoadTextData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\FontType.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
