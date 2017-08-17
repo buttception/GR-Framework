@@ -13,6 +13,8 @@
 #include "GraphicsManager.h"
 #include "ShaderProgram.h"
 #include "EntityManager.h"
+#include "FontType.h"
+#include "LoadTextData.h"
 
 #include "GenericEntity.h"
 #include "GroundEntity.h"
@@ -379,22 +381,20 @@ void SceneText::Update(double dt)
 	// Update the 2 text object values. NOTE: Can do this in their own class but i'm lazy to do it now :P
 	// Eg. FPSRenderEntity or inside RenderUI for LightEntity
 	std::ostringstream ss;
-	ss.precision(5);
+	ss << std::fixed;
+	ss.precision(1);
 	float fps = (float)(1.f / dt);
 	ss << "FPS: " << fps;
 	textObj[0]->SetText(ss.str());
 
 	// Update the player position into textObj[2]
 	ss.str("");
-	ss.precision(4);
+	ss.precision(1);
 	ss << "Player:" << Player::GetInstance()->GetPos();
 	textObj[1]->SetText(ss.str());
 
-	CSoundEngine::GetInstance()->playthesound("HELLO", 3);
-	std::cout << "Song Playing" << std::endl;
-
 	ss.str("");
-	ss.precision(4);
+	ss.precision(0);
 	if (isDay)
 	{
 		switch (noOfDays)
@@ -528,10 +528,11 @@ void SceneText::RenderPassMain()
 	GraphicsManager::GetInstance()->SetOrthographicProjection(-halfWindowWidth, halfWindowWidth, -halfWindowHeight, halfWindowHeight, -10, 10);
 	GraphicsManager::GetInstance()->DetachCamera();
 
+	glDisable(GL_DEPTH_TEST);
 	EntityManager::GetInstance()->RenderUI();
-
 	theMiniMap->RenderUI();
 	//RenderHelper::RenderTextOnScreen(text, std::to_string(fps), Color(0, 1, 0), 2, 0, 0);
+	glEnable(GL_DEPTH_TEST);
 }
 
 void SceneText::RenderWorld()
