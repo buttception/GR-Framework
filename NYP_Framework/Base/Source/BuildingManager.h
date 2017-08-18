@@ -18,10 +18,14 @@ public:
 
 	void AddWall(int _x, int _y, BuildingTile::TILE_SIDE direction);
 
+	BuildingTile** GetBuildingArray() {
+		return buildingArray;
+	}
+
 private:
 	// each cell will be 20 units by 20 units
 	// a 2D array of MAXCELLS x MAXCELLS of building tiles
-	BuildingTile* buildingArray[MAX_CELLS][MAX_CELLS];
+	BuildingTile** buildingArray;
 	
 };
 

@@ -61,6 +61,7 @@
     <ClInclude Include="Source\SkyBox\SkyBoxEntity.h" />
     <ClInclude Include="Source\Sound_Engine.h" />
     <ClInclude Include="Source\SpriteEntity.h" />
+    <ClInclude Include="Source\StateMachine.h" />
     <ClInclude Include="Source\TextEntity.h" />
     <ClInclude Include="Source\TopDownCamera.h" />
   </ItemGroup>

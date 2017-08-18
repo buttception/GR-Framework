@@ -13,20 +13,12 @@ void EntityManager::Update(double _dt)
 	end = entityList.end();
 	for (it = entityList.begin(); it != end; ++it)
 	{
+		if ((*it)->IsFixed())
+			break;
 		(*it)->Update(_dt);
 	}
 
-	CollisionManager::GetInstance()->Update(collisionList);
-
-	// Erase objects that are done from collisionList
-	it = collisionList.begin();
-	while (it != collisionList.end()) {
-		if ((*it)->IsDone()) {
-			it = collisionList.erase(it);
-		}
-		else
-			++it;
-	}
+	CollisionManager::GetInstance()->Update(entityList);
 
 	// Clean up entities that are done
 	it = entityList.begin();
@@ -73,10 +65,11 @@ void EntityManager::RenderUI()
 // Add an entity to this EntityManager
 void EntityManager::AddEntity(EntityBase* _newEntity)
 {
-	entityList.push_back(_newEntity);
-
-	if (_newEntity->HasCollider())
-		collisionList.push_back(_newEntity);
+	// put fixed objects at the back, and moving objects at the front
+	if (_newEntity->IsFixed())
+		entityList.push_back(_newEntity);
+	else
+		entityList.push_front(_newEntity);
 }
 
 // Remove an entity from this EntityManager
@@ -84,13 +77,6 @@ bool EntityManager::RemoveEntity(EntityBase* _existingEntity)
 {
 	// Find the entity's iterator
 	std::list<EntityBase*>::iterator findIter = std::find(entityList.begin(), entityList.end(), _existingEntity);
-	
-	// find if the entity has a collider and remove from list
-	if (_existingEntity->HasCollider()) {
-		std::list<EntityBase*>::iterator findCollider = std::find(collisionList.begin(), collisionList.end(), _existingEntity);
-		if (findCollider != collisionList.end())
-			findCollider = collisionList.erase(findCollider);
-	}
 
 	// Delete the entity if found
 	if (findIter != entityList.end())

@@ -22,11 +22,12 @@ public:
 	void AddWall(BuildingEntity* entity, TILE_SIDE direction);
 	bool RemoveBuilding(BuildingEntity* entity);
 
-private:
 	BuildingEntity* leftWall;
 	BuildingEntity* rightWall;
 	BuildingEntity* bottomWall;
 	BuildingEntity* topWall;
+
+private:
 	BuildingEntity* floor;
 };
 

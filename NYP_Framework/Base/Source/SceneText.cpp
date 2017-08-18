@@ -164,7 +164,7 @@ void SceneText::Init()
 	lights[0] = new Light();
 	GraphicsManager::GetInstance()->AddLight("lights[0]", lights[0]);
 	lights[0]->type = Light::LIGHT_DIRECTIONAL;
-	lights[0]->position.Set(MAX_CELLS * CELL_SIZE / 2, MAX_CELLS * CELL_SIZE, 0);
+	lights[0]->position.Set(0, MAX_CELLS * CELL_SIZE, 0);
 	lights[0]->color.Set(1, 1, 1);
 	lights[0]->power = 1;
 	lights[0]->kC = 1.f;
@@ -190,9 +190,9 @@ void SceneText::Init()
 	// Create entities into the scene
 	Create::Entity("reference", Vector3(0.0f, 0.0f, 0.0f)); // Reference
 	Create::Entity("lightball", Vector3(lights[0]->position.x, lights[0]->position.y, lights[0]->position.z)); // Lightball
-	GenericEntity* aCube = Create::Entity("cube", Vector3(-20.0f, 0.0f, -20.0f));
-	aCube->SetCollider(true);
-	aCube->SetAABB(Vector3(0.5f, 0.5f, 0.5f), Vector3(-0.5f, -0.5f, -0.5f));
+	//GenericEntity* aCube = Create::Entity("cube", Vector3(-20.0f, 0.0f, -20.0f));
+	//aCube->SetCollider(true);
+	//aCube->SetAABB(Vector3(0.5f, 0.5f, 0.5f), Vector3(-0.5f, -0.5f, -0.5f));
 	//groundEntity = Create::Ground("GRASS_DARKGREEN", "GRASS_LIGHTGREEN");
 //	Create::Text3DObject("text", Vector3(0.0f, 0.0f, 0.0f), "DM2210", Vector3(10.0f, 10.0f, 10.0f), Color(0, 1, 1));
 	Create::Sprite2DObject("crosshair", Vector3(0.0f, 0.0f, 0.0f), Vector3(10.0f, 10.0f, 10.0f));
@@ -518,7 +518,7 @@ void SceneText::RenderPassMain()
 
 	GraphicsManager::GetInstance()->UpdateLightUniforms();
 
-	GraphicsManager::GetInstance()->SetPerspectiveProjection(45.0f, 4.0f / 3.0f, 0.1f, 10000.0f);
+	GraphicsManager::GetInstance()->SetPerspectiveProjection(60.f, 4.0f / 3.0f, 0.1f, 10000.0f);
 	GraphicsManager::GetInstance()->AttachCamera(camera);
 
 	ms.LoadIdentity();

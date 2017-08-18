@@ -23,7 +23,6 @@ private:
 	virtual ~EntityManager();
 
 	std::list<EntityBase*> entityList;
-	std::list<EntityBase*> collisionList;
 };
 
 #endif // ENTITY_MANAGER_H

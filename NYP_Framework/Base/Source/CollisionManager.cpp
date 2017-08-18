@@ -86,7 +86,20 @@ void CollisionManager::Update(std::list<EntityBase*> collisionList)
 	std::list<EntityBase*>::iterator it, it2, end;
 	end = collisionList.end();
 	for (it = collisionList.begin(); it != end; ++it) {
+		// if it does not have collider aspect
+		if (!(*it)->HasCollider())
+			continue;
+
+		// if it is a fixed object, no need collision check
+		// fixed object shld not check collision with fixed objects
+		if ((*it)->IsFixed())
+			break;
+
 		for (it2 = std::next(it, 1); it2 != end; ++it2) {
+			// if entity does not have a collider aspect
+			if (!(*it)->HasCollider() || !(*it2)->HasCollider())
+				continue;
+
 			// do your checks here
 			if (CheckAABBCollision(*it, *it2))
 			{
@@ -96,10 +109,12 @@ void CollisionManager::Update(std::list<EntityBase*> collisionList)
 				thisEntity->CollisionResponse(thatEntity);
 			}
 		}
-		if (CheckAABBCollision(*it, Player::GetInstance())) {
-			Player::GetInstance()->CollisionResponse(*it);
-		}
-		
+	}
+	for (it = collisionList.begin(); it != end; ++it) {
+		if (!(*it)->HasCollider())
+			continue;
+		if (CheckAABBCollision((*it), Player::GetInstance()))
+			Player::GetInstance()->CollisionResponse((*it));
 	}
 }
 
