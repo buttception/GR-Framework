@@ -1,11 +1,12 @@
-﻿  SceneMainMenu.cpp
-c:\users\530\desktop\school_work\studio_project_3\gr-framework\nyp_framework\common\source\mymath.h(265): warning C4018: '<' : signed/unsigned mismatch
-c:\users\530\desktop\school_work\studio_project_3\gr-framework\nyp_framework\common\source\mymath.h(284): warning C4244: 'return' : conversion from 'unsigned __int64' to 'int', possible loss of data
-c:\users\530\desktop\school_work\studio_project_3\gr-framework\nyp_framework\common\source\mymath.h(300): warning C4244: 'return' : conversion from 'unsigned __int64' to 'int', possible loss of data
-c:\users\530\desktop\school_work\studio_project_3\gr-framework\nyp_framework\common\source\mymath.h(347): warning C4018: '<=' : signed/unsigned mismatch
-c:\users\530\desktop\school_work\studio_project_3\gr-framework\nyp_framework\common\source\mymath.h(369): warning C4244: 'return' : conversion from 'double' to 'int', possible loss of data
-c:\users\530\desktop\school_work\studio_project_3\gr-framework\nyp_framework\common\source\mymath.h(389): warning C4018: '<=' : signed/unsigned mismatch
-c:\users\530\desktop\school_work\studio_project_3\gr-framework\nyp_framework\base\source\scenemainmenu.cpp(84): warning C4244: 'initializing' : conversion from 'double' to 'int', possible loss of data
+﻿  SceneText.cpp
+d:\github\sp3\nyp_framework\common\source\mymath.h(265): warning C4018: '<' : signed/unsigned mismatch
+d:\github\sp3\nyp_framework\common\source\mymath.h(284): warning C4244: 'return' : conversion from 'unsigned __int64' to 'int', possible loss of data
+d:\github\sp3\nyp_framework\common\source\mymath.h(300): warning C4244: 'return' : conversion from 'unsigned __int64' to 'int', possible loss of data
+d:\github\sp3\nyp_framework\common\source\mymath.h(347): warning C4018: '<=' : signed/unsigned mismatch
+d:\github\sp3\nyp_framework\common\source\mymath.h(369): warning C4244: 'return' : conversion from 'double' to 'int', possible loss of data
+d:\github\sp3\nyp_framework\common\source\mymath.h(389): warning C4018: '<=' : signed/unsigned mismatch
+d:\github\sp3\nyp_framework\base\source\scenetext.cpp(190): warning C4101: 'a' : unreferenced local variable
+d:\github\sp3\nyp_framework\base\source\scenetext.cpp(278): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
 Application.obj : warning LNK4075: ignoring '/EDITANDCONTINUE' due to '/OPT:LBR' specification
 LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
-  Base.vcxproj -> C:\Users\530\Desktop\School_work\Studio_Project_3\GR-Framework\NYP_Framework\Debug\Base.exe
+  Base.vcxproj -> D:\GitHub\SP3\NYP_Framework\Debug\Base.exe
