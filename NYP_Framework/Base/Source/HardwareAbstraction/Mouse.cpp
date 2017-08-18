@@ -52,20 +52,41 @@ int Mouse::Read(const float deltaTime)
 	{
 		if (SceneText::isDay)
 		{
-			switch ((int)MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_YOFFSET))
+			if (Player::GetInstance()->GetIsBuilding())
 			{
-			case 1:
-				Player::GetInstance()->SetCurrentBuilding(BuildingEntity::BUILDING_WALL);
-				break;
-			case 2:
-				Player::GetInstance()->SetCurrentBuilding(BuildingEntity::BUILDING_DOOR);
-				break;
-			case 3:
-				Player::GetInstance()->SetCurrentBuilding(BuildingEntity::BUILDING_COVER);
-				break;
-			case 4:
-				Player::GetInstance()->SetCurrentBuilding(BuildingEntity::BUILDING_FLOOR);
-				break;
+				switch ((int)MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_YOFFSET))
+				{
+				case 1:
+					Player::GetInstance()->SetCurrentBuilding(BuildingEntity::BUILDING_WALL);
+					break;
+				case 2:
+					Player::GetInstance()->SetCurrentBuilding(BuildingEntity::BUILDING_DOOR);
+					break;
+				case 3:
+					Player::GetInstance()->SetCurrentBuilding(BuildingEntity::BUILDING_COVER);
+					break;
+				case 4:
+					Player::GetInstance()->SetCurrentBuilding(BuildingEntity::BUILDING_FLOOR);
+					break;
+				}
+			}
+			else if (Player::GetInstance()->GetIsEquipment())
+			{
+				switch ((int)MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_YOFFSET))
+				{
+				case 1:
+					Player::GetInstance()->SetCurrentEquipment(EquipmentEntity::EQUIPMENT_TURRET);
+					break;
+				case 2:
+					Player::GetInstance()->SetCurrentEquipment(EquipmentEntity::EQUIPMENT_HEALING_STATION);
+					break;
+				case 3:
+					Player::GetInstance()->SetCurrentEquipment(EquipmentEntity::EQUIPMENT_FLOOR_SPIKE);
+					break;
+				case 4:
+					Player::GetInstance()->SetCurrentEquipment(EquipmentEntity::EQUIPMENT_SHIELD);
+					break;
+				}
 			}
 		}
 	}

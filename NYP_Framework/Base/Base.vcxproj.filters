@@ -113,6 +113,12 @@
     <ClCompile Include="Source\LoadTextData.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Source\EquipmentEntity.cpp">
+      <Filter>Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\EquipmentManager.cpp">
+      <Filter>Manager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h">
@@ -189,6 +195,12 @@
     </ClInclude>
     <ClInclude Include="Source\Minimap.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\EquipmentEntity.h">
+      <Filter>Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\EquipmentManager.h">
+      <Filter>Manager</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

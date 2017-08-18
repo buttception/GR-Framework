@@ -10,18 +10,41 @@ BuildingTile::BuildingTile()
 	, rightWall(nullptr)
 	, bottomWall(nullptr)
 	, topWall(nullptr)
+
 	, leftDoor(nullptr)
 	, rightDoor(nullptr)
 	, bottomDoor(nullptr)
 	, topDoor(nullptr)
+
 	, leftCover(nullptr)
 	, rightCover(nullptr)
 	, bottomCover(nullptr)
 	, topCover(nullptr)
+
 	, leftFloor(nullptr)
 	, rightFloor(nullptr)
 	, bottomFloor(nullptr)
 	, topFloor(nullptr)
+
+	, leftTurret(nullptr)
+	, rightTurret(nullptr)
+	, bottomTurret(nullptr)
+	, topTurret(nullptr)
+
+	, leftHealingStation(nullptr)
+	, rightHealingStation(nullptr)
+	, bottomHealingStation(nullptr)
+	, topHealingStation(nullptr)
+
+	, leftFloorSpike(nullptr)
+	, rightFloorSpike(nullptr)
+	, bottomFloorSpike(nullptr)
+	, topFloorSpike(nullptr)
+
+	, leftShield(nullptr)
+	, rightShield(nullptr)
+	, bottomShield(nullptr)
+	, topShield(nullptr)
 {
 }
 
@@ -202,4 +225,172 @@ bool BuildingTile::RemoveBuilding(BuildingEntity * entity)
 	
 
 	return false;
+}
+
+void BuildingTile::AddTurret(EquipmentEntity * entity, TILE_SIDE direction)
+{
+	//where 1 -> left, 2 -> top, 3 -> right, 4 ->bottom
+	switch (direction) {
+	case LEFT:
+		if (leftTurret) {
+			std::cout << "Position occupied" << std::endl;
+			return;
+		}
+		leftTurret = entity;
+		break;
+	case TOP:
+		if (topTurret) {
+			std::cout << "Position occupied" << std::endl;
+			return;
+		}
+		topTurret = entity;
+		break;
+	case RIGHT:
+		if (rightTurret) {
+			std::cout << "Position occupied" << std::endl;
+			return;
+		}
+		rightTurret = entity;
+		break;
+	case BOTTOM:
+		if (bottomTurret) {
+			std::cout << "Position occupied" << std::endl;
+			return;
+		}
+		bottomTurret = entity;
+		break;
+	default:
+		return;
+	}
+	std::cout << "Turret placed down" << std::endl;
+	Player::GetInstance()->SetMaterial(Math::Max(0, Player::GetInstance()->GetMaterial() - 250));
+	EntityManager::GetInstance()->AddEntity(entity);
+	//CSoundEngine::GetInstance()->playthesound("Build", 0.4);
+	//std::cout << "Buld sound Played" << std::endl;
+}
+
+void BuildingTile::AddHealingStation(EquipmentEntity * entity, TILE_SIDE direction)
+{
+	//where 1 -> left, 2 -> top, 3 -> right, 4 ->bottom
+	switch (direction) {
+	case LEFT:
+		if (leftHealingStation) {
+			std::cout << "Position occupied" << std::endl;
+			return;
+		}
+		leftHealingStation = entity;
+		break;
+	case TOP:
+		if (topHealingStation) {
+			std::cout << "Position occupied" << std::endl;
+			return;
+		}
+		topHealingStation = entity;
+		break;
+	case RIGHT:
+		if (rightHealingStation) {
+			std::cout << "Position occupied" << std::endl;
+			return;
+		}
+		rightHealingStation = entity;
+		break;
+	case BOTTOM:
+		if (bottomHealingStation) {
+			std::cout << "Position occupied" << std::endl;
+			return;
+		}
+		bottomHealingStation = entity;
+		break;
+	default:
+		return;
+	}
+	std::cout << "Healing Station placed down" << std::endl;
+	Player::GetInstance()->SetMaterial(Math::Max(0, Player::GetInstance()->GetMaterial() - 250));
+	EntityManager::GetInstance()->AddEntity(entity);
+	//CSoundEngine::GetInstance()->playthesound("Build", 0.4);
+	//std::cout << "Buld sound Played" << std::endl;
+}
+
+void BuildingTile::AddFloorSpike(EquipmentEntity * entity, TILE_SIDE direction)
+{
+	//where 1 -> left, 2 -> top, 3 -> right, 4 ->bottom
+	switch (direction) {
+	case LEFT:
+		if (leftFloorSpike) {
+			std::cout << "Position occupied" << std::endl;
+			return;
+		}
+		leftFloorSpike = entity;
+		break;
+	case TOP:
+		if (topFloorSpike) {
+			std::cout << "Position occupied" << std::endl;
+			return;
+		}
+		topFloorSpike = entity;
+		break;
+	case RIGHT:
+		if (rightFloorSpike) {
+			std::cout << "Position occupied" << std::endl;
+			return;
+		}
+		rightFloorSpike = entity;
+		break;
+	case BOTTOM:
+		if (bottomFloorSpike) {
+			std::cout << "Position occupied" << std::endl;
+			return;
+		}
+		bottomFloorSpike = entity;
+		break;
+	default:
+		return;
+	}
+	std::cout << "Floor Spike placed down" << std::endl;
+	Player::GetInstance()->SetMaterial(Math::Max(0, Player::GetInstance()->GetMaterial() - 250));
+	EntityManager::GetInstance()->AddEntity(entity);
+	//CSoundEngine::GetInstance()->playthesound("Build", 0.4);
+	//std::cout << "Buld sound Played" << std::endl;
+}
+
+void BuildingTile::AddShield(EquipmentEntity * entity, TILE_SIDE direction)
+{
+	//where 1 -> left, 2 -> top, 3 -> right, 4 ->bottom
+	switch (direction) {
+	case LEFT:
+		if (leftShield) {
+			std::cout << "Position occupied" << std::endl;
+			return;
+		}
+		leftShield = entity;
+		break;
+	case TOP:
+		if (topShield) {
+			std::cout << "Position occupied" << std::endl;
+			return;
+		}
+		topShield = entity;
+		break;
+	case RIGHT:
+		if (rightShield) {
+			std::cout << "Position occupied" << std::endl;
+			return;
+		}
+		rightShield = entity;
+		break;
+	case BOTTOM:
+		if (bottomShield) {
+			std::cout << "Position occupied" << std::endl;
+			return;
+		}
+		bottomShield = entity;
+		break;
+	default:
+		return;
+	}
+	std::cout << "Shield placed down" << std::endl;
+	Player::GetInstance()->SetMaterial(Math::Max(0, Player::GetInstance()->GetMaterial() - 250));
+	EntityManager::GetInstance()->AddEntity(entity);
+	//CSoundEngine::GetInstance()->playthesound("Build", 0.4);
+	//std::cout << "Buld sound Played" << std::endl;
 }

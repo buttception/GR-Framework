@@ -22,6 +22,8 @@ public:
 		CONTROLLER_RELOAD,
 		CONTROLLER_RESET,
 		CONTROLLER_MAPRESIZE,
+		CONTROLLER_ISBUILDING,
+		CONTROLLER_ISEQUIPMENT,
 
 		CONTROLLER_LEFTCLICK,
 		CONTROLLER_AIM,
@@ -49,6 +51,8 @@ public:
 	virtual bool LeftClick(double dt);
 	virtual bool Aim(double dt);
 	virtual bool MapResize(double dt);
+	virtual bool isBuilding(double dt);
+	virtual bool isEquipment(double dt);
 
 };
 

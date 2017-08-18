@@ -8,6 +8,7 @@
 #include "../Minimap.h"
 #include "../Application.h"
 #include "../BuildingManager.h"
+#include "../EquipmentManager.h"
 
 class Keyboard;
 class Mouse;
@@ -58,8 +59,13 @@ public:
 	float GetPlayerHealth(void) const { return playerHealth; }
 	void SetPlayerHealth(float playerHealth) { this->playerHealth = playerHealth; }
 	BuildingEntity::BUILDING_TYPE GetCurrentBuilding(void) const { return currentBuilding; }
-	void SetCurrentBuilding(BuildingEntity::BUILDING_TYPE currentBuilding) { 
-		this->currentBuilding = currentBuilding; }
+	void SetCurrentBuilding(BuildingEntity::BUILDING_TYPE currentBuilding) { this->currentBuilding = currentBuilding; }
+	bool GetIsBuilding(void) const { return isBuilding; }
+	void SetIsBuilding();
+	bool GetIsEquipment(void) const { return isEquipment; }
+	void SetIsEquipment();
+	EquipmentEntity::EQUIPMENT_TYPE GetCurrentEquipment(void) const { return currentEquipment; }
+	void SetCurrentEquipment(EquipmentEntity::EQUIPMENT_TYPE currentEquipment) { this->currentEquipment = currentEquipment; }
 
 private:
 	Vector3 defaultPosition;
@@ -80,4 +86,6 @@ private:
 	int material;
 	float playerHealth;
 	BuildingEntity::BUILDING_TYPE currentBuilding;
+	bool isBuilding, isEquipment;
+	EquipmentEntity::EQUIPMENT_TYPE currentEquipment;
 };

@@ -217,33 +217,30 @@ void BuildingManager::AddFloor(int _x, int _y, BuildingTile::TILE_SIDE direction
 	floor->SetLevel(1);
 	floor->type = BuildingEntity::BUILDING_FLOOR;
 	floor->SetCollider(false);
+	floor->SetScale(Vector3(CELL_SIZE + 2, 2, CELL_SIZE + 2));
 
 	//where 1 -> left, 2 -> top, 3 -> right, 4 ->bottom
 	if (direction == BuildingTile::LEFT) {
-		floor->SetScale(Vector3(2, 10, CELL_SIZE + 2));
-		floor->SetPosition(Vector3(_x * CELL_SIZE, floor->GetScale().y / 2, _y * CELL_SIZE + CELL_SIZE / 2));
+		floor->SetPosition(Vector3(_x * CELL_SIZE - CELL_SIZE / 2, floor->GetScale().y / 2, _y * CELL_SIZE + CELL_SIZE / 2));
 		buildingArray[_x][_y]->AddFloor(floor, BuildingTile::LEFT);
 	}
 	else if (direction == BuildingTile::TOP) {
-		floor->SetScale(Vector3(CELL_SIZE + 2, 10, 2));
-		floor->SetPosition(Vector3(_x * CELL_SIZE + CELL_SIZE / 2, floor->GetScale().y / 2, _y* CELL_SIZE));
+		floor->SetPosition(Vector3(_x * CELL_SIZE + CELL_SIZE / 2, floor->GetScale().y / 2, _y * CELL_SIZE - CELL_SIZE / 2));
 		buildingArray[_x][_y]->AddFloor(floor, BuildingTile::TOP);
 	}
 	else if (direction == BuildingTile::RIGHT) {
-		floor->SetScale(Vector3(2, 10, CELL_SIZE + 2));
 		//if it is on the right, which is the next tile set unless is end
 		if (_x + 1 != MAX_CELLS)
-			AddFloor(_x + 1, _y, BuildingTile::LEFT);
+			AddFloor(_x + 2, _y, BuildingTile::LEFT);
 		else {
 			floor->SetPosition(Vector3(MAX_CELLS * CELL_SIZE, floor->GetScale().y / 2, _y * CELL_SIZE + CELL_SIZE / 2));
 			buildingArray[_x][_y]->AddFloor(floor, BuildingTile::RIGHT);
 		}
 	}
 	else if (direction == BuildingTile::BOTTOM) {
-		floor->SetScale(Vector3(CELL_SIZE + 2, 10, 2));
 		//if it is on the bottom, which is the bottom tile set unless is end
 		if (_y >= 0)
-			AddFloor(_x, _y + 1, BuildingTile::TOP);
+			AddFloor(_x, _y + 2, BuildingTile::TOP);
 		else {
 			floor->SetPosition(Vector3(_x * CELL_SIZE + CELL_SIZE / 2, floor->GetScale().y / 2, MAX_CELLS * CELL_SIZE));
 			buildingArray[_x][_y]->AddFloor(floor, BuildingTile::BOTTOM);

@@ -10,6 +10,7 @@
 #include "MatrixStack.h"
 #include "GenericEntity.h"
 #include "BuildingManager.h"
+#include "EquipmentManager.h"
 
 
 class ShaderProgram;

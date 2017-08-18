@@ -144,6 +144,14 @@ void SceneText::Init()
 	MeshList::GetInstance()->GetMesh("GRASS_LIGHTGREEN")->textureID[0] = LoadTGA("Image//grass_lightgreen.tga");
 
 	MeshBuilder::GetInstance()->GenerateOBJ("wall", "OBJ//cube.obj");
+	MeshBuilder::GetInstance()->GenerateOBJ("door", "OBJ//cube.obj"); //remember to change texture
+	MeshBuilder::GetInstance()->GenerateOBJ("cover", "OBJ//cube.obj"); //remember to change obj
+	MeshBuilder::GetInstance()->GenerateOBJ("floor", "OBJ//cube.obj"); //remember to change texture
+
+	MeshBuilder::GetInstance()->GenerateOBJ("Turret", "OBJ//cube.obj"); //remember to change obj
+	MeshBuilder::GetInstance()->GenerateOBJ("Healing Station", "OBJ//cube.obj"); //remember to change obj
+	MeshBuilder::GetInstance()->GenerateOBJ("Floor Spike", "OBJ//cube.obj"); //remember to change obj
+	MeshBuilder::GetInstance()->GenerateOBJ("Shield", "OBJ//cube.obj"); //remember to change obj
 
 	sun = MeshBuilder::GetInstance()->GenerateSphere("sphere", Color(1, 1, 1), 24, 24, 1);
 
@@ -428,20 +436,41 @@ void SceneText::Update(double dt)
 	ss.str("");
 	if (isDay)
 	{
-		switch (Player::GetInstance()->GetCurrentBuilding())
+		if (Player::GetInstance()->GetIsBuilding())
 		{
-		case BuildingEntity::BUILDING_WALL:
-			ss << "Current Building: Wall";
-			break;
-		case BuildingEntity::BUILDING_DOOR:
-			ss << "Current Building: Door";
-			break;
-		case BuildingEntity::BUILDING_COVER:
-			ss << "Current Building: Cover";
-			break;
-		case BuildingEntity::BUILDING_FLOOR:
-			ss << "Current Building: Floor";
-			break;
+			switch (Player::GetInstance()->GetCurrentBuilding())
+			{
+			case BuildingEntity::BUILDING_WALL:
+				ss << "Current Building: Wall";
+				break;
+			case BuildingEntity::BUILDING_DOOR:
+				ss << "Current Building: Door";
+				break;
+			case BuildingEntity::BUILDING_COVER:
+				ss << "Current Building: Cover";
+				break;
+			case BuildingEntity::BUILDING_FLOOR:
+				ss << "Current Building: Floor";
+				break;
+			}
+		}
+		else if (Player::GetInstance()->GetIsEquipment())
+		{
+			switch (Player::GetInstance()->GetCurrentEquipment())
+			{
+			case EquipmentEntity::EQUIPMENT_TURRET:
+				ss << "Current Equipment: Turret";
+				break;
+			case EquipmentEntity::EQUIPMENT_HEALING_STATION:
+				ss << "Current Equipment: Healing Station";
+				break;
+			case EquipmentEntity::EQUIPMENT_FLOOR_SPIKE:
+				ss << "Current Equipment: Floor Spike";
+				break;
+			case EquipmentEntity::EQUIPMENT_SHIELD:
+				ss << "Current Equipment: Shield";
+				break;
+			}
 		}
 	}
 	textObj[4]->SetText(ss.str());

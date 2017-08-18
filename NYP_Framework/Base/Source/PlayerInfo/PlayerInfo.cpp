@@ -27,6 +27,9 @@ Player::Player(void)
 	, playerHealth(100.f)
 	, material(3000)
 	, currentBuilding(BuildingEntity::BUILDING_WALL)
+	, isBuilding(true)
+	, isEquipment(false)
+	, currentEquipment(EquipmentEntity::EQUIPMENT_TURRET)
 {
 }
 
@@ -287,18 +290,36 @@ bool Player::LeftClick()
 		//Add buildings according to angles formed with pre-detemined vectors based on mouse and player positions
 		if (SceneText::isDay)
 		{
-			// Up
-			if (angle >= -53.f && angle <= 53.f)
-				BuildingManager::GetInstance()->AddBuilding((int)(Player::GetInstance()->GetPos().x / CELL_SIZE), (int)(Player::GetInstance()->GetPos().z / CELL_SIZE), BuildingTile::TOP, currentBuilding);
-			// Left
-			else if (angle >= -127.f && angle <= -53.f)
-				BuildingManager::GetInstance()->AddBuilding((int)(Player::GetInstance()->GetPos().x / CELL_SIZE), (int)(Player::GetInstance()->GetPos().z / CELL_SIZE), BuildingTile::LEFT, currentBuilding);
-			// Right
-			else if (angle >= 53.f && angle <= 127.f)
-				BuildingManager::GetInstance()->AddBuilding((int)(Player::GetInstance()->GetPos().x / CELL_SIZE), (int)(Player::GetInstance()->GetPos().z / CELL_SIZE), BuildingTile::RIGHT, currentBuilding);
-			// Down
-			else if ((angle >= -180.f && angle <= -127.f) || (angle >= 127.f && angle <= 180.f))
-				BuildingManager::GetInstance()->AddBuilding((int)(Player::GetInstance()->GetPos().x / CELL_SIZE), (int)(Player::GetInstance()->GetPos().z / CELL_SIZE), BuildingTile::BOTTOM, currentBuilding);
+			if (isBuilding)
+			{
+				// Up
+				if (angle >= -53.f && angle <= 53.f)
+					BuildingManager::GetInstance()->AddBuilding((int)(Player::GetInstance()->GetPos().x / CELL_SIZE), (int)(Player::GetInstance()->GetPos().z / CELL_SIZE), BuildingTile::TOP, currentBuilding);
+				// Left
+				else if (angle >= -127.f && angle <= -53.f)
+					BuildingManager::GetInstance()->AddBuilding((int)(Player::GetInstance()->GetPos().x / CELL_SIZE), (int)(Player::GetInstance()->GetPos().z / CELL_SIZE), BuildingTile::LEFT, currentBuilding);
+				// Right
+				else if (angle >= 53.f && angle <= 127.f)
+					BuildingManager::GetInstance()->AddBuilding((int)(Player::GetInstance()->GetPos().x / CELL_SIZE), (int)(Player::GetInstance()->GetPos().z / CELL_SIZE), BuildingTile::RIGHT, currentBuilding);
+				// Down
+				else if ((angle >= -180.f && angle <= -127.f) || (angle >= 127.f && angle <= 180.f))
+					BuildingManager::GetInstance()->AddBuilding((int)(Player::GetInstance()->GetPos().x / CELL_SIZE), (int)(Player::GetInstance()->GetPos().z / CELL_SIZE), BuildingTile::BOTTOM, currentBuilding);
+			}
+			else if (isEquipment)
+			{
+				// Up
+				if (angle >= -53.f && angle <= 53.f)
+					EquipmentManager::GetInstance()->AddEquipment((int)(Player::GetInstance()->GetPos().x / CELL_SIZE), (int)(Player::GetInstance()->GetPos().z / CELL_SIZE), BuildingTile::TOP, EquipmentEntity::EQUIPMENT_TURRET);
+				// Left
+				else if (angle >= -127.f && angle <= -53.f)
+					EquipmentManager::GetInstance()->AddEquipment((int)(Player::GetInstance()->GetPos().x / CELL_SIZE), (int)(Player::GetInstance()->GetPos().z / CELL_SIZE), BuildingTile::LEFT, EquipmentEntity::EQUIPMENT_TURRET);
+				// Right
+				else if (angle >= 53.f && angle <= 127.f)
+					EquipmentManager::GetInstance()->AddEquipment((int)(Player::GetInstance()->GetPos().x / CELL_SIZE), (int)(Player::GetInstance()->GetPos().z / CELL_SIZE), BuildingTile::RIGHT, EquipmentEntity::EQUIPMENT_TURRET);
+				// Down
+				else if ((angle >= -180.f && angle <= -127.f) || (angle >= 127.f && angle <= 180.f))
+					EquipmentManager::GetInstance()->AddEquipment((int)(Player::GetInstance()->GetPos().x / CELL_SIZE), (int)(Player::GetInstance()->GetPos().z / CELL_SIZE), BuildingTile::BOTTOM, EquipmentEntity::EQUIPMENT_TURRET);
+			}
 			return true;
 		}
 	}
@@ -322,4 +343,16 @@ void Player::CollisionResponse(EntityBase *thatEntity)
 {
 	//std::cout << "collided with wall" << std::endl;
 	position = defaultPosition;
+}
+
+void Player::SetIsBuilding()
+{
+	isBuilding = true;
+	isEquipment = false;
+}
+
+void Player::SetIsEquipment()
+{
+	isEquipment = true;
+	isBuilding = false;
 }
