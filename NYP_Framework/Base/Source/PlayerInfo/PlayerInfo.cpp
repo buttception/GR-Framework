@@ -5,7 +5,6 @@
 #include "KeyboardController.h"
 #include "Mtx44.h"
 #include "../HardwareAbstraction/Keyboard.h"
-#include "../BuildingManager.h"
 #include "../HardwareAbstraction/Mouse.h"
 #include "../Sound_Engine.h"
 #include "../SceneText.h"
@@ -25,6 +24,9 @@ Player::Player(void)
 	, m_pTerrain(NULL)
 	, speedMultiplier(1.0)
 	, size(1)
+	, playerHealth(100.f)
+	, material(3000)
+	, currentBuilding(BuildingEntity::BUILDING_WALL)
 {
 }
 
@@ -58,9 +60,6 @@ void Player::Init(void)
 	CSoundEngine::GetInstance()->Init();
 	CSoundEngine::GetInstance()->Addthefuckingsound("HELLO", "Image//Hello.mp3");
 	CSoundEngine::GetInstance()->Addthefuckingsound("Build", "Image//wood1.ogg");
-
-	playerHealth = 100.f;
-	material = 3000;
 }
 
 // Set position
@@ -285,21 +284,21 @@ bool Player::LeftClick()
 		if (playerMouse_Direction.x < 0)
 			angle = -angle;
 
-		//Build wall according to angles formed with pre-detemined vectors based on mouse and player positions
+		//Add buildings according to angles formed with pre-detemined vectors based on mouse and player positions
 		if (SceneText::isDay)
 		{
 			// Up
 			if (angle >= -53.f && angle <= 53.f)
-				BuildingManager::GetInstance()->AddWall((int)(Player::GetInstance()->GetPos().x / CELL_SIZE), (int)(Player::GetInstance()->GetPos().z / CELL_SIZE), BuildingTile::TOP);
+				BuildingManager::GetInstance()->AddBuilding((int)(Player::GetInstance()->GetPos().x / CELL_SIZE), (int)(Player::GetInstance()->GetPos().z / CELL_SIZE), BuildingTile::TOP, currentBuilding);
 			// Left
 			else if (angle >= -127.f && angle <= -53.f)
-				BuildingManager::GetInstance()->AddWall((int)(Player::GetInstance()->GetPos().x / CELL_SIZE), (int)(Player::GetInstance()->GetPos().z / CELL_SIZE), BuildingTile::LEFT);
+				BuildingManager::GetInstance()->AddBuilding((int)(Player::GetInstance()->GetPos().x / CELL_SIZE), (int)(Player::GetInstance()->GetPos().z / CELL_SIZE), BuildingTile::LEFT, currentBuilding);
 			// Right
 			else if (angle >= 53.f && angle <= 127.f)
-				BuildingManager::GetInstance()->AddWall((int)(Player::GetInstance()->GetPos().x / CELL_SIZE), (int)(Player::GetInstance()->GetPos().z / CELL_SIZE), BuildingTile::RIGHT);
+				BuildingManager::GetInstance()->AddBuilding((int)(Player::GetInstance()->GetPos().x / CELL_SIZE), (int)(Player::GetInstance()->GetPos().z / CELL_SIZE), BuildingTile::RIGHT, currentBuilding);
 			// Down
 			else if ((angle >= -180.f && angle <= -127.f) || (angle >= 127.f && angle <= 180.f))
-				BuildingManager::GetInstance()->AddWall((int)(Player::GetInstance()->GetPos().x / CELL_SIZE), (int)(Player::GetInstance()->GetPos().z / CELL_SIZE), BuildingTile::BOTTOM);
+				BuildingManager::GetInstance()->AddBuilding((int)(Player::GetInstance()->GetPos().x / CELL_SIZE), (int)(Player::GetInstance()->GetPos().z / CELL_SIZE), BuildingTile::BOTTOM, currentBuilding);
 			return true;
 		}
 	}

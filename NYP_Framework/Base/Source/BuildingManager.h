@@ -16,7 +16,11 @@ public:
 	BuildingManager();
 	virtual ~BuildingManager();
 
+	void AddBuilding(int _x, int _y, BuildingTile::TILE_SIDE direction, BuildingEntity::BUILDING_TYPE type);
 	void AddWall(int _x, int _y, BuildingTile::TILE_SIDE direction);
+	void AddDoor(int _x, int _y, BuildingTile::TILE_SIDE direction);
+	void AddCover(int _x, int _y, BuildingTile::TILE_SIDE direction);
+	void AddFloor(int _x, int _y, BuildingTile::TILE_SIDE direction);
 
 private:
 	// each cell will be 20 units by 20 units

@@ -20,6 +20,9 @@ public:
 	}side;
 
 	void AddWall(BuildingEntity* entity, TILE_SIDE direction);
+	void AddDoor(BuildingEntity* entity, TILE_SIDE direction);
+	void AddCover(BuildingEntity* entity, TILE_SIDE direction);
+	void AddFloor(BuildingEntity* entity, TILE_SIDE direction);
 	bool RemoveBuilding(BuildingEntity* entity);
 
 private:
@@ -27,7 +30,21 @@ private:
 	BuildingEntity* rightWall;
 	BuildingEntity* bottomWall;
 	BuildingEntity* topWall;
-	BuildingEntity* floor;
+
+	BuildingEntity* leftDoor;
+	BuildingEntity* rightDoor;
+	BuildingEntity* bottomDoor;
+	BuildingEntity* topDoor;
+
+	BuildingEntity* leftCover;
+	BuildingEntity* rightCover;
+	BuildingEntity* bottomCover;
+	BuildingEntity* topCover;
+
+	BuildingEntity* leftFloor;
+	BuildingEntity* rightFloor;
+	BuildingEntity* bottomFloor;
+	BuildingEntity* topFloor;
 };
 
 #endif

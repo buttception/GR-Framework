@@ -36,9 +36,6 @@
 
 SceneText* SceneText::sInstance = new SceneText(SceneManager::GetInstance());
 
-float Player::playerHealth = 100.f;
-int Player::material = 3000;
-
 SceneText::SceneText()
 {
 }
@@ -215,7 +212,7 @@ void SceneText::Init()
 	float halfWindowHeight = Application::GetInstance().GetWindowHeight() / 2.0f;
 	float fontSize = 25.0f;
 	float halfFontSize = fontSize / 2.0f;
-	for (int i = 0; i < 4; ++i)
+	for (int i = 0; i < 5; ++i)
 	{
 		textObj[i] = Create::Text2DObject("text", Vector3(-halfWindowWidth, -halfWindowHeight + fontSize*i + halfFontSize, 0.0f), "", Vector3(fontSize, fontSize, fontSize), Color(0.0f,1.0f,0.0f));
 	}
@@ -425,8 +422,29 @@ void SceneText::Update(double dt)
 	}
 
 	ss.str("");
-	ss << "Material: " << Player::material;
+	ss << "Material: " << Player::GetInstance()->GetMaterial();
 	textObj[3]->SetText(ss.str());
+
+	ss.str("");
+	if (isDay)
+	{
+		switch (Player::GetInstance()->GetCurrentBuilding())
+		{
+		case BuildingEntity::BUILDING_WALL:
+			ss << "Current Building: Wall";
+			break;
+		case BuildingEntity::BUILDING_DOOR:
+			ss << "Current Building: Door";
+			break;
+		case BuildingEntity::BUILDING_COVER:
+			ss << "Current Building: Cover";
+			break;
+		case BuildingEntity::BUILDING_FLOOR:
+			ss << "Current Building: Floor";
+			break;
+		}
+	}
+	textObj[4]->SetText(ss.str());
 }
 
 void SceneText::Render()
@@ -546,7 +564,7 @@ void SceneText::RenderPassMain()
 
 	ms.PushMatrix();
 	ms.Translate(-395.f, 270.f, 0);
-	ms.Scale(Player::playerHealth, 10.f, 0);
+	ms.Scale(Player::GetInstance()->GetPlayerHealth(), 10.f, 0);
 	RenderHelper::RenderMesh(playerHealthBar);
 	ms.PopMatrix();
 

@@ -5,6 +5,7 @@ using namespace std;
 
 #include "MouseController.h"
 #include "../PlayerInfo/PlayerInfo.h"
+#include "../SceneText.h"
 
 const bool _CONTROLLER_MOUSE_DEBUG = false;
 
@@ -38,16 +39,34 @@ int Mouse::Read(const float deltaTime)
 	if (_CONTROLLER_MOUSE_DEBUG)
 		cout << "Mouse::Read()" << endl;
 
-	//double mousePosX, mousePosY;
-	//MouseController::GetInstance()->GetMousePosition(mousePosX, mousePosY);
-	//cout << "mouseX: " << mousePosX << endl;
-	//cout << "mouseY: " << mousePosY << endl;
-
 	for (int i = CONTROLLER_LEFTCLICK;i < NUM_CONRTOLLER;++i)
 	{
 		if (MouseController::GetInstance()->IsButtonReleased(KeyList[i]))
 		{
 			(this->*(controllerfunc[i]))(deltaTime);
+		}
+	}
+
+	//for switching buildings / weapons
+	if (MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_YOFFSET) != 0.0)
+	{
+		if (SceneText::isDay)
+		{
+			switch ((int)MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_YOFFSET))
+			{
+			case 1:
+				Player::GetInstance()->SetCurrentBuilding(BuildingEntity::BUILDING_WALL);
+				break;
+			case 2:
+				Player::GetInstance()->SetCurrentBuilding(BuildingEntity::BUILDING_DOOR);
+				break;
+			case 3:
+				Player::GetInstance()->SetCurrentBuilding(BuildingEntity::BUILDING_COVER);
+				break;
+			case 4:
+				Player::GetInstance()->SetCurrentBuilding(BuildingEntity::BUILDING_FLOOR);
+				break;
+			}
 		}
 	}
 	return 0;

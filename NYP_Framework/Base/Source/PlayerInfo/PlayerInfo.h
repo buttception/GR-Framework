@@ -7,6 +7,7 @@
 #include "SingletonTemplate.h"
 #include "../Minimap.h"
 #include "../Application.h"
+#include "../BuildingManager.h"
 
 class Keyboard;
 class Mouse;
@@ -52,8 +53,14 @@ public:
 	bool MapResize();
 	void CollisionResponse(EntityBase* thatEntity);
 
-	static int material;
-	static float playerHealth;
+	int GetMaterial(void) const { return material; }
+	void SetMaterial(int material) { this->material = material; }
+	float GetPlayerHealth(void) const { return playerHealth; }
+	void SetPlayerHealth(float playerHealth) { this->playerHealth = playerHealth; }
+	BuildingEntity::BUILDING_TYPE GetCurrentBuilding(void) const { return currentBuilding; }
+	void SetCurrentBuilding(BuildingEntity::BUILDING_TYPE currentBuilding) { 
+		this->currentBuilding = currentBuilding; }
+
 private:
 	Vector3 defaultPosition;
 	Vector3 position, direction;
@@ -70,4 +77,7 @@ private:
 	Keyboard* keyboard;
 	Mouse* mouse;
 
+	int material;
+	float playerHealth;
+	BuildingEntity::BUILDING_TYPE currentBuilding;
 };

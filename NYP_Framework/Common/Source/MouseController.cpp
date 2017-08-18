@@ -32,15 +32,15 @@ void MouseController::UpdateMouseButtonReleased(int _slot)
 void MouseController::UpdateMouseScroll(const double xoffset, const double yoffset)
 {
 	this->xoffset += xoffset;
-	if (this->xoffset > 3.0)
-		this->xoffset = 3.0;
-	else if (this->xoffset < -3.0)
-		this->xoffset = -3.0;
+	if (this->xoffset > 4.0)
+		this->xoffset = 4.0;
+	else if (this->xoffset < -4.0)
+		this->xoffset = -4.0;
 	this->yoffset += yoffset;
-	if (this->yoffset > 3.0)
-		this->yoffset = 3.0;
-	else if (this->yoffset < -3.0)
-		this->yoffset = -3.0;
+	if (this->yoffset > 4.0)
+		this->yoffset = 4.0;
+	else if (this->yoffset < -4.0)
+		this->yoffset = -4.0;
 }
 
 void MouseController::EndFrameUpdate()
