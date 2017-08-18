@@ -30,9 +30,7 @@ void GenericEntity::Render()
 
 void GenericEntity::CollisionResponse(GenericEntity * ThatEntity)
 {
-	if (this->type == TEST && ThatEntity->type == TEST) {
-		//do whatever here
-	}
+	
 }
 
 // Set the maxAABB and minAABB
@@ -42,6 +40,8 @@ void GenericEntity::SetAABB(Vector3 maxAABB, Vector3 minAABB)
 	this->minAABB = minAABB;
 	if (!m_bAABB)
 		m_bAABB = true;
+	if (!m_bCollider)
+		m_bCollider = true;
 }
 
 GenericEntity* Create::Entity(	const std::string& _meshName, 

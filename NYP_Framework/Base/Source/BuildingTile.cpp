@@ -6,11 +6,13 @@
 
 
 BuildingTile::BuildingTile()
-	:leftWall(nullptr)
-	,rightWall(nullptr)
-	,topWall(nullptr)
-	,bottomWall(nullptr)
-	,floor(nullptr)
+	: leftWall(nullptr)
+	, rightWall(nullptr)
+	, bottomWall(nullptr)
+	, topWall(nullptr)
+
+	, floor(nullptr)
+	, equipment(nullptr)
 {
 }
 
@@ -53,12 +55,24 @@ void BuildingTile::AddWall(BuildingEntity * entity, TILE_SIDE direction)
 	default:
 		return;
 	}
-	std::cout << "wall placed down" << std::endl;
-	Player::material = Math::Max(0, Player::material - 100);
+	if (entity->type == BuildingEntity::BUILDING_COVER)
+		std::cout << "Cover placed down" << std::endl;
+	Player::GetInstance()->SetMaterial(Math::Max(0, Player::GetInstance()->GetMaterial() - 150));
 	EntityManager::GetInstance()->AddEntity(entity);
 	CSoundEngine::GetInstance()->playthesound("Build", 0.4);
 	std::cout << "Buld sound Played" << std::endl;
-	
+}
+
+void BuildingTile::AddFloor(BuildingEntity * entity)
+{
+	if (floor) {
+		std::cout << "Floor position occupied\n";
+		return;
+	}
+	if (entity->type != BuildingEntity::BUILDING_FLOOR)
+		return;
+	floor = entity;
+	EntityManager::GetInstance()->AddEntity(floor);
 }
 
 bool BuildingTile::RemoveBuilding(BuildingEntity * entity)
@@ -66,4 +80,14 @@ bool BuildingTile::RemoveBuilding(BuildingEntity * entity)
 	
 
 	return false;
+}
+
+void BuildingTile::AddEquipment(EquipmentEntity * entity)
+{
+	if (equipment) {
+		std::cout << "Equipment slot is occupied\n";
+		return;
+	}
+	equipment = entity;
+	EntityManager::GetInstance()->AddEntity(equipment);
 }

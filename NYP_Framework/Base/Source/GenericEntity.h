@@ -15,8 +15,9 @@ public:
 
 	enum OBJECT_TYPE {
 		NONE = 0,
-		TEST
-	}type;
+		BUILDING,
+		EQUIPMENT
+	}objectType;
 
 	virtual void Update(double _dt);
 	virtual void Render();

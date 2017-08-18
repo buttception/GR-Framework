@@ -34,6 +34,8 @@ bool Controller::Create(Player* thePlayerInfo)
 	this->controllerfunc[CONTROLLER_LEFTCLICK] = &Controller::LeftClick;
 	this->controllerfunc[CONTROLLER_AIM] = &Controller::Aim;
 	this->controllerfunc[CONTROLLER_MAPRESIZE] = &Controller::MapResize;
+	this->controllerfunc[CONTROLLER_ISBUILDING] = &Controller::isBuilding;
+	this->controllerfunc[CONTROLLER_ISEQUIPMENT] = &Controller::isEquipment;
 
 	return false;
 }
@@ -103,5 +105,17 @@ bool Controller::Aim(double dt)
 bool Controller::MapResize(double dt)
 {
 	thePlayerInfo->MapResize();
+	return false;
+}
+
+bool Controller::isBuilding(double dt)
+{
+	thePlayerInfo->SetIsBuilding();
+	return false;
+}
+
+bool Controller::isEquipment(double dt)
+{
+	thePlayerInfo->SetIsEquipment();
 	return false;
 }

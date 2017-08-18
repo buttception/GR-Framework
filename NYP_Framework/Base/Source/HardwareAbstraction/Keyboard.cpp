@@ -30,6 +30,8 @@ bool Keyboard::Create(Player* thePlayerInfo)
 	KeyList[CONTROLLER_RELOAD] = 'R';
 	KeyList[CONTROLLER_RESET] = 'P';
 	KeyList[CONTROLLER_MAPRESIZE] = 'M';
+	KeyList[CONTROLLER_ISBUILDING] = '1';
+	KeyList[CONTROLLER_ISEQUIPMENT] = '2';
 
 	return false;
 }

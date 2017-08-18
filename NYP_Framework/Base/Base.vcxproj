@@ -17,6 +17,7 @@
     <ClCompile Include="Source\BuildingTile.cpp" />
     <ClCompile Include="Source\CollisionManager.cpp" />
     <ClCompile Include="Source\EntityManager.cpp" />
+    <ClCompile Include="Source\EquipmentEntity.cpp" />
     <ClCompile Include="Source\FPSCamera.cpp" />
     <ClCompile Include="Source\GenericEntity.cpp" />
     <ClCompile Include="Source\GroundEntity.cpp" />
@@ -44,6 +45,7 @@
     <ClInclude Include="Source\BuildingTile.h" />
     <ClInclude Include="Source\CollisionManager.h" />
     <ClInclude Include="Source\EntityManager.h" />
+    <ClInclude Include="Source\EquipmentEntity.h" />
     <ClInclude Include="Source\FontType.h" />
     <ClInclude Include="Source\FPSCamera.h" />
     <ClInclude Include="Source\GenericEntity.h" />

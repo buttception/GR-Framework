@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "BuildingEntity.h"
+#include "EquipmentEntity.h"
 
 class BuildingTile {
 public:
@@ -20,15 +21,20 @@ public:
 	}side;
 
 	void AddWall(BuildingEntity* entity, TILE_SIDE direction);
+	void AddFloor(BuildingEntity* entity);
 	bool RemoveBuilding(BuildingEntity* entity);
+	
+	void AddEquipment(EquipmentEntity* entity);
 
 	BuildingEntity* leftWall;
 	BuildingEntity* rightWall;
 	BuildingEntity* bottomWall;
 	BuildingEntity* topWall;
+	BuildingEntity* floor;
 
 private:
-	BuildingEntity* floor;
+	EquipmentEntity* equipment;
+
 };
 
 #endif
