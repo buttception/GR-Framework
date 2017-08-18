@@ -45,6 +45,8 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
 
 void resize_callback(GLFWwindow* window, int w, int h)
 {
+	Application::GetInstance().m_window_width = w;
+	Application::GetInstance().m_window_height = h;
 	glViewport(0, 0, w, h);
 }
 

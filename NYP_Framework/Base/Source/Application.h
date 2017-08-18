@@ -28,15 +28,14 @@ public:
 	int GetWindowHeight();
 	int GetWindowWidth();
 	
+	// Should make these not hard-coded :P
+	int m_window_width = 800;
+	int m_window_height = 600;
 private:
 	Application();
 	~Application();
 
 	static bool IsKeyPressed(unsigned short key);
-
-	// Should make these not hard-coded :P
-	const static int m_window_width = 800;
-	const static int m_window_height = 600;
 
 	//Declare a window object
 	StopWatch m_timer;

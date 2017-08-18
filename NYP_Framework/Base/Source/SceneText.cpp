@@ -565,7 +565,7 @@ void SceneText::RenderPassMain()
 
 	GraphicsManager::GetInstance()->UpdateLightUniforms();
 
-	GraphicsManager::GetInstance()->SetPerspectiveProjection(60.f, 4.0f / 3.0f, 0.1f, 10000.0f);
+	GraphicsManager::GetInstance()->SetPerspectiveProjection(60.f, (float)(Application::GetInstance().m_window_width) / (float)(Application::GetInstance().m_window_height), 0.1f, 10000.0f);
 	GraphicsManager::GetInstance()->AttachCamera(camera);
 
 	ms.LoadIdentity();
@@ -577,6 +577,7 @@ void SceneText::RenderPassMain()
 
 	int halfWindowWidth = Application::GetInstance().GetWindowWidth() / 2;
 	int halfWindowHeight = Application::GetInstance().GetWindowHeight() / 2;
+
 
 	GraphicsManager::GetInstance()->SetOrthographicProjection(-halfWindowWidth, halfWindowWidth, -halfWindowHeight, halfWindowHeight, -10, 10);
 	GraphicsManager::GetInstance()->DetachCamera();
