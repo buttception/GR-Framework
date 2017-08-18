@@ -4,6 +4,7 @@ EntityBase::EntityBase()
 	: position(0.0f, 0.0f, 0.0f)
 	, scale(1.0f, 1.0f, 1.0f)
 	, isDone(false)
+	, isFixed(false)
 	, m_bCollider(false)
 {
 }
@@ -32,6 +33,16 @@ bool EntityBase::IsDone()
 void EntityBase::SetIsDone(bool _value)
 {
 	isDone = _value;
+}
+
+bool EntityBase::IsFixed()
+{
+	return isFixed;
+}
+
+void EntityBase::SetIsFixed(const bool _value)
+{
+	isFixed = _value;
 }
 
 // Check if this entity has a collider class parent

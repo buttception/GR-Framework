@@ -22,6 +22,9 @@ public:
 	bool IsDone();
 	void SetIsDone(const bool _value);
 
+	bool IsFixed();
+	void SetIsFixed(const bool _value);
+
 	// Check if this entity has a collider class parent
 	virtual bool HasCollider(void) const;
 	// Set the flag to indicate if this entity has a collider class parent
@@ -37,6 +40,7 @@ protected:
 	Vector3 scale;
 
 	bool isDone;
+	bool isFixed;
 	bool m_bCollider;
 	bool m_bPhysic;
 };
