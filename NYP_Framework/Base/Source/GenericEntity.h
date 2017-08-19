@@ -16,7 +16,9 @@ public:
 	enum OBJECT_TYPE {
 		NONE = 0,
 		BUILDING,
-		EQUIPMENT
+		EQUIPMENT,
+		ENEMY,
+		PROJECTILE
 	}objectType;
 
 	virtual void Update(double _dt);

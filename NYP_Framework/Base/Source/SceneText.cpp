@@ -15,6 +15,7 @@
 #include "EntityManager.h"
 #include "FontType.h"
 #include "LoadTextData.h"
+#include "EnemyManager.h"
 
 #include "GenericEntity.h"
 #include "GroundEntity.h"
@@ -153,6 +154,8 @@ void SceneText::Init()
 	MeshBuilder::GetInstance()->GenerateOBJ("Floor Spike", "OBJ//cube.obj"); //remember to change obj
 	MeshBuilder::GetInstance()->GenerateOBJ("Shield", "OBJ//cube.obj"); //remember to change obj
 
+	MeshBuilder::GetInstance()->GenerateOBJ("Cuck", "OBJ//cube.obj");
+
 	sun = MeshBuilder::GetInstance()->GenerateSphere("sphere", Color(1, 1, 1), 24, 24, 1);
 
 	generatorCoreHealthBar = MeshBuilder::GetInstance()->GenerateQuad("generatorCoreHealthBar", Color(1, 0, 0), 1.f);
@@ -230,7 +233,8 @@ void SceneText::Init()
 	fpscamera = new FPSCamera();
 	Player::GetInstance()->AttachCamera(camera);
 	GraphicsManager::GetInstance()->AttachCamera(camera);
-
+	
+	EnemyManager::GetInstance()->Init();
 
 	//light testing
 	light_depth_mesh = MeshBuilder::GetInstance()->GenerateQuad("light_depth_mewsh", Color(1, 0, 1), 1);

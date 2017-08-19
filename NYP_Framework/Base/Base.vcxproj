@@ -16,7 +16,10 @@
     <ClCompile Include="Source\BuildingManager.cpp" />
     <ClCompile Include="Source\BuildingTile.cpp" />
     <ClCompile Include="Source\CollisionManager.cpp" />
+    <ClCompile Include="Source\EnemyAI.cpp" />
+    <ClCompile Include="Source\EnemyCuck.cpp" />
     <ClCompile Include="Source\EnemyEntity.cpp" />
+    <ClCompile Include="Source\EnemyManager.cpp" />
     <ClCompile Include="Source\EntityManager.cpp" />
     <ClCompile Include="Source\EquipmentEntity.cpp" />
     <ClCompile Include="Source\FPSCamera.cpp" />
@@ -36,6 +39,7 @@
     <ClCompile Include="Source\SkyBox\SkyBoxEntity.cpp" />
     <ClCompile Include="Source\Sound_Engine.cpp" />
     <ClCompile Include="Source\SpriteEntity.cpp" />
+    <ClCompile Include="Source\StateMachine.cpp" />
     <ClCompile Include="Source\TextEntity.cpp" />
     <ClCompile Include="Source\TopDownCamera.cpp" />
   </ItemGroup>
@@ -45,7 +49,10 @@
     <ClInclude Include="Source\BuildingManager.h" />
     <ClInclude Include="Source\BuildingTile.h" />
     <ClInclude Include="Source\CollisionManager.h" />
+    <ClInclude Include="Source\EnemyAI.h" />
+    <ClInclude Include="Source\EnemyCuck.h" />
     <ClInclude Include="Source\EnemyEntity.h" />
+    <ClInclude Include="Source\EnemyManager.h" />
     <ClInclude Include="Source\EntityManager.h" />
     <ClInclude Include="Source\EquipmentEntity.h" />
     <ClInclude Include="Source\FontType.h" />

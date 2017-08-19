@@ -2,14 +2,27 @@
 #define ENEMY_ENTITY_H
 
 #include "GenericEntity.h"
+#include "EnemyAI.h"
+#include "EntityManager.h"
 
-class EnemyEntity : public GenericEntity {
+//base enemy entity class for ease of running all updates of its children
+class EnemyEntity : public GenericEntity, public EnemyAI {
 public:
-	EnemyEntity();
-	~EnemyEntity();
+	EnemyEntity(std::string _meshName);
+	virtual ~EnemyEntity();
 
-private:
+	virtual void Init();
+	virtual void Update(double dt);
 
+	Vector3 GetDirection();
+	float GetSpeed();
+
+protected:
+	Vector3 direction;
+	float speed;
+
+	int health;
+	int damage;
 };
 
 #endif

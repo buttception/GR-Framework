@@ -1,6 +1,7 @@
 #include "EntityManager.h"
 #include "EntityBase.h"
 #include "CollisionManager.h"
+#include "EnemyManager.h"
 
 #include <iostream>
 using namespace std;
@@ -19,6 +20,7 @@ void EntityManager::Update(double _dt)
 	}
 
 	CollisionManager::GetInstance()->Update(entityList);
+	EnemyManager::GetInstance()->Update(_dt, entityList);
 
 	// Clean up entities that are done
 	it = entityList.begin();

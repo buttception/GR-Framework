@@ -131,6 +131,18 @@
     <ClCompile Include="Source\EnemyEntity.cpp">
       <Filter>Entity</Filter>
     </ClCompile>
+    <ClCompile Include="Source\EnemyCuck.cpp">
+      <Filter>Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\EnemyManager.cpp">
+      <Filter>Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\StateMachine.cpp">
+      <Filter>Enemy AI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\EnemyAI.cpp">
+      <Filter>Enemy AI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h">
@@ -216,6 +228,15 @@
     </ClInclude>
     <ClInclude Include="Source\EnemyEntity.h">
       <Filter>Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\EnemyAI.h">
+      <Filter>Enemy AI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\EnemyCuck.h">
+      <Filter>Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\EnemyManager.h">
+      <Filter>Manager</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
