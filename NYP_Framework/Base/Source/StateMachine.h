@@ -14,7 +14,6 @@ public :
 		DEFAULT_STATE
 	}state;
 
-	void PathFinding();
 private:
 	
 };

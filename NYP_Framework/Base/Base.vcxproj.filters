@@ -36,6 +36,18 @@
     <Filter Include="Sound Engine">
       <UniqueIdentifier>{e634f44d-6d18-402f-aae6-dc86e4e2a969}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Text">
+      <UniqueIdentifier>{f801d08f-5abd-4a6a-9fb9-1b7ea674fdbc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Enemy">
+      <UniqueIdentifier>{162bcec7-5985-4aa5-b199-f39f439c9f9c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Minimap">
+      <UniqueIdentifier>{73e36c50-fc44-4b49-abaf-31009a2e7d76}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Enemy AI">
+      <UniqueIdentifier>{145105a5-4e17-426a-9220-c5175d676b86}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Application.cpp">
@@ -101,19 +113,22 @@
     <ClCompile Include="Source\Sound_Engine.cpp">
       <Filter>Sound Engine</Filter>
     </ClCompile>
-    <ClCompile Include="Source\BuildingTile.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Source\SceneMainMenu.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Minimap.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Source\EquipmentEntity.cpp">
+      <Filter>Entity</Filter>
     </ClCompile>
     <ClCompile Include="Source\LoadTextData.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Text</Filter>
     </ClCompile>
-    <ClCompile Include="Source\EquipmentEntity.cpp">
+    <ClCompile Include="Source\BuildingTile.cpp">
+      <Filter>Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Minimap.cpp">
+      <Filter>Minimap</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\EnemyEntity.cpp">
       <Filter>Entity</Filter>
     </ClCompile>
   </ItemGroup>
@@ -178,25 +193,28 @@
     <ClInclude Include="Source\Sound_Engine.h">
       <Filter>Sound Engine</Filter>
     </ClInclude>
-    <ClInclude Include="Source\BuildingTile.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Source\SceneMainMenu.h">
       <Filter>Scene</Filter>
     </ClInclude>
-    <ClInclude Include="Source\LoadTextData.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Source\EquipmentEntity.h">
+      <Filter>Entity</Filter>
     </ClInclude>
     <ClInclude Include="Source\FontType.h">
-      <Filter>Header Files</Filter>
+      <Filter>Text</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\LoadTextData.h">
+      <Filter>Text</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\BuildingTile.h">
+      <Filter>Entity</Filter>
     </ClInclude>
     <ClInclude Include="Source\Minimap.h">
-      <Filter>Header Files</Filter>
+      <Filter>Minimap</Filter>
     </ClInclude>
     <ClInclude Include="Source\StateMachine.h">
-      <Filter>Header Files</Filter>
+      <Filter>Enemy AI</Filter>
     </ClInclude>
-    <ClInclude Include="Source\EquipmentEntity.h">
+    <ClInclude Include="Source\EnemyEntity.h">
       <Filter>Entity</Filter>
     </ClInclude>
   </ItemGroup>
