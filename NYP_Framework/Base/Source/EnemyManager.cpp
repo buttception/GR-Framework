@@ -2,8 +2,11 @@
 #include "EnemyCuck.h"
 #include "MyMath.h"
 
-EnemyManager::EnemyManager()
+EnemyManager::EnemyManager():
+	active(false),
+	spawningAngle(0)
 {
+	enemyCount.insert(std::make_pair("Cuck", 0));
 }
 
 EnemyManager::~EnemyManager()
@@ -12,19 +15,42 @@ EnemyManager::~EnemyManager()
 
 void EnemyManager::Init()
 {
-	// resets the enemy count
-	for (auto &it : enemyCount) {
-		it.second = 0;
-	}
 	// find a random angle to start spawning enemies
 	spawningAngle = Math::RandIntMinMax(0, 360);
 
 	SpawnEnemies();
+
+	active = true;
 }
 
 // purpose of enemy manager is not to update enemy, but decide where and when to create them and destruct them
 void EnemyManager::Update(double dt, std::list<EntityBase*> entityList)
 {
+}
+
+void EnemyManager::End()
+{
+	ClearEnemies(EntityManager::GetInstance()->GetEntityList());
+
+	// resets the enemy count
+	for (auto &it : enemyCount) {
+		it.second = 0;
+	}
+	// clear the route
+	while (!route.empty())
+		route.pop();
+
+	active = false;
+}
+
+void EnemyManager::AddCount(std::string _name)
+{
+	if(enemyCount.count(_name)){
+		enemyCount[_name] += 1;
+	}
+	else {
+		std::cout << "Enemy name not found, nani dafuq\n";
+	}
 }
 
 // to spawn enemy based on how many days
