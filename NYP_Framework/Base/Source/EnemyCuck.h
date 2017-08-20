@@ -12,10 +12,6 @@ public:
 	void Init();
 	void Update(double dt);
 
-	void CollisionResponse(GenericEntity* thatEntity);
-
-	void Attack(GenericEntity* thatEntity, double dt);
-
 private:
 };
 

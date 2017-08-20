@@ -12,15 +12,8 @@ public:
 	EnemyManager();
 	virtual ~EnemyManager();
 
-	// bool for whether the manager is active
-	bool active;
-
 	void Init();
 	void Update(double dt, std::list<EntityBase*> entityList);
-
-	void End();
-	
-	void AddCount(std::string _name);
 	void SpawnEnemies();
 	void ClearEnemies(std::list<EntityBase*> entityList);
 

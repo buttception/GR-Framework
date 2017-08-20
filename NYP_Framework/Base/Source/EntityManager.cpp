@@ -19,6 +19,9 @@ void EntityManager::Update(double _dt)
 		(*it)->Update(_dt);
 	}
 
+	CollisionManager::GetInstance()->Update(entityList);
+	EnemyManager::GetInstance()->Update(_dt, entityList);
+
 	// Clean up entities that are done
 	it = entityList.begin();
 	while (it != end)
@@ -35,9 +38,6 @@ void EntityManager::Update(double _dt)
 			++it;
 		}
 	}
-
-	CollisionManager::GetInstance()->Update(entityList);
-	EnemyManager::GetInstance()->Update(_dt, entityList);
 }
 
 // Render all entities
@@ -89,11 +89,6 @@ bool EntityManager::RemoveEntity(EntityBase* _existingEntity)
 	}
 	// Return false if not found
 	return false;
-}
-
-std::list<EntityBase*> EntityManager::GetEntityList()
-{
-	return entityList;
 }
 
 // Constructor
