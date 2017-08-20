@@ -48,6 +48,9 @@
     <Filter Include="Enemy AI">
       <UniqueIdentifier>{145105a5-4e17-426a-9220-c5175d676b86}</UniqueIdentifier>
     </Filter>
+    <Filter Include="WeaponInfo">
+      <UniqueIdentifier>{1cb0ec8e-e627-4325-91ba-66ebc74bddea}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Application.cpp">
@@ -143,6 +146,15 @@
     <ClCompile Include="Source\EnemyAI.cpp">
       <Filter>Enemy AI</Filter>
     </ClCompile>
+    <ClCompile Include="Source\WeaponInfo\Weapon.cpp">
+      <Filter>WeaponInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\WeaponInfo\WeaponInfo.cpp">
+      <Filter>WeaponInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Projectile\Projectile.cpp">
+      <Filter>WeaponInfo</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h">
@@ -237,6 +249,15 @@
     </ClInclude>
     <ClInclude Include="Source\EnemyManager.h">
       <Filter>Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\WeaponInfo\Weapon.h">
+      <Filter>WeaponInfo</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\WeaponInfo\WeaponInfo.h">
+      <Filter>WeaponInfo</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Projectile\Projectile.h">
+      <Filter>WeaponInfo</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

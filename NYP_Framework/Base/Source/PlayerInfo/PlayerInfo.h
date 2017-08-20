@@ -8,10 +8,13 @@
 #include "../Minimap.h"
 #include "../Application.h"
 #include "../BuildingManager.h"
+#include "../WeaponInfo/WeaponInfo.h"
 
 class Keyboard;
 class Mouse;
 class SceneText;
+class CWeaponInfo;
+class Weapon;
 
 class Player : public Singleton<Player>, public GenericEntity
 {
@@ -49,7 +52,7 @@ public:
 	// Movement
 	bool MoveFrontBack(const float deltaTime, const bool direction, const float speedMultiplier = 1.0f);
 	bool MoveLeftRight(const float deltaTime, const bool direction, const float speedMultiplier = 1.0f);
-	bool LeftClick();
+	bool LeftClick(float dt);
 	bool MapResize();
 	void CollisionResponse(EntityBase* thatEntity);
 
@@ -66,9 +69,34 @@ public:
 	EquipmentEntity::EQUIPMENT_TYPE GetCurrentEquipment(void) const { return currentEquipment; }
 	void SetCurrentEquipment(EquipmentEntity::EQUIPMENT_TYPE currentEquipment) { this->currentEquipment = currentEquipment; }
 
+	// Reload current weapon
+	bool ReloadWeapon(void);
+	// Change current weapon
+	bool ChangeWeapon(void);
+	// Change current weapon(Keyboard)
+	bool ChangeWeaponK(void);
+	// Get Current Weapon
+	int GetWeapon(void) const;
+	// Discharge Primary Weapon
+	bool DischargePrimaryWeapon(const float deltaTime, Vector3 position, Vector3 target);
+	// Discharge Secondary Weapon
+	bool DischargeSecondaryWeapon(const float deltaTime);
+
+	//GetProj
+	std::list<Projectile*>GetProj();
+
+	// Scrollable weapon switching
+	CWeaponInfo** weaponManager;
+	std::vector<Weapon*> weaponList;
+	int m_iCurrentWeapon;
+	const int m_iNumOfWeapon = 2;
+	CWeaponInfo* primaryWeapon;
+	CWeaponInfo* secondaryWeapon;
+
 private:
 	Vector3 defaultPosition;
 	Vector3 position, direction;
+	Vector3 target;
 	Vector3 maxBoundary, minBoundary;
 	GroundEntity* m_pTerrain;
 	float size;

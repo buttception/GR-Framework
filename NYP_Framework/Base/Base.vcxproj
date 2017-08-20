@@ -34,6 +34,7 @@
     <ClCompile Include="Source\Minimap.cpp" />
     <ClCompile Include="Source\OBJMesh.cpp" />
     <ClCompile Include="Source\PlayerInfo\PlayerInfo.cpp" />
+    <ClCompile Include="Source\Projectile\Projectile.cpp" />
     <ClCompile Include="Source\SceneMainMenu.cpp" />
     <ClCompile Include="Source\SceneText.cpp" />
     <ClCompile Include="Source\SkyBox\SkyBoxEntity.cpp" />
@@ -42,6 +43,8 @@
     <ClCompile Include="Source\StateMachine.cpp" />
     <ClCompile Include="Source\TextEntity.cpp" />
     <ClCompile Include="Source\TopDownCamera.cpp" />
+    <ClCompile Include="Source\WeaponInfo\Weapon.cpp" />
+    <ClCompile Include="Source\WeaponInfo\WeaponInfo.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h" />
@@ -67,6 +70,7 @@
     <ClInclude Include="Source\Minimap.h" />
     <ClInclude Include="Source\OBJMesh.h" />
     <ClInclude Include="Source\PlayerInfo\PlayerInfo.h" />
+    <ClInclude Include="Source\Projectile\Projectile.h" />
     <ClInclude Include="Source\SceneMainMenu.h" />
     <ClInclude Include="Source\SceneText.h" />
     <ClInclude Include="Source\SkyBox\SkyBoxEntity.h" />
@@ -75,6 +79,8 @@
     <ClInclude Include="Source\StateMachine.h" />
     <ClInclude Include="Source\TextEntity.h" />
     <ClInclude Include="Source\TopDownCamera.h" />
+    <ClInclude Include="Source\WeaponInfo\Weapon.h" />
+    <ClInclude Include="Source\WeaponInfo\WeaponInfo.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{9B172635-4E2B-46F1-A403-08F4194D00F5}</ProjectGuid>

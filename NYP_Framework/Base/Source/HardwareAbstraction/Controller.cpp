@@ -81,6 +81,7 @@ bool Controller::Interact(double dt)
 bool Controller::Reload(double dt)
 {
 	std::cout << "Reload" << std::endl;
+	thePlayerInfo->ReloadWeapon();
 	return false;
 }
 
@@ -92,7 +93,7 @@ bool Controller::Reset(double dt)
 
 bool Controller::LeftClick(double dt)
 {
-	thePlayerInfo->LeftClick();
+	thePlayerInfo->LeftClick(dt);
 	return false;
 }
 
