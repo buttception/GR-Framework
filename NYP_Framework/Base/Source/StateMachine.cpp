@@ -3,7 +3,7 @@
 StateMachine::StateMachine()
 {
 	// initialize state machine with default state
-	stateStack.push(DEFAULT_STATE);
+	stateStack.push(NONE);
 }
 
 StateMachine::~StateMachine()

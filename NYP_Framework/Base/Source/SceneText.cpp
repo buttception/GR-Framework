@@ -233,8 +233,6 @@ void SceneText::Init()
 	fpscamera = new FPSCamera();
 	Player::GetInstance()->AttachCamera(camera);
 	GraphicsManager::GetInstance()->AttachCamera(camera);
-	
-	EnemyManager::GetInstance()->Init();
 
 	//light testing
 	light_depth_mesh = MeshBuilder::GetInstance()->GenerateQuad("light_depth_mewsh", Color(1, 0, 1), 1);
@@ -253,6 +251,17 @@ void SceneText::Update(double dt)
 {
 	// Update our entities
 	EntityManager::GetInstance()->Update(dt);
+
+	if (isDay) {
+		if (EnemyManager::GetInstance()->active) {
+			EnemyManager::GetInstance()->End();
+		}
+	}
+	else if (!isDay) {
+		if (!EnemyManager::GetInstance()->active) {
+			EnemyManager::GetInstance()->Init();
+		}
+	}
 
 	// THIS WHOLE CHUNK TILL <THERE> CAN REMOVE INTO ENTITIES LOGIC! Or maybe into a scene function to keep the update clean
 	if(KeyboardController::GetInstance()->IsKeyDown('1'))
