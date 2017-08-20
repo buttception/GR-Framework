@@ -5,48 +5,32 @@
 #include "GraphicsManager.h"
 #include "RenderHelper.h"
 
-CProjectile::CProjectile(void)
-	: modelMesh(NULL)
-	, m_bStatus(false)
-	, theDirection(0, 0, 0)
-	, m_fLifetime(-1.0f)
-	, m_fSpeed(10.0f)
-	, theSource(NULL)
+Projectile::Projectile(std::string _meshName) : GenericEntity(MeshList::GetInstance()->GetMesh(_meshName))
+, m_bStatus(false)
+, theDirection(0, 0, 0)
+, m_fLifetime(-1.0f)
+, m_fSpeed(10.0f)
+{
+
+}
+
+Projectile::~Projectile()
 {
 }
 
-CProjectile::CProjectile(Mesh* _modelMesh)
-	: modelMesh(_modelMesh)
-	, m_bStatus(false)
-	, theDirection(0, 0, 0)
-	, m_fLifetime(-1)
-	, m_fSpeed(10.0f)
-	, theSource(NULL)
-{
-}
-
-CProjectile::~CProjectile(void)
-{
-	modelMesh = NULL;
-	theSource = NULL;
-}
-
-// Activate the projectile. true == active, false == inactive
-void CProjectile::SetStatus(const bool m_bStatus)
+void Projectile::SetStatus(const bool m_bStatus)
 {
 	if (m_bStatus == false)
 		m_fLifetime = -1;
 	this->m_bStatus = m_bStatus;
 }
 
-// get status of the projectile. true == active, false == inactive
-bool CProjectile::GetStatus(void) const
+bool Projectile::GetStatus(void) const
 {
 	return m_bStatus;
 }
 
-// Set the position and direction of the projectile
-void CProjectile::Set(Vector3 theNewPosition, Vector3 theNewDirection, const float m_fLifetime, const float m_fSpeed)
+void Projectile::Set(Vector3 theNewPosition, Vector3 theNewDirection, const float m_fLifetime, const float m_fSpeed)
 {
 	position = theNewPosition;
 	theDirection = theNewDirection;
@@ -54,56 +38,37 @@ void CProjectile::Set(Vector3 theNewPosition, Vector3 theNewDirection, const flo
 	this->m_fSpeed = m_fSpeed;
 }
 
-// Get the direction of the projectile
-Vector3 CProjectile::GetDirection(void)
-{
-	return theDirection;
-}
-
-// Get the lifetime of the projectile
-float CProjectile::GetLifetime(void) const
-{
-	return m_fLifetime;
-}
-
-// Get the speed of the projectile
-float CProjectile::GetSpeed(void) const
-{
-	return m_fSpeed;
-}
-
-// Set the direction of the projectile
-void CProjectile::SetDirection(Vector3 theNewDirection)
+void Projectile::SetDirection(Vector3 theNewDirection)
 {
 	theDirection = theNewDirection;
 }
 
-// Set the lifetime of the projectile
-void CProjectile::SetLifetime(const float m_fLifetime)
+Vector3 Projectile::GetDirection(void)
+{
+	return theDirection;
+}
+
+void Projectile::SetLifetime(const float m_fLifetime)
 {
 	this->m_fLifetime = m_fLifetime;
 }
 
-// Set the speed of the projectile
-void CProjectile::SetSpeed(const float m_fSpeed)
+float Projectile::GetLifetime(void) const
+{
+	return m_fLifetime;
+}
+
+void Projectile::SetSpeed(const float m_fSpeed)
 {
 	this->m_fSpeed = m_fSpeed;
 }
 
-// Set the source of the projectile
-void CProjectile::SetSource(CPlayerInfo* _source)
+float Projectile::GetSpeed(void) const
 {
-	theSource = _source;
+	return m_fSpeed;
 }
 
-// Get the source of the projectile
-CPlayerInfo* CProjectile::GetSource(void) const
-{
-	return theSource;
-}
-
-// Update the status of this projectile
-void CProjectile::Update(double dt)
+void Projectile::Update(double dt)
 {
 	if (m_bStatus == false)
 		return;
@@ -118,14 +83,11 @@ void CProjectile::Update(double dt)
 	}
 
 	// Update Position
-	position.Set(	position.x + (float)(theDirection.x * dt * m_fSpeed),
-					position.y + (float)(theDirection.y * dt * m_fSpeed),
-					position.z + (float)(theDirection.z * dt * m_fSpeed));
+	Vector3 d(theDirection.x, 0, -theDirection.y);
+	position += d * dt * m_fSpeed;
 }
 
-
-// Render this projectile
-void CProjectile::Render(void)
+void Projectile::Render(void)
 {
 	if (m_bStatus == false)
 		return;
@@ -141,24 +103,9 @@ void CProjectile::Render(void)
 	modelStack.PopMatrix();
 }
 
-// Create a projectile and add it into EntityManager
-CProjectile* Create::Projectile(const std::string& _meshName, 
-								const Vector3& _position, 
-								const Vector3& _direction, 
-								const float m_fLifetime, 
-								const float m_fSpeed,
-								CPlayerInfo* _source)
+Projectile * Create::Bullet(std::string _meshName)
 {
-	Mesh* modelMesh = MeshBuilder::GetInstance()->GetMesh(_meshName);
-	if (modelMesh == nullptr)
-		return nullptr;
-
-	CProjectile* result = new CProjectile(modelMesh);
-	result->Set(_position, _direction, m_fLifetime, m_fSpeed);
-	result->SetStatus(true);
-	result->SetCollider(true);
-	result->SetSource(_source);
-	EntityManager::GetInstance()->AddEntity(result);
-
-	return result;
+	Projectile* p = new Projectile(_meshName);
+	EntityManager::GetInstance()->AddEntity(p);
+	return p;
 }

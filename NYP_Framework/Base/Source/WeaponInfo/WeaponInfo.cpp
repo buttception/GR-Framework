@@ -5,19 +5,25 @@
 using namespace std;
 
 CWeaponInfo::CWeaponInfo()
-	: magRounds(1)
-	, maxMagRounds(1)
+	: magRounds(10)
+	, maxMagRounds(10)
 	, totalRounds(8)
 	, maxTotalRounds(8)
 	, timeBetweenShots(0.5)
 	, elapsedTime(0.0)
 	, bFire(true)
+	, weaponName("")
 {
 }
 
 
 CWeaponInfo::~CWeaponInfo()
 {
+}
+
+void CWeaponInfo::WeaponDamage(const int damage)
+{
+	this->damage = damage;
 }
 
 // Set the number of ammunition in the magazine for this player
@@ -45,6 +51,16 @@ void CWeaponInfo::SetMaxTotalRound(const int maxTotalRounds)
 }
 
 
+int CWeaponInfo::GetWeaponID(void) const
+{
+	return weaponID;
+}
+
+int CWeaponInfo::GetWeaponDamage(void) const
+{
+	return damage;
+}
+
 // Get the number of ammunition in the magazine for this player
 int CWeaponInfo::GetMagRound(void) const
 {
@@ -67,6 +83,11 @@ int CWeaponInfo::GetTotalRound(void) const
 int CWeaponInfo::GetMaxTotalRound(void) const
 {
 	return maxTotalRounds;
+}
+
+std::string CWeaponInfo::GetName(void) const
+{
+	return weaponName;
 }
 
 // Set the time between shots
@@ -108,14 +129,14 @@ bool CWeaponInfo::GetCanFire(void) const
 // Initialise this instance to default values
 void CWeaponInfo::Init(void)
 {
-	// The number of ammunition in a magazine for this weapon
-	magRounds = 1;
-	// The maximum number of ammunition for this magazine for this weapon
-	maxMagRounds = 1;
-	// The current total number of rounds currently carried by this player
-	totalRounds = 8;
-	// The max total number of rounds currently carried by this player
-	maxTotalRounds = 8;
+	//// The number of ammunition in a magazine for this weapon
+	//magRounds = 12;
+	//// The maximum number of ammunition for this magazine for this weapon
+	//maxMagRounds = 12;
+	//// The current total number of rounds currently carried by this player
+	//totalRounds = 12;
+	//// The max total number of rounds currently carried by this player
+	//maxTotalRounds = 999;
 
 	// The time between shots
 	timeBetweenShots = 0.5;
@@ -134,28 +155,38 @@ void CWeaponInfo::Update(const double dt)
 		bFire = true;
 		elapsedTime = 0.0;
 	}
+
+	if (bFired)
+	{
+		if (magRounds > 0)
+		{
+			magRounds--;
+		}
+		bFired = false;
+	}
 }
 
 // Discharge this weapon
-void CWeaponInfo::Discharge(Vector3 position, Vector3 target, CPlayerInfo* _source)
+void CWeaponInfo::Discharge(Vector3 position, Vector3 target, Player* _source)
 {
 	if (bFire)
 	{
-		// If there is still ammo in the magazine, then fire
+		// If there is still ammo in the magazine, then fireddd
 		if (magRounds > 0)
 		{
 			// Create a projectile with a cube mesh. Its position and direction is same as the player.
 			// It will last for 3.0 seconds and travel at 500 units per second
-			CProjectile* aProjectile = Create::Projectile("cube", 
-															position, 
-															(target - position).Normalized(), 
-															2.0f, 
-															10.0f,
-															_source);
+			Projectile* aProjectile = Create::Bullet("sphere");
+			aProjectile->SetPosition(Player::GetInstance()->GetPos());
 			aProjectile->SetCollider(true);
+			aProjectile->SetLifetime(10);
+			aProjectile->SetDirection(target);
+			aProjectile->SetStatus(true);
 			aProjectile->SetAABB(Vector3(0.5f, 0.5f, 0.5f), Vector3(-0.5f, -0.5f, -0.5f));
+			bullets.push_back(aProjectile);
 			bFire = false;
-			magRounds--;
+			bFired = true;
+			//magRounds--;
 		}
 	}
 }
@@ -175,6 +206,7 @@ void CWeaponInfo::Reload(void)
 			magRounds += totalRounds;
 			totalRounds = 0;
 		}
+		PrintSelf();
 	}
 }
 
@@ -199,4 +231,9 @@ void CWeaponInfo::PrintSelf(void)
 	cout << "timeBetweenShots\t:\t" << timeBetweenShots << endl;
 	cout << "elapsedTime\t\t:\t" << elapsedTime << endl;
 	cout << "bFire\t\t:\t" << bFire << endl;
+}
+
+std::list<Projectile*> CWeaponInfo::GetProj()
+{
+	return bullets;
 }
