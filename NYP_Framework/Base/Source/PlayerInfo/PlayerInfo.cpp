@@ -9,9 +9,6 @@
 #include "../Sound_Engine.h"
 #include "../SceneText.h"
 #include "../Minimap.h"
-#include "../WeaponInfo/Weapon.h"
-#include "../Projectile/Projectile.h"
-#include "Loader.h"
 
 bool SceneText::isDay = true;
 bool CMinimap::isResizing = false;
@@ -33,10 +30,6 @@ Player::Player(void)
 	, isBuilding(true)
 	, isEquipment(false)
 	, currentEquipment(EquipmentEntity::EQUIPMENT_TURRET)
-	, primaryWeapon(NULL)
-	, secondaryWeapon(NULL)
-	, weaponManager(NULL)
-	, m_iCurrentWeapon(1)
 {
 }
 
@@ -70,18 +63,6 @@ void Player::Init(void)
 	CSoundEngine::GetInstance()->Init();
 	CSoundEngine::GetInstance()->Addthefuckingsound("HELLO", "Image//Hello.mp3");
 	CSoundEngine::GetInstance()->Addthefuckingsound("Build", "Image//wood1.ogg");
-
-	// Set the pistol as the primary weapon
-	Loader::GetInstance()->ReadFileWeapon("weapon.csv", weaponList);
-	primaryWeapon = weaponList[1];
-	primaryWeapon->Init();
-
-	weaponManager = new CWeaponInfo*[m_iNumOfWeapon];
-	weaponManager[1] = weaponList[0];
-	weaponManager[1]->Init();
-
-	weaponManager[2] = weaponList[1];
-	weaponManager[2]->Init();
 }
 
 // Set position
@@ -198,94 +179,7 @@ void Player::Update(double dt)
 
 	CMinimap::GetInstance()->SetPosition(position.x * CMinimap::GetInstance()->GetSize_x() / Application::GetInstance().GetWindowWidth(),
 		(Application::GetInstance().GetWindowHeight() - position.z) * CMinimap::GetInstance()->GetSize_y() / Application::GetInstance().GetWindowHeight());
-
-
-	//weapon update
-	if (primaryWeapon)
-		primaryWeapon->Update(dt);
-	if (secondaryWeapon)
-		secondaryWeapon->Update(dt);
-	if (weaponManager[m_iCurrentWeapon])
-		weaponManager[m_iCurrentWeapon]->Update(dt);
 }
-
-// Reload current weapon
-bool Player::ReloadWeapon(void)
-{
-	if (weaponManager[m_iCurrentWeapon])
-	{
-		weaponManager[m_iCurrentWeapon]->Reload();
-		return true;
-	}
-	return false;
-}
-
-// Change current weapon
-bool Player::ChangeWeapon(void)
-{
-	//if (MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_YOFFSET) != m_iCurrentWeapon)
-	//{
-	//	if ((MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_YOFFSET) >= 0) &&
-	//		(MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_YOFFSET) < m_iNumOfWeapon))
-	//	{
-	//		m_iCurrentWeapon = MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_YOFFSET);
-	//	}
-	//}
-	return true;
-}
-
-bool Player::ChangeWeaponK(void)
-{
-	//m_iCurrentWeapon++;
-	//MouseController::GetInstance()->SetScrollStatus(m_iCurrentWeapon);
-
-	//if (m_iCurrentWeapon > 1)
-	//{
-	//	m_iCurrentWeapon = 0;
-	//	MouseController::GetInstance()->SetScrollStatus(m_iCurrentWeapon);
-	//}
-
-	return true;
-}
-
-// Get Current Weapon
-int Player::GetWeapon(void) const
-{
-	return m_iCurrentWeapon;
-}
-
-// Discharge Primary Weapon
-bool Player::DischargePrimaryWeapon(const float deltaTime, Vector3 position, Vector3 target)
-{
-	if (weaponManager[m_iCurrentWeapon])
-	{
-		std::cout << weaponManager[m_iCurrentWeapon]->GetName() << std::endl;
-		weaponManager[m_iCurrentWeapon]->PrintSelf();
-		std::cout << "fire" << std::endl;
-		weaponManager[m_iCurrentWeapon]->Discharge(position, target, this);
-		return true;
-	}
-
-	return false;
-}
-
-// Discharge Secondary Weapon
-bool Player::DischargeSecondaryWeapon(const float deltaTime)
-{
-	if (secondaryWeapon)
-	{
-		secondaryWeapon->Discharge(position, target, this);
-		return true;
-	}
-
-	return false;
-}
-
-std::list<Projectile*> Player::GetProj()
-{
-	return weaponManager[m_iCurrentWeapon]->GetProj();
-}
-
 
 // Constrain the position within the borders
 void Player::Constrain(void)
@@ -376,7 +270,7 @@ bool Player::MoveLeftRight(const float deltaTime, const bool direction, const fl
 	return false;
 }
 
-bool Player::LeftClick(float dt)
+bool Player::LeftClick()
 {
 	//convert mouse pos on window onto world
 	double mouseX, mouseY;
@@ -418,10 +312,6 @@ bool Player::LeftClick(float dt)
 			else if (currentBuilding == BuildingEntity::BUILDING_FLOOR)
 				BuildingManager::GetInstance()->AddBuilding((int)(Player::GetInstance()->GetPos().x / CELL_SIZE), (int)(Player::GetInstance()->GetPos().z / CELL_SIZE), BuildingTile::LEFT, BuildingEntity::BUILDING_FLOOR);
 			return true;
-		}
-		else
-		{
-			DischargePrimaryWeapon(dt, position, playerMouse_Direction);
 		}
 	}
 	catch (DivideByZero)

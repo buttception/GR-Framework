@@ -92,7 +92,7 @@ bool Controller::Reset(double dt)
 
 bool Controller::LeftClick(double dt)
 {
-	thePlayerInfo->LeftClick(dt);
+	thePlayerInfo->LeftClick();
 	return false;
 }
 
