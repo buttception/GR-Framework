@@ -37,7 +37,7 @@ private:
 	GroundEntity* groundEntity;
 	TopDownCamera *camera;
 	FPSCamera* fpscamera;
-	TextEntity* textObj[5];
+	TextEntity* textObj[6];
 	Light* lights[2];
 
 	GenericEntity* theCube;

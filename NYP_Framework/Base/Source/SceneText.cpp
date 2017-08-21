@@ -220,7 +220,7 @@ void SceneText::Init()
 	float halfWindowHeight = Application::GetInstance().GetWindowHeight() / 2.0f;
 	float fontSize = 25.0f;
 	float halfFontSize = fontSize / 2.0f;
-	for (int i = 0; i < 5; ++i)
+	for (int i = 0; i < 6; ++i)
 	{
 		textObj[i] = Create::Text2DObject("text", Vector3(-halfWindowWidth, -halfWindowHeight + fontSize*i + halfFontSize, 0.0f), "", Vector3(fontSize, fontSize, fontSize), Color(0.0f,1.0f,0.0f));
 	}
@@ -250,7 +250,7 @@ void SceneText::Update(double dt)
 	float halfWindowHeight = Application::GetInstance().GetWindowHeight() / 2.0f;
 	float fontSize = 25.0f;
 	float halfFontSize = fontSize / 2.0f;
-	for (int i = 0; i < 5; ++i)
+	for (int i = 0; i < 6; ++i)
 	{
 		textObj[i]->SetPosition(Vector3(-halfWindowWidth, -halfWindowHeight + fontSize*i + halfFontSize, 0.0f));
 	}
@@ -326,9 +326,20 @@ void SceneText::Update(double dt)
 		noOfDays++;
 		generatorCoreScale = Math::Max(0.f, generatorCoreScale - 0.198f); // decrease generator core health on top
 	}
+	if (KeyboardController::GetInstance()->IsKeyPressed(VK_F6))
+		Player::GetInstance()->fatigue = Player::FATIGUE::TIRED;
+	if (KeyboardController::GetInstance()->IsKeyPressed(VK_F7))
+		Player::GetInstance()->fatigue = Player::FATIGUE::NORMAL;
+	if (KeyboardController::GetInstance()->IsKeyPressed(VK_F8))
+		Player::GetInstance()->fatigue = Player::FATIGUE::ENERGETIC;
+	if (KeyboardController::GetInstance()->IsKeyPressed(VK_F9))
+		Player::GetInstance()->SetSlept(false);
+	if (KeyboardController::GetInstance()->IsKeyPressed(VK_F10))
+		Player::GetInstance()->SetSlept(true);
+	
 	//day night shift
 	time -= dt;
-	if (time <= 0.00 && isDay)
+	if ((time <= 0.00 || Player::GetInstance()->GetSlept()) && isDay)
 	{
 		time = 10.00;
 		isDay = false;
@@ -340,6 +351,33 @@ void SceneText::Update(double dt)
 		noOfDays++;
 	}
 
+	//if a day(day and night) past,but no sleep
+	if (!isDay && !Player::GetInstance()->GetSlept() && time <= 0.02)
+	{
+		switch (Player::GetInstance()->fatigue)
+		{
+		case Player::FATIGUE::ENERGETIC:
+			Player::GetInstance()->fatigue = Player::FATIGUE::NORMAL;
+			break;
+		case Player::FATIGUE::NORMAL:
+			Player::GetInstance()->fatigue = Player::FATIGUE::TIRED;
+			break;
+		}
+	}
+	//got sleep
+	if (Player::GetInstance()->GetSlept())
+	{
+		switch (Player::GetInstance()->fatigue)
+		{
+		case Player::FATIGUE::TIRED:
+			Player::GetInstance()->fatigue = Player::FATIGUE::NORMAL;
+			break;
+		case Player::FATIGUE::NORMAL:
+			Player::GetInstance()->fatigue = Player::FATIGUE::ENERGETIC;
+			break;
+		}
+		Player::GetInstance()->SetSlept(false);
+	}
 	//convert mouse pos on window onto world
 	double mouseX, mouseY;
 	MouseController::GetInstance()->GetMousePosition(mouseX, mouseY);
@@ -512,6 +550,22 @@ void SceneText::Update(double dt)
 		}
 	}
 	textObj[4]->SetText(ss.str());
+
+
+	ss.str("");
+	switch (Player::GetInstance()->fatigue)
+	{
+	case Player::FATIGUE::TIRED:
+		ss << "Fatigue Level: Tired";
+		break;
+	case Player::FATIGUE::NORMAL:
+		ss << "Fatigue Level: Normal";
+		break;
+	case Player::FATIGUE::ENERGETIC:
+		ss << "Fatigue Level: Energetic";
+		break;
+	}
+	textObj[5]->SetText(ss.str());
 }
 
 void SceneText::Render()

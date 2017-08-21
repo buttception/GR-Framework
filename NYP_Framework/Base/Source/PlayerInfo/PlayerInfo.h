@@ -73,6 +73,8 @@ public:
 	int GetCurrentWeapon(void) const { return m_iCurrentWeapon; }
 	int GetNumberOfWeapon(void) const { return m_iNumOfWeapon; }
 	void SetCurrentWeapon(int currentWeapon) { this->m_iCurrentWeapon = currentWeapon; }
+	bool GetSlept(void) const { return slept; }
+	void SetSlept(bool slept) { this->slept = slept; }
 
 	// Reload current weapon
 	bool ReloadWeapon(void);
@@ -89,6 +91,13 @@ public:
 	// Scrollable weapon switching
 	CWeaponInfo** weaponManager;
 	std::vector<Weapon*> weaponList;
+
+	enum FATIGUE
+	{
+		TIRED = 0,
+		NORMAL,
+		ENERGETIC,
+	}fatigue;
 
 private:
 	Vector3 defaultPosition;
@@ -117,4 +126,6 @@ private:
 	const int m_iNumOfWeapon = 2;
 	CWeaponInfo* primaryWeapon;
 	CWeaponInfo* secondaryWeapon;
+
+	bool slept;
 };

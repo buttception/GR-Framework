@@ -37,6 +37,8 @@ Player::Player(void)
 	, secondaryWeapon(NULL)
 	, weaponManager(NULL)
 	, m_iCurrentWeapon(1)
+	, fatigue(FATIGUE::NORMAL)
+	, slept(false)
 {
 }
 
