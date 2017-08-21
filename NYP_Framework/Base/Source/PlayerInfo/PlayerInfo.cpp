@@ -37,6 +37,8 @@ Player::Player(void)
 	, secondaryWeapon(NULL)
 	, weaponManager(NULL)
 	, m_iCurrentWeapon(1)
+	, fatigue(FATIGUE::NORMAL)
+	, slept(false)
 {
 }
 
@@ -66,10 +68,11 @@ void Player::Init(void)
 	this->mouse = new Mouse();
 	mouse->Create(this);
 
-
+	//Playerinfo is my bitch
 	CSoundEngine::GetInstance()->Init();
 	CSoundEngine::GetInstance()->Addthefuckingsound("HELLO", "Image//Hello.mp3");
 	CSoundEngine::GetInstance()->Addthefuckingsound("Build", "Image//wood1.ogg");
+	CSoundEngine::GetInstance()->Addthefuckingsound("PewPew", "Image//9mm.mp3");
 
 	// Set the pistol as the primary weapon
 	Loader::GetInstance()->ReadFileWeapon("weapon.csv", weaponList);
@@ -184,9 +187,8 @@ void Player::Update(double dt)
 	if (KeyboardController::GetInstance()->IsKeyPressed(VK_F5) && !SceneText::isDay)
 		playerHealth = Math::Max(0.f, playerHealth - 10.f);
 
-	CMinimap::GetInstance()->SetPosition(position.x * CMinimap::GetInstance()->GetSize_x() / Application::GetInstance().GetWindowWidth(),
-		(Application::GetInstance().GetWindowHeight() - position.z) * CMinimap::GetInstance()->GetSize_y() / Application::GetInstance().GetWindowHeight());
-
+	CMinimap::GetInstance()->SetPosition(( position.x - 250.f )/ MAX_CELLS * CELL_SIZE * 0.5f * 0.01f,
+		 (250.f - position.z) / MAX_CELLS * CELL_SIZE * 0.5f * 0.01f);
 
 	//weapon update
 	if (primaryWeapon)
@@ -208,38 +210,18 @@ bool Player::ReloadWeapon(void)
 	return false;
 }
 
-// Change current weapon
-bool Player::ChangeWeapon(void)
+bool Player::SwitchWeapon(void)
 {
-	//if (MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_YOFFSET) != m_iCurrentWeapon)
-	//{
-	//	if ((MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_YOFFSET) >= 0) &&
-	//		(MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_YOFFSET) < m_iNumOfWeapon))
-	//	{
-	//		m_iCurrentWeapon = MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_YOFFSET);
-	//	}
-	//}
-	return true;
-}
-
-bool Player::ChangeWeaponK(void)
-{
-	//m_iCurrentWeapon++;
-	//MouseController::GetInstance()->SetScrollStatus(m_iCurrentWeapon);
-
-	//if (m_iCurrentWeapon > 1)
-	//{
-	//	m_iCurrentWeapon = 0;
-	//	MouseController::GetInstance()->SetScrollStatus(m_iCurrentWeapon);
-	//}
+	if (m_iCurrentWeapon == 1)
+	{
+		m_iCurrentWeapon = 2;
+	}
+	else
+	{
+		m_iCurrentWeapon = 1;
+	}
 
 	return true;
-}
-
-// Get Current Weapon
-int Player::GetWeapon(void) const
-{
-	return m_iCurrentWeapon;
 }
 
 // Discharge Primary Weapon
@@ -249,8 +231,11 @@ bool Player::DischargePrimaryWeapon(const float deltaTime, Vector3 position, Vec
 	{
 		std::cout << weaponManager[m_iCurrentWeapon]->GetName() << std::endl;
 		weaponManager[m_iCurrentWeapon]->PrintSelf();
-		std::cout << "fire" << std::endl;
+		//std::cout << "fire" << std::endl;
 		weaponManager[m_iCurrentWeapon]->Discharge(position, target, this);
+
+		//CSoundEngine::GetInstance()->playthesound("PewPew", 0.3);
+
 		return true;
 	}
 
@@ -372,8 +357,10 @@ bool Player::LeftClick(float dt)
 	MouseController::GetInstance()->UpdateMousePosition(mouseX, mouseY);//Application::GetInstance().GetWindowHeight() - 
 	MouseController::GetInstance()->GetMousePosition(mouseX, mouseY);
 
-	Vector3 Up_Direction = Vector3(400.f, 600.f, 0.f) - Vector3(400.f, 300.f, 0.f);
-	Vector3 playerMouse_Direction = Vector3((float)mouseX, (float)mouseY, 0.f) - Vector3(400.f, 300.f, 0.f);
+	float windowWidth = (float)Application::GetInstance().GetWindowWidth();
+	float windowHeight = (float)Application::GetInstance().GetWindowHeight();
+	Vector3 Up_Direction = Vector3(windowWidth / 2.f, windowHeight, 0.f) - Vector3(windowWidth / 2.f, windowHeight / 2.f, 0.f);
+	Vector3 playerMouse_Direction = Vector3((float)mouseX, (float)mouseY, 0.f) - Vector3(windowWidth / 2.f, windowHeight / 2.f, 0.f);
 	try
 	{
 		playerMouse_Direction.Normalize();
@@ -450,10 +437,19 @@ void Player::SetIsBuilding()
 {
 	isBuilding = true;
 	isEquipment = false;
+	isWeapon = false;
 }
 
 void Player::SetIsEquipment()
 {
 	isEquipment = true;
 	isBuilding = false;
+	isWeapon = false;
+}
+
+void Player::SetIsWeapon()
+{
+	isWeapon = true;
+	isBuilding = false;
+	isEquipment = false;
 }

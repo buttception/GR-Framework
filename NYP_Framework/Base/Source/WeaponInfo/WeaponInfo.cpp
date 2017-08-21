@@ -1,6 +1,6 @@
 #include "WeaponInfo.h"
 #include "../Projectile/Projectile.h"
-
+#include "../Sound_Engine.h"
 #include <iostream>
 using namespace std;
 
@@ -144,6 +144,9 @@ void CWeaponInfo::Init(void)
 	elapsedTime = 0.0;
 	// Boolean flag to indicate if weapon can fire now
 	bFire = true;
+
+	
+
 }
 
 // Update the elapsed time

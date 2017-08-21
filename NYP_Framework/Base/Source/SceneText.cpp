@@ -54,9 +54,6 @@ SceneText::~SceneText()
 
 void SceneText::Init()
 {
-	worldHeight = 100.f;
-	worldWidth = worldHeight * (float)Application::GetInstance().GetWindowWidth() / Application::GetInstance().GetWindowHeight();
-
 	currProg = GraphicsManager::GetInstance()->LoadShader("default", "Shader//Shadow.vertexshader", "Shader//Shadow.fragmentshader");
 	
 	// Tell the shader program to store these uniform locations
@@ -149,6 +146,8 @@ void SceneText::Init()
 	MeshBuilder::GetInstance()->GenerateOBJ("cover", "OBJ//cube.obj"); //remember to change obj
 	MeshBuilder::GetInstance()->GenerateOBJ("floor", "OBJ//cube.obj"); //remember to change texture
 
+
+
 	MeshBuilder::GetInstance()->GenerateOBJ("Turret", "OBJ//cube.obj"); //remember to change obj
 	MeshBuilder::GetInstance()->GenerateOBJ("Healing Station", "OBJ//cube.obj"); //remember to change obj
 	MeshBuilder::GetInstance()->GenerateOBJ("Floor Spike", "OBJ//cube.obj"); //remember to change obj
@@ -159,7 +158,7 @@ void SceneText::Init()
 	sun = MeshBuilder::GetInstance()->GenerateSphere("sphere", Color(1, 1, 1), 24, 24, 1);
 
 	generatorCoreHealthBar = MeshBuilder::GetInstance()->GenerateQuad("generatorCoreHealthBar", Color(1, 0, 0), 1.f);
-	generatorCoreScale = 790.f;
+	generatorCoreScale = 1.98f;
 
 	playerHealthBar = MeshBuilder::GetInstance()->GenerateQuad("playerHealthBar", Color(1, 0.64706f, 0), 1.f);
 
@@ -223,7 +222,7 @@ void SceneText::Init()
 	float halfWindowHeight = Application::GetInstance().GetWindowHeight() / 2.0f;
 	float fontSize = 25.0f;
 	float halfFontSize = fontSize / 2.0f;
-	for (int i = 0; i < 5; ++i)
+	for (int i = 0; i < 6; ++i)
 	{
 		textObj[i] = Create::Text2DObject("text", Vector3(-halfWindowWidth, -halfWindowHeight + fontSize*i + halfFontSize, 0.0f), "", Vector3(fontSize, fontSize, fontSize), Color(0.0f,1.0f,0.0f));
 	}
@@ -249,6 +248,14 @@ void SceneText::Init()
 
 void SceneText::Update(double dt)
 {
+	float halfWindowWidth = Application::GetInstance().GetWindowWidth() / 2.0f;
+	float halfWindowHeight = Application::GetInstance().GetWindowHeight() / 2.0f;
+	float fontSize = 25.0f;
+	float halfFontSize = fontSize / 2.0f;
+	for (int i = 0; i < 6; ++i)
+	{
+		textObj[i]->SetPosition(Vector3(-halfWindowWidth, -halfWindowHeight + fontSize*i + halfFontSize, 0.0f));
+	}
 	// Update our entities
 	EntityManager::GetInstance()->Update(dt);
 
@@ -286,11 +293,30 @@ void SceneText::Update(double dt)
 		lights[0]->type = Light::LIGHT_SPOT;
 	}
 
+
+	//==========================================================================Light Feature=====================================================//
 	float speed = 180 / 10;
 	Mtx44 rotate;
 	rotate.SetToRotation(speed * dt, 1, 0, 0);
 	Vector3 pos(lights[0]->position.x, lights[0]->position.y, lights[0]->position.z);
 	lights[0]->position = rotate * lights[0]->position;
+
+	if (lights[0]->position.z < 90) {
+		lights[0]->color.Set(255 / 255, (float)165 / (float)255, 0); //keep it this way for now
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+	//==========================================================================Light Feature=====================================================//
 
 	//if (KeyboardController::GetInstance()->IsKeyPressed(VK_F1)){
 	//	//Debug mode
@@ -319,11 +345,22 @@ void SceneText::Update(double dt)
 		isDay = true;
 		time = 10.00;
 		noOfDays++;
-		generatorCoreScale = Math::Max(0.f, generatorCoreScale - 80.f); // decrease generator core health on top
+		generatorCoreScale = Math::Max(0.f, generatorCoreScale - 0.198f); // decrease generator core health on top
 	}
+	if (KeyboardController::GetInstance()->IsKeyPressed(VK_F6))
+		Player::GetInstance()->fatigue = Player::FATIGUE::TIRED;
+	if (KeyboardController::GetInstance()->IsKeyPressed(VK_F7))
+		Player::GetInstance()->fatigue = Player::FATIGUE::NORMAL;
+	if (KeyboardController::GetInstance()->IsKeyPressed(VK_F8))
+		Player::GetInstance()->fatigue = Player::FATIGUE::ENERGETIC;
+	if (KeyboardController::GetInstance()->IsKeyPressed(VK_F9))
+		Player::GetInstance()->SetSlept(false);
+	if (KeyboardController::GetInstance()->IsKeyPressed(VK_F10))
+		Player::GetInstance()->SetSlept(true);
+	
 	//day night shift
 	time -= dt;
-	if (time <= 0.00 && isDay)
+	if ((time <= 0.00 || Player::GetInstance()->GetSlept()) && isDay)
 	{
 		time = 10.00;
 		isDay = false;
@@ -335,15 +372,44 @@ void SceneText::Update(double dt)
 		noOfDays++;
 	}
 
+	//if a day(day and night) past,but no sleep
+	if (!isDay && !Player::GetInstance()->GetSlept() && time <= 0.02)
+	{
+		switch (Player::GetInstance()->fatigue)
+		{
+		case Player::FATIGUE::ENERGETIC:
+			Player::GetInstance()->fatigue = Player::FATIGUE::NORMAL;
+			break;
+		case Player::FATIGUE::NORMAL:
+			Player::GetInstance()->fatigue = Player::FATIGUE::TIRED;
+			break;
+		}
+	}
+	//got sleep
+	if (Player::GetInstance()->GetSlept())
+	{
+		switch (Player::GetInstance()->fatigue)
+		{
+		case Player::FATIGUE::TIRED:
+			Player::GetInstance()->fatigue = Player::FATIGUE::NORMAL;
+			break;
+		case Player::FATIGUE::NORMAL:
+			Player::GetInstance()->fatigue = Player::FATIGUE::ENERGETIC;
+			break;
+		}
+		Player::GetInstance()->SetSlept(false);
+	}
 	//convert mouse pos on window onto world
 	double mouseX, mouseY;
 	MouseController::GetInstance()->GetMousePosition(mouseX, mouseY);
 	MouseController::GetInstance()->UpdateMousePosition(mouseX, Application::GetInstance().GetWindowHeight() - mouseY);
 	MouseController::GetInstance()->GetMousePosition(mouseX, mouseY);
 
+	float windowWidth = (float)Application::GetInstance().GetWindowWidth();
+	float windowHeight = (float)Application::GetInstance().GetWindowHeight();
 	//for minimap icon to rotate
-	Vector3 Up_Direction = Vector3(400.f, 600.f, 0.f) - Vector3(400.f, 300.f, 0.f);
-	Vector3 playerMouse_Direction = Vector3((float)mouseX, (float)mouseY, 0.f) - Vector3(400.f, 300.f, 0.f);
+	Vector3 Up_Direction = Vector3(windowWidth / 2.f, windowHeight, 0.f) - Vector3(windowWidth / 2.f, windowHeight / 2.f, 0.f);
+	Vector3 playerMouse_Direction = Vector3((float)mouseX, (float)mouseY, 0.f) - Vector3(windowWidth / 2.f, windowHeight / 2.f, 0.f);
 	
 	try
 	{
@@ -358,22 +424,22 @@ void SceneText::Update(double dt)
 		std::cout << "Cannot move mouse to center, divide by zero(Normalize for minimap icon to rotate)" << std::endl;
 	}
 
-	if (MouseController::GetInstance()->IsButtonReleased(MouseController::RMB))
-	{
-		std::cout << "Right Mouse Button was released!" << std::endl;
-	}
-	if (MouseController::GetInstance()->IsButtonReleased(MouseController::MMB))
-	{
-		std::cout << "Middle Mouse Button was released!" << std::endl;
-	}
-	if (MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_XOFFSET) != 0.0)
-	{
-		std::cout << "Mouse Wheel has offset in X-axis of " << MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_XOFFSET) << std::endl;
-	}
-	if (MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_YOFFSET) != 0.0)
-	{
-		std::cout << "Mouse Wheel has offset in Y-axis of " << MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_YOFFSET) << std::endl;
-	}
+	//if (MouseController::GetInstance()->IsButtonReleased(MouseController::RMB))
+	//{
+	//	std::cout << "Right Mouse Button was released!" << std::endl;
+	//}
+	//if (MouseController::GetInstance()->IsButtonReleased(MouseController::MMB))
+	//{
+	//	std::cout << "Middle Mouse Button was released!" << std::endl;
+	//}
+	//if (MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_XOFFSET) != 0.0)
+	//{
+	//	std::cout << "Mouse Wheel has offset in X-axis of " << MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_XOFFSET) << std::endl;
+	//}
+	//if (MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_YOFFSET) != 0.0)
+	//{
+	//	std::cout << "Mouse Wheel has offset in Y-axis of " << MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_YOFFSET) << std::endl;
+	//}
 	// <THERE>
 
 	// Update the player position and other details based on keyboard and mouse inputs
@@ -485,6 +551,24 @@ void SceneText::Update(double dt)
 				break;
 			}
 		}
+		else if (Player::GetInstance()->GetIsWeapon())
+		{
+			switch (Player::GetInstance()->GetCurrentWeapon())
+			{
+			case 1:
+				ss << "Current Weapon: ";
+				break;
+			case 2:
+				ss << "Current Weapon: ";
+				break;
+			case 3:
+				ss << "Current Weapon: ";
+				break;
+			case 4:
+				ss << "Current Weapon: ";
+				break;
+			}
+		}
 	}
 	textObj[4]->SetText(ss.str());
 
@@ -492,6 +576,21 @@ void SceneText::Update(double dt)
 	//int _y = (int)Player::GetInstance()->GetPosition().z / CELL_SIZE;
 	//std::cout << _x << ", " << _y << std::endl;
 	//std::cout << BuildingManager::GetInstance()->GetBuildingArray()[_x][_y].hitbox.GetMinAABB() << std::endl;
+
+	ss.str("");
+	switch (Player::GetInstance()->fatigue)
+	{
+	case Player::FATIGUE::TIRED:
+		ss << "Fatigue Level: Tired";
+		break;
+	case Player::FATIGUE::NORMAL:
+		ss << "Fatigue Level: Normal";
+		break;
+	case Player::FATIGUE::ENERGETIC:
+		ss << "Fatigue Level: Energetic";
+		break;
+	}
+	textObj[5]->SetText(ss.str());
 }
 
 void SceneText::Render()
@@ -564,7 +663,6 @@ void SceneText::RenderPassGPass()
 //******************************* MAIN RENDER PASS ************************************
 void SceneText::RenderPassMain()
 {
-
 	GraphicsManager* g = GraphicsManager::GetInstance();
 	MS& ms = GraphicsManager::GetInstance()->GetModelStack();
 
@@ -602,16 +700,17 @@ void SceneText::RenderPassMain()
 
 	glDisable(GL_DEPTH_TEST);
 	EntityManager::GetInstance()->RenderUI();
+	theMiniMap->Init(halfWindowHeight, halfWindowWidth);
 	theMiniMap->RenderUI();
 
 	ms.PushMatrix();
-	ms.Translate(0, 290.f, 0);
-	ms.Scale(generatorCoreScale, 10.f, 0);
+	ms.Translate(0, halfWindowHeight * 0.98f, 0);
+	ms.Scale(halfWindowWidth * generatorCoreScale, 10.f, 0);
 	RenderHelper::RenderMesh(generatorCoreHealthBar);
 	ms.PopMatrix();
 
 	ms.PushMatrix();
-	ms.Translate(-395.f, 270.f, 0);
+	ms.Translate(-halfWindowWidth, halfWindowHeight * 0.92f, 0);
 	ms.Scale(Player::GetInstance()->GetPlayerHealth(), 10.f, 0);
 	RenderHelper::RenderMesh(playerHealthBar);
 	ms.PopMatrix();

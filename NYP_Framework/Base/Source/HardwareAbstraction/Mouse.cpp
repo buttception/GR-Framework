@@ -47,7 +47,7 @@ int Mouse::Read(const float deltaTime)
 		}
 	}
 
-	//for switching buildings / weapons
+	//for switching buildings / equipment / weapons
 	if (MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_YOFFSET) != 0.0)
 	{
 		if (SceneText::isDay)
@@ -86,6 +86,15 @@ int Mouse::Read(const float deltaTime)
 				case 4:
 					Player::GetInstance()->SetCurrentEquipment(EquipmentEntity::EQUIPMENT_SHIELD);
 					break;
+				}
+			}
+			else if (Player::GetInstance()->GetIsWeapon())
+			{
+				if ((int)MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_YOFFSET) != Player::GetInstance()->GetCurrentWeapon())
+				{
+					if ((MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_YOFFSET) >= 0.0) &&
+						((int)MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_YOFFSET) < Player::GetInstance()->GetNumberOfWeapon()))
+						Player::GetInstance()->SetCurrentWeapon((int)MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_YOFFSET));
 				}
 			}
 		}

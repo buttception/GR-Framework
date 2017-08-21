@@ -4,6 +4,7 @@
 #include "../EntityManager.h"
 #include "GraphicsManager.h"
 #include "RenderHelper.h"
+#include "../Sound_Engine.h"
 
 Projectile::Projectile(std::string _meshName) : GenericEntity(MeshList::GetInstance()->GetMesh(_meshName))
 , m_bStatus(false)
@@ -108,4 +109,5 @@ Projectile * Create::Bullet(std::string _meshName)
 	Projectile* p = new Projectile(_meshName);
 	EntityManager::GetInstance()->AddEntity(p);
 	return p;
+	
 }

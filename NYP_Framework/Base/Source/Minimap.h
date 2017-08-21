@@ -15,7 +15,7 @@ public:
 	Mesh* m_cMinimap_Avatar;
 
 	// Initialise this class instance
-	bool Init(void);
+	bool Init(int halfWindowHeight,int halfWindowWidth);
 
 	// Set the background mesh to this class
 	bool SetBackground(Mesh* aBackground);

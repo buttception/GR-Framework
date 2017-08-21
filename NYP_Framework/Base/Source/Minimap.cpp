@@ -2,13 +2,14 @@
 #include "GraphicsManager.h"
 #include "RenderHelper.h"
 #include "GL\glew.h"
+#include "Application.h"
 
 CMinimap::CMinimap(void)
 	: m_cMinimap_Background(NULL)
 	, m_cMinimap_Avatar(NULL)
 	, m_fAngle(-90.0f)
 {
-	Init();
+	Init(Application::GetInstance().GetWindowHeight() / 2.0f, Application::GetInstance().GetWindowWidth() / 2.0f);
 }
 
 CMinimap::~CMinimap(void)
@@ -26,11 +27,10 @@ CMinimap::~CMinimap(void)
 }
 
 // Initialise this class instance
-bool CMinimap::Init(void)
+bool CMinimap::Init(int halfWindowHeight, int halfWindowWidth)
 {
-	m_fAngle = -90.0f;
-	position.Set(335.f, 235.f, 0.0f);
-	scale.Set(100.0f, 100.0f, 100.0f);
+	position.Set(halfWindowWidth * 0.86f, halfWindowHeight * 0.78f, 0.0f);
+	scale.Set(halfWindowHeight * 0.35f, halfWindowHeight * 0.35f, 1.f);
 
 	return true;
 }
@@ -126,62 +126,62 @@ void CMinimap::RenderUI()
 {
 	MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
 
-	// Push the current transformation into the modelStack
-	modelStack.PushMatrix();
-		// Translate the current transformation
+	if (!isResizing)
+	{
+		modelStack.PushMatrix();
 		modelStack.Translate(position.x, position.y, position.z);
-		// Scale the current transformation
 		modelStack.Scale(scale.x, scale.y, scale.z);
+		SetSize(1.3f, 1.f);
+		modelStack.PushMatrix();
+		if (m_cMinimap_Background)
+			RenderHelper::RenderMesh(m_cMinimap_Background);
+		modelStack.PopMatrix();
+		modelStack.PopMatrix();
 
-		if (!isResizing)
-		{
-			SetSize(1.3f, 1.f);
-			modelStack.PushMatrix();
-			if (m_cMinimap_Background)
-				RenderHelper::RenderMesh(m_cMinimap_Background);
-			modelStack.PopMatrix();
+		// Disable depth test
+		glDisable(GL_DEPTH_TEST);
 
-			// Disable depth test
-			glDisable(GL_DEPTH_TEST);
+		// Display the Avatar
+		modelStack.PushMatrix();
+		modelStack.Translate(position.x, position.y, position.z);
+		modelStack.Translate(m_fPos_x * (scale.x  * 0.5f), m_fPos_y * (scale.y * 0.5f), 0.f);
+		modelStack.Scale(scale.x, scale.y, scale.z);
+		modelStack.Rotate(m_fAngle, 0.0f, 0.0f, -1.0f);
+		if (m_cMinimap_Avatar)
+			RenderHelper::RenderMesh(m_cMinimap_Avatar);
+		modelStack.PopMatrix();
 
-			// Display the Avatar
-			modelStack.PushMatrix();
-			modelStack.Translate(m_fPos_x - 0.4f, m_fPos_y - 0.6f, 0.f);
-			modelStack.Rotate(m_fAngle, 0.0f, 0.0f, -1.0f);
-			if (m_cMinimap_Avatar)
-				RenderHelper::RenderMesh(m_cMinimap_Avatar);
-			modelStack.PopMatrix();
+		// Enable depth test
+		glEnable(GL_DEPTH_TEST);
+	}
+	else
+	{
+		modelStack.PushMatrix();
+		modelStack.Scale(scale.x, scale.y, scale.z);
+		SetSize(3.6f, 3.f);
+		modelStack.PushMatrix();
+		modelStack.Scale(2.5f, 2.5f, 1.f);
+		if (m_cMinimap_Background)
+			RenderHelper::RenderMesh(m_cMinimap_Background);
+		modelStack.PopMatrix();
+		modelStack.PopMatrix();
 
-			// Enable depth test
-			glEnable(GL_DEPTH_TEST);
-		}
-		else
-		{
-			SetSize(3.6f, 3.f);
-			modelStack.PushMatrix();
-			modelStack.Translate(-3.35f, -2.35f, 0.f);
-			modelStack.Scale(2.5f, 2.5f, 1.f);
-			if (m_cMinimap_Background)
-				RenderHelper::RenderMesh(m_cMinimap_Background);
-			modelStack.PopMatrix();
+		// Disable depth test
+		glDisable(GL_DEPTH_TEST);
 
-			// Disable depth test
-			glDisable(GL_DEPTH_TEST);
+		// Display the Avatar
+		modelStack.PushMatrix();
+		modelStack.Scale(2.5f, 2.5f, 1.f);
+		modelStack.Translate(m_fPos_x * (scale.x  * 0.5f), m_fPos_y * (scale.y  * 0.5f), 0.f);
+		modelStack.Rotate(m_fAngle, 0.0f, 0.0f, -1.0f);
+		modelStack.Scale(scale.x, scale.y, scale.z);
+		if (m_cMinimap_Avatar)
+			RenderHelper::RenderMesh(m_cMinimap_Avatar);
+		modelStack.PopMatrix();
 
-			// Display the Avatar
-			modelStack.PushMatrix();
-			modelStack.Translate(-3.3f, -2.35f, 0.f);
-			modelStack.Translate(m_fPos_x - 1.2f, m_fPos_y - 1.8f, 0.f);
-			modelStack.Rotate(m_fAngle, 0.0f, 0.0f, -1.0f);
-			modelStack.Scale(3.f, 3.f, 1.f);
-			if (m_cMinimap_Avatar)
-				RenderHelper::RenderMesh(m_cMinimap_Avatar);
-			modelStack.PopMatrix();
-
-			// Enable depth test
-			glEnable(GL_DEPTH_TEST);
-		}
-	modelStack.PopMatrix();
+		// Enable depth test
+		glEnable(GL_DEPTH_TEST);
+	}
 }
 
 CMinimap* Create::Minimap()
