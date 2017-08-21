@@ -54,9 +54,6 @@ SceneText::~SceneText()
 
 void SceneText::Init()
 {
-	worldHeight = 100.f;
-	worldWidth = worldHeight * (float)Application::GetInstance().GetWindowWidth() / Application::GetInstance().GetWindowHeight();
-
 	currProg = GraphicsManager::GetInstance()->LoadShader("default", "Shader//Shadow.vertexshader", "Shader//Shadow.fragmentshader");
 	
 	// Tell the shader program to store these uniform locations
@@ -159,7 +156,7 @@ void SceneText::Init()
 	sun = MeshBuilder::GetInstance()->GenerateSphere("sphere", Color(1, 1, 1), 24, 24, 1);
 
 	generatorCoreHealthBar = MeshBuilder::GetInstance()->GenerateQuad("generatorCoreHealthBar", Color(1, 0, 0), 1.f);
-	generatorCoreScale = 790.f;
+	generatorCoreScale = 1.98f;
 
 	playerHealthBar = MeshBuilder::GetInstance()->GenerateQuad("playerHealthBar", Color(1, 0.64706f, 0), 1.f);
 
@@ -249,6 +246,14 @@ void SceneText::Init()
 
 void SceneText::Update(double dt)
 {
+	float halfWindowWidth = Application::GetInstance().GetWindowWidth() / 2.0f;
+	float halfWindowHeight = Application::GetInstance().GetWindowHeight() / 2.0f;
+	float fontSize = 25.0f;
+	float halfFontSize = fontSize / 2.0f;
+	for (int i = 0; i < 5; ++i)
+	{
+		textObj[i]->SetPosition(Vector3(-halfWindowWidth, -halfWindowHeight + fontSize*i + halfFontSize, 0.0f));
+	}
 	// Update our entities
 	EntityManager::GetInstance()->Update(dt);
 
@@ -319,7 +324,7 @@ void SceneText::Update(double dt)
 		isDay = true;
 		time = 10.00;
 		noOfDays++;
-		generatorCoreScale = Math::Max(0.f, generatorCoreScale - 80.f); // decrease generator core health on top
+		generatorCoreScale = Math::Max(0.f, generatorCoreScale - 0.198f); // decrease generator core health on top
 	}
 	//day night shift
 	time -= dt;
@@ -341,9 +346,11 @@ void SceneText::Update(double dt)
 	MouseController::GetInstance()->UpdateMousePosition(mouseX, Application::GetInstance().GetWindowHeight() - mouseY);
 	MouseController::GetInstance()->GetMousePosition(mouseX, mouseY);
 
+	float windowWidth = (float)Application::GetInstance().GetWindowWidth();
+	float windowHeight = (float)Application::GetInstance().GetWindowHeight();
 	//for minimap icon to rotate
-	Vector3 Up_Direction = Vector3(400.f, 600.f, 0.f) - Vector3(400.f, 300.f, 0.f);
-	Vector3 playerMouse_Direction = Vector3((float)mouseX, (float)mouseY, 0.f) - Vector3(400.f, 300.f, 0.f);
+	Vector3 Up_Direction = Vector3(windowWidth / 2.f, windowHeight, 0.f) - Vector3(windowWidth / 2.f, windowHeight / 2.f, 0.f);
+	Vector3 playerMouse_Direction = Vector3((float)mouseX, (float)mouseY, 0.f) - Vector3(windowWidth / 2.f, windowHeight / 2.f, 0.f);
 	
 	try
 	{
@@ -577,7 +584,6 @@ void SceneText::RenderPassGPass()
 //******************************* MAIN RENDER PASS ************************************
 void SceneText::RenderPassMain()
 {
-
 	GraphicsManager* g = GraphicsManager::GetInstance();
 	MS& ms = GraphicsManager::GetInstance()->GetModelStack();
 
@@ -615,16 +621,17 @@ void SceneText::RenderPassMain()
 
 	glDisable(GL_DEPTH_TEST);
 	EntityManager::GetInstance()->RenderUI();
+	theMiniMap->Init(halfWindowHeight, halfWindowWidth);
 	theMiniMap->RenderUI();
 
 	ms.PushMatrix();
-	ms.Translate(0, 290.f, 0);
-	ms.Scale(generatorCoreScale, 10.f, 0);
+	ms.Translate(0, halfWindowHeight * 0.98f, 0);
+	ms.Scale(halfWindowWidth * generatorCoreScale, 10.f, 0);
 	RenderHelper::RenderMesh(generatorCoreHealthBar);
 	ms.PopMatrix();
 
 	ms.PushMatrix();
-	ms.Translate(-395.f, 270.f, 0);
+	ms.Translate(-halfWindowWidth, halfWindowHeight * 0.92f, 0);
 	ms.Scale(Player::GetInstance()->GetPlayerHealth(), 10.f, 0);
 	RenderHelper::RenderMesh(playerHealthBar);
 	ms.PopMatrix();
