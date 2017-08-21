@@ -196,9 +196,8 @@ void Player::Update(double dt)
 	if (KeyboardController::GetInstance()->IsKeyPressed(VK_F5) && !SceneText::isDay)
 		playerHealth = Math::Max(0.f, playerHealth - 10.f);
 
-	CMinimap::GetInstance()->SetPosition(position.x * CMinimap::GetInstance()->GetSize_x() / Application::GetInstance().GetWindowWidth(),
-		(Application::GetInstance().GetWindowHeight() - position.z) * CMinimap::GetInstance()->GetSize_y() / Application::GetInstance().GetWindowHeight());
-
+	CMinimap::GetInstance()->SetPosition(( position.x - 250.f )/ MAX_CELLS * CELL_SIZE * 0.5f * 0.01f,
+		 (250.f - position.z) / MAX_CELLS * CELL_SIZE * 0.5f * 0.01f);
 
 	//weapon update
 	if (primaryWeapon)
@@ -222,14 +221,14 @@ bool Player::ReloadWeapon(void)
 
 bool Player::SwitchWeapon(void)
 {
-	//m_iCurrentWeapon++;
-	//MouseController::GetInstance()->SetScrollStatus(m_iCurrentWeapon);
-
-	//if (m_iCurrentWeapon > 1)
-	//{
-	//	m_iCurrentWeapon = 0;
-	//	MouseController::GetInstance()->SetScrollStatus(m_iCurrentWeapon);
-	//}
+	if (m_iCurrentWeapon == 1)
+	{
+		m_iCurrentWeapon = 2;
+	}
+	else
+	{
+		m_iCurrentWeapon = 1;
+	}
 
 	return true;
 }
@@ -364,8 +363,10 @@ bool Player::LeftClick(float dt)
 	MouseController::GetInstance()->UpdateMousePosition(mouseX, mouseY);//Application::GetInstance().GetWindowHeight() - 
 	MouseController::GetInstance()->GetMousePosition(mouseX, mouseY);
 
-	Vector3 Up_Direction = Vector3(400.f, 600.f, 0.f) - Vector3(400.f, 300.f, 0.f);
-	Vector3 playerMouse_Direction = Vector3((float)mouseX, (float)mouseY, 0.f) - Vector3(400.f, 300.f, 0.f);
+	float windowWidth = (float)Application::GetInstance().GetWindowWidth();
+	float windowHeight = (float)Application::GetInstance().GetWindowHeight();
+	Vector3 Up_Direction = Vector3(windowWidth / 2.f, windowHeight, 0.f) - Vector3(windowWidth / 2.f, windowHeight / 2.f, 0.f);
+	Vector3 playerMouse_Direction = Vector3((float)mouseX, (float)mouseY, 0.f) - Vector3(windowWidth / 2.f, windowHeight / 2.f, 0.f);
 	try
 	{
 		playerMouse_Direction.Normalize();
