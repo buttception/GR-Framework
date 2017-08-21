@@ -66,10 +66,11 @@ void Player::Init(void)
 	this->mouse = new Mouse();
 	mouse->Create(this);
 
-
+	//Playerinfo is my bitch
 	CSoundEngine::GetInstance()->Init();
 	CSoundEngine::GetInstance()->Addthefuckingsound("HELLO", "Image//Hello.mp3");
 	CSoundEngine::GetInstance()->Addthefuckingsound("Build", "Image//wood1.ogg");
+	CSoundEngine::GetInstance()->Addthefuckingsound("PewPew", "Image//9mm.mp3");
 
 	// Set the pistol as the primary weapon
 	Loader::GetInstance()->ReadFileWeapon("weapon.csv", weaponList);
@@ -242,6 +243,9 @@ bool Player::DischargePrimaryWeapon(const float deltaTime, Vector3 position, Vec
 		weaponManager[m_iCurrentWeapon]->PrintSelf();
 		//std::cout << "fire" << std::endl;
 		weaponManager[m_iCurrentWeapon]->Discharge(position, target, this);
+
+		//CSoundEngine::GetInstance()->playthesound("PewPew", 0.3);
+
 		return true;
 	}
 

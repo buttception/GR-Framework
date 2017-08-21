@@ -1,5 +1,5 @@
 #include "Weapon.h"
-
+#include "../Sound_Engine.h"
 #include "Loader.h"
 
 Weapon::Weapon()
@@ -36,6 +36,7 @@ void Weapon::Init(int setWeaponID, std::string setWeaponName, int setDamage, dou
 	range = setRange;
 	penetration = setPenetration;
 	timeBetweenShots = 0.5f;
+	
 }
 
 void Weapon::LoadWeaponData()
