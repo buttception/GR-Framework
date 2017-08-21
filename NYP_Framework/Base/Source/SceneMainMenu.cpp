@@ -48,7 +48,7 @@ void SceneMainMenu::Init()
 		"Shader//Shadow.vertexshader", "Shader//Shadow.fragmentshader");
 	GraphicsManager::GetInstance()->SetActiveShader("default");
 
-	glDisable(GL_DEPTH_TEST);
+	glDisable(GL_DEPTH_TEST); //<Fixed
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
@@ -101,7 +101,7 @@ void SceneMainMenu::Update(double dt)
 		Delay = 0.5f;
 	}
 
-	if (KeyboardController::GetInstance()->IsKeyDown(VK_UP) && Delay >= ButtonCooldown)
+	if (KeyboardController::GetInstance()->IsKeyDown(VK_UP) && Delay >= ButtonCooldown || KeyboardController::GetInstance()->IsKeyDown('W') && Delay >= ButtonCooldown)
 	{
 		
 
@@ -121,7 +121,7 @@ void SceneMainMenu::Update(double dt)
 
 		Delay = 0.0f;
 	}
-	if (KeyboardController::GetInstance()->IsKeyDown(VK_DOWN) && Delay >= ButtonCooldown)
+	if (KeyboardController::GetInstance()->IsKeyDown(VK_DOWN) && Delay >= ButtonCooldown || KeyboardController::GetInstance()->IsKeyDown('S') && Delay >= ButtonCooldown)
 	{
 		if (SelectedOptions == GAME)
 		{
