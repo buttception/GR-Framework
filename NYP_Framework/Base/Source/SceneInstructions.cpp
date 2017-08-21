@@ -1,4 +1,4 @@
-#include "SceneMainMenu.h"
+#include "SceneInstructions.h"
 #include "GL\glew.h"
 
 #include "shader.hpp"
@@ -26,25 +26,25 @@
 #include "../IK/irrKlang.h"
 using namespace irrklang;
 #pragma comment(lib,"irrKlang.lib")
-ISoundEngine*BONER = createIrrKlangDevice();
+ISoundEngine*Lolol = createIrrKlangDevice();
 #include <iostream>
 using namespace std;
 
-SceneMainMenu*SceneMainMenu::sInstance = new SceneMainMenu(SceneManager::GetInstance());
+SceneInstructions*SceneInstructions::sInstance = new SceneInstructions(SceneManager::GetInstance());
 
-SceneMainMenu::SceneMainMenu()
+SceneInstructions::SceneInstructions()
 {
 }
-SceneMainMenu::~SceneMainMenu()
+SceneInstructions::~SceneInstructions()
 {
 }
-SceneMainMenu::SceneMainMenu(SceneManager* _sceneMgr)
+SceneInstructions::SceneInstructions(SceneManager* _sceneMgr)
 {
-	_sceneMgr->AddScene("MainMenu", this);
+	_sceneMgr->AddScene("Instructions", this);
 }
-void SceneMainMenu::Init()
+void SceneInstructions::Init()
 {
-	currProg = GraphicsManager::GetInstance()->LoadShader("default", 
+	currProg = GraphicsManager::GetInstance()->LoadShader("default",
 		"Shader//Shadow.vertexshader", "Shader//Shadow.fragmentshader");
 	GraphicsManager::GetInstance()->SetActiveShader("default");
 
@@ -53,8 +53,8 @@ void SceneMainMenu::Init()
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	//Main Menu
-	MeshBuilder::GetInstance()->GenerateQuad("Scene_MainMenu", Color(1, 1, 1), 1.f);
-	MeshList::GetInstance()->GetMesh("Scene_MainMenu")->textureID[0] = LoadTGA("Image//Menu/Menu.tga");
+	MeshBuilder::GetInstance()->GenerateQuad("Instructions", Color(1, 1, 1), 1.f);
+	MeshList::GetInstance()->GetMesh("Instructions")->textureID[0] = LoadTGA("Image//Menu/penis.tga");
 
 	MeshBuilder::GetInstance()->GenerateQuad("ARROW", Color(1, 1, 1), 1.f);
 	MeshList::GetInstance()->GetMesh("ARROW")->textureID[0] = LoadTGA("Image//Menu/Arrow.tga");
@@ -65,17 +65,17 @@ void SceneMainMenu::Init()
 	float halfWindowWidth = Application::GetInstance().GetWindowWidth() / 2.0f;
 	float halfWindowHeight = Application::GetInstance().GetWindowHeight() / 2.0f;
 
-	Arrow = Create::Sprite2DObject("ARROW",
+	/*Arrow = Create::Sprite2DObject("ARROW",
 		Vector3(halfWindowWidth, halfWindowHeight, 2.f),
-		Vector3(25.0f, 25.0f, 25.0f));
-	MainMenu = Create::Sprite2DObject("Scene_MainMenu",
+		Vector3(25.0f, 25.0f, 25.0f));*/
+	Instructions = Create::Sprite2DObject("Instructions",
 		Vector3(halfWindowWidth, halfWindowHeight, 0.0f),
 		Vector3(800.0f, 600.0f, 0.0f));
 
-	BONER->play2D("Image//Relax.mp3" , GL_TRUE);
-	std::cout << "Main Menu Song Playing" << std::endl;
+	Lolol->play2D("Image//Troll.mp3", GL_TRUE);
+	std::cout << "Instructions Song Playing" << std::endl;
 }
-void SceneMainMenu::Update(double dt)
+void SceneInstructions::Update(double dt)
 {
 	EntityManager::GetInstance()->Update(dt);
 
@@ -96,14 +96,14 @@ void SceneMainMenu::Update(double dt)
 	Delay += (float)dt;
 
 
-	if (Delay > 0.5f)
+	/*if (Delay > 0.5f)
 	{
 		Delay = 0.5f;
 	}
 
 	if (KeyboardController::GetInstance()->IsKeyDown(VK_UP) && Delay >= ButtonCooldown || KeyboardController::GetInstance()->IsKeyDown('W') && Delay >= ButtonCooldown)
 	{
-		
+
 
 		if (SelectedOptions == QUIT)
 		{
@@ -142,7 +142,7 @@ void SceneMainMenu::Update(double dt)
 
 	if (KeyboardController::GetInstance()->IsKeyDown(VK_RETURN) && Delay >= ButtonCooldown)
 	{
-		
+
 
 
 		if (SelectedOptions == GAME)
@@ -153,7 +153,6 @@ void SceneMainMenu::Update(double dt)
 		else if (SelectedOptions == INSTRUCTION)
 		{
 			SceneManager::GetInstance()->SetActiveScene("Instructions");
-			std::cout << "Instructions Selected" << std::endl;
 		}
 		else if (SelectedOptions == QUIT)
 		{
@@ -183,9 +182,9 @@ void SceneMainMenu::Update(double dt)
 		b_INSTRUCTIONS = false;
 		b_quit = true;
 		break;
-	}
+	}*/
 
-	if (b_GAME)
+	/*if (b_GAME)
 	{
 		Arrow->SetPosition(Vector3(250, 320, 2));
 	}
@@ -197,12 +196,12 @@ void SceneMainMenu::Update(double dt)
 	if (b_quit)
 	{
 		Arrow->SetPosition(Vector3(250, 150, 2));
-	}
+	}*/
 
 	//CSoundEngine::GetInstance()->playthesound("HELLO", 3);
 }
 
-void SceneMainMenu::Render()
+void SceneInstructions::Render()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	GraphicsManager::GetInstance()->SetOrthographicProjection(0, Application::GetInstance().GetWindowWidth(), 0, Application::GetInstance().GetWindowHeight(), -10, 10);
@@ -210,16 +209,16 @@ void SceneMainMenu::Render()
 	EntityManager::GetInstance()->RenderUI();
 }
 
-void SceneMainMenu::Exit()
+void SceneInstructions::Exit()
 {
 	GraphicsManager::GetInstance()->DetachCamera();
-	Arrow->SetIsDone(true);
-	MainMenu->SetIsDone(true);
+	//Arrow->SetIsDone(true);
+	Instructions->SetIsDone(true);
 	// /\ Importatnt
 	//EntityManager::GetInstance()->RemoveEntity(MainMenu);
 
 	//CSoundEngine::GetInstance()->removethesound("HELLO");
 
-	BONER->stopAllSounds();
-	std::cout << "Main Menu Song Stopped Playing" << std::endl;
+	Lolol->stopAllSounds();
+	std::cout << "Instructions Song Stopped playing" << std::endl;
 }
