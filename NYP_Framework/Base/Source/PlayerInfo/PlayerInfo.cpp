@@ -222,14 +222,14 @@ bool Player::ReloadWeapon(void)
 
 bool Player::SwitchWeapon(void)
 {
-	//m_iCurrentWeapon++;
-	//MouseController::GetInstance()->SetScrollStatus(m_iCurrentWeapon);
-
-	//if (m_iCurrentWeapon > 1)
-	//{
-	//	m_iCurrentWeapon = 0;
-	//	MouseController::GetInstance()->SetScrollStatus(m_iCurrentWeapon);
-	//}
+	if (m_iCurrentWeapon == 1)
+	{
+		m_iCurrentWeapon = 2;
+	}
+	else
+	{
+		m_iCurrentWeapon = 1;
+	}
 
 	return true;
 }
