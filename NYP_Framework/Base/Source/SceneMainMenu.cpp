@@ -65,15 +65,12 @@ void SceneMainMenu::Init()
 	float halfWindowWidth = Application::GetInstance().GetWindowWidth() / 2.0f;
 	float halfWindowHeight = Application::GetInstance().GetWindowHeight() / 2.0f;
 
+	Arrow = Create::Sprite2DObject("ARROW",
+		Vector3(halfWindowWidth, halfWindowHeight, 2.f),
+		Vector3(25.0f, 25.0f, 25.0f));
 	MainMenu = Create::Sprite2DObject("Scene_MainMenu",
 		Vector3(halfWindowWidth, halfWindowHeight, 0.0f),
 		Vector3(800.0f, 600.0f, 0.0f));
-
-	
-
-	Arrow = Create::Sprite2DObject("ARROW",
-		Vector3(halfWindowWidth, halfWindowHeight, 0.0f),
-		Vector3(25.0f, 25.0f, 25.0f));
 
 	BONER->play2D("Image//Relax.mp3" , GL_TRUE);
 	std::cout << "Main Menu Song Playing" << std::endl;
@@ -81,6 +78,16 @@ void SceneMainMenu::Init()
 void SceneMainMenu::Update(double dt)
 {
 	EntityManager::GetInstance()->Update(dt);
+
+	// THIS WHOLE CHUNK TILL <THERE> CAN REMOVE INTO ENTITIES LOGIC! Or maybe into a scene function to keep the update clean
+	if (KeyboardController::GetInstance()->IsKeyDown('1'))
+		glEnable(GL_CULL_FACE);
+	if (KeyboardController::GetInstance()->IsKeyDown('2'))
+		glDisable(GL_CULL_FACE);
+	if (KeyboardController::GetInstance()->IsKeyDown('3'))
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	if (KeyboardController::GetInstance()->IsKeyDown('4'))
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 	int framerate = 1 / dt;
 
@@ -158,8 +165,6 @@ void SceneMainMenu::Update(double dt)
 	}
 
 
-
-
 	switch (SelectedOptions)
 	{
 	case GAME:
@@ -179,6 +184,19 @@ void SceneMainMenu::Update(double dt)
 		break;
 	}
 
+	if (b_GAME)
+	{
+		Arrow->SetPosition(Vector3(250, 320, 2));
+	}
+	if (b_INSTRUCTIONS)
+	{
+		Arrow->SetPosition(Vector3(250, 240, 2));
+
+	}
+	if (b_quit)
+	{
+		Arrow->SetPosition(Vector3(250, 150, 2));
+	}
 
 	//CSoundEngine::GetInstance()->playthesound("HELLO", 3);
 }
@@ -189,29 +207,12 @@ void SceneMainMenu::Render()
 	GraphicsManager::GetInstance()->SetOrthographicProjection(0, Application::GetInstance().GetWindowWidth(), 0, Application::GetInstance().GetWindowHeight(), -10, 10);
 	GraphicsManager::GetInstance()->DetachCamera();
 	EntityManager::GetInstance()->RenderUI();
-
-
-	if (b_GAME)
-	{
-		Arrow->SetPosition(Vector3(250, 320, 0));
-	}
-	if (b_INSTRUCTIONS)
-	{
-		Arrow->SetPosition(Vector3(250, 240, 0));
-
-	}
-	if (b_quit)
-	{
-		Arrow->SetPosition(Vector3(250, 150, 0));
-	}
-
-
 }
 
 void SceneMainMenu::Exit()
 {
 	GraphicsManager::GetInstance()->DetachCamera();
-
+	Arrow->SetIsDone(true);
 	MainMenu->SetIsDone(true);
 	// /\ Importatnt
 	//EntityManager::GetInstance()->RemoveEntity(MainMenu);
