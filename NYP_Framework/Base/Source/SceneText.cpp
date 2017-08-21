@@ -146,6 +146,8 @@ void SceneText::Init()
 	MeshBuilder::GetInstance()->GenerateOBJ("cover", "OBJ//cube.obj"); //remember to change obj
 	MeshBuilder::GetInstance()->GenerateOBJ("floor", "OBJ//cube.obj"); //remember to change texture
 
+
+
 	MeshBuilder::GetInstance()->GenerateOBJ("Turret", "OBJ//cube.obj"); //remember to change obj
 	MeshBuilder::GetInstance()->GenerateOBJ("Healing Station", "OBJ//cube.obj"); //remember to change obj
 	MeshBuilder::GetInstance()->GenerateOBJ("Floor Spike", "OBJ//cube.obj"); //remember to change obj
@@ -291,11 +293,30 @@ void SceneText::Update(double dt)
 		lights[0]->type = Light::LIGHT_SPOT;
 	}
 
+
+	//==========================================================================Light Feature=====================================================//
 	float speed = 180 / 10;
 	Mtx44 rotate;
 	rotate.SetToRotation(speed * dt, 1, 0, 0);
 	Vector3 pos(lights[0]->position.x, lights[0]->position.y, lights[0]->position.z);
 	lights[0]->position = rotate * lights[0]->position;
+
+	if (lights[0]->position.z < 90) {
+		lights[0]->color.Set(255 / 255, (float)165 / (float)255, 0); //keep it this way for now
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+	//==========================================================================Light Feature=====================================================//
 
 	//if (KeyboardController::GetInstance()->IsKeyPressed(VK_F1)){
 	//	//Debug mode
