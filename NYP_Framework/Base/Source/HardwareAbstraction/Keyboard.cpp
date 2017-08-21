@@ -28,10 +28,12 @@ bool Keyboard::Create(Player* thePlayerInfo)
 	KeyList[CONTROLLER_RUN] = VK_LSHIFT;
 	KeyList[CONTROLLER_INTERACT] = 'E';
 	KeyList[CONTROLLER_RELOAD] = 'R';
+	KeyList[CONTROLLER_SWITCHWEAPON] = 'Q';
 	KeyList[CONTROLLER_RESET] = 'P';
 	KeyList[CONTROLLER_MAPRESIZE] = 'M';
 	KeyList[CONTROLLER_ISBUILDING] = '1';
 	KeyList[CONTROLLER_ISEQUIPMENT] = '2';
+	KeyList[CONTROLLER_ISWEAPON] = '3';
 
 	return false;
 }

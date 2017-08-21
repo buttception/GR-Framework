@@ -18,12 +18,14 @@ public:
 		CONTROLLER_RUN,
 
 		CONTROLLER_INTERACT,
-
+		
 		CONTROLLER_RELOAD,
+		CONTROLLER_SWITCHWEAPON,
 		CONTROLLER_RESET,
 		CONTROLLER_MAPRESIZE,
 		CONTROLLER_ISBUILDING,
 		CONTROLLER_ISEQUIPMENT,
+		CONTROLLER_ISWEAPON,
 
 		CONTROLLER_LEFTCLICK,
 		CONTROLLER_AIM,
@@ -47,12 +49,14 @@ public:
 	virtual bool MoveRight(double dt);
 	virtual bool Interact(double dt);
 	virtual bool Reload(double dt);
+	virtual bool SwitchWeapon(double dt);
 	virtual bool Reset(double dt);
 	virtual bool LeftClick(double dt);
 	virtual bool Aim(double dt);
 	virtual bool MapResize(double dt);
 	virtual bool isBuilding(double dt);
 	virtual bool isEquipment(double dt);
+	virtual bool isWeapon(double dt);
 
 };
 

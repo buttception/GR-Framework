@@ -220,21 +220,7 @@ bool Player::ReloadWeapon(void)
 	return false;
 }
 
-// Change current weapon
-bool Player::ChangeWeapon(void)
-{
-	//if (MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_YOFFSET) != m_iCurrentWeapon)
-	//{
-	//	if ((MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_YOFFSET) >= 0) &&
-	//		(MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_YOFFSET) < m_iNumOfWeapon))
-	//	{
-	//		m_iCurrentWeapon = MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_YOFFSET);
-	//	}
-	//}
-	return true;
-}
-
-bool Player::ChangeWeaponK(void)
+bool Player::SwitchWeapon(void)
 {
 	//m_iCurrentWeapon++;
 	//MouseController::GetInstance()->SetScrollStatus(m_iCurrentWeapon);
@@ -248,12 +234,6 @@ bool Player::ChangeWeaponK(void)
 	return true;
 }
 
-// Get Current Weapon
-int Player::GetWeapon(void) const
-{
-	return m_iCurrentWeapon;
-}
-
 // Discharge Primary Weapon
 bool Player::DischargePrimaryWeapon(const float deltaTime, Vector3 position, Vector3 target)
 {
@@ -261,7 +241,7 @@ bool Player::DischargePrimaryWeapon(const float deltaTime, Vector3 position, Vec
 	{
 		std::cout << weaponManager[m_iCurrentWeapon]->GetName() << std::endl;
 		weaponManager[m_iCurrentWeapon]->PrintSelf();
-		std::cout << "fire" << std::endl;
+		//std::cout << "fire" << std::endl;
 		weaponManager[m_iCurrentWeapon]->Discharge(position, target, this);
 		return true;
 	}
@@ -462,10 +442,19 @@ void Player::SetIsBuilding()
 {
 	isBuilding = true;
 	isEquipment = false;
+	isWeapon = false;
 }
 
 void Player::SetIsEquipment()
 {
 	isEquipment = true;
 	isBuilding = false;
+	isWeapon = false;
+}
+
+void Player::SetIsWeapon()
+{
+	isWeapon = true;
+	isBuilding = false;
+	isEquipment = false;
 }

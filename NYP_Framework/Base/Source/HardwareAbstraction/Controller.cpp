@@ -30,12 +30,14 @@ bool Controller::Create(Player* thePlayerInfo)
 	this->controllerfunc[CONTROLLER_MOVERIGHT] = &Controller::MoveRight;
 	this->controllerfunc[CONTROLLER_INTERACT] = &Controller::Interact;
 	this->controllerfunc[CONTROLLER_RELOAD] = &Controller::Reload;
+	this->controllerfunc[CONTROLLER_SWITCHWEAPON] = &Controller::SwitchWeapon;
 	this->controllerfunc[CONTROLLER_RESET] = &Controller::Reset;
 	this->controllerfunc[CONTROLLER_LEFTCLICK] = &Controller::LeftClick;
 	this->controllerfunc[CONTROLLER_AIM] = &Controller::Aim;
 	this->controllerfunc[CONTROLLER_MAPRESIZE] = &Controller::MapResize;
 	this->controllerfunc[CONTROLLER_ISBUILDING] = &Controller::isBuilding;
 	this->controllerfunc[CONTROLLER_ISEQUIPMENT] = &Controller::isEquipment;
+	this->controllerfunc[CONTROLLER_ISWEAPON] = &Controller::isWeapon;
 
 	return false;
 }
@@ -80,8 +82,14 @@ bool Controller::Interact(double dt)
 
 bool Controller::Reload(double dt)
 {
-	std::cout << "Reload" << std::endl;
 	thePlayerInfo->ReloadWeapon();
+	return false;
+}
+
+bool Controller::SwitchWeapon(double dt)
+{
+	std::cout << "Switch Weapon" << std::endl;
+	thePlayerInfo->SwitchWeapon();
 	return false;
 }
 
@@ -118,5 +126,11 @@ bool Controller::isBuilding(double dt)
 bool Controller::isEquipment(double dt)
 {
 	thePlayerInfo->SetIsEquipment();
+	return false;
+}
+
+bool Controller::isWeapon(double dt)
+{
+	thePlayerInfo->SetIsWeapon();
 	return false;
 }

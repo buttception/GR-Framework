@@ -358,22 +358,22 @@ void SceneText::Update(double dt)
 		std::cout << "Cannot move mouse to center, divide by zero(Normalize for minimap icon to rotate)" << std::endl;
 	}
 
-	if (MouseController::GetInstance()->IsButtonReleased(MouseController::RMB))
-	{
-		std::cout << "Right Mouse Button was released!" << std::endl;
-	}
-	if (MouseController::GetInstance()->IsButtonReleased(MouseController::MMB))
-	{
-		std::cout << "Middle Mouse Button was released!" << std::endl;
-	}
-	if (MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_XOFFSET) != 0.0)
-	{
-		std::cout << "Mouse Wheel has offset in X-axis of " << MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_XOFFSET) << std::endl;
-	}
-	if (MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_YOFFSET) != 0.0)
-	{
-		std::cout << "Mouse Wheel has offset in Y-axis of " << MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_YOFFSET) << std::endl;
-	}
+	//if (MouseController::GetInstance()->IsButtonReleased(MouseController::RMB))
+	//{
+	//	std::cout << "Right Mouse Button was released!" << std::endl;
+	//}
+	//if (MouseController::GetInstance()->IsButtonReleased(MouseController::MMB))
+	//{
+	//	std::cout << "Middle Mouse Button was released!" << std::endl;
+	//}
+	//if (MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_XOFFSET) != 0.0)
+	//{
+	//	std::cout << "Mouse Wheel has offset in X-axis of " << MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_XOFFSET) << std::endl;
+	//}
+	//if (MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_YOFFSET) != 0.0)
+	//{
+	//	std::cout << "Mouse Wheel has offset in Y-axis of " << MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_YOFFSET) << std::endl;
+	//}
 	// <THERE>
 
 	// Update the player position and other details based on keyboard and mouse inputs
@@ -482,6 +482,24 @@ void SceneText::Update(double dt)
 				break;
 			case EquipmentEntity::EQUIPMENT_SHIELD:
 				ss << "Current Equipment: Shield";
+				break;
+			}
+		}
+		else if (Player::GetInstance()->GetIsWeapon())
+		{
+			switch (Player::GetInstance()->GetCurrentWeapon())
+			{
+			case 1:
+				ss << "Current Weapon: ";
+				break;
+			case 2:
+				ss << "Current Weapon: ";
+				break;
+			case 3:
+				ss << "Current Weapon: ";
+				break;
+			case 4:
+				ss << "Current Weapon: ";
 				break;
 			}
 		}

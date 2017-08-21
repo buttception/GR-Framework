@@ -66,17 +66,18 @@ public:
 	void SetIsBuilding();
 	bool GetIsEquipment(void) const { return isEquipment; }
 	void SetIsEquipment();
+	bool GetIsWeapon(void) const { return isWeapon; }
+	void SetIsWeapon();
 	EquipmentEntity::EQUIPMENT_TYPE GetCurrentEquipment(void) const { return currentEquipment; }
 	void SetCurrentEquipment(EquipmentEntity::EQUIPMENT_TYPE currentEquipment) { this->currentEquipment = currentEquipment; }
+	int GetCurrentWeapon(void) const { return m_iCurrentWeapon; }
+	int GetNumberOfWeapon(void) const { return m_iNumOfWeapon; }
+	void SetCurrentWeapon(int currentWeapon) { this->m_iCurrentWeapon = currentWeapon; }
 
 	// Reload current weapon
 	bool ReloadWeapon(void);
-	// Change current weapon
-	bool ChangeWeapon(void);
 	// Change current weapon(Keyboard)
-	bool ChangeWeaponK(void);
-	// Get Current Weapon
-	int GetWeapon(void) const;
+	bool SwitchWeapon(void);
 	// Discharge Primary Weapon
 	bool DischargePrimaryWeapon(const float deltaTime, Vector3 position, Vector3 target);
 	// Discharge Secondary Weapon
@@ -88,10 +89,6 @@ public:
 	// Scrollable weapon switching
 	CWeaponInfo** weaponManager;
 	std::vector<Weapon*> weaponList;
-	int m_iCurrentWeapon;
-	const int m_iNumOfWeapon = 2;
-	CWeaponInfo* primaryWeapon;
-	CWeaponInfo* secondaryWeapon;
 
 private:
 	Vector3 defaultPosition;
@@ -113,6 +110,11 @@ private:
 	int material;
 	float playerHealth;
 	BuildingEntity::BUILDING_TYPE currentBuilding;
-	bool isBuilding, isEquipment;
+	bool isBuilding, isEquipment, isWeapon;
 	EquipmentEntity::EQUIPMENT_TYPE currentEquipment;
+
+	int m_iCurrentWeapon;
+	const int m_iNumOfWeapon = 2;
+	CWeaponInfo* primaryWeapon;
+	CWeaponInfo* secondaryWeapon;
 };
