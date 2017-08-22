@@ -9,7 +9,7 @@ CMinimap::CMinimap(void)
 	, m_cMinimap_Avatar(NULL)
 	, m_fAngle(-90.0f)
 {
-	Init(Application::GetInstance().GetWindowHeight() / 2.0f, Application::GetInstance().GetWindowWidth() / 2.0f);
+	Init(Application::GetInstance().GetWindowHeight() / 2, Application::GetInstance().GetWindowWidth() / 2);
 }
 
 CMinimap::~CMinimap(void)

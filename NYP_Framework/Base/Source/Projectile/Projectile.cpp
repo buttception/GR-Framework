@@ -85,7 +85,7 @@ void Projectile::Update(double dt)
 
 	// Update Position
 	Vector3 d(theDirection.x, 0, -theDirection.y);
-	position += d * dt * m_fSpeed;
+	position += d * (float)dt * m_fSpeed;
 }
 
 void Projectile::Render(void)

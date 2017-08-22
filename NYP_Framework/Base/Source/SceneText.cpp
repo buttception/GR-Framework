@@ -185,11 +185,6 @@ void SceneText::Init()
 
 	currProg->UpdateInt("numLights", 2);
 	currProg->UpdateInt("textEnabled", 0);
-	
-	// Create the playerinfo instance, which manages all information about the player
-
-	std::cout << _DEBUG << std::endl;
-	int a;
 
 	// Create and attach the camera to the scene
 	//camera.Init(Vector3(0, 0, 10), Vector3(0, 0, 0), Vector3(0, 1, 0));
@@ -297,7 +292,7 @@ void SceneText::Update(double dt)
 	//==========================================================================Light Feature=====================================================//
 	float speed = 180 / 10;
 	Mtx44 rotate;
-	rotate.SetToRotation(speed * dt, 1, 0, 0);
+	rotate.SetToRotation(speed * (float)dt, 1, 0, 0);
 	Vector3 pos(lights[0]->position.x, lights[0]->position.y, lights[0]->position.z);
 	lights[0]->position = rotate * lights[0]->position;
 
@@ -710,8 +705,8 @@ void SceneText::RenderPassMain()
 	ms.PopMatrix();
 
 	ms.PushMatrix();
-	ms.Translate(-halfWindowWidth, halfWindowHeight * 0.92f, 0);
-	ms.Scale(Player::GetInstance()->GetPlayerHealth(), 10.f, 0);
+	ms.Translate((float)-halfWindowWidth, (float)halfWindowHeight * 0.92f, 0.f);
+	ms.Scale(Player::GetInstance()->GetPlayerHealth(), 10.f, 0.f);
 	RenderHelper::RenderMesh(playerHealthBar);
 	ms.PopMatrix();
 
