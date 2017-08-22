@@ -155,6 +155,12 @@
     <ClCompile Include="Source\Projectile\Projectile.cpp">
       <Filter>WeaponInfo</Filter>
     </ClCompile>
+    <ClCompile Include="Source\SceneInstructions.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ScenePause.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h">
@@ -258,6 +264,12 @@
     </ClInclude>
     <ClInclude Include="Source\Projectile\Projectile.h">
       <Filter>WeaponInfo</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SceneInstructions.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ScenePause.h">
+      <Filter>Scene</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
