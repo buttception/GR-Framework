@@ -42,14 +42,31 @@ SceneText::SceneText()
 }
 
 SceneText::SceneText(SceneManager* _sceneMgr)
-	: theMiniMap(NULL)
+	: theMiniMap(NULL) 
+	
+
 {
 	_sceneMgr->AddScene("Start", this);
+	
 }
 
 SceneText::~SceneText()
 {
 	CMinimap::Destroy();
+	
+
+
+		//thinge to delete
+		//Ground entity
+		//Textobj
+		//light
+		//thecube
+		//ground
+		//sun
+		//light_depth_mesh
+		//playerhealthbar
+		//generatorcorehealthbar
+
 }
 
 void SceneText::Init()
@@ -308,7 +325,7 @@ void SceneText::Update(double dt)
 		std::cout << "Light Color is Orange" << std::endl;
 	}
 	else if (lights[0]->position.z >= 490 /*&& lights[0]->position.z <=490*/) {
-		lights[0]->color.Set(255/255, 255/255, 0);
+		lights[0]->color.Set(1, 1, 1);
 		std::cout << "Light Color is Yellow" << std::endl;
 	}
 	
@@ -604,6 +621,17 @@ void SceneText::Update(double dt)
 
 
 
+	Delay += (float)dt;
+	if (Delay > 0.5f)
+	{
+		Delay = 0.5f;
+	}
+
+	if (KeyboardController::GetInstance()->IsKeyDown('P') && Delay >= ButtonCooldown)
+	{
+		SceneManager::GetInstance()->SetActiveScene("Pause");
+		std::cout << "Pause Selected" << std::endl;
+	}
 	
 }
 
