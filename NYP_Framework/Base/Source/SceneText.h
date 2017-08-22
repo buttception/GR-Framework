@@ -58,6 +58,7 @@ private:
 	float worldWidth, worldHeight;
 	
 	double time;
+	double dayDuration;
 	int noOfDays;
 
 	float generatorCoreScale;
