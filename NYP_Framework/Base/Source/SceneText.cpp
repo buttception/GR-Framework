@@ -469,7 +469,7 @@ void SceneText::Update(double dt)
 	// Update the player position into textObj[2]
 	ss.str("");
 	ss.precision(1);
-	ss << "Player:" << Player::GetInstance()->GetPos();
+	ss << "Player:" << Player::GetInstance()->GetPosition();
 	textObj[1]->SetText(ss.str());
 
 	//CSoundEngine::GetInstance()->playthesound("HELLO", 0.01);
@@ -580,6 +580,10 @@ void SceneText::Update(double dt)
 	}
 	textObj[4]->SetText(ss.str());
 
+	//int _x = (int)Player::GetInstance()->GetPosition().x / CELL_SIZE;
+	//int _y = (int)Player::GetInstance()->GetPosition().z / CELL_SIZE;
+	//std::cout << _x << ", " << _y << std::endl;
+	//std::cout << BuildingManager::GetInstance()->GetBuildingArray()[_x][_y].hitbox.GetMinAABB() << std::endl;
 
 	ss.str("");
 	switch (Player::GetInstance()->fatigue)

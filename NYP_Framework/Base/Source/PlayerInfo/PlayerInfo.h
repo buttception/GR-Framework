@@ -28,15 +28,10 @@ public:
 	// Reset this player instance to default
 	void Reset(void);
 
-	// Set position
-	void SetPos(const Vector3& pos);
 	// Set the boundary for the player info
 	void SetBoundary(Vector3 max, Vector3 min);
 	// Set the terrain for the player info
 	void SetTerrain(GroundEntity* m_pTerrain);
-
-	// Get position
-	Vector3 GetPos(void) const;
 
 	// Update
 	void Update(double dt = 0.0333f);
@@ -101,7 +96,7 @@ public:
 
 private:
 	Vector3 defaultPosition;
-	Vector3 position, direction;
+	Vector3 direction;
 	Vector3 target;
 	Vector3 maxBoundary, minBoundary;
 	GroundEntity* m_pTerrain;

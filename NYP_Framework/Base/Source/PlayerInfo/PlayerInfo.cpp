@@ -87,12 +87,6 @@ void Player::Init(void)
 	weaponManager[2]->Init();
 }
 
-// Set position
-void Player::SetPos(const Vector3& pos)
-{
-	position = pos;
-}
-
 // Set the boundary for the player info
 void Player::SetBoundary(Vector3 max, Vector3 min)
 {
@@ -116,12 +110,6 @@ void Player::Reset(void)
 {
 	// Set the current values to default values
 	position = defaultPosition;
-}
-
-// Get position x of the player
-Vector3 Player::GetPos(void) const
-{
-	return position;
 }
 
 /********************************************************************************
@@ -387,23 +375,23 @@ bool Player::LeftClick(float dt)
 			{
 				// Up
 				if (angle >= -53.f && angle <= 53.f)
-					BuildingManager::GetInstance()->AddBuilding((int)(Player::GetInstance()->GetPos().x / CELL_SIZE), (int)(Player::GetInstance()->GetPos().z / CELL_SIZE), BuildingTile::TOP, currentBuilding);
+					BuildingManager::GetInstance()->AddBuilding((int)(Player::GetInstance()->GetPosition().x / CELL_SIZE), (int)(Player::GetInstance()->GetPosition().z / CELL_SIZE), BuildingTile::TOP, currentBuilding);
 				// Left
 				else if (angle >= -127.f && angle <= -53.f)
-					BuildingManager::GetInstance()->AddBuilding((int)(Player::GetInstance()->GetPos().x / CELL_SIZE), (int)(Player::GetInstance()->GetPos().z / CELL_SIZE), BuildingTile::LEFT, currentBuilding);
+					BuildingManager::GetInstance()->AddBuilding((int)(Player::GetInstance()->GetPosition().x / CELL_SIZE), (int)(Player::GetInstance()->GetPosition().z / CELL_SIZE), BuildingTile::LEFT, currentBuilding);
 				// Right
 				else if (angle >= 53.f && angle <= 127.f)
-					BuildingManager::GetInstance()->AddBuilding((int)(Player::GetInstance()->GetPos().x / CELL_SIZE), (int)(Player::GetInstance()->GetPos().z / CELL_SIZE), BuildingTile::RIGHT, currentBuilding);
+					BuildingManager::GetInstance()->AddBuilding((int)(Player::GetInstance()->GetPosition().x / CELL_SIZE), (int)(Player::GetInstance()->GetPosition().z / CELL_SIZE), BuildingTile::RIGHT, currentBuilding);
 				// Down
 				else if ((angle >= -180.f && angle <= -127.f) || (angle >= 127.f && angle <= 180.f))
-					BuildingManager::GetInstance()->AddBuilding((int)(Player::GetInstance()->GetPos().x / CELL_SIZE), (int)(Player::GetInstance()->GetPos().z / CELL_SIZE), BuildingTile::BOTTOM, currentBuilding);
+					BuildingManager::GetInstance()->AddBuilding((int)(Player::GetInstance()->GetPosition().x / CELL_SIZE), (int)(Player::GetInstance()->GetPosition().z / CELL_SIZE), BuildingTile::BOTTOM, currentBuilding);
 			}
 			else if (isEquipment)
 			{
-				BuildingManager::GetInstance()->AddEquipment((int)(Player::GetInstance()->GetPos().x / CELL_SIZE), (int)(Player::GetInstance()->GetPos().z / CELL_SIZE), currentEquipment);
+				BuildingManager::GetInstance()->AddEquipment((int)(Player::GetInstance()->GetPosition().x / CELL_SIZE), (int)(Player::GetInstance()->GetPosition().z / CELL_SIZE), currentEquipment);
 			}
 			else if (currentBuilding == BuildingEntity::BUILDING_FLOOR)
-				BuildingManager::GetInstance()->AddBuilding((int)(Player::GetInstance()->GetPos().x / CELL_SIZE), (int)(Player::GetInstance()->GetPos().z / CELL_SIZE), BuildingTile::LEFT, BuildingEntity::BUILDING_FLOOR);
+				BuildingManager::GetInstance()->AddBuilding((int)(Player::GetInstance()->GetPosition().x / CELL_SIZE), (int)(Player::GetInstance()->GetPosition().z / CELL_SIZE), BuildingTile::LEFT, BuildingEntity::BUILDING_FLOOR);
 			return true;
 		}
 		else

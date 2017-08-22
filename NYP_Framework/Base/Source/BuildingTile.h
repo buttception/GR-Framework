@@ -6,6 +6,7 @@
 
 #include "BuildingEntity.h"
 #include "EquipmentEntity.h"
+#include "Collider\Collider.h"
 
 class BuildingTile {
 public:
@@ -31,6 +32,8 @@ public:
 	BuildingEntity* bottomWall;
 	BuildingEntity* topWall;
 	BuildingEntity* floor;
+
+	Collision hitbox;
 
 private:
 	EquipmentEntity* equipment;

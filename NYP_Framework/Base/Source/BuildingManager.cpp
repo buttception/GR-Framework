@@ -2,9 +2,18 @@
 
 BuildingManager::BuildingManager()
 {
+	// new all the buildingtiles
 	buildingArray = new BuildingTile*[MAX_CELLS];
 	for (size_t i = 0; i < MAX_CELLS; ++i)
 		buildingArray[i] = new BuildingTile[MAX_CELLS];
+
+	for (size_t i = 0; i < MAX_CELLS; ++i) {
+		for (size_t j = 0; j < MAX_CELLS; ++j) {
+			Vector3 max((i + 1) * CELL_SIZE, 1, (j + 1) * CELL_SIZE);
+			Vector3 min(i * CELL_SIZE, - 1, j * CELL_SIZE);
+			buildingArray[i][j].hitbox.SetAABB(max, min);
+		}
+	}
 }
 
 BuildingManager::~BuildingManager()

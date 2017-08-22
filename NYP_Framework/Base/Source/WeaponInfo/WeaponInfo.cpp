@@ -180,7 +180,7 @@ void CWeaponInfo::Discharge(Vector3 position, Vector3 target, Player* _source)
 			// Create a projectile with a cube mesh. Its position and direction is same as the player.
 			// It will last for 3.0 seconds and travel at 500 units per second
 			Projectile* aProjectile = Create::Bullet("sphere");
-			aProjectile->SetPosition(Player::GetInstance()->GetPos());
+			aProjectile->SetPosition(Player::GetInstance()->GetPosition());
 			aProjectile->SetCollider(true);
 			aProjectile->SetLifetime(10);
 			aProjectile->SetDirection(target);

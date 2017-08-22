@@ -20,7 +20,7 @@ void EnemyCuck::Init()
 	size = 3;
 	scale.Set(size, size, size);
 	attackSpeed = 1.f;
-	direction = (pathfindingStack.top()- position).Normalized();
+	direction = (pathfindingStack.front()- position).Normalized();
 }
 
 void EnemyCuck::Update(double dt)
@@ -30,11 +30,11 @@ void EnemyCuck::Update(double dt)
 		switch (stateStack.top()) {
 		case StateMachine::DEFAULT_STATE:
 			// if enemy reached a node
-			if (position == pathfindingStack.top()) {
+			if (position == pathfindingStack.front()) {
 				// pop the stack
 				PopRoute();
 				// find new direction to next node
-				direction = (pathfindingStack.top() - position).Normalized();
+				direction = (pathfindingStack.front() - position).Normalized();
 			}
 			position += direction * speed * dt;
 			//updates AABB if enemy move
@@ -82,7 +82,8 @@ void EnemyCuck::Attack(GenericEntity * thatEntity, double dt)
 	if (attackElaspedTime >= attackSpeed) {
 		std::cout << "attack\n";
 		//check if still in contact with its target
-		if (CollisionManager::GetInstance()->CheckAABBCollision(this, thatEntity)){
+		//test if this is too weak against player
+		//if (CollisionManager::GetInstance()->CheckAABBCollision(this, thatEntity)){
 			if (thatEntity->objectType == BUILDING) {
 				BuildingEntity* building = dynamic_cast<BuildingEntity*>(thatEntity);
 				if (building) {
@@ -98,7 +99,7 @@ void EnemyCuck::Attack(GenericEntity * thatEntity, double dt)
 						stateStack.pop();
 					}
 				}
-			}
+			//}
 		}
 		// resets attack time
 		attackElaspedTime = 0.f;
