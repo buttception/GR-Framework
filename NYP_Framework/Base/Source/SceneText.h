@@ -53,6 +53,7 @@ private:
 	Mesh* light_depth_mesh;
 	Mesh* generatorCoreHealthBar;
 	Mesh* playerHealthBar;
+	Mesh* wireFrameBox;
 	CMinimap* theMiniMap;
 
 	float worldWidth, worldHeight;
@@ -61,6 +62,7 @@ private:
 	int noOfDays;
 
 	float generatorCoreScale;
+	float wfbPosX, wfbPosY, wfbScaleX, wfbScaleY;
 };
 
 #endif

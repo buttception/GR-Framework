@@ -48,7 +48,7 @@ void BuildingManager::AddBuilding(int _x, int _y, BuildingTile::TILE_SIDE direct
 		}
 		else if (direction == BuildingTile::TOP) {
 			wall->SetScale(Vector3(CELL_SIZE + 2, 10, 2));
-			wall->SetPosition(Vector3((float)_x * CELL_SIZE + CELL_SIZE / 2.f, wall->GetScale().y / 2.f, (float)_y* CELL_SIZE));
+			wall->SetPosition(Vector3((float)_x * CELL_SIZE + CELL_SIZE / 2.f, wall->GetScale().y / 2.f, (float)_y * CELL_SIZE));
 			buildingArray[_x][_y].AddWall(wall, BuildingTile::TOP);
 		}
 		else if (direction == BuildingTile::RIGHT) {
