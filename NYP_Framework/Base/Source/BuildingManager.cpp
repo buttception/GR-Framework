@@ -9,8 +9,8 @@ BuildingManager::BuildingManager()
 
 	for (size_t i = 0; i < MAX_CELLS; ++i) {
 		for (size_t j = 0; j < MAX_CELLS; ++j) {
-			Vector3 max((i + 1) * CELL_SIZE, 1, (j + 1) * CELL_SIZE);
-			Vector3 min(i * CELL_SIZE, - 1, j * CELL_SIZE);
+			Vector3 max(((float)i + 1.f) * CELL_SIZE, 1, ((float)j + 1.f) * CELL_SIZE);
+			Vector3 min((float)i * CELL_SIZE, - 1.f, (float)j * CELL_SIZE);
 			buildingArray[i][j].hitbox.SetAABB(max, min);
 		}
 	}
@@ -43,12 +43,12 @@ void BuildingManager::AddBuilding(int _x, int _y, BuildingTile::TILE_SIDE direct
 		//where 1 -> left, 2 -> top, 3 -> right, 4 ->bottom
 		if (direction == BuildingTile::LEFT) {
 			wall->SetScale(Vector3(2, 10, CELL_SIZE + 2));
-			wall->SetPosition(Vector3(_x * CELL_SIZE, wall->GetScale().y / 2, _y * CELL_SIZE + CELL_SIZE / 2));
+			wall->SetPosition(Vector3((float)_x * CELL_SIZE, wall->GetScale().y / 2.f, (float)_y * CELL_SIZE + CELL_SIZE / 2.f));
 			buildingArray[_x][_y].AddWall(wall, BuildingTile::LEFT);
 		}
 		else if (direction == BuildingTile::TOP) {
 			wall->SetScale(Vector3(CELL_SIZE + 2, 10, 2));
-			wall->SetPosition(Vector3(_x * CELL_SIZE + CELL_SIZE / 2, wall->GetScale().y / 2, _y* CELL_SIZE));
+			wall->SetPosition(Vector3((float)_x * CELL_SIZE + CELL_SIZE / 2.f, wall->GetScale().y / 2.f, (float)_y* CELL_SIZE));
 			buildingArray[_x][_y].AddWall(wall, BuildingTile::TOP);
 		}
 		else if (direction == BuildingTile::RIGHT) {
@@ -57,7 +57,7 @@ void BuildingManager::AddBuilding(int _x, int _y, BuildingTile::TILE_SIDE direct
 			if (_x + 1 != MAX_CELLS)
 				AddBuilding(_x + 1, _y, BuildingTile::LEFT, type);
 			else {
-				wall->SetPosition(Vector3(MAX_CELLS * CELL_SIZE, wall->GetScale().y / 2, _y * CELL_SIZE + CELL_SIZE / 2));
+				wall->SetPosition(Vector3(MAX_CELLS * CELL_SIZE, wall->GetScale().y / 2.f, (float)_y * CELL_SIZE + CELL_SIZE / 2.f));
 				buildingArray[_x][_y].AddWall(wall, BuildingTile::RIGHT);
 			}
 		}
@@ -67,7 +67,7 @@ void BuildingManager::AddBuilding(int _x, int _y, BuildingTile::TILE_SIDE direct
 			if (_y >= 0)
 				AddBuilding(_x, _y + 1, BuildingTile::TOP, type);
 			else {
-				wall->SetPosition(Vector3(_x * CELL_SIZE + CELL_SIZE / 2, wall->GetScale().y / 2, MAX_CELLS * CELL_SIZE));
+				wall->SetPosition(Vector3((float)_x * CELL_SIZE + CELL_SIZE / 2.f, wall->GetScale().y / 2.f, MAX_CELLS * CELL_SIZE));
 				buildingArray[_x][_y].AddWall(wall, BuildingTile::BOTTOM);
 			}
 		}
@@ -83,7 +83,7 @@ void BuildingManager::AddBuilding(int _x, int _y, BuildingTile::TILE_SIDE direct
 	}
 	else {
 		wall->SetScale(Vector3(CELL_SIZE, 1.f, CELL_SIZE));
-		wall->SetPosition(Vector3(_x * CELL_SIZE + CELL_SIZE / 2, 0.1, _y * CELL_SIZE + CELL_SIZE / 2));
+		wall->SetPosition(Vector3((float)_x * CELL_SIZE + CELL_SIZE / 2.f, 0.1f, (float)_y * CELL_SIZE + CELL_SIZE / 2.f));
 		buildingArray[_x][_y].AddFloor(wall);
 	}
 }
@@ -109,7 +109,7 @@ void BuildingManager::AddEquipment(int _x, int _y, EquipmentEntity::EQUIPMENT_TY
 		e->type = _type;
 		e->objectType = GenericEntity::EQUIPMENT;
 		e->SetScale(Vector3(CELL_SIZE, 1.f, CELL_SIZE));
-		e->SetPosition(Vector3(_x * CELL_SIZE + CELL_SIZE / 2, 0.1, _y * CELL_SIZE + CELL_SIZE / 2));
+		e->SetPosition(Vector3((float)_x * CELL_SIZE + CELL_SIZE / 2.f, 0.1f, (float)_y * CELL_SIZE + CELL_SIZE / 2.f));
 		Vector3 max(e->GetPosition().x + e->GetScale().x / 2, 1, e->GetPosition().z + e->GetScale().z / 2);
 		Vector3 min(e->GetPosition().x - e->GetScale().x / 2, 0, e->GetPosition().z - e->GetScale().z / 2);
 		e->SetAABB(max, min);

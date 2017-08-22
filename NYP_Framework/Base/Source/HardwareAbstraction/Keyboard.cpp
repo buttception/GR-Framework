@@ -120,4 +120,5 @@ int Keyboard::Read(const float deltaTime)
 			(this->*(controllerfunc[i]))(deltaTime);
 		}
 	}
+	return 0;
 }
