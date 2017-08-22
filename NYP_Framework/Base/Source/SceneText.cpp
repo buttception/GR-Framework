@@ -202,11 +202,6 @@ void SceneText::Init()
 
 	currProg->UpdateInt("numLights", 2);
 	currProg->UpdateInt("textEnabled", 0);
-	
-	// Create the playerinfo instance, which manages all information about the player
-
-	std::cout << _DEBUG << std::endl;
-	int a;
 
 	// Create and attach the camera to the scene
 	//camera.Init(Vector3(0, 0, 10), Vector3(0, 0, 0), Vector3(0, 1, 0));
@@ -259,7 +254,8 @@ void SceneText::Init()
 
 	//Hello->play2D("Image//Hello.mp3", GL_TRUE);
 	isDay = true;
-	time = 10.00;
+	dayDuration = 30.f;
+	time = dayDuration;
 	noOfDays = 1;
 }
 
@@ -314,7 +310,7 @@ void SceneText::Update(double dt)
 	//==========================================================================Light Feature=====================================================//
 	float speed = 180 / 10;
 	Mtx44 rotate;
-	rotate.SetToRotation(speed * dt, 1, 0, 0);
+	rotate.SetToRotation(speed * (float)dt, 1, 0, 0);
 	Vector3 pos(lights[0]->position.x, lights[0]->position.y, lights[0]->position.z);
 	lights[0]->position = rotate * lights[0]->position;
 
@@ -363,12 +359,12 @@ void SceneText::Update(double dt)
 	if (KeyboardController::GetInstance()->IsKeyPressed(VK_F3) && isDay)
 	{
 		isDay = false;
-		time = 10.00;
+		time = dayDuration;
 	}
 	if (KeyboardController::GetInstance()->IsKeyPressed(VK_F4) && !isDay)
 	{
 		isDay = true;
-		time = 10.00;
+		time = dayDuration;
 		noOfDays++;
 		generatorCoreScale = Math::Max(0.f, generatorCoreScale - 0.198f); // decrease generator core health on top
 	}
@@ -387,12 +383,12 @@ void SceneText::Update(double dt)
 	time -= dt;
 	if ((time <= 0.00 || Player::GetInstance()->GetSlept()) && isDay)
 	{
-		time = 10.00;
+		time = dayDuration;
 		isDay = false;
 	}
 	if (time <= 0.00 && !isDay)
 	{
-		time = 10.00;
+		time = dayDuration;
 		isDay = true;
 		noOfDays++;
 	}
@@ -752,8 +748,8 @@ void SceneText::RenderPassMain()
 	ms.PopMatrix();
 
 	ms.PushMatrix();
-	ms.Translate(-halfWindowWidth, halfWindowHeight * 0.92f, 0);
-	ms.Scale(Player::GetInstance()->GetPlayerHealth(), 10.f, 0);
+	ms.Translate((float)-halfWindowWidth, (float)halfWindowHeight * 0.92f, 0.f);
+	ms.Scale(Player::GetInstance()->GetPlayerHealth(), 10.f, 0.f);
 	RenderHelper::RenderMesh(playerHealthBar);
 	ms.PopMatrix();
 

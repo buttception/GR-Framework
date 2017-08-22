@@ -43,7 +43,7 @@ bool Controller::Create(Player* thePlayerInfo)
 }
 
 // Read from the controller
-int Controller::Read(const const float deltaTime)
+int Controller::Read(const float deltaTime)
 {
 	if (_CONTROLLER_DEBUG)
 		cout << "Controller::Read()" << endl;
@@ -52,25 +52,25 @@ int Controller::Read(const const float deltaTime)
 
 bool Controller::MoveFront(double dt)
 {
-	thePlayerInfo->MoveFrontBack(dt, true);
+	thePlayerInfo->MoveFrontBack((float)dt, true);
 	return false;
 }
 
 bool Controller::MoveBack(double dt)
 {
-	thePlayerInfo->MoveFrontBack(dt, false);
+	thePlayerInfo->MoveFrontBack((float)dt, false);
 	return false;
 }
 
 bool Controller::MoveLeft(double dt)
 {
-	thePlayerInfo->MoveLeftRight(dt, false);
+	thePlayerInfo->MoveLeftRight((float)dt, false);
 	return false;
 }
 
 bool Controller::MoveRight(double dt)
 {
-	thePlayerInfo->MoveLeftRight(dt, true);
+	thePlayerInfo->MoveLeftRight((float)dt, true);
 	return false;
 }
 
@@ -101,7 +101,7 @@ bool Controller::Reset(double dt)
 
 bool Controller::LeftClick(double dt)
 {
-	thePlayerInfo->LeftClick(dt);
+	thePlayerInfo->LeftClick((float)dt);
 	return false;
 }
 
