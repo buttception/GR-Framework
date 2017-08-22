@@ -301,9 +301,17 @@ void SceneText::Update(double dt)
 	Vector3 pos(lights[0]->position.x, lights[0]->position.y, lights[0]->position.z);
 	lights[0]->position = rotate * lights[0]->position;
 
-	if (lights[0]->position.z < 90) {
+	std::cout << lights[0]->position.z << std::endl;
+
+	if (lights[0]->position.z <= 210  /*|| lights[0]->position.z > 364*/ ) {
 		lights[0]->color.Set(255 / 255, (float)165 / (float)255, 0); //keep it this way for now
+		std::cout << "Light Color is Orange" << std::endl;
 	}
+	else if (lights[0]->position.z >= 490 /*&& lights[0]->position.z <=490*/) {
+		lights[0]->color.Set(255/255, 255/255, 0);
+		std::cout << "Light Color is Yellow" << std::endl;
+	}
+	
 
 
 
@@ -587,6 +595,12 @@ void SceneText::Update(double dt)
 		break;
 	}
 	textObj[5]->SetText(ss.str());
+
+
+
+
+
+	
 }
 
 void SceneText::Render()
