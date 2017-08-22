@@ -58,7 +58,63 @@ void EnemyManager::SpawnEnemies()
 {
 	// when spawn enemy, find optimal route from spawn to core
 	if (route.empty()) {
-		EnemyEntity* first = Create::Cuck("Cuck", Vector3(310, 0, 250));
+		EnemyEntity* first = Create::Cuck("Cuck", Vector3(310, 0, 190));
+		// only need to calculate one optimal route thus saving the stack
+		first->Pathfind(PathfindNode(first->GetPosition()));
+		route = first->GetRoute();
+		// init the enemy
+		first->Init();
+
+		first = Create::Cuck("Cuck", Vector3(310, 0, 190));
+		// only need to calculate one optimal route thus saving the stack
+		first->Pathfind(PathfindNode(first->GetPosition()));
+		route = first->GetRoute();
+		// init the enemy
+		first->Init();
+
+		first = Create::Cuck("Cuck", Vector3(310, 0, 250));
+		// only need to calculate one optimal route thus saving the stack
+		first->Pathfind(PathfindNode(first->GetPosition()));
+		route = first->GetRoute();
+		// init the enemy
+		first->Init();
+
+		first = Create::Cuck("Cuck", Vector3(310, 0, 310));
+		// only need to calculate one optimal route thus saving the stack
+		first->Pathfind(PathfindNode(first->GetPosition()));
+		route = first->GetRoute();
+		// init the enemy
+		first->Init();
+
+		first = Create::Cuck("Cuck", Vector3(250, 0, 310));
+		// only need to calculate one optimal route thus saving the stack
+		first->Pathfind(PathfindNode(first->GetPosition()));
+		route = first->GetRoute();
+		// init the enemy
+		first->Init();
+
+		first = Create::Cuck("Cuck", Vector3(250, 0, 190));
+		// only need to calculate one optimal route thus saving the stack
+		first->Pathfind(PathfindNode(first->GetPosition()));
+		route = first->GetRoute();
+		// init the enemy
+		first->Init();
+
+		first = Create::Cuck("Cuck", Vector3(190, 0, 310));
+		// only need to calculate one optimal route thus saving the stack
+		first->Pathfind(PathfindNode(first->GetPosition()));
+		route = first->GetRoute();
+		// init the enemy
+		first->Init();
+
+		first = Create::Cuck("Cuck", Vector3(190, 0, 250));
+		// only need to calculate one optimal route thus saving the stack
+		first->Pathfind(PathfindNode(first->GetPosition()));
+		route = first->GetRoute();
+		// init the enemy
+		first->Init();
+
+		first = Create::Cuck("Cuck", Vector3(190, 0, 190));
 		// only need to calculate one optimal route thus saving the stack
 		first->Pathfind(PathfindNode(first->GetPosition()));
 		route = first->GetRoute();
