@@ -22,7 +22,7 @@ void EnemyCuck::Init()
 	scale.Set(size, size, size);
 	attackSpeed = 1.f;
 	direction = (optimalRoute.top()- position).Normalized();
-	CSoundEngine::GetInstance()->playthesound("CUCK", 0.4f);
+	
 }
 
 void EnemyCuck::Update(double dt)
@@ -51,6 +51,7 @@ void EnemyCuck::Update(double dt)
 		case StateMachine::ATTACK_STATE:
 			if (target != nullptr) {
 				attacking = true;
+				CSoundEngine::GetInstance()->playthesound("CUCK", 0.4f);
 			}
 			else
 				stateStack.pop();
