@@ -22,6 +22,7 @@ void EnemyCuck::Init()
 	scale.Set(size, size, size);
 	attackSpeed = 1.f;
 	direction = (optimalRoute.top()- position).Normalized();
+	CSoundEngine::GetInstance()->playthesound("ISIS", 0.5f);
 	
 }
 
@@ -52,6 +53,7 @@ void EnemyCuck::Update(double dt)
 			if (target != nullptr) {
 				attacking = true;
 				CSoundEngine::GetInstance()->playthesound("CUCK", 0.4f);
+				std::cout << "Muslim Sound Played" << std::endl;
 			}
 			else
 				stateStack.pop();
