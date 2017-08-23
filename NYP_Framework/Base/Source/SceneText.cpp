@@ -793,6 +793,12 @@ void SceneText::RenderWorld()
 	//RenderHelper::RenderMesh(light_depth_mesh);
 	ms.PopMatrix();
 
+	ms.PushMatrix();
+	ms.Translate(Player::GetInstance()->GetPosition());
+	ms.Scale(Player::GetInstance()->GetScale());
+	RenderHelper::RenderMesh(Player::GetInstance()->GetMesh());
+	ms.PopMatrix();
+
 	if (isDay) // Only render wireframe box in day time
 	{
 		ms.PushMatrix();

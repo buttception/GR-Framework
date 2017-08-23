@@ -15,7 +15,7 @@ bool CollisionManager::CheckPointToSphereCollision(Vector3 point, EntityBase * T
 		return false;
 	}
 
-	if (DistanceSquaredBetween(point, thatSphere->GetPosition() < thatSphere->GetRadius() * thatSphere->GetRadius()))
+	if (DistanceSquaredBetween(point, thatSphere->GetPosition()) < thatSphere->GetRadius() * thatSphere->GetRadius())
 		return true;
 	return false;
 }
@@ -115,6 +115,9 @@ void CollisionManager::Update(std::list<EntityBase*> collisionList)
 			continue;
 		if (CheckAABBCollision((*it), Player::GetInstance()))
 			Player::GetInstance()->CollisionResponse((*it));
+		if (CheckPointToSphereCollision((*it)->GetPosition(), Player::GetInstance())) {
+			Player::GetInstance()->CollisionResponse((*it));
+		}
 	}
 }
 

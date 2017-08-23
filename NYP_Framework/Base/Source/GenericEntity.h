@@ -15,6 +15,7 @@ public:
 
 	enum OBJECT_TYPE {
 		NONE = 0,
+		PLAYER,
 		BUILDING,
 		EQUIPMENT,
 		ENEMY,

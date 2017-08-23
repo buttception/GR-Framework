@@ -53,6 +53,10 @@ void EnemyCuck::Update(double dt)
 			else
 				stateStack.pop();
 			break;
+		case StateMachine::CHASE_STATE:
+			direction = (target->GetPosition() - position).Normalized();
+			position += direction * speed * dt;
+			break;
 		default:
 			return;
 		}

@@ -20,6 +20,9 @@ public:
 
 	virtual void Attack(GenericEntity* thatEntity, double dt);
 
+	void SetTarget(GenericEntity* _t) { target = _t; }
+	GenericEntity* GetTarget() { return target; }
+
 	Vector3 GetDirection();
 	float GetSpeed();
 
