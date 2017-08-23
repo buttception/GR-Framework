@@ -165,6 +165,7 @@ void SceneText::Init()
 	generatorCoreScale = 1.98f;
 
 	playerHealthBar = MeshBuilder::GetInstance()->GenerateQuad("playerHealthBar", Color(1, 0.64706f, 0), 1.f);
+	wireFrameBox = MeshBuilder::GetInstance()->GenerateQuad("wireFrameBox", Color(1, 0, 0), 1.f);
 
 	theMiniMap = Create::Minimap();
 	theMiniMap->SetBackground(MeshBuilder::GetInstance()->GenerateQuad("miniMap", Color(1, 1, 1), 1.f));
@@ -244,6 +245,10 @@ void SceneText::Init()
 	dayDuration = 30.f;
 	time = dayDuration;
 	noOfDays = 1;
+	wfbScaleX = 1.f;
+	wfbScaleY = 1.f;
+	wfbPosX = 0.f;
+	wfbPosY = 0.f;
 }
 
 void SceneText::Update(double dt)
@@ -305,9 +310,11 @@ void SceneText::Update(double dt)
 
 	if (lights[0]->position.z <= 210  /*|| lights[0]->position.z > 364*/ ) {
 		lights[0]->color.Set(255 / 255, (float)165 / (float)255, 0); //keep it this way for now
-		std::cout << "Light Color is Orange" << std::endl;
+		//std::cout << "Light Color is Orange" << std::endl;
 	}
 	else if (lights[0]->position.z >= 490 /*&& lights[0]->position.z <=490*/) {
+		lights[0]->color.Set(255/255, 255/255, 0);
+		//std::cout << "Light Color is Yellow" << std::endl;
 		lights[0]->color.Set(1, 1, 1);
 		std::cout << "Light Color is White" << std::endl;
 	}
@@ -414,6 +421,65 @@ void SceneText::Update(double dt)
 		if (playerMouse_Direction.x < 0)
 			angle = -angle;
 		CMinimap::GetInstance()->SetAngle(angle);
+
+		if (Player::GetInstance()->GetIsBuilding())
+		{
+			if (Player::GetInstance()->GetCurrentBuilding() != BuildingEntity::BUILDING_FLOOR)
+			{
+				// Up
+				if (angle >= -53.f && angle <= 53.f)
+				{
+					wfbScaleX = 0.4f;
+					wfbScaleY = 0.05f;
+					wfbPosX = 0.1f * (float)-halfWindowWidth;
+					if((int)windowHeight >= 595 && (int)windowHeight <= 605)
+						wfbPosY = CELL_SIZE * 1.f;
+					else
+						wfbPosY = CELL_SIZE * 2.f;
+				}
+				// Left
+				else if (angle >= -127.f && angle <= -53.f)
+				{
+					wfbScaleX = 0.05f;
+					wfbScaleY = 0.4f;
+					if((int)windowWidth >= 795 && (int)windowWidth <= 805)
+						wfbPosX = CELL_SIZE * -5.f;
+					else
+						wfbPosX = CELL_SIZE * -9.5f;
+					wfbPosY = 0.1f * (float)-halfWindowHeight;
+				}
+				// Right
+				else if (angle >= 53.f && angle <= 127.f)
+				{
+					wfbScaleX = 0.05f;
+					wfbScaleY = 0.4f;
+					if ((int)windowWidth >= 795 && (int)windowWidth <= 805)
+						wfbPosX = CELL_SIZE * 1.f;
+					else
+						wfbPosX = CELL_SIZE * 0.05f;
+					wfbPosY = 0.1f * (float)-halfWindowHeight;
+				}
+				// Down
+				else if (angle >= -180.f && angle <= -127.f)
+				{
+					wfbScaleX = 0.4f;
+					wfbScaleY = 0.05f;
+					wfbPosX = 0.1f * (float)-halfWindowWidth;
+					if ((int)windowHeight >= 595 && (int)windowHeight <= 605)
+						wfbPosY = CELL_SIZE * -4.5f;
+					else
+						wfbPosY = CELL_SIZE * -7.5f;
+				}
+			}
+			else
+			{
+				wfbScaleX = 0.35f;
+				wfbScaleY = 0.35f;
+				wfbPosX = 0.1f * (float)-halfWindowWidth;
+				wfbPosY = 0.1f * (float)-halfWindowHeight;
+			}
+		}
+		
 	}
 	catch (DivideByZero)
 	{
@@ -717,8 +783,8 @@ void SceneText::RenderPassMain()
 	theMiniMap->RenderUI();
 
 	ms.PushMatrix();
-	ms.Translate(0, halfWindowHeight * 0.98f, 0);
-	ms.Scale(halfWindowWidth * generatorCoreScale, 10.f, 0);
+	ms.Translate(0, (float)halfWindowHeight * 0.98f, 0);
+	ms.Scale((float)halfWindowWidth * generatorCoreScale, 10.f, 0);
 	RenderHelper::RenderMesh(generatorCoreHealthBar);
 	ms.PopMatrix();
 
@@ -726,6 +792,16 @@ void SceneText::RenderPassMain()
 	ms.Translate((float)-halfWindowWidth, (float)halfWindowHeight * 0.92f, 0.f);
 	ms.Scale(Player::GetInstance()->GetPlayerHealth(), 10.f, 0.f);
 	RenderHelper::RenderMesh(playerHealthBar);
+	ms.PopMatrix();
+
+	ms.PushMatrix();
+	ms.Translate(0.1f * (float)halfWindowWidth + wfbPosX,
+		0.1f * (float)halfWindowHeight + wfbPosY, 0.f);
+	ms.Scale((float)halfWindowHeight * wfbScaleX,
+		(float)halfWindowHeight * wfbScaleY, 0.f);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	RenderHelper::RenderMesh(wireFrameBox);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	ms.PopMatrix();
 
 	//RenderHelper::RenderTextOnScreen(text, std::to_string(fps), Color(0, 1, 0), 2, 0, 0);

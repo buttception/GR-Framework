@@ -55,6 +55,7 @@ private:
 	Mesh* light_depth_mesh;
 	Mesh* generatorCoreHealthBar;
 	Mesh* playerHealthBar;
+	Mesh* wireFrameBox;
 	CMinimap* theMiniMap;
 
 	float worldWidth, worldHeight;
@@ -64,7 +65,7 @@ private:
 	int noOfDays;
 
 	float generatorCoreScale;
-
+	float wfbPosX, wfbPosY, wfbScaleX, wfbScaleY;
 
 	float Delay = 0.0f;
 	const float ButtonCooldown = 0.20f;
