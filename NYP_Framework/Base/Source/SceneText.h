@@ -31,7 +31,6 @@ public:
 	static bool isDay;
 private:
 	SceneText(SceneManager* _sceneMgr); // This is used to register to SceneManager
-
 	
 	ShaderProgram* currProg;
 
@@ -45,7 +44,6 @@ private:
 	GenericEntity* theCube;
 	static SceneText* sInstance; // The pointer to the object that gets registered
 
-
 	void RenderPassGPass();//PRE RENDER PASS
 	void RenderPassMain();//MAIN RENDER PASS
 	void RenderWorld();
@@ -58,18 +56,11 @@ private:
 	Mesh* wireFrameBox;
 	CMinimap* theMiniMap;
 
-	float worldWidth, worldHeight;
-	Vector3 ghostPos;
-	Vector3 ghostScale;
-	
-	double time;
-	double dayDuration;
+	float worldWidth, worldHeight, generatorCoreScale
+		, Delay = 0.0f;
+	Vector3 ghostPos, ghostScale;
+	double time, dayDuration;
 	int noOfDays;
-
-	float generatorCoreScale;
-	float wfbPosX, wfbPosY, wfbScaleX, wfbScaleY;
-
-	float Delay = 0.0f;
 	const float ButtonCooldown = 0.20f;
 };
 

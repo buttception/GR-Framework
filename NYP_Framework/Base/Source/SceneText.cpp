@@ -43,8 +43,6 @@ SceneText::SceneText()
 
 SceneText::SceneText(SceneManager* _sceneMgr)
 	: theMiniMap(NULL) 
-	
-
 {
 	_sceneMgr->AddScene("Start", this);
 	
@@ -53,7 +51,6 @@ SceneText::SceneText(SceneManager* _sceneMgr)
 SceneText::~SceneText()
 {
 	CMinimap::Destroy();
-
 }
 
 void SceneText::Init()
@@ -145,28 +142,27 @@ void SceneText::Init()
 	MeshBuilder::GetInstance()->GenerateQuad("GRASS_LIGHTGREEN", Color(1, 1, 1), 1.f);
 	MeshList::GetInstance()->GetMesh("GRASS_LIGHTGREEN")->textureID[0] = LoadTGA("Image//grass_lightgreen.tga");
 
+	//Building Meshes
 	MeshBuilder::GetInstance()->GenerateOBJ("wall", "OBJ//cube.obj");
 	MeshBuilder::GetInstance()->GenerateOBJ("door", "OBJ//cube.obj"); //remember to change texture
 	MeshBuilder::GetInstance()->GenerateOBJ("cover", "OBJ//cube.obj"); //remember to change obj
 	MeshBuilder::GetInstance()->GenerateOBJ("floor", "OBJ//cube.obj"); //remember to change texture
 
-
-
+	//Equipment Meshes
 	MeshBuilder::GetInstance()->GenerateOBJ("Turret", "OBJ//cube.obj"); //remember to change obj
 	MeshBuilder::GetInstance()->GenerateOBJ("Healing Station", "OBJ//cube.obj"); //remember to change obj
 	MeshBuilder::GetInstance()->GenerateOBJ("Floor Spike", "OBJ//cube.obj"); //remember to change obj
 	MeshBuilder::GetInstance()->GenerateOBJ("Shield", "OBJ//cube.obj"); //remember to change obj
 
+	//Enemy Mesh
 	MeshBuilder::GetInstance()->GenerateOBJ("Cuck", "OBJ//cube.obj");
 
 	sun = MeshBuilder::GetInstance()->GenerateSphere("sphere", Color(1, 1, 1), 24, 24, 1);
-
 	generatorCoreHealthBar = MeshBuilder::GetInstance()->GenerateQuad("generatorCoreHealthBar", Color(1, 0, 0), 1.f);
-	generatorCoreScale = 1.98f;
-
 	playerHealthBar = MeshBuilder::GetInstance()->GenerateQuad("playerHealthBar", Color(1, 0.64706f, 0), 1.f);
 	wireFrameBox = MeshBuilder::GetInstance()->GenerateQuad("wireFrameBox", Color(1, 0, 0), 1.f);
 
+	//Minimap
 	theMiniMap = Create::Minimap();
 	theMiniMap->SetTarget(MeshBuilder::GetInstance()->GenerateQuad("miniMapTarget", Color(1, 1, 1), 0.0625f));
 	theMiniMap->GetTarget()->textureID[0] = LoadTGA("Image//target.tga");
@@ -240,18 +236,14 @@ void SceneText::Init()
 	light_depth_mesh->textureID[0] = GraphicsManager::GetInstance()->m_lightDepthFBO.GetTexture();
 	//light_depth_mesh->textureID[0] = LoadTGA("Image//calibri.tga");
 
-
-
 	//Hello->play2D("Image//Hello.mp3", GL_TRUE);
 	isDay = true;
 	dayDuration = 30.f;
 	time = dayDuration;
 	noOfDays = 1;
-	wfbScaleX = 1.f;
-	wfbScaleY = 1.f;
-	wfbPosX = 0.f;
-	wfbPosY = 0.f;
+	generatorCoreScale = 1.98f;
 	ghostPos.SetZero();
+	ghostScale.SetZero();
 }
 
 void SceneText::Update(double dt)
@@ -268,14 +260,12 @@ void SceneText::Update(double dt)
 	EntityManager::GetInstance()->Update(dt);
 
 	if (isDay) {
-		if (EnemyManager::GetInstance()->active) {
+		if (EnemyManager::GetInstance()->active)
 			EnemyManager::GetInstance()->End();
-		}
 	}
-	else if (!isDay) {
-		if (!EnemyManager::GetInstance()->active) {
+	else {
+		if (!EnemyManager::GetInstance()->active)
 			EnemyManager::GetInstance()->Init();
-		}
 	}
 
 	// THIS WHOLE CHUNK TILL <THERE> CAN REMOVE INTO ENTITIES LOGIC! Or maybe into a scene function to keep the update clean
@@ -301,7 +291,6 @@ void SceneText::Update(double dt)
 		lights[0]->type = Light::LIGHT_SPOT;
 	}
 
-
 	//==========================================================================Light Feature=====================================================//
 	float speed = 180 / dayDuration;
 	Mtx44 rotate;
@@ -319,10 +308,10 @@ void SceneText::Update(double dt)
 		lights[0]->color.Set(255/255, 255/255, 0);
 		//std::cout << "Light Color is Yellow" << std::endl;
 		lights[0]->color.Set(1, 1, 1);
-		std::cout << "Light Color is White" << std::endl;
+		//std::cout << "Light Color is White" << std::endl;
 	}
 	
-	//==========================================================================Light Feature=====================================================//
+	//============================================================================================================================================//
 
 	//if (KeyboardController::GetInstance()->IsKeyPressed(VK_F1)){
 	//	//Debug mode
@@ -425,13 +414,16 @@ void SceneText::Update(double dt)
 			angle = -angle;
 		CMinimap::GetInstance()->SetAngle(angle);
 
-		if (Player::GetInstance()->GetIsBuilding())
+		//Set & Update wireFrameBox's position & scale
 		{
-			if (Player::GetInstance()->GetCurrentBuilding() != BuildingEntity::BUILDING_FLOOR)
+			Vector3 pPos = Player::GetInstance()->GetPosition();
+			int x = (int)(pPos.x / CELL_SIZE);
+			int z = (int)(pPos.z / CELL_SIZE);
+
+			// Buildings except floor
+			if (Player::GetInstance()->GetIsBuilding() &&
+				Player::GetInstance()->GetCurrentBuilding() != BuildingEntity::BUILDING_FLOOR)
 			{
-				Vector3 pPos = Player::GetInstance()->GetPosition();
-				int x = (int)(pPos.x / CELL_SIZE);
-				int z = (int)(pPos.z / CELL_SIZE);
 				// Up
 				if (angle >= -53.f && angle <= 53.f)
 				{
@@ -457,12 +449,19 @@ void SceneText::Update(double dt)
 					ghostScale.Set(CELL_SIZE, 10, 2);
 				}
 			}
+			// Floor and Equipment
+			else if ((Player::GetInstance()->GetIsBuilding() &&
+				Player::GetInstance()->GetCurrentBuilding() == BuildingEntity::BUILDING_FLOOR) ||
+				Player::GetInstance()->GetIsEquipment())
+			{
+				ghostPos.Set(x * CELL_SIZE + CELL_SIZE / 2, 1, z * CELL_SIZE + CELL_SIZE / 2);
+				ghostScale.Set(CELL_SIZE, 10, CELL_SIZE);
+			}
+			//Weapon
 			else
 			{
-				wfbScaleX = 0.35f;
-				wfbScaleY = 0.35f;
-				wfbPosX = 0.1f * (float)-halfWindowWidth;
-				wfbPosY = 0.1f * (float)-halfWindowHeight;
+				ghostPos.SetZero();
+				ghostScale.SetZero();
 			}
 		}
 		
@@ -511,9 +510,6 @@ void SceneText::Update(double dt)
 	ss.precision(1);
 	ss << "Player:" << Player::GetInstance()->GetPosition();
 	textObj[1]->SetText(ss.str());
-
-	//CSoundEngine::GetInstance()->playthesound("HELLO", 0.01);
-	//std::cout << "Song Playing" << std::endl;
 
 	ss.str("");
 	ss.precision(0);
@@ -620,11 +616,6 @@ void SceneText::Update(double dt)
 	}
 	textObj[4]->SetText(ss.str());
 
-	//int _x = (int)Player::GetInstance()->GetPosition().x / CELL_SIZE;
-	//int _y = (int)Player::GetInstance()->GetPosition().z / CELL_SIZE;
-	//std::cout << _x << ", " << _y << std::endl;
-	//std::cout << BuildingManager::GetInstance()->GetBuildingArray()[_x][_y].hitbox.GetMinAABB() << std::endl;
-
 	ss.str("");
 	switch (Player::GetInstance()->fatigue)
 	{
@@ -639,10 +630,6 @@ void SceneText::Update(double dt)
 		break;
 	}
 	textObj[5]->SetText(ss.str());
-
-
-
-
 
 	Delay += (float)dt;
 	if (Delay > 0.5f)
@@ -660,7 +647,6 @@ void SceneText::Update(double dt)
 
 void SceneText::Render()
 {
-
 	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	//GraphicsManager::GetInstance()->UpdateLightUniforms();
@@ -780,16 +766,6 @@ void SceneText::RenderPassMain()
 	RenderHelper::RenderMesh(playerHealthBar);
 	ms.PopMatrix();
 
-	if (isDay) {
-		ms.PushMatrix();
-		ms.Translate(ghostPos.x, ghostPos.y, ghostPos.z);
-		ms.Rotate(-90, 1, 0, 0);
-		ms.Scale(ghostScale.x, ghostScale.z, ghostScale.y);
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-		RenderHelper::RenderMesh(wireFrameBox);
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-		ms.PopMatrix();
-	}
 	//RenderHelper::RenderTextOnScreen(text, std::to_string(fps), Color(0, 1, 0), 2, 0, 0);
 	glEnable(GL_DEPTH_TEST);
 }
@@ -817,15 +793,17 @@ void SceneText::RenderWorld()
 	//RenderHelper::RenderMesh(light_depth_mesh);
 	ms.PopMatrix();
 
-	if (isDay) {
+	if (isDay) // Only render wireframe box in day time
+	{
 		ms.PushMatrix();
 		ms.Translate(ghostPos.x, ghostPos.y, ghostPos.z);
 		ms.Rotate(-90, 1, 0, 0);
 		ms.Scale(ghostScale.x, ghostScale.z, ghostScale.y);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		RenderHelper::RenderMesh(wireFrameBox);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		ms.PopMatrix();
 	}
-
 	EntityManager::GetInstance()->Render();
 }
 
