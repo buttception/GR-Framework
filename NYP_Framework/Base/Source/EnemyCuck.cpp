@@ -2,6 +2,9 @@
 #include "MeshList.h"
 #include "EnemyManager.h"
 
+float EquipmentEntity::spikeTimer = 0.f;
+float EquipmentEntity::spikeCoolDown = 1.f;
+
 EnemyCuck::EnemyCuck(std::string _meshName, Vector3 position) : EnemyEntity(_meshName)
 {
 	this->position = position;
@@ -14,10 +17,10 @@ EnemyCuck::~EnemyCuck()
 
 void EnemyCuck::Init()
 {
-	speed = 10;
+	speed = 10.f;
 	health = 100;
 	damage = 10;
-	size = 3;
+	size = 3.f;
 	scale.Set(size, size, size);
 	attackSpeed = 1.f;
 	direction = (optimalRoute.top()- position).Normalized();
@@ -60,10 +63,14 @@ void EnemyCuck::Update(double dt)
 	else if (attacking) {
 		Attack(target, dt);
 	}
+
+	//Equipment Timer Update
+	EquipmentEntity::spikeTimer += (float)dt;
 }
 
 void EnemyCuck::CollisionResponse(GenericEntity * thatEntity)
 {
+	
 	switch (thatEntity->objectType) {
 	case GenericEntity::BUILDING:
 		//if collide with a building
@@ -76,6 +83,37 @@ void EnemyCuck::CollisionResponse(GenericEntity * thatEntity)
 	case GenericEntity::PROJECTILE:
 
 		break;
+	case GenericEntity::EQUIPMENT:
+	{
+		EquipmentEntity* equipment = dynamic_cast<EquipmentEntity*>(thatEntity);
+		// Attack Equipment except floor spike and healing station
+		if (stateStack.top() != ATTACK_STATE &&
+			equipment->type != EquipmentEntity::EQUIPMENT_FLOOR_SPIKE &&
+			equipment->type != EquipmentEntity::EQUIPMENT_HEALING_STATION)
+			stateStack.push(ATTACK_STATE);
+		target = thatEntity;
+
+		switch (equipment->type)
+		{
+		case EquipmentEntity::EQUIPMENT_TURRET:
+			std::cout << "collided with turret" << std::endl;
+			break;
+		case EquipmentEntity::EQUIPMENT_FLOOR_SPIKE:
+			if (EquipmentEntity::spikeTimer >= EquipmentEntity::spikeCoolDown)
+			{
+				health = Math::Max(0, health - 10);
+				speed = 5.f;
+				EquipmentEntity::spikeTimer = 0.f;
+			}
+			if (health == 0)
+				SetIsDone(true);
+			break;
+		case EquipmentEntity::EQUIPMENT_SHIELD:
+			std::cout << "collided with shield" << std::endl;
+			break;
+		}
+	}
+	break;
 	default:
 		return;
 	}

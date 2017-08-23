@@ -12,9 +12,12 @@
 #include "../WeaponInfo/Weapon.h"
 #include "../Projectile/Projectile.h"
 #include "Loader.h"
+#include "LoadTGA.cpp"
 
 bool SceneText::isDay = true;
 bool CMinimap::isResizing = false;
+float EquipmentEntity::healTimer = 0.f;
+float EquipmentEntity::healCoolDown = 2.f;
 // Allocating and initializing Player's static data member.  
 // The pointer is allocated but not the object's constructor.
 
@@ -198,6 +201,9 @@ void Player::Update(double dt)
 		secondaryWeapon->Update(dt);
 	if (weaponManager[m_iCurrentWeapon])
 		weaponManager[m_iCurrentWeapon]->Update(dt);
+
+	//healTimer update
+	EquipmentEntity::healTimer += (float)dt;
 }
 
 // Reload current weapon
@@ -421,14 +427,27 @@ void Player::CollisionResponse(EntityBase *thatEntity)
 	GenericEntity* entity;
 	if (entity = dynamic_cast<GenericEntity*>(thatEntity))
 	{
-		switch (entity->objectType) {
+		switch (entity->objectType)
+		{
 		case GenericEntity::BUILDING:
-			std::cout << "collided with wall" << std::endl;
 			position = defaultPosition;
 			break;
 		case GenericEntity::EQUIPMENT:
-			std::cout << "collided with equipement" << std::endl;
-			break;
+		{
+			EquipmentEntity* equipment = dynamic_cast<EquipmentEntity*>(thatEntity);
+			switch (equipment->type)
+			{
+			case EquipmentEntity::EQUIPMENT_HEALING_STATION:
+				if (EquipmentEntity::healTimer >= EquipmentEntity::healCoolDown &&
+					!SceneText::isDay)
+				{
+					playerHealth = Math::Min(100.f, playerHealth + 20.f);
+					EquipmentEntity::healTimer = 0.f;
+				}
+				break;
+			}
+		}
+		break;
 		}
 	}
 	return;

@@ -102,10 +102,7 @@ private:
 	GroundEntity* m_pTerrain;
 	float size;
 
-	double m_dSpeed;
-	double m_dAcceleration;
-	double m_dElapsedTime;
-	double speedMultiplier;
+	double m_dSpeed, m_dAcceleration, m_dElapsedTime, speedMultiplier;
 
 	CameraBase* attachedCamera;
 	Keyboard* keyboard;
