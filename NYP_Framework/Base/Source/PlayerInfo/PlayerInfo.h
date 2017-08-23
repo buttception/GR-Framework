@@ -103,10 +103,7 @@ private:
 	Vector3 maxBoundary, minBoundary;
 	GroundEntity* m_pTerrain;
 
-	double m_dSpeed;
-	double m_dAcceleration;
-	double m_dElapsedTime;
-	double speedMultiplier;
+	double m_dSpeed, m_dAcceleration, m_dElapsedTime, speedMultiplier;
 
 	CameraBase* attachedCamera;
 	Keyboard* keyboard;

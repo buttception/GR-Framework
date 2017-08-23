@@ -33,6 +33,8 @@ public:
 	int GetGridZ();
 	void SetGrid(int _x, int _z);
 
+	static float healTimer, healCoolDown,
+				 spikeTimer, spikeCoolDown;
 private:
 	int health;
 	int level;

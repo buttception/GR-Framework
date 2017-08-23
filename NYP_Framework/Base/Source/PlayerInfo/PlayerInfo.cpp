@@ -14,9 +14,12 @@
 #include "Loader.h"
 #include "MeshList.h"
 #include "../EnemyEntity.h"
+#include "LoadTGA.cpp"
 
 bool SceneText::isDay = true;
 bool CMinimap::isResizing = false;
+float EquipmentEntity::healTimer = 0.f;
+float EquipmentEntity::healCoolDown = 2.f;
 // Allocating and initializing Player's static data member.  
 // The pointer is allocated but not the object's constructor.
 
@@ -79,6 +82,8 @@ void Player::Init(void)
 	CSoundEngine::GetInstance()->Addthefuckingsound("HELLO", "Image//Hello.mp3");
 	CSoundEngine::GetInstance()->Addthefuckingsound("Build", "Image//wood1.ogg");
 	CSoundEngine::GetInstance()->Addthefuckingsound("PewPew", "Image//9mm.mp3");
+	CSoundEngine::GetInstance()->Addthefuckingsound("Floor", "Image//stone6.ogg");
+	CSoundEngine::GetInstance()->Addthefuckingsound("CUCK", "Image//AA.mp3");
 
 	// Set the pistol as the primary weapon
 	Loader::GetInstance()->ReadFileWeapon("weapon.csv", weaponList);
@@ -205,6 +210,9 @@ void Player::Update(double dt)
 		secondaryWeapon->Update(dt);
 	if (weaponManager[m_iCurrentWeapon])
 		weaponManager[m_iCurrentWeapon]->Update(dt);
+
+	//healTimer update
+	EquipmentEntity::healTimer += (float)dt;
 }
 
 // Reload current weapon
@@ -428,19 +436,35 @@ void Player::CollisionResponse(EntityBase *thatEntity)
 	GenericEntity* entity;
 	if (entity = dynamic_cast<GenericEntity*>(thatEntity))
 	{
-		switch (entity->objectType) {
+		switch (entity->objectType)
+		{
 		case GenericEntity::BUILDING:
-			std::cout << "collided with wall" << std::endl;
 			position = defaultPosition;
 			break;
-		case GenericEntity::EQUIPMENT:
+		case GenericEntity::EQUIPMENT: {
 			std::cout << "collided with equipement" << std::endl;
+			EquipmentEntity* equipment = dynamic_cast<EquipmentEntity*>(thatEntity);
+			switch (equipment->type)
+			{
+			case EquipmentEntity::EQUIPMENT_HEALING_STATION:
+				if (EquipmentEntity::healTimer >= EquipmentEntity::healCoolDown &&
+					!SceneText::isDay)
+				{
+					playerHealth = Math::Min(100.f, playerHealth + 20.f);
+					EquipmentEntity::healTimer = 0.f;
+				}
+				break;
+			}
+		}
 			break;
-		case GenericEntity::ENEMY:
+		case GenericEntity::ENEMY: {
 			EnemyEntity* e = dynamic_cast<EnemyEntity*>(thatEntity);
 			e->AddState(StateMachine::CHASE_STATE);
 			e->SetTarget(Player::GetInstance());
+		}
 			break;
+		default:
+			return;
 		}
 	}
 	return;
