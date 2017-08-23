@@ -8,6 +8,7 @@
 EquipmentEntity::EquipmentEntity(const std::string _meshName) : GenericEntity(MeshList::GetInstance()->GetMesh(_meshName))
 {
 	modelMesh = MeshList::GetInstance()->GetMesh(_meshName);
+	SetIsFixed(true);
 }
 
 EquipmentEntity::~EquipmentEntity()

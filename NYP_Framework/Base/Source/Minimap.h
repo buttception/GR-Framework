@@ -4,6 +4,8 @@
 #include "EntityBase.h"
 #include "SingletonTemplate.h"
 #include "Mesh.h"
+#include "EntityManager.h"
+#include "BuildingManager.h"
 
 class CMinimap : public EntityBase, public Singleton<CMinimap>
 {
@@ -13,9 +15,15 @@ public:
 
 	Mesh* m_cMinimap_Background;
 	Mesh* m_cMinimap_Avatar;
+	Mesh* m_cMinimap_Target;
 
 	// Initialise this class instance
 	bool Init(int halfWindowHeight,int halfWindowWidth);
+
+	// Set the target (a.k.a. the enemies in the minimap)
+	bool SetTarget(Mesh* aTarget);
+	// Get the target (a.k.a. the enemies in the minimap)
+	Mesh* GetTarget(void) const;
 
 	// Set the background mesh to this class
 	bool SetBackground(Mesh* aBackground);

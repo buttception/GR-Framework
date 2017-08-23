@@ -53,19 +53,6 @@ SceneText::SceneText(SceneManager* _sceneMgr)
 SceneText::~SceneText()
 {
 	CMinimap::Destroy();
-	
-
-
-		//thinge to delete
-		//Ground entity
-		//Textobj
-		//light
-		//thecube
-		//ground
-		//sun
-		//light_depth_mesh
-		//playerhealthbar
-		//generatorcorehealthbar
 
 }
 
@@ -181,6 +168,8 @@ void SceneText::Init()
 	wireFrameBox = MeshBuilder::GetInstance()->GenerateQuad("wireFrameBox", Color(1, 0, 0), 1.f);
 
 	theMiniMap = Create::Minimap();
+	theMiniMap->SetTarget(MeshBuilder::GetInstance()->GenerateQuad("miniMapTarget", Color(1, 1, 1), 0.0625f));
+	theMiniMap->GetTarget()->textureID[0] = LoadTGA("Image//target.tga");
 	theMiniMap->SetBackground(MeshBuilder::GetInstance()->GenerateQuad("miniMap", Color(1, 1, 1), 1.f));
 	theMiniMap->GetBackground()->textureID[0] = LoadTGA("Image//grass_lightgreen.tga");
 	theMiniMap->SetAvatar(MeshBuilder::GetInstance()->GenerateQuad("MINIMAPAVATAR", Color(1, 1, 1), 0.125f));
@@ -320,7 +309,7 @@ void SceneText::Update(double dt)
 	Vector3 pos(lights[0]->position.x, lights[0]->position.y, lights[0]->position.z);
 	lights[0]->position = rotate * lights[0]->position;
 
-	std::cout << lights[0]->position.z << std::endl;
+	//std::cout << lights[0]->position.z << std::endl;
 
 	if (lights[0]->position.z <= 210  /*|| lights[0]->position.z > 364*/ ) {
 		lights[0]->color.Set(255 / 255, (float)165 / (float)255, 0); //keep it this way for now
@@ -330,21 +319,9 @@ void SceneText::Update(double dt)
 		lights[0]->color.Set(255/255, 255/255, 0);
 		//std::cout << "Light Color is Yellow" << std::endl;
 		lights[0]->color.Set(1, 1, 1);
-		std::cout << "Light Color is Yellow" << std::endl;
+		std::cout << "Light Color is White" << std::endl;
 	}
 	
-
-
-
-
-
-
-
-
-
-
-
-
 	//==========================================================================Light Feature=====================================================//
 
 	//if (KeyboardController::GetInstance()->IsKeyPressed(VK_F1)){
@@ -803,16 +780,16 @@ void SceneText::RenderPassMain()
 	RenderHelper::RenderMesh(playerHealthBar);
 	ms.PopMatrix();
 
-	//ms.PushMatrix();
-	//ms.Translate(0.1f * (float)halfWindowWidth + wfbPosX,
-	//	0.1f * (float)halfWindowHeight + wfbPosY, 0.f);
-	//ms.Scale((float)halfWindowHeight * wfbScaleX,
-	//	(float)halfWindowHeight * wfbScaleY, 0.f);
-	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	//RenderHelper::RenderMesh(wireFrameBox);
-	//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-	//ms.PopMatrix();
-
+	if (isDay) {
+		ms.PushMatrix();
+		ms.Translate(ghostPos.x, ghostPos.y, ghostPos.z);
+		ms.Rotate(-90, 1, 0, 0);
+		ms.Scale(ghostScale.x, ghostScale.z, ghostScale.y);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		RenderHelper::RenderMesh(wireFrameBox);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		ms.PopMatrix();
+	}
 	//RenderHelper::RenderTextOnScreen(text, std::to_string(fps), Color(0, 1, 0), 2, 0, 0);
 	glEnable(GL_DEPTH_TEST);
 }
@@ -859,5 +836,5 @@ void SceneText::Exit()
 
 
 	// Delete the lights
-	delete lights[0];
+	//delete lights[0];
 }

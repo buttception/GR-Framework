@@ -1,9 +1,135 @@
-﻿  MeshList.cpp
-d:\github\sp3\nyp_framework\common\source\mymath.h(265): warning C4018: '<' : signed/unsigned mismatch
-d:\github\sp3\nyp_framework\common\source\mymath.h(284): warning C4244: 'return' : conversion from 'unsigned __int64' to 'int', possible loss of data
-d:\github\sp3\nyp_framework\common\source\mymath.h(300): warning C4244: 'return' : conversion from 'unsigned __int64' to 'int', possible loss of data
-d:\github\sp3\nyp_framework\common\source\mymath.h(347): warning C4018: '<=' : signed/unsigned mismatch
-d:\github\sp3\nyp_framework\common\source\mymath.h(369): warning C4244: 'return' : conversion from 'double' to 'int', possible loss of data
-d:\github\sp3\nyp_framework\common\source\mymath.h(389): warning C4018: '<=' : signed/unsigned mismatch
+﻿  Win32Input.cpp
+  Vector3.cpp
+c:\users\530\documents\sp3\gr-framework\nyp_framework\common\source\mymath.h(265): warning C4018: '<' : signed/unsigned mismatch
+c:\users\530\documents\sp3\gr-framework\nyp_framework\common\source\mymath.h(284): warning C4244: 'return' : conversion from 'unsigned __int64' to 'int', possible loss of data
+c:\users\530\documents\sp3\gr-framework\nyp_framework\common\source\mymath.h(300): warning C4244: 'return' : conversion from 'unsigned __int64' to 'int', possible loss of data
+c:\users\530\documents\sp3\gr-framework\nyp_framework\common\source\mymath.h(347): warning C4018: '<=' : signed/unsigned mismatch
+c:\users\530\documents\sp3\gr-framework\nyp_framework\common\source\mymath.h(369): warning C4244: 'return' : conversion from 'double' to 'int', possible loss of data
+c:\users\530\documents\sp3\gr-framework\nyp_framework\common\source\mymath.h(389): warning C4018: '<=' : signed/unsigned mismatch
+  Vector2.cpp
+  Utility.cpp
+c:\users\530\documents\sp3\gr-framework\nyp_framework\common\source\mymath.h(265): warning C4018: '<' : signed/unsigned mismatch
+c:\users\530\documents\sp3\gr-framework\nyp_framework\common\source\mymath.h(284): warning C4244: 'return' : conversion from 'unsigned __int64' to 'int', possible loss of data
+c:\users\530\documents\sp3\gr-framework\nyp_framework\common\source\mymath.h(300): warning C4244: 'return' : conversion from 'unsigned __int64' to 'int', possible loss of data
+c:\users\530\documents\sp3\gr-framework\nyp_framework\common\source\mymath.h(347): warning C4018: '<=' : signed/unsigned mismatch
+c:\users\530\documents\sp3\gr-framework\nyp_framework\common\source\mymath.h(369): warning C4244: 'return' : conversion from 'double' to 'int', possible loss of data
+c:\users\530\documents\sp3\gr-framework\nyp_framework\common\source\mymath.h(389): warning C4018: '<=' : signed/unsigned mismatch
+  timer.cpp
+  ShaderProgram.cpp
+c:\users\530\documents\sp3\gr-framework\nyp_framework\common\source\mymath.h(265): warning C4018: '<' : signed/unsigned mismatch
+c:\users\530\documents\sp3\gr-framework\nyp_framework\common\source\mymath.h(284): warning C4244: 'return' : conversion from 'unsigned __int64' to 'int', possible loss of data
+c:\users\530\documents\sp3\gr-framework\nyp_framework\common\source\mymath.h(300): warning C4244: 'return' : conversion from 'unsigned __int64' to 'int', possible loss of data
+c:\users\530\documents\sp3\gr-framework\nyp_framework\common\source\mymath.h(347): warning C4018: '<=' : signed/unsigned mismatch
+c:\users\530\documents\sp3\gr-framework\nyp_framework\common\source\mymath.h(369): warning C4244: 'return' : conversion from 'double' to 'int', possible loss of data
+c:\users\530\documents\sp3\gr-framework\nyp_framework\common\source\mymath.h(389): warning C4018: '<=' : signed/unsigned mismatch
+  shader.cpp
+  SceneManager.cpp
+  RenderHelper.cpp
+c:\users\530\documents\sp3\gr-framework\nyp_framework\common\source\mymath.h(265): warning C4018: '<' : signed/unsigned mismatch
+c:\users\530\documents\sp3\gr-framework\nyp_framework\common\source\mymath.h(284): warning C4244: 'return' : conversion from 'unsigned __int64' to 'int', possible loss of data
+c:\users\530\documents\sp3\gr-framework\nyp_framework\common\source\mymath.h(300): warning C4244: 'return' : conversion from 'unsigned __int64' to 'int', possible loss of data
+c:\users\530\documents\sp3\gr-framework\nyp_framework\common\source\mymath.h(347): warning C4018: '<=' : signed/unsigned mismatch
+c:\users\530\documents\sp3\gr-framework\nyp_framework\common\source\mymath.h(369): warning C4244: 'return' : conversion from 'double' to 'int', possible loss of data
+c:\users\530\documents\sp3\gr-framework\nyp_framework\common\source\mymath.h(389): warning C4018: '<=' : signed/unsigned mismatch
+  Physic.cpp
+c:\users\530\documents\sp3\gr-framework\nyp_framework\common\source\mymath.h(265): warning C4018: '<' : signed/unsigned mismatch
+c:\users\530\documents\sp3\gr-framework\nyp_framework\common\source\mymath.h(284): warning C4244: 'return' : conversion from 'unsigned __int64' to 'int', possible loss of data
+c:\users\530\documents\sp3\gr-framework\nyp_framework\common\source\mymath.h(300): warning C4244: 'return' : conversion from 'unsigned __int64' to 'int', possible loss of data
+c:\users\530\documents\sp3\gr-framework\nyp_framework\common\source\mymath.h(347): warning C4018: '<=' : signed/unsigned mismatch
+c:\users\530\documents\sp3\gr-framework\nyp_framework\common\source\mymath.h(369): warning C4244: 'return' : conversion from 'double' to 'int', possible loss of data
+c:\users\530\documents\sp3\gr-framework\nyp_framework\common\source\mymath.h(389): warning C4018: '<=' : signed/unsigned mismatch
+  Mtx44.cpp
+c:\users\530\documents\sp3\gr-framework\nyp_framework\common\source\mymath.h(265): warning C4018: '<' : signed/unsigned mismatch
+c:\users\530\documents\sp3\gr-framework\nyp_framework\common\source\mymath.h(284): warning C4244: 'return' : conversion from 'unsigned __int64' to 'int', possible loss of data
+c:\users\530\documents\sp3\gr-framework\nyp_framework\common\source\mymath.h(300): warning C4244: 'return' : conversion from 'unsigned __int64' to 'int', possible loss of data
+c:\users\530\documents\sp3\gr-framework\nyp_framework\common\source\mymath.h(347): warning C4018: '<=' : signed/unsigned mismatch
+c:\users\530\documents\sp3\gr-framework\nyp_framework\common\source\mymath.h(369): warning C4244: 'return' : conversion from 'double' to 'int', possible loss of data
+c:\users\530\documents\sp3\gr-framework\nyp_framework\common\source\mymath.h(389): warning C4018: '<=' : signed/unsigned mismatch
+  MouseController.cpp
+  MeshList.cpp
+c:\users\530\documents\sp3\gr-framework\nyp_framework\common\source\mymath.h(265): warning C4018: '<' : signed/unsigned mismatch
+c:\users\530\documents\sp3\gr-framework\nyp_framework\common\source\mymath.h(284): warning C4244: 'return' : conversion from 'unsigned __int64' to 'int', possible loss of data
+c:\users\530\documents\sp3\gr-framework\nyp_framework\common\source\mymath.h(300): warning C4244: 'return' : conversion from 'unsigned __int64' to 'int', possible loss of data
+c:\users\530\documents\sp3\gr-framework\nyp_framework\common\source\mymath.h(347): warning C4018: '<=' : signed/unsigned mismatch
+c:\users\530\documents\sp3\gr-framework\nyp_framework\common\source\mymath.h(369): warning C4244: 'return' : conversion from 'double' to 'int', possible loss of data
+c:\users\530\documents\sp3\gr-framework\nyp_framework\common\source\mymath.h(389): warning C4018: '<=' : signed/unsigned mismatch
+  MeshBuilder.cpp
+c:\users\530\documents\sp3\gr-framework\nyp_framework\common\source\mymath.h(265): warning C4018: '<' : signed/unsigned mismatch
+c:\users\530\documents\sp3\gr-framework\nyp_framework\common\source\mymath.h(284): warning C4244: 'return' : conversion from 'unsigned __int64' to 'int', possible loss of data
+c:\users\530\documents\sp3\gr-framework\nyp_framework\common\source\mymath.h(300): warning C4244: 'return' : conversion from 'unsigned __int64' to 'int', possible loss of data
+c:\users\530\documents\sp3\gr-framework\nyp_framework\common\source\mymath.h(347): warning C4018: '<=' : signed/unsigned mismatch
+c:\users\530\documents\sp3\gr-framework\nyp_framework\common\source\mymath.h(369): warning C4244: 'return' : conversion from 'double' to 'int', possible loss of data
+c:\users\530\documents\sp3\gr-framework\nyp_framework\common\source\mymath.h(389): warning C4018: '<=' : signed/unsigned mismatch
+  Mesh.cpp
+c:\users\530\documents\sp3\gr-framework\nyp_framework\common\source\mymath.h(265): warning C4018: '<' : signed/unsigned mismatch
+c:\users\530\documents\sp3\gr-framework\nyp_framework\common\source\mymath.h(284): warning C4244: 'return' : conversion from 'unsigned __int64' to 'int', possible loss of data
+c:\users\530\documents\sp3\gr-framework\nyp_framework\common\source\mymath.h(300): warning C4244: 'return' : conversion from 'unsigned __int64' to 'int', possible loss of data
+c:\users\530\documents\sp3\gr-framework\nyp_framework\common\source\mymath.h(347): warning C4018: '<=' : signed/unsigned mismatch
+c:\users\530\documents\sp3\gr-framework\nyp_framework\common\source\mymath.h(369): warning C4244: 'return' : conversion from 'double' to 'int', possible loss of data
+c:\users\530\documents\sp3\gr-framework\nyp_framework\common\source\mymath.h(389): warning C4018: '<=' : signed/unsigned mismatch
+  MatrixStack.cpp
+c:\users\530\documents\sp3\gr-framework\nyp_framework\common\source\mymath.h(265): warning C4018: '<' : signed/unsigned mismatch
+c:\users\530\documents\sp3\gr-framework\nyp_framework\common\source\mymath.h(284): warning C4244: 'return' : conversion from 'unsigned __int64' to 'int', possible loss of data
+c:\users\530\documents\sp3\gr-framework\nyp_framework\common\source\mymath.h(300): warning C4244: 'return' : conversion from 'unsigned __int64' to 'int', possible loss of data
+c:\users\530\documents\sp3\gr-framework\nyp_framework\common\source\mymath.h(347): warning C4018: '<=' : signed/unsigned mismatch
+c:\users\530\documents\sp3\gr-framework\nyp_framework\common\source\mymath.h(369): warning C4244: 'return' : conversion from 'double' to 'int', possible loss of data
+c:\users\530\documents\sp3\gr-framework\nyp_framework\common\source\mymath.h(389): warning C4018: '<=' : signed/unsigned mismatch
+  LoadTGA.cpp
+  LoadOBJ.cpp
+c:\users\530\documents\sp3\gr-framework\nyp_framework\common\source\mymath.h(265): warning C4018: '<' : signed/unsigned mismatch
+c:\users\530\documents\sp3\gr-framework\nyp_framework\common\source\mymath.h(284): warning C4244: 'return' : conversion from 'unsigned __int64' to 'int', possible loss of data
+c:\users\530\documents\sp3\gr-framework\nyp_framework\common\source\mymath.h(300): warning C4244: 'return' : conversion from 'unsigned __int64' to 'int', possible loss of data
+c:\users\530\documents\sp3\gr-framework\nyp_framework\common\source\mymath.h(347): warning C4018: '<=' : signed/unsigned mismatch
+c:\users\530\documents\sp3\gr-framework\nyp_framework\common\source\mymath.h(369): warning C4244: 'return' : conversion from 'double' to 'int', possible loss of data
+c:\users\530\documents\sp3\gr-framework\nyp_framework\common\source\mymath.h(389): warning C4018: '<=' : signed/unsigned mismatch
+  Loader.cpp
+c:\users\530\documents\sp3\gr-framework\nyp_framework\common\source\mymath.h(265): warning C4018: '<' : signed/unsigned mismatch
+c:\users\530\documents\sp3\gr-framework\nyp_framework\common\source\mymath.h(284): warning C4244: 'return' : conversion from 'unsigned __int64' to 'int', possible loss of data
+c:\users\530\documents\sp3\gr-framework\nyp_framework\common\source\mymath.h(300): warning C4244: 'return' : conversion from 'unsigned __int64' to 'int', possible loss of data
+c:\users\530\documents\sp3\gr-framework\nyp_framework\common\source\mymath.h(347): warning C4018: '<=' : signed/unsigned mismatch
+c:\users\530\documents\sp3\gr-framework\nyp_framework\common\source\mymath.h(369): warning C4244: 'return' : conversion from 'double' to 'int', possible loss of data
+c:\users\530\documents\sp3\gr-framework\nyp_framework\common\source\mymath.h(389): warning C4018: '<=' : signed/unsigned mismatch
+c:\users\530\documents\sp3\gr-framework\nyp_framework\common\source\loader.cpp(145): warning C4800: 'long' : forcing value to bool 'true' or 'false' (performance warning)
+  LightBase.cpp
+  Generating Code...
+  Compiling...
+  KeyboardController.cpp
+  GraphicsManager.cpp
+c:\users\530\documents\sp3\gr-framework\nyp_framework\common\source\mymath.h(265): warning C4018: '<' : signed/unsigned mismatch
+c:\users\530\documents\sp3\gr-framework\nyp_framework\common\source\mymath.h(284): warning C4244: 'return' : conversion from 'unsigned __int64' to 'int', possible loss of data
+c:\users\530\documents\sp3\gr-framework\nyp_framework\common\source\mymath.h(300): warning C4244: 'return' : conversion from 'unsigned __int64' to 'int', possible loss of data
+c:\users\530\documents\sp3\gr-framework\nyp_framework\common\source\mymath.h(347): warning C4018: '<=' : signed/unsigned mismatch
+c:\users\530\documents\sp3\gr-framework\nyp_framework\common\source\mymath.h(369): warning C4244: 'return' : conversion from 'double' to 'int', possible loss of data
+c:\users\530\documents\sp3\gr-framework\nyp_framework\common\source\mymath.h(389): warning C4018: '<=' : signed/unsigned mismatch
+  EntityBase.cpp
+c:\users\530\documents\sp3\gr-framework\nyp_framework\common\source\mymath.h(265): warning C4018: '<' : signed/unsigned mismatch
+c:\users\530\documents\sp3\gr-framework\nyp_framework\common\source\mymath.h(284): warning C4244: 'return' : conversion from 'unsigned __int64' to 'int', possible loss of data
+c:\users\530\documents\sp3\gr-framework\nyp_framework\common\source\mymath.h(300): warning C4244: 'return' : conversion from 'unsigned __int64' to 'int', possible loss of data
+c:\users\530\documents\sp3\gr-framework\nyp_framework\common\source\mymath.h(347): warning C4018: '<=' : signed/unsigned mismatch
+c:\users\530\documents\sp3\gr-framework\nyp_framework\common\source\mymath.h(369): warning C4244: 'return' : conversion from 'double' to 'int', possible loss of data
+c:\users\530\documents\sp3\gr-framework\nyp_framework\common\source\mymath.h(389): warning C4018: '<=' : signed/unsigned mismatch
+  DepthFBO.cpp
+  Collider.cpp
+c:\users\530\documents\sp3\gr-framework\nyp_framework\common\source\mymath.h(265): warning C4018: '<' : signed/unsigned mismatch
+c:\users\530\documents\sp3\gr-framework\nyp_framework\common\source\mymath.h(284): warning C4244: 'return' : conversion from 'unsigned __int64' to 'int', possible loss of data
+c:\users\530\documents\sp3\gr-framework\nyp_framework\common\source\mymath.h(300): warning C4244: 'return' : conversion from 'unsigned __int64' to 'int', possible loss of data
+c:\users\530\documents\sp3\gr-framework\nyp_framework\common\source\mymath.h(347): warning C4018: '<=' : signed/unsigned mismatch
+c:\users\530\documents\sp3\gr-framework\nyp_framework\common\source\mymath.h(369): warning C4244: 'return' : conversion from 'double' to 'int', possible loss of data
+c:\users\530\documents\sp3\gr-framework\nyp_framework\common\source\mymath.h(389): warning C4018: '<=' : signed/unsigned mismatch
+  CameraBase.cpp
+c:\users\530\documents\sp3\gr-framework\nyp_framework\common\source\mymath.h(265): warning C4018: '<' : signed/unsigned mismatch
+c:\users\530\documents\sp3\gr-framework\nyp_framework\common\source\mymath.h(284): warning C4244: 'return' : conversion from 'unsigned __int64' to 'int', possible loss of data
+c:\users\530\documents\sp3\gr-framework\nyp_framework\common\source\mymath.h(300): warning C4244: 'return' : conversion from 'unsigned __int64' to 'int', possible loss of data
+c:\users\530\documents\sp3\gr-framework\nyp_framework\common\source\mymath.h(347): warning C4018: '<=' : signed/unsigned mismatch
+c:\users\530\documents\sp3\gr-framework\nyp_framework\common\source\mymath.h(369): warning C4244: 'return' : conversion from 'double' to 'int', possible loss of data
+c:\users\530\documents\sp3\gr-framework\nyp_framework\common\source\mymath.h(389): warning C4018: '<=' : signed/unsigned mismatch
+  BaseDatabase.cpp
+c:\users\530\documents\sp3\gr-framework\nyp_framework\common\source\mymath.h(265): warning C4018: '<' : signed/unsigned mismatch
+c:\users\530\documents\sp3\gr-framework\nyp_framework\common\source\mymath.h(284): warning C4244: 'return' : conversion from 'unsigned __int64' to 'int', possible loss of data
+c:\users\530\documents\sp3\gr-framework\nyp_framework\common\source\mymath.h(300): warning C4244: 'return' : conversion from 'unsigned __int64' to 'int', possible loss of data
+c:\users\530\documents\sp3\gr-framework\nyp_framework\common\source\mymath.h(347): warning C4018: '<=' : signed/unsigned mismatch
+c:\users\530\documents\sp3\gr-framework\nyp_framework\common\source\mymath.h(369): warning C4244: 'return' : conversion from 'double' to 'int', possible loss of data
+c:\users\530\documents\sp3\gr-framework\nyp_framework\common\source\mymath.h(389): warning C4018: '<=' : signed/unsigned mismatch
+  Generating Code...
 BaseDatabase.obj : warning LNK4221: This object file does not define any previously undefined public symbols, so it will not be used by any link operation that consumes this library
-  Common.vcxproj -> D:\GitHub\SP3\NYP_Framework\Debug\Common.lib
+  Common.vcxproj -> C:\Users\530\Documents\SP3\GR-Framework\NYP_Framework\Debug\Common.lib
