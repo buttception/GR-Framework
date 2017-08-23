@@ -28,12 +28,16 @@ PathfindNode EnemyAI::Pathfind(PathfindNode &node)
 
 	//once finish
 	if (node.pos == target) {
-		PathfindNode temp = *root;
-		while (temp.child != nullptr) {
-			pathfindingStack.push_front(temp.pos);
-			temp = *temp.child;
+		PathfindStack newStack;
+		PathfindNode* temp = &node;
+		while (temp->parent != nullptr) {
+			newStack.route.push(temp->pos);
+			newStack.totalDifficulty += temp->difficulty;
+			temp = temp->parent;
 		}
-		return temp;
+		//push back a possible route that was found
+		possibleRoutes.push_back(newStack);
+		return NULL;
 	}
 	else {
 
@@ -45,6 +49,7 @@ PathfindNode EnemyAI::Pathfind(PathfindNode &node)
 		node.child = &nextNode;
 
 		nextNode.child = &Pathfind(nextNode);
+		nextNode.child->parent = &nextNode;
 
 		return nextNode;
 
@@ -111,26 +116,15 @@ PathfindNode EnemyAI::Pathfind(PathfindNode &node)
 
 std::stack<Vector3> EnemyAI::GetRoute()
 {
-	std::stack<Vector3>route;
-	for (auto it : pathfindingStack) {
-		route.push(it);
+	PathfindStack lowest;
+	lowest = possibleRoutes.front();
+	for (auto it : possibleRoutes) {
+		if (it.totalDifficulty < lowest.totalDifficulty) {
+			lowest = it;
+		}
 	}
-	return route;
-}
-
-void EnemyAI::PopRoute()
-{
-	if (pathfindingStack.empty()) {
-		std::cout << "AI had reached destination\n";
-		return;
-	}
-	else
-		pathfindingStack.pop_back();
-}
-
-void EnemyAI::AddNode(PathfindNode * node)
-{
-
+	optimalRoute = lowest.route;
+	return lowest.route;
 }
 
 bool EnemyAI::CheckRaytraceAABB(Vector3 _end, Vector3 _origin, Collision hitbox)
@@ -176,20 +170,54 @@ bool EnemyAI::CheckRaytraceAABB(Vector3 _end, Vector3 _origin, Collision hitbox)
 	float gradient = dir.z / dir.x;
 	float c = _end.z - _end.x * gradient;
 
-	//check min
-	//if intersection point is greater or equals to min
+	//4 line segements in total
+	//y = hitbox.GetMinAABB().y
+	//y = hitbox.GetMaxAABB().y
+
+	//x = hitbox.GetMinAABB().x
+	//x = hitbox.GetMaxAABB().x
+	//if the line intersects inbetween 2 of the line segments of the same axis, the collision is true
+
+	//y = mx + c
+	//x = (y - c)/m
+
+	//checking for collision on the z plane
+	//check if intersection is bigger or equals to the x front of the box
 	if (gradient * hitbox.GetMinAABB().x + c >= hitbox.GetMinAABB().z) {
-		if ((hitbox.GetMinAABB().z - c) / gradient >= hitbox.GetMinAABB().x) {
-			//check if intersection is smaller or equals to min
-			if (gradient * hitbox.GetMaxAABB() + c <= hitbox.GetMaxAABB().z) {
-				if ((hitbox.GetMaxAABB().z - c) / gradient <= hitbox.GetMaxAABB().x) {
-					Vector3 hitboxPos = (hitbox.GetMaxAABB() - hitbox.GetMinAABB()) * 0.5 + hitbox.GetMinAABB();
-					if ((_origin - hitboxPos).Dot(dir) < 0)
-						return true; 
-				}
-			}
+		//check if the intersection is smaller or equals to the x back of the box
+		if ((hitbox.GetMaxAABB().z - c)/ gradient <= hitbox.GetMaxAABB().x) {
+			Vector3 hitboxPos = (hitbox.GetMaxAABB() - hitbox.GetMinAABB()) * 0.5 + hitbox.GetMinAABB();
+			//check if line is facing the hitbox or away
+			if ((_origin - hitboxPos).Dot(dir) < 0)
+				return true;
 		}
 	}
+	//checking collision on the x plane
+	if ((hitbox.GetMinAABB().z - c) / gradient >= hitbox.GetMinAABB().x) {
+		if ((gradient * hitbox.GetMaxAABB().x + c <= hitbox.GetMaxAABB().z)) {
+			Vector3 hitboxPos = (hitbox.GetMaxAABB() - hitbox.GetMinAABB()) * 0.5 + hitbox.GetMinAABB();
+			if ((_origin - hitboxPos).Dot(dir) < 0)
+				return true;
+		}
+	}
+	if (gradient * hitbox.GetMinAABB().x + c >= hitbox.GetMinAABB().z) {
+		//check if the intersection is smaller or equals to the x back of the box
+		if ((gradient * hitbox.GetMaxAABB().x + c <= hitbox.GetMaxAABB().z)) {
+			Vector3 hitboxPos = (hitbox.GetMaxAABB() - hitbox.GetMinAABB()) * 0.5 + hitbox.GetMinAABB();
+			//check if line is facing the hitbox or away
+			if ((_origin - hitboxPos).Dot(dir) < 0)
+				return true;
+		}
+	}
+	//checking collision on the x plane
+	if ((hitbox.GetMinAABB().z - c) / gradient >= hitbox.GetMinAABB().x) {
+		if ((hitbox.GetMaxAABB().z - c) / gradient <= hitbox.GetMaxAABB().x) {
+			Vector3 hitboxPos = (hitbox.GetMaxAABB() - hitbox.GetMinAABB()) * 0.5 + hitbox.GetMinAABB();
+			if ((_origin - hitboxPos).Dot(dir) < 0)
+				return true;
+		}
+	}
+					
 	return false;
 }
 
@@ -213,14 +241,6 @@ Vector3 EnemyAI::FindNextTile(Vector3 _pos)
 		allBoxes.push_back(BuildingManager::GetInstance()->GetBuildingArray()[_x][_y + 1].hitbox);
 	if (_y > 0)
 		allBoxes.push_back(BuildingManager::GetInstance()->GetBuildingArray()[_x][_y - 1].hitbox);
-	if (_x < MAX_CELLS - 1 && _y < MAX_CELLS - 1)
-		allBoxes.push_back(BuildingManager::GetInstance()->GetBuildingArray()[_x + 1][_y + 1].hitbox);
-	if (_x > 0 && _y < MAX_CELLS - 1)
-		allBoxes.push_back(BuildingManager::GetInstance()->GetBuildingArray()[_x - 1][_y + 1].hitbox);
-	if (_x < MAX_CELLS - 1 && _y > 0)
-		allBoxes.push_back(BuildingManager::GetInstance()->GetBuildingArray()[_x + 1][_y - 1].hitbox);
-	if (_x > 0 && _y > 0)
-		allBoxes.push_back(BuildingManager::GetInstance()->GetBuildingArray()[_x - 1][_y - 1].hitbox);
 
 	for (auto it : allBoxes) {
 		// if line intersects the hitbox
@@ -230,25 +250,39 @@ Vector3 EnemyAI::FindNextTile(Vector3 _pos)
 			potentialCollision.push_back(pos);
 		}
 	}
-
-	float dist = -1;
-	Vector3 node;
-	for (auto it : potentialCollision) {
-		// find the node that is the closest to the target
-		if ((target - it).LengthSquared() > dist) {
-			node = it;
+	
+	if (potentialCollision.empty())
+		return Vector3(250, 0, 250);
+	else {
+		float dist = (target - potentialCollision.front()).LengthSquared();
+		Vector3 node = potentialCollision.front();
+		for (auto it : potentialCollision) {
+			// find the node that is the closest to the target
+			if ((target - it).LengthSquared() < dist) {
+				node = it;
+			}
 		}
-	}
 
-	return node;
+		return node;
+	}
 }
 
 PathfindNode::PathfindNode(Vector3 _pos)
 {
 	pos = _pos;
 	child = sibling = parent = nullptr;
+	difficulty = 0;
 }
 
 PathfindNode::~PathfindNode()
+{
+}
+
+PathfindStack::PathfindStack()
+{
+	totalDifficulty = 0;
+}
+
+PathfindStack::~PathfindStack()
 {
 }

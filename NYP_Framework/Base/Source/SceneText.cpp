@@ -42,14 +42,31 @@ SceneText::SceneText()
 }
 
 SceneText::SceneText(SceneManager* _sceneMgr)
-	: theMiniMap(NULL)
+	: theMiniMap(NULL) 
+	
+
 {
 	_sceneMgr->AddScene("Start", this);
+	
 }
 
 SceneText::~SceneText()
 {
 	CMinimap::Destroy();
+	
+
+
+		//thinge to delete
+		//Ground entity
+		//Textobj
+		//light
+		//thecube
+		//ground
+		//sun
+		//light_depth_mesh
+		//playerhealthbar
+		//generatorcorehealthbar
+
 }
 
 void SceneText::Init()
@@ -238,7 +255,8 @@ void SceneText::Init()
 
 	//Hello->play2D("Image//Hello.mp3", GL_TRUE);
 	isDay = true;
-	time = 10.00;
+	dayDuration = 30.f;
+	time = dayDuration;
 	noOfDays = 1;
 	wfbScaleX = 1.f;
 	wfbScaleY = 1.f;
@@ -310,6 +328,8 @@ void SceneText::Update(double dt)
 	else if (lights[0]->position.z >= 490 /*&& lights[0]->position.z <=490*/) {
 		lights[0]->color.Set(255/255, 255/255, 0);
 		//std::cout << "Light Color is Yellow" << std::endl;
+		lights[0]->color.Set(1, 1, 1);
+		std::cout << "Light Color is Yellow" << std::endl;
 	}
 	
 
@@ -346,12 +366,12 @@ void SceneText::Update(double dt)
 	if (KeyboardController::GetInstance()->IsKeyPressed(VK_F3) && isDay)
 	{
 		isDay = false;
-		time = 10.00;
+		time = dayDuration;
 	}
 	if (KeyboardController::GetInstance()->IsKeyPressed(VK_F4) && !isDay)
 	{
 		isDay = true;
-		time = 10.00;
+		time = dayDuration;
 		noOfDays++;
 		generatorCoreScale = Math::Max(0.f, generatorCoreScale - 0.198f); // decrease generator core health on top
 	}
@@ -370,12 +390,12 @@ void SceneText::Update(double dt)
 	time -= dt;
 	if ((time <= 0.00 || Player::GetInstance()->GetSlept()) && isDay)
 	{
-		time = 10.00;
+		time = dayDuration;
 		isDay = false;
 	}
 	if (time <= 0.00 && !isDay)
 	{
-		time = 10.00;
+		time = dayDuration;
 		isDay = true;
 		noOfDays++;
 	}
@@ -663,6 +683,17 @@ void SceneText::Update(double dt)
 
 
 
+	Delay += (float)dt;
+	if (Delay > 0.5f)
+	{
+		Delay = 0.5f;
+	}
+
+	if (KeyboardController::GetInstance()->IsKeyDown('P') && Delay >= ButtonCooldown)
+	{
+		SceneManager::GetInstance()->SetActiveScene("Pause");
+		std::cout << "Pause Selected" << std::endl;
+	}
 	
 }
 
