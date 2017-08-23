@@ -104,7 +104,11 @@ void SceneInstructions::Update(double dt)
 	if (KeyboardController::GetInstance()->IsKeyDown(VK_RETURN) && Delay >= ButtonCooldown)
 	{
 		if (SelectedOptions == GAME)
+		{
 			SceneManager::GetInstance()->SetActiveScene("Start");
+			//BGM_I->stopAllSounds();
+		}
+			
 		else if (SelectedOptions == QUIT)
 			exit(0);
 		Delay = 0.0f;

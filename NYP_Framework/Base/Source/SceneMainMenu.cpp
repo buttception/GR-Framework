@@ -82,7 +82,7 @@ void SceneMainMenu::Update(double dt)
 
 	//Menu selection
 	if (KeyboardController::GetInstance()->IsKeyDown(VK_UP) && Delay >= ButtonCooldown
-		|| KeyboardController::GetInstance()->IsKeyDown('W') && Delay >= ButtonCooldown)
+		|| KeyboardController::GetInstance()->IsKeyDown('W') && Delay >= ButtonCooldown )
 	{
 		if (SelectedOptions == QUIT)
 			SelectedOptions = INSTRUCTION;
@@ -107,8 +107,10 @@ void SceneMainMenu::Update(double dt)
 	//Confirm selection
 	if (KeyboardController::GetInstance()->IsKeyDown(VK_RETURN) && Delay >= ButtonCooldown)
 	{
-		if (SelectedOptions == GAME)
+		if (SelectedOptions == GAME) {
 			SceneManager::GetInstance()->SetActiveScene("Start");
+			
+		}
 		else if (SelectedOptions == INSTRUCTION)
 			SceneManager::GetInstance()->SetActiveScene("Instructions");
 		else if (SelectedOptions == QUIT)

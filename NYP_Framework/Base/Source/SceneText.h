@@ -19,6 +19,8 @@ class Keyboard;
 class CMinimap;
 class SceneText : public Scene
 {	
+
+
 public:
 	SceneText();
 	~SceneText();

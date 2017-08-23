@@ -73,6 +73,7 @@ void BuildingTile::AddFloor(BuildingEntity * entity)
 		return;
 	floor = entity;
 	EntityManager::GetInstance()->AddEntity(floor);
+	CSoundEngine::GetInstance()->playthesound("Floor", 0.4f);
 }
 
 bool BuildingTile::RemoveBuilding(BuildingEntity * entity)

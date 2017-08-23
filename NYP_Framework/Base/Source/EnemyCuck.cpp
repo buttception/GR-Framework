@@ -1,6 +1,7 @@
 #include "EnemyCuck.h"
 #include "MeshList.h"
 #include "EnemyManager.h"
+#include "../Source/Sound_Engine.h"
 
 EnemyCuck::EnemyCuck(std::string _meshName, Vector3 position) : EnemyEntity(_meshName)
 {
@@ -21,6 +22,7 @@ void EnemyCuck::Init()
 	scale.Set(size, size, size);
 	attackSpeed = 1.f;
 	direction = (optimalRoute.top()- position).Normalized();
+	CSoundEngine::GetInstance()->playthesound("CUCK", 0.4f);
 }
 
 void EnemyCuck::Update(double dt)
