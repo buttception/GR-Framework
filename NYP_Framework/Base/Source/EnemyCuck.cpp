@@ -2,6 +2,7 @@
 #include "MeshList.h"
 #include "EnemyManager.h"
 #include "../Source/Sound_Engine.h"
+#include "PlayerInfo\PlayerInfo.h"
 
 float EquipmentEntity::spikeTimer = 0.f;
 float EquipmentEntity::spikeCoolDown = 1.f;
@@ -38,30 +39,41 @@ void EnemyCuck::Update(double dt)
 			if ((int)position.x == optimalRoute.top().x && (int)position.z == optimalRoute.top().z) {
 				// pop the stack
 				optimalRoute.pop();
-				// find new direction to next node
-				if (optimalRoute.empty())
-					stateStack.push(StateMachine::NONE);
-				else {
-					direction = (optimalRoute.top() - position).Normalized();
-					direction.x = round(direction.x);
-					direction.z = round(direction.z);
-				}
+			}
+			// find new direction to next node
+			if (optimalRoute.empty())
+				stateStack.push(StateMachine::NONE);
+			else {
+				direction = (optimalRoute.top() - position).Normalized();
+				direction.x = round(direction.x);
+				direction.y = 0;
+				direction.z = round(direction.z);
 			}
 			position += direction * speed * dt;
 			//updates AABB if enemy move
 			SetAABB(Vector3(position.x + size, position.y + size, position.z + size), Vector3(position.x - size, position.y - size, position.z - size));
+			if (CollisionManager::GetInstance()->CheckPointToSphereCollision(position, Player::GetInstance())) {
+				stateStack.push(CHASE_STATE);
+				target = Player::GetInstance();
+			}
 			break;
 		case StateMachine::ATTACK_STATE:
-			if (target != nullptr) {
-				attacking = true;
-				CSoundEngine::GetInstance()->playthesound("CUCK", 0.4f);
-			}
-			else
-				stateStack.pop();
+			attacking = true;
+			CSoundEngine::GetInstance()->playthesound("CUCK", 0.4f);
+			stateStack.pop();
 			break;
 		case StateMachine::CHASE_STATE:
-			direction = (target->GetPosition() - position).Normalized();
+			try {
+				if (target == nullptr)
+					stateStack.top();
+				else
+					direction = (target->GetPosition() - position).Normalized();
+			}
+			catch (std::exception &e) {
+				direction.SetZero();
+			}
 			position += direction * speed * dt;
+			SetAABB(Vector3(position.x + size, position.y + size, position.z + size), Vector3(position.x - size, position.y - size, position.z - size));
 			break;
 		default:
 			return;

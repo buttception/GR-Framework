@@ -459,7 +459,7 @@ void Player::CollisionResponse(EntityBase *thatEntity)
 			break;
 		case GenericEntity::ENEMY: {
 			EnemyEntity* e = dynamic_cast<EnemyEntity*>(thatEntity);
-			e->AddState(StateMachine::CHASE_STATE);
+			e->AddState(StateMachine::ATTACK_STATE);
 			e->SetTarget(Player::GetInstance());
 		}
 			break;
