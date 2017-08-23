@@ -59,6 +59,8 @@ private:
 	CMinimap* theMiniMap;
 
 	float worldWidth, worldHeight;
+	Vector3 ghostPos;
+	Vector3 ghostScale;
 	
 	double time;
 	double dayDuration;

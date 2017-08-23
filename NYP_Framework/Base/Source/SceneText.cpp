@@ -262,6 +262,7 @@ void SceneText::Init()
 	wfbScaleY = 1.f;
 	wfbPosX = 0.f;
 	wfbPosY = 0.f;
+	ghostPos.SetZero();
 }
 
 void SceneText::Update(double dt)
@@ -313,7 +314,7 @@ void SceneText::Update(double dt)
 
 
 	//==========================================================================Light Feature=====================================================//
-	float speed = 180 / 10;
+	float speed = 180 / dayDuration;
 	Mtx44 rotate;
 	rotate.SetToRotation(speed * (float)dt, 1, 0, 0);
 	Vector3 pos(lights[0]->position.x, lights[0]->position.y, lights[0]->position.z);
@@ -451,49 +452,32 @@ void SceneText::Update(double dt)
 		{
 			if (Player::GetInstance()->GetCurrentBuilding() != BuildingEntity::BUILDING_FLOOR)
 			{
+				Vector3 pPos = Player::GetInstance()->GetPosition();
+				int x = (int)(pPos.x / CELL_SIZE);
+				int z = (int)(pPos.z / CELL_SIZE);
 				// Up
 				if (angle >= -53.f && angle <= 53.f)
 				{
-					wfbScaleX = 0.4f;
-					wfbScaleY = 0.05f;
-					wfbPosX = 0.1f * (float)-halfWindowWidth;
-					if((int)windowHeight >= 595 && (int)windowHeight <= 605)
-						wfbPosY = CELL_SIZE * 1.f;
-					else
-						wfbPosY = CELL_SIZE * 2.f;
+					ghostPos.Set(x * CELL_SIZE + CELL_SIZE / 2, 1, z * CELL_SIZE);
+					ghostScale.Set(CELL_SIZE, 10, 2);
 				}
 				// Left
 				else if (angle >= -127.f && angle <= -53.f)
 				{
-					wfbScaleX = 0.05f;
-					wfbScaleY = 0.4f;
-					if((int)windowWidth >= 795 && (int)windowWidth <= 805)
-						wfbPosX = CELL_SIZE * -5.f;
-					else
-						wfbPosX = CELL_SIZE * -9.5f;
-					wfbPosY = 0.1f * (float)-halfWindowHeight;
+					ghostPos.Set(x * CELL_SIZE, 1, z * CELL_SIZE + CELL_SIZE / 2);
+					ghostScale.Set(2, 10, CELL_SIZE);
 				}
 				// Right
 				else if (angle >= 53.f && angle <= 127.f)
 				{
-					wfbScaleX = 0.05f;
-					wfbScaleY = 0.4f;
-					if ((int)windowWidth >= 795 && (int)windowWidth <= 805)
-						wfbPosX = CELL_SIZE * 1.f;
-					else
-						wfbPosX = CELL_SIZE * 0.05f;
-					wfbPosY = 0.1f * (float)-halfWindowHeight;
+					ghostPos.Set(x * CELL_SIZE + CELL_SIZE, 1, z * CELL_SIZE + CELL_SIZE / 2);
+					ghostScale.Set(2, 10, CELL_SIZE);
 				}
 				// Down
 				else if (angle >= -180.f && angle <= -127.f)
 				{
-					wfbScaleX = 0.4f;
-					wfbScaleY = 0.05f;
-					wfbPosX = 0.1f * (float)-halfWindowWidth;
-					if ((int)windowHeight >= 595 && (int)windowHeight <= 605)
-						wfbPosY = CELL_SIZE * -4.5f;
-					else
-						wfbPosY = CELL_SIZE * -7.5f;
+					ghostPos.Set(x * CELL_SIZE + CELL_SIZE / 2, 1, z * CELL_SIZE + CELL_SIZE);
+					ghostScale.Set(CELL_SIZE, 10, 2);
 				}
 			}
 			else
@@ -819,15 +803,15 @@ void SceneText::RenderPassMain()
 	RenderHelper::RenderMesh(playerHealthBar);
 	ms.PopMatrix();
 
-	ms.PushMatrix();
-	ms.Translate(0.1f * (float)halfWindowWidth + wfbPosX,
-		0.1f * (float)halfWindowHeight + wfbPosY, 0.f);
-	ms.Scale((float)halfWindowHeight * wfbScaleX,
-		(float)halfWindowHeight * wfbScaleY, 0.f);
-	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	RenderHelper::RenderMesh(wireFrameBox);
-	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-	ms.PopMatrix();
+	//ms.PushMatrix();
+	//ms.Translate(0.1f * (float)halfWindowWidth + wfbPosX,
+	//	0.1f * (float)halfWindowHeight + wfbPosY, 0.f);
+	//ms.Scale((float)halfWindowHeight * wfbScaleX,
+	//	(float)halfWindowHeight * wfbScaleY, 0.f);
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	//RenderHelper::RenderMesh(wireFrameBox);
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	//ms.PopMatrix();
 
 	//RenderHelper::RenderTextOnScreen(text, std::to_string(fps), Color(0, 1, 0), 2, 0, 0);
 	glEnable(GL_DEPTH_TEST);
@@ -855,6 +839,15 @@ void SceneText::RenderWorld()
 	ms.Scale(50, 50, 50);	
 	//RenderHelper::RenderMesh(light_depth_mesh);
 	ms.PopMatrix();
+
+	if (isDay) {
+		ms.PushMatrix();
+		ms.Translate(ghostPos.x, ghostPos.y, ghostPos.z);
+		ms.Rotate(-90, 1, 0, 0);
+		ms.Scale(ghostScale.x, ghostScale.z, ghostScale.y);
+		RenderHelper::RenderMesh(wireFrameBox);
+		ms.PopMatrix();
+	}
 
 	EntityManager::GetInstance()->Render();
 }

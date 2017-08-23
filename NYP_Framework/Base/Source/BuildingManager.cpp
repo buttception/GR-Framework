@@ -42,17 +42,17 @@ void BuildingManager::AddBuilding(int _x, int _y, BuildingTile::TILE_SIDE direct
 	if (type != BuildingEntity::BUILDING_FLOOR) {
 		//where 1 -> left, 2 -> top, 3 -> right, 4 ->bottom
 		if (direction == BuildingTile::LEFT) {
-			wall->SetScale(Vector3(2, 10, CELL_SIZE + 2));
+			wall->SetScale(Vector3(2, 10, CELL_SIZE));
 			wall->SetPosition(Vector3((float)_x * CELL_SIZE, wall->GetScale().y / 2.f, (float)_y * CELL_SIZE + CELL_SIZE / 2.f));
 			buildingArray[_x][_y].AddWall(wall, BuildingTile::LEFT);
 		}
 		else if (direction == BuildingTile::TOP) {
-			wall->SetScale(Vector3(CELL_SIZE + 2, 10, 2));
+			wall->SetScale(Vector3(CELL_SIZE, 10, 2));
 			wall->SetPosition(Vector3((float)_x * CELL_SIZE + CELL_SIZE / 2.f, wall->GetScale().y / 2.f, (float)_y * CELL_SIZE));
 			buildingArray[_x][_y].AddWall(wall, BuildingTile::TOP);
 		}
 		else if (direction == BuildingTile::RIGHT) {
-			wall->SetScale(Vector3(2, 10, CELL_SIZE + 2));
+			wall->SetScale(Vector3(2, 10, CELL_SIZE));
 			//if it is on the right, which is the next tile set unless is end
 			if (_x + 1 != MAX_CELLS)
 				AddBuilding(_x + 1, _y, BuildingTile::LEFT, type);
@@ -62,7 +62,7 @@ void BuildingManager::AddBuilding(int _x, int _y, BuildingTile::TILE_SIDE direct
 			}
 		}
 		else if (direction == BuildingTile::BOTTOM) {
-			wall->SetScale(Vector3(CELL_SIZE + 2, 10, 2));
+			wall->SetScale(Vector3(CELL_SIZE, 10, 2));
 			//if it is on the bottom, which is the bottom tile set unless is end
 			if (_y >= 0)
 				AddBuilding(_x, _y + 1, BuildingTile::TOP, type);

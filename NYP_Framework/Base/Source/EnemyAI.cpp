@@ -16,10 +16,14 @@ PathfindNode EnemyAI::Pathfind(PathfindNode &node)
 {
 	// temp pathfinding for now, need to use something like crash and turn to find optimal route
 	//target = Vector3(MAX_CELLS * CELL_SIZE / 2, 0, MAX_CELLS * CELL_SIZE / 2);
-	//pathfindingStack.push(target);
+	PathfindStack temp;
+	temp.route.push(target);
+	possibleRoutes.push_back(temp);
 
-	//return this->pathfindingStack;
+	return NULL;
 
+	/*
+	///pathfind fail, too advanced
 	//testing actual pathfinding
 	//first node for route
 	if (root == nullptr) {
@@ -29,11 +33,11 @@ PathfindNode EnemyAI::Pathfind(PathfindNode &node)
 	//once finish
 	if (node.pos == target) {
 		PathfindStack newStack;
-		PathfindNode* temp = &node;
-		while (temp->parent != nullptr) {
-			newStack.route.push(temp->pos);
-			newStack.totalDifficulty += temp->difficulty;
-			temp = temp->parent;
+		PathfindNode temp = node;
+		while (temp.parent != nullptr) {
+			newStack.route.push(temp.pos);
+			newStack.totalDifficulty += temp.difficulty;
+			temp = *temp.parent;
 		}
 		//push back a possible route that was found
 		possibleRoutes.push_back(newStack);
@@ -44,16 +48,20 @@ PathfindNode EnemyAI::Pathfind(PathfindNode &node)
 		//find next node to go to
 		Vector3 nextTile = FindNextTile(node.pos);
 
+		//create the next node and assign its parent and child
 		PathfindNode nextNode(nextTile);
 		nextNode.parent = &node;
-		node.child = &nextNode;
+		//node.child = &nextNode;
+		nextNode.difficulty += 1;
 
-		nextNode.child = &Pathfind(nextNode);
-		nextNode.child->parent = &nextNode;
+		//recursive the next pathfind assuming no wall
+		//nextNode.child = &Pathfind(nextNode);
+		//nextNode.child->parent = &nextNode;
 
-		return nextNode;
+		//pathfind recursive, assign the next node parent to curr node
+		PathfindNode temp = Pathfind(nextNode);
+		temp.parent = &nextNode;
 
-		/*
 		//find the dir to the nextile
 		Vector3 dir = nextTile - node.pos;
 		// 1 = top left, 2 = top, 3 = top right, 4 = right
@@ -110,8 +118,8 @@ PathfindNode EnemyAI::Pathfind(PathfindNode &node)
 			Pathfind(nextTile);
 			break;
 		}
-		*/
 	}
+	*/
 }
 
 std::stack<Vector3> EnemyAI::GetRoute()
@@ -270,7 +278,7 @@ Vector3 EnemyAI::FindNextTile(Vector3 _pos)
 PathfindNode::PathfindNode(Vector3 _pos)
 {
 	pos = _pos;
-	child = sibling = parent = nullptr;
+	parent = nullptr;
 	difficulty = 0;
 }
 

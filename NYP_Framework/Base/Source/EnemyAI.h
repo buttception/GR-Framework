@@ -5,6 +5,7 @@
 
 // node struct for pathfinding
 struct PathfindNode {
+	PathfindNode() {}
 	PathfindNode(Vector3);
 	~PathfindNode();
 
@@ -13,8 +14,6 @@ struct PathfindNode {
 	int difficulty;
 
 	PathfindNode* parent;
-	PathfindNode* child;
-	PathfindNode* sibling;
 };
 
 //struct for each route to keep track of the total difficulty
