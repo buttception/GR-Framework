@@ -1,6 +1,7 @@
 #include "EnemyCuck.h"
 #include "MeshList.h"
 #include "EnemyManager.h"
+#include "../Source/Sound_Engine.h"
 
 float EquipmentEntity::spikeTimer = 0.f;
 float EquipmentEntity::spikeCoolDown = 1.f;
@@ -24,6 +25,7 @@ void EnemyCuck::Init()
 	scale.Set(size, size, size);
 	attackSpeed = 1.f;
 	direction = (optimalRoute.top()- position).Normalized();
+	
 }
 
 void EnemyCuck::Update(double dt)
@@ -52,6 +54,7 @@ void EnemyCuck::Update(double dt)
 		case StateMachine::ATTACK_STATE:
 			if (target != nullptr) {
 				attacking = true;
+				CSoundEngine::GetInstance()->playthesound("CUCK", 0.4f);
 			}
 			else
 				stateStack.pop();
