@@ -53,19 +53,6 @@ SceneText::SceneText(SceneManager* _sceneMgr)
 SceneText::~SceneText()
 {
 	CMinimap::Destroy();
-	
-
-
-		//thinge to delete
-		//Ground entity
-		//Textobj
-		//light
-		//thecube
-		//ground
-		//sun
-		//light_depth_mesh
-		//playerhealthbar
-		//generatorcorehealthbar
 
 }
 
@@ -314,7 +301,7 @@ void SceneText::Update(double dt)
 	Vector3 pos(lights[0]->position.x, lights[0]->position.y, lights[0]->position.z);
 	lights[0]->position = rotate * lights[0]->position;
 
-	std::cout << lights[0]->position.z << std::endl;
+	//std::cout << lights[0]->position.z << std::endl;
 
 	if (lights[0]->position.z <= 210  /*|| lights[0]->position.z > 364*/ ) {
 		lights[0]->color.Set(255 / 255, (float)165 / (float)255, 0); //keep it this way for now
@@ -322,21 +309,9 @@ void SceneText::Update(double dt)
 	}
 	else if (lights[0]->position.z >= 490 /*&& lights[0]->position.z <=490*/) {
 		lights[0]->color.Set(1, 1, 1);
-		std::cout << "Light Color is Yellow" << std::endl;
+		std::cout << "Light Color is White" << std::endl;
 	}
 	
-
-
-
-
-
-
-
-
-
-
-
-
 	//==========================================================================Light Feature=====================================================//
 
 	//if (KeyboardController::GetInstance()->IsKeyPressed(VK_F1)){
@@ -790,5 +765,5 @@ void SceneText::Exit()
 
 
 	// Delete the lights
-	delete lights[0];
+	//delete lights[0];
 }
