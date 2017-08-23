@@ -48,15 +48,10 @@ private:
 	//FPSCamera* fpscamera;
 	//TextEntity* textObj[3];
 	//Light* lights[2];
-
 	//GenericEntity* theCube;
-
-
-
 	//void RenderPassGPass();//PRE RENDER PASS
 	//void RenderPassMain();//MAIN RENDER PASS
 	//void RenderWorld();
-
 	//Mesh* ground;
 
 
@@ -69,11 +64,6 @@ private:
 	Menu SelectedOptions = Return;
 	SpriteEntity* MainMenu;
 	SpriteEntity* Arrow;
-
-	/*bool b_GAME;
-	bool b_INSTRUCTIONS;
-	bool b_quit;*/
-
 	bool b_Return;
 	bool b_Exit_to_Main_Menu;
 
