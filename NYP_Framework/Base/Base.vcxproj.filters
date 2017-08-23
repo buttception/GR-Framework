@@ -161,6 +161,9 @@
     <ClCompile Include="Source\ScenePause.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
+    <ClCompile Include="Source\EnemyRuck.cpp">
+      <Filter>Enemy</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h">
@@ -270,6 +273,9 @@
     </ClInclude>
     <ClInclude Include="Source\ScenePause.h">
       <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\EnemyRuck.h">
+      <Filter>Enemy</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

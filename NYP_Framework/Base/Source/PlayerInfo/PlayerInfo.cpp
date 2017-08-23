@@ -12,21 +12,26 @@
 #include "../WeaponInfo/Weapon.h"
 #include "../Projectile/Projectile.h"
 #include "Loader.h"
+#include "MeshList.h"
+#include "../EnemyEntity.h"
+#include "LoadTGA.cpp"
 
 bool SceneText::isDay = true;
 bool CMinimap::isResizing = false;
+float EquipmentEntity::healTimer = 0.f;
+float EquipmentEntity::healCoolDown = 2.f;
 // Allocating and initializing Player's static data member.  
 // The pointer is allocated but not the object's constructor.
 
 Player::Player(void)
 	: m_dSpeed(40.0)
-	, GenericEntity(NULL)
+	, GenericEntity(MeshList::GetInstance()->GetMesh("wall"))
 	, m_dAcceleration(10.0)
 	, m_dElapsedTime(0.0)
 	, attachedCamera(NULL)
 	, m_pTerrain(NULL)
 	, speedMultiplier(1.0)
-	, size(1)
+	, size(5)
 	, playerHealth(100.f)
 	, material(3000)
 	, currentBuilding(BuildingEntity::BUILDING_WALL)
@@ -41,6 +46,8 @@ Player::Player(void)
 	, fatigue(FATIGUE::NORMAL)
 	, slept(false)
 {
+	//EntityManager::GetInstance()->AddEntity(this);
+	//objectType = GenericEntity::PLAYER;
 }
 
 Player::~Player(void)
@@ -62,6 +69,7 @@ void Player::Init(void)
 	minBoundary.Set(-1, -1, -1);
 
 	SetAABB(Vector3(position.x + size / 2, position.y + size / 2, position.z + size / 2), Vector3(position.x - size / 2, position.y - size / 2, position.z - size / 2));
+	SetRadius(size * 5);
 	SetCollider(true);
 
 	this->keyboard = new Keyboard();
@@ -89,6 +97,8 @@ void Player::Init(void)
 
 	weaponManager[2] = weaponList[1];
 	weaponManager[2]->Init();
+
+	SetScale(Vector3(size, size, size));
 }
 
 // Set the boundary for the player info
@@ -201,6 +211,9 @@ void Player::Update(double dt)
 		secondaryWeapon->Update(dt);
 	if (weaponManager[m_iCurrentWeapon])
 		weaponManager[m_iCurrentWeapon]->Update(dt);
+
+	//healTimer update
+	EquipmentEntity::healTimer += (float)dt;
 }
 
 // Reload current weapon
@@ -424,14 +437,35 @@ void Player::CollisionResponse(EntityBase *thatEntity)
 	GenericEntity* entity;
 	if (entity = dynamic_cast<GenericEntity*>(thatEntity))
 	{
-		switch (entity->objectType) {
+		switch (entity->objectType)
+		{
 		case GenericEntity::BUILDING:
-			std::cout << "collided with wall" << std::endl;
 			position = defaultPosition;
 			break;
-		case GenericEntity::EQUIPMENT:
+		case GenericEntity::EQUIPMENT: {
 			std::cout << "collided with equipement" << std::endl;
+			EquipmentEntity* equipment = dynamic_cast<EquipmentEntity*>(thatEntity);
+			switch (equipment->type)
+			{
+			case EquipmentEntity::EQUIPMENT_HEALING_STATION:
+				if (EquipmentEntity::healTimer >= EquipmentEntity::healCoolDown &&
+					!SceneText::isDay)
+				{
+					playerHealth = Math::Min(100.f, playerHealth + 20.f);
+					EquipmentEntity::healTimer = 0.f;
+				}
+				break;
+			}
+		}
 			break;
+		case GenericEntity::ENEMY: {
+			EnemyEntity* e = dynamic_cast<EnemyEntity*>(thatEntity);
+			e->AddState(StateMachine::CHASE_STATE);
+			e->SetTarget(Player::GetInstance());
+		}
+			break;
+		default:
+			return;
 		}
 	}
 	return;

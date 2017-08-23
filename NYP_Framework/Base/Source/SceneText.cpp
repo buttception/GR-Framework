@@ -151,6 +151,7 @@ void SceneText::Init()
 	//Equipment Meshes
 	MeshBuilder::GetInstance()->GenerateOBJ("Turret", "OBJ//cube.obj"); //remember to change obj
 	MeshBuilder::GetInstance()->GenerateOBJ("Healing Station", "OBJ//cube.obj"); //remember to change obj
+	MeshList::GetInstance()->GetMesh("Healing Station")->textureID[0] = LoadTGA("Image//Heal_Active.tga");
 	MeshBuilder::GetInstance()->GenerateOBJ("Floor Spike", "OBJ//cube.obj"); //remember to change obj
 	MeshBuilder::GetInstance()->GenerateOBJ("Shield", "OBJ//cube.obj"); //remember to change obj
 
@@ -791,6 +792,12 @@ void SceneText::RenderWorld()
 	ms.Rotate(-90, 1, 0, 0);
 	ms.Scale(50, 50, 50);	
 	//RenderHelper::RenderMesh(light_depth_mesh);
+	ms.PopMatrix();
+
+	ms.PushMatrix();
+	ms.Translate(Player::GetInstance()->GetPosition());
+	ms.Scale(Player::GetInstance()->GetScale());
+	RenderHelper::RenderMesh(Player::GetInstance()->GetMesh());
 	ms.PopMatrix();
 
 	if (isDay) // Only render wireframe box in day time

@@ -70,6 +70,7 @@ public:
 	void SetCurrentWeapon(int currentWeapon) { this->m_iCurrentWeapon = currentWeapon; }
 	bool GetSlept(void) const { return slept; }
 	void SetSlept(bool slept) { this->slept = slept; }
+	Mesh* GetMesh() { return modelMesh; }
 
 	// Reload current weapon
 	bool ReloadWeapon(void);
@@ -94,18 +95,15 @@ public:
 		ENERGETIC,
 	}fatigue;
 
+	float size;
 private:
 	Vector3 defaultPosition;
 	Vector3 direction;
 	Vector3 target;
 	Vector3 maxBoundary, minBoundary;
 	GroundEntity* m_pTerrain;
-	float size;
 
-	double m_dSpeed;
-	double m_dAcceleration;
-	double m_dElapsedTime;
-	double speedMultiplier;
+	double m_dSpeed, m_dAcceleration, m_dElapsedTime, speedMultiplier;
 
 	CameraBase* attachedCamera;
 	Keyboard* keyboard;
