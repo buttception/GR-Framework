@@ -20,7 +20,7 @@ void EnemyCuck::Init()
 	size = 3;
 	scale.Set(size, size, size);
 	attackSpeed = 1.f;
-	direction = (optimalRoute.top()- position).Normalized();
+	direction = (pathfindingStack.front()- position).Normalized();
 }
 
 void EnemyCuck::Update(double dt)
@@ -30,17 +30,11 @@ void EnemyCuck::Update(double dt)
 		switch (stateStack.top()) {
 		case StateMachine::DEFAULT_STATE:
 			// if enemy reached a node
-			if ((int)position.x == optimalRoute.top().x && (int)position.z == optimalRoute.top().z) {
+			if (position == pathfindingStack.front()) {
 				// pop the stack
-				optimalRoute.pop();
+				PopRoute();
 				// find new direction to next node
-				if (optimalRoute.empty())
-					stateStack.push(StateMachine::NONE);
-				else {
-					direction = (optimalRoute.top() - position).Normalized();
-					direction.x = round(direction.x);
-					direction.z = round(direction.z);
-				}
+				direction = (pathfindingStack.front() - position).Normalized();
 			}
 			position += direction * speed * dt;
 			//updates AABB if enemy move

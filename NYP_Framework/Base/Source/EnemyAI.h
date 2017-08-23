@@ -10,20 +10,9 @@ struct PathfindNode {
 
 	Vector3 pos;
 
-	int difficulty;
-
 	PathfindNode* parent;
 	PathfindNode* child;
 	PathfindNode* sibling;
-};
-
-//struct for each route to keep track of the total difficulty
-struct PathfindStack {
-	PathfindStack();
-	~PathfindStack();
-
-	int totalDifficulty;
-	std::stack<Vector3>route;
 };
 
 //enemy ai class, incharged of switching of states and pathfinding
@@ -35,13 +24,15 @@ public:
 	PathfindNode Pathfind(PathfindNode &node);
 
 	std::stack<Vector3>GetRoute();
+	void PopRoute();
+
+	void AddNode(PathfindNode* node);
 
 	bool CheckRaytraceAABB(Vector3 _end, Vector3 origin, Collision hitbox);
 	Vector3 FindNextTile(Vector3 _pos);
 
 protected:
-	std::vector<PathfindStack>possibleRoutes;
-	std::stack<Vector3>optimalRoute;
+	std::deque<Vector3>pathfindingStack;
 	PathfindNode* root;
 	Vector3 target;
 };

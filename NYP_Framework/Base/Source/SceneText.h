@@ -32,9 +32,7 @@ public:
 private:
 	SceneText(SceneManager* _sceneMgr); // This is used to register to SceneManager
 
-	
 	ShaderProgram* currProg;
-
 	Player* playerInfo;
 	GroundEntity* groundEntity;
 	TopDownCamera *camera;
@@ -61,14 +59,10 @@ private:
 	float worldWidth, worldHeight;
 	
 	double time;
-	double dayDuration;
 	int noOfDays;
 
 	float generatorCoreScale;
 	float wfbPosX, wfbPosY, wfbScaleX, wfbScaleY;
-
-	float Delay = 0.0f;
-	const float ButtonCooldown = 0.20f;
 };
 
 #endif
