@@ -26,6 +26,7 @@ void EnemyCuck::Init()
 	scale.Set(size, size, size);
 	attackSpeed = 1.f;
 	direction = (optimalRoute.top()- position).Normalized();
+	CSoundEngine::GetInstance()->playthesound("ISIS", 0.5f);
 	
 }
 
@@ -45,10 +46,11 @@ void EnemyCuck::Update(double dt)
 				stateStack.push(StateMachine::NONE);
 			else {
 				direction = (optimalRoute.top() - position).Normalized();
-				direction.x = round(direction.x);
-				direction.y = 0;
-				direction.z = round(direction.z);
 			}
+			direction.y = 0;
+			direction.Normalize();
+			direction.x = round(direction.x);
+			direction.z = round(direction.z);
 			position += direction * speed * dt;
 			//updates AABB if enemy move
 			SetAABB(Vector3(position.x + size, position.y + size, position.z + size), Vector3(position.x - size, position.y - size, position.z - size));
@@ -65,9 +67,12 @@ void EnemyCuck::Update(double dt)
 		case StateMachine::CHASE_STATE:
 			try {
 				if (target == nullptr)
-					stateStack.top();
-				else
-					direction = (target->GetPosition() - position).Normalized();
+					stateStack.pop();
+				else {
+					direction = (target->GetPosition() - position);
+					direction.y = 0;
+					direction.Normalize();
+				}
 			}
 			catch (std::exception &e) {
 				direction.SetZero();
@@ -146,6 +151,8 @@ void EnemyCuck::Attack(GenericEntity * thatEntity, double dt)
 		std::cout << "attack\n";
 		//check if still in contact with its target
 		//test if this is too weak against player
+		if (target)
+		{
 		//if (CollisionManager::GetInstance()->CheckAABBCollision(this, thatEntity)){
 			if (thatEntity->objectType == BUILDING) {
 				BuildingEntity* building = dynamic_cast<BuildingEntity*>(thatEntity);
@@ -157,12 +164,21 @@ void EnemyCuck::Attack(GenericEntity * thatEntity, double dt)
 					if (building->GetHealth() <= 0) {
 						//destroy the building
 						building->SetIsDone(true);
-						target = nullptr;
 						//pop the attack state
 						stateStack.pop();
+						if (stateStack.top() == CHASE_STATE)
+							target = Player::GetInstance();
+						else
+							target = nullptr;
 					}
 				}
-			//}
+				//}
+			}
+			else {
+				stateStack.pop();
+				if (stateStack.top() == CHASE_STATE)
+					target = Player::GetInstance();
+			}
 		}
 		// resets attack time
 		attackElaspedTime = 0.f;
