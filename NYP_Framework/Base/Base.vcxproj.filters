@@ -158,11 +158,9 @@
     <ClCompile Include="Source\SceneInstructions.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
-
     <ClCompile Include="Source\ScenePause.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
-
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h">
@@ -270,11 +268,8 @@
     <ClInclude Include="Source\SceneInstructions.h">
       <Filter>Scene</Filter>
     </ClInclude>
-<<<<<<< HEAD
     <ClInclude Include="Source\ScenePause.h">
       <Filter>Scene</Filter>
     </ClInclude>
-=======
->>>>>>> d9ef18978421d7336106a73c1fcc5d6eea923f0a
   </ItemGroup>
 </Project>
