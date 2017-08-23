@@ -71,7 +71,7 @@ public:
 	bool GetSlept(void) const { return slept; }
 	void SetSlept(bool slept) { this->slept = slept; }
 	Mesh* GetMesh() { return modelMesh; }
-
+	
 	// Reload current weapon
 	bool ReloadWeapon(void);
 	// Change current weapon(Keyboard)
@@ -110,7 +110,7 @@ private:
 	Mouse* mouse;
 
 	int material;
-	float playerHealth;
+	float playerHealth, maxPlayerHealth;
 	BuildingEntity::BUILDING_TYPE currentBuilding;
 	bool isBuilding, isEquipment, isWeapon;
 	EquipmentEntity::EQUIPMENT_TYPE currentEquipment;

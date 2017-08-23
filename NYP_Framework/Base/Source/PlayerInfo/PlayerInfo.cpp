@@ -32,6 +32,7 @@ Player::Player(void)
 	, m_pTerrain(NULL)
 	, speedMultiplier(1.0)
 	, size(5)
+	, maxPlayerHealth(100.f)
 	, playerHealth(100.f)
 	, material(3000)
 	, currentBuilding(BuildingEntity::BUILDING_WALL)
@@ -214,6 +215,19 @@ void Player::Update(double dt)
 
 	//healTimer update
 	EquipmentEntity::healTimer += (float)dt;
+
+	switch (fatigue)
+	{
+	case TIRED:
+		maxPlayerHealth = 150.f;
+		break;
+	case NORMAL:
+		maxPlayerHealth = 100.f;
+		break;
+	case ENERGETIC:
+		maxPlayerHealth = 50.f;
+		break;
+	}
 }
 
 // Reload current weapon
@@ -443,7 +457,6 @@ void Player::CollisionResponse(EntityBase *thatEntity)
 			position = defaultPosition;
 			break;
 		case GenericEntity::EQUIPMENT: {
-			std::cout << "collided with equipement" << std::endl;
 			EquipmentEntity* equipment = dynamic_cast<EquipmentEntity*>(thatEntity);
 			switch (equipment->type)
 			{
@@ -451,7 +464,7 @@ void Player::CollisionResponse(EntityBase *thatEntity)
 				if (EquipmentEntity::healTimer >= EquipmentEntity::healCoolDown &&
 					!SceneText::isDay)
 				{
-					playerHealth = Math::Min(100.f, playerHealth + 20.f);
+					playerHealth = Math::Min(maxPlayerHealth, playerHealth + 20.f);
 					EquipmentEntity::healTimer = 0.f;
 				}
 				break;
@@ -474,20 +487,24 @@ void Player::CollisionResponse(EntityBase *thatEntity)
 void Player::SetIsBuilding()
 {
 	isBuilding = true;
+
 	isEquipment = false;
 	isWeapon = false;
 }
 
 void Player::SetIsEquipment()
 {
-	isEquipment = true;
 	isBuilding = false;
+
+	isEquipment = true;
+	
 	isWeapon = false;
 }
 
 void Player::SetIsWeapon()
 {
-	isWeapon = true;
 	isBuilding = false;
 	isEquipment = false;
+	
+	isWeapon = true;
 }
