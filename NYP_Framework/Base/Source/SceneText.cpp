@@ -181,6 +181,8 @@ void SceneText::Init()
 	wireFrameBox = MeshBuilder::GetInstance()->GenerateQuad("wireFrameBox", Color(1, 0, 0), 1.f);
 
 	theMiniMap = Create::Minimap();
+	theMiniMap->SetTarget(MeshBuilder::GetInstance()->GenerateQuad("miniMapTarget", Color(1, 1, 1), 0.0625f));
+	theMiniMap->GetTarget()->textureID[0] = LoadTGA("Image//target.tga");
 	theMiniMap->SetBackground(MeshBuilder::GetInstance()->GenerateQuad("miniMap", Color(1, 1, 1), 1.f));
 	theMiniMap->GetBackground()->textureID[0] = LoadTGA("Image//grass_lightgreen.tga");
 	theMiniMap->SetAvatar(MeshBuilder::GetInstance()->GenerateQuad("MINIMAPAVATAR", Color(1, 1, 1), 0.125f));
@@ -819,16 +821,18 @@ void SceneText::RenderPassMain()
 	RenderHelper::RenderMesh(playerHealthBar);
 	ms.PopMatrix();
 
-	ms.PushMatrix();
-	ms.Translate(0.1f * (float)halfWindowWidth + wfbPosX,
-		0.1f * (float)halfWindowHeight + wfbPosY, 0.f);
-	ms.Scale((float)halfWindowHeight * wfbScaleX,
-		(float)halfWindowHeight * wfbScaleY, 0.f);
-	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	RenderHelper::RenderMesh(wireFrameBox);
-	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-	ms.PopMatrix();
-
+	if (isDay)
+	{
+		ms.PushMatrix();
+		ms.Translate(0.1f * (float)halfWindowWidth + wfbPosX,
+			0.1f * (float)halfWindowHeight + wfbPosY, 0.f);
+		ms.Scale((float)halfWindowHeight * wfbScaleX,
+			(float)halfWindowHeight * wfbScaleY, 0.f);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		RenderHelper::RenderMesh(wireFrameBox);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		ms.PopMatrix();
+	}
 	//RenderHelper::RenderTextOnScreen(text, std::to_string(fps), Color(0, 1, 0), 2, 0, 0);
 	glEnable(GL_DEPTH_TEST);
 }

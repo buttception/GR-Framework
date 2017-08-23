@@ -3,10 +3,12 @@
 #include "RenderHelper.h"
 #include "GL\glew.h"
 #include "Application.h"
+#include "GenericEntity.h"
 
 CMinimap::CMinimap(void)
 	: m_cMinimap_Background(NULL)
 	, m_cMinimap_Avatar(NULL)
+	, m_cMinimap_Target(NULL)
 	, m_fAngle(-90.0f)
 {
 	Init(Application::GetInstance().GetWindowHeight() / 2, Application::GetInstance().GetWindowWidth() / 2);
@@ -24,6 +26,11 @@ CMinimap::~CMinimap(void)
 		delete m_cMinimap_Avatar;
 		m_cMinimap_Avatar = NULL;
 	}
+	if (m_cMinimap_Target)
+	{
+		delete m_cMinimap_Target;
+		m_cMinimap_Target = NULL;
+	}
 }
 
 // Initialise this class instance
@@ -33,6 +40,21 @@ bool CMinimap::Init(int halfWindowHeight, int halfWindowWidth)
 	scale.Set(halfWindowHeight * 0.35f, halfWindowHeight * 0.35f, 1.f);
 
 	return true;
+}
+
+bool CMinimap::SetTarget(Mesh * aTarget)
+{
+	if (aTarget != NULL)
+	{
+		m_cMinimap_Target = aTarget;
+		return true;
+	}
+	return false;
+}
+
+Mesh * CMinimap::GetTarget(void) const
+{
+	return m_cMinimap_Target;
 }
 
 // Set the background mesh to this class
@@ -125,9 +147,12 @@ float CMinimap::GetSize_y(void) const
 void CMinimap::RenderUI()
 {
 	MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
+	std::list<EntityBase*> entityList = EntityManager::GetInstance()->GetEntityList();
+	std::list<EntityBase*>::iterator it, end = entityList.end();
 
-	if (!isResizing)
+	if (!isResizing) // normal size minimap
 	{
+		//Display map
 		modelStack.PushMatrix();
 		modelStack.Translate(position.x, position.y, position.z);
 		modelStack.Scale(scale.x, scale.y, scale.z);
@@ -140,6 +165,30 @@ void CMinimap::RenderUI()
 
 		// Disable depth test
 		glDisable(GL_DEPTH_TEST);
+
+		//Display Enemy targets
+		for (it = entityList.begin(); it != end; ++it)
+		{
+			if((*it)->HasCollider())
+			{
+				if (!(*it)->IsFixed())
+				{
+					GenericEntity *g = dynamic_cast<GenericEntity*>(*it);
+					float gPosX = (g->GetPosition().x - 250.f) / MAX_CELLS * CELL_SIZE * 0.5f * 0.01f;
+					float gPosZ = (250.f - g->GetPosition().z) / MAX_CELLS * CELL_SIZE * 0.5f * 0.01f;
+					if (g->objectType == GenericEntity::ENEMY)
+					{
+						modelStack.PushMatrix();
+						modelStack.Translate(position.x, position.y, position.z);
+						modelStack.Translate(gPosX * (scale.x  * 0.5f), gPosZ * (scale.y * 0.5f), 0.f);
+						modelStack.Scale(scale.x, scale.y, scale.z);
+						if (m_cMinimap_Target)
+							RenderHelper::RenderMesh(m_cMinimap_Target);
+						modelStack.PopMatrix();
+					}
+				}
+			}
+		}
 
 		// Display the Avatar
 		modelStack.PushMatrix();
@@ -154,8 +203,9 @@ void CMinimap::RenderUI()
 		// Enable depth test
 		glEnable(GL_DEPTH_TEST);
 	}
-	else
+	else //enlarged minimap
 	{
+		// Display map
 		modelStack.PushMatrix();
 		modelStack.Scale(scale.x, scale.y, scale.z);
 		SetSize(3.6f, 3.f);
@@ -168,6 +218,30 @@ void CMinimap::RenderUI()
 
 		// Disable depth test
 		glDisable(GL_DEPTH_TEST);
+
+		//Display Enemy targets
+		for (it = entityList.begin(); it != end; ++it)
+		{
+			if ((*it)->HasCollider())
+			{
+				if (!(*it)->IsFixed())
+				{
+					GenericEntity *g = dynamic_cast<GenericEntity*>(*it);
+					float gPosX = (g->GetPosition().x - 250.f) / MAX_CELLS * CELL_SIZE * 0.5f * 0.01f;
+					float gPosZ = (250.f - g->GetPosition().z) / MAX_CELLS * CELL_SIZE * 0.5f * 0.01f;
+					if (g->objectType == GenericEntity::ENEMY)
+					{
+						modelStack.PushMatrix();
+						modelStack.Scale(2.5f, 2.5f, 1.f);
+						modelStack.Translate(gPosX * (scale.x  * 0.5f), gPosZ * (scale.y * 0.5f), 0.f);
+						modelStack.Scale(scale.x, scale.y, scale.z);
+						if (m_cMinimap_Target)
+							RenderHelper::RenderMesh(m_cMinimap_Target);
+						modelStack.PopMatrix();
+					}
+				}
+			}
+		}
 
 		// Display the Avatar
 		modelStack.PushMatrix();
