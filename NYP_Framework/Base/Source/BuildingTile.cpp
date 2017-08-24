@@ -92,3 +92,13 @@ void BuildingTile::AddEquipment(EquipmentEntity * entity)
 	equipment = entity;
 	EntityManager::GetInstance()->AddEntity(equipment);
 }
+
+bool BuildingTile::GetEmpty()
+{
+	if (leftWall || rightWall || bottomWall || topWall) {
+		if (floor || equipment)
+			return false;
+	}
+	else
+		return true;
+}

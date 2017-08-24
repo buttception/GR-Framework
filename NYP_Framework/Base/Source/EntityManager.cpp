@@ -37,7 +37,7 @@ void EntityManager::Update(double _dt)
 	}
 
 	CollisionManager::GetInstance()->Update(entityList);
-	EnemyManager::GetInstance()->Update(_dt, entityList);
+	EnemyManager::GetInstance()->Update(_dt);
 }
 
 // Render all entities

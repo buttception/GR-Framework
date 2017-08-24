@@ -26,6 +26,9 @@ public:
 	Vector3 GetDirection();
 	float GetSpeed();
 
+	bool GetActive() { return active; }
+	void SetActive(bool _bool) { active = _bool; }
+
 protected:
 	GenericEntity* target;
 
@@ -39,6 +42,8 @@ protected:
 	bool attacking;
 	float attackSpeed;
 	float attackElaspedTime;
+
+	bool active;
 };
 
 #endif

@@ -2,6 +2,7 @@
 #define ENEMY_MANAGER_H
 
 #include <map>
+#include <list>
 
 #include "SingletonTemplate.h"
 #include "EnemyEntity.h"
@@ -16,19 +17,24 @@ public:
 	bool active;
 
 	void Init();
-	void Update(double dt, std::list<EntityBase*> entityList);
+	void Update(double dt);
 
 	void End();
-	
-	void AddCount(std::string _name);
+
 	void SpawnEnemies();
-	void ClearEnemies(std::list<EntityBase*> entityList);
+	void ClearEnemies();
 
 private:
 	// spawning angle for the enemies
 	int spawningAngle;
-	// enemyCount needed to keep track of how many enemies there are to spawn more or stop spawning
-	std::map <std::string, int> enemyCount;
+	// spawning angle size to spawn the enemy
+	int spawningSize;
+	// minimun distance need to spawn the enemy
+	int minDistance;
+	// maximum distance to spawn enemy
+	int maxDistance;
+	// keep track of the total number of enemy
+	std::map<std::string, std::list<EnemyEntity*>> enemyMap;
 	// route to core
 	std::stack<Vector3> route;
 };

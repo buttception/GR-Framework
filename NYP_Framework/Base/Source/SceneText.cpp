@@ -268,6 +268,7 @@ void SceneText::Update(double dt)
 	else {
 		if (!EnemyManager::GetInstance()->active)
 			EnemyManager::GetInstance()->Init();
+		EnemyManager::GetInstance()->Update(dt);
 	}
 
 	// THIS WHOLE CHUNK TILL <THERE> CAN REMOVE INTO ENTITIES LOGIC! Or maybe into a scene function to keep the update clean

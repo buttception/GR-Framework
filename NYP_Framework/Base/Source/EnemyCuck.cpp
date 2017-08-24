@@ -192,7 +192,7 @@ void EnemyCuck::Attack(GenericEntity * thatEntity, double dt)
 EnemyCuck * Create::Cuck(std::string _meshName, Vector3 position)
 {
 	EnemyCuck* cuck = new EnemyCuck(_meshName, position);
-	EnemyManager::GetInstance()->AddCount("Cuck");
+	cuck->SetActive(true);
 	EntityManager::GetInstance()->AddEntity(cuck);
 	return cuck;
 }

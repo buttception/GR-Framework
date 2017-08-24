@@ -27,6 +27,8 @@ public:
 	
 	void AddEquipment(EquipmentEntity* entity);
 
+	bool GetEmpty();
+
 	BuildingEntity* leftWall;
 	BuildingEntity* rightWall;
 	BuildingEntity* bottomWall;

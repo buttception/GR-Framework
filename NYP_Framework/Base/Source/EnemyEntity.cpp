@@ -12,7 +12,8 @@ EnemyEntity::EnemyEntity(std::string _meshName)
 	size(1),
 	attacking(false),
 	attackSpeed(0),
-	attackElaspedTime(0)
+	attackElaspedTime(0),
+	active(false)
 {
 	objectType = GenericEntity::ENEMY;
 	direction.SetZero();
@@ -28,6 +29,8 @@ void EnemyEntity::Init()
 
 void EnemyEntity::Render()
 {
+	if (!active)
+		return;
 	MS& ms = GraphicsManager::GetInstance()->GetModelStack();
 	ms.PushMatrix();
 	ms.Translate(position.x, position.y, position.z);
