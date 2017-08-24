@@ -32,6 +32,8 @@ public:
 	bool GetActive() { return active; }
 	void SetActive(bool _bool) { active = _bool; }
 
+	void Reset();
+
 protected:
 	GenericEntity* target;
 

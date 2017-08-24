@@ -77,7 +77,7 @@ void EnemyManager::Init()
 				++y;
 		}
 	}
-	minDistance = 3 * CELL_SIZE;
+	minDistance = 5 * CELL_SIZE;
 	if (x != MAX_CELLS / 2) {
 		minDistance += abs((x - MAX_CELLS) * CELL_SIZE);
 	}
@@ -89,11 +89,9 @@ void EnemyManager::Init()
 	//first time set up
 	if (enemyMap["Cuck"].empty()) {
 		for (size_t i = 0; i < 20; ++i) {
-
+			enemyMap["Cuck"].push_back(Create::Cuck("wall", Vector3(0, 0, 0)));
 		}
 	}
-
-	SpawnEnemies();
 
 	active = true;
 }
@@ -101,6 +99,8 @@ void EnemyManager::Init()
 // purpose of enemy manager is not to update enemy, but decide where and when to create them and destruct them
 void EnemyManager::Update(double dt)
 {
+	if (active)
+		SpawnEnemies();
 }
 
 void EnemyManager::End()
@@ -115,14 +115,34 @@ void EnemyManager::End()
 	spawningAngle = spawningSize = minDistance = maxDistance = 0;
 }
 
+EnemyEntity * EnemyManager::FetchEnemy(std::string _type)
+{
+	if (enemyMap.count(_type)) {
+		for (auto it : enemyMap[_type]) {
+			if (it->GetActive() == false)
+				return it;
+		}
+	}
+	return nullptr;
+}
+
 // to spawn enemy based on how many days
 void EnemyManager::SpawnEnemies()
 {
-	// when spawn enemy, find optimal route from spawn to core
+	EnemyEntity* e;
+	Vector3 center(MAX_CELLS * CELL_SIZE / 2, 0, MAX_CELLS * CELL_SIZE / 2);
+	if (e = FetchEnemy("Cuck")) {
+		// when spawn enemy, find optimal route from spawn to core
 		int spawnAnglePosition = Math::RandIntMinMax(0, spawningSize) + spawningAngle;
 		Vector3 spawnDir(1, 0, 0);
 		Mtx44 rotate;	rotate.SetToRotation(spawnAnglePosition, 0, 1, 0);
 		spawnDir = rotate * spawnDir;
+		EnemyCuck*c = dynamic_cast<EnemyCuck*>(e);
+		if (c) {
+			c->SetPosition(center + spawnDir * Math::RandFloatMinMax(minDistance, maxDistance));
+			c->Init();
+		}
+	}
 
 		
 }
@@ -133,6 +153,7 @@ void EnemyManager::ClearEnemies()
 	for (auto &it : enemyMap) {
 		for (auto it2 : it.second) {
 			it2->SetActive(false);
+			it2->Reset();
 		}
 	}
 }

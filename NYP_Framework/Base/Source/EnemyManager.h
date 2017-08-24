@@ -21,6 +21,8 @@ public:
 
 	void End();
 
+	EnemyEntity* FetchEnemy(std::string _type);
+
 	void SpawnEnemies();
 	void ClearEnemies();
 

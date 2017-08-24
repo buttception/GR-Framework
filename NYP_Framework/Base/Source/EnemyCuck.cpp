@@ -10,7 +10,6 @@ float EquipmentEntity::spikeCoolDown = 1.f;
 EnemyCuck::EnemyCuck(std::string _meshName, Vector3 position) : EnemyEntity(_meshName)
 {
 	this->position = position;
-	stateStack.push(DEFAULT_STATE);
 }
 
 EnemyCuck::~EnemyCuck()
@@ -19,19 +18,25 @@ EnemyCuck::~EnemyCuck()
 
 void EnemyCuck::Init()
 {
-	speed = 10.f;
+	stateStack.push(DEFAULT_STATE);
+	speed = 20.f;
 	health = 100;
 	damage = 10;
 	size = 3.f;
 	scale.Set(size, size, size);
 	attackSpeed = 1.f;
+	Pathfind(PathfindNode(position));
+	GetRoute();
 	direction = (optimalRoute.top()- position).Normalized();
+	active = true;
 	//CSoundEngine::GetInstance()->playthesound("ISIS", 0.5f);
 	
 }
 
 void EnemyCuck::Update(double dt)
 {
+	if (!active)
+		return;
 	//if player is not attacking
 	if (!attacking) {
 		switch (stateStack.top()) {
@@ -217,7 +222,6 @@ void EnemyCuck::Attack(GenericEntity * thatEntity, double dt)
 EnemyCuck * Create::Cuck(std::string _meshName, Vector3 position)
 {
 	EnemyCuck* cuck = new EnemyCuck(_meshName, position);
-	cuck->SetActive(true);
 	EntityManager::GetInstance()->AddEntity(cuck);
 	return cuck;
 }

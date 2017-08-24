@@ -281,6 +281,7 @@ void SceneText::Init()
 	ghostPos.SetZero();
 	ghostScale.SetZero();
 	//CSoundEngine::GetInstance()->playthesound("HELLO", 0.2f);
+	Math::InitRNG();
 }
 
 void SceneText::Update(double dt)
