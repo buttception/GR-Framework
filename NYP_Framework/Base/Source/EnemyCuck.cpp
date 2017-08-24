@@ -26,7 +26,7 @@ void EnemyCuck::Init()
 	scale.Set(size, size, size);
 	attackSpeed = 1.f;
 	direction = (optimalRoute.top()- position).Normalized();
-	CSoundEngine::GetInstance()->playthesound("ISIS", 0.5f);
+	//CSoundEngine::GetInstance()->playthesound("ISIS", 0.5f);
 	
 }
 
@@ -63,9 +63,10 @@ void EnemyCuck::Update(double dt)
 
 			if (target != nullptr) {
 				attacking = true;
+				//CSoundEngine::GetInstance()->playthesound("CUCK", 0.4f);
+
 				/*if (attacking = true)
 				{
-					CSoundEngine::GetInstance()->playthesound("CUCK", 0.4f);
 				}*/
 				
 			}
@@ -103,6 +104,13 @@ void EnemyCuck::Update(double dt)
 
 	//Equipment Timer Update
 	EquipmentEntity::spikeTimer += (float)dt;
+				/*static int i = 0;
+				++i;
+
+				if (i % 120 == 0) {
+					CSoundEngine::GetInstance()->playthesound("CUCK", 0.4f);
+					std::cout << "test\n";
+				}*/
 }
 
 void EnemyCuck::CollisionResponse(GenericEntity * thatEntity)

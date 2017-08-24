@@ -279,6 +279,7 @@ void SceneText::Init()
 	generatorCoreScale = 1.98f;
 	ghostPos.SetZero();
 	ghostScale.SetZero();
+	//CSoundEngine::GetInstance()->playthesound("HELLO", 0.2f);
 }
 
 void SceneText::Update(double dt)
@@ -681,7 +682,6 @@ void SceneText::Update(double dt)
 	}
 	
 
-	//CSoundEngine::GetInstance()->playthesound("HELLO", 0.2f);
 }
 
 void SceneText::Render()
