@@ -434,6 +434,8 @@ bool Player::LeftClick(float dt)
 		{
 			DischargePrimaryWeapon(dt, position, playerMouse_Direction);
 		}
+
+		CSoundEngine::GetInstance()->playthesound("PewPew", 0.2f);
 	}
 	catch (DivideByZero)
 	{
@@ -551,6 +553,7 @@ bool Player::RightClick()
 				}
 			}
 		}
+
 		CSoundEngine::GetInstance()->playthesound("Remove", 0.2f);
 		std::cout << "Remove Sound Played" << std::endl;
 	}
