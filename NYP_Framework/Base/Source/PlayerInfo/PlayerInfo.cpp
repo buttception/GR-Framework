@@ -66,8 +66,8 @@ void Player::Init(void)
 	defaultPosition = position;
 
 	// Set Boundary
-	maxBoundary.Set(1,1,1);
-	minBoundary.Set(-1, -1, -1);
+	maxBoundary.Set(MAX_CELLS*CELL_SIZE,1,MAX_CELLS*CELL_SIZE);
+	minBoundary.Set(0, -1, 0);
 
 	SetAABB(Vector3(position.x + size / 2, position.y + size / 2, position.z + size / 2), Vector3(position.x - size / 2, position.y - size / 2, position.z - size / 2));
 	SetRadius(size * 5);
@@ -304,21 +304,26 @@ std::list<Projectile*> Player::GetProj()
 void Player::Constrain(void)
 {
 
+	//constrain the player to stay within the map/play area 
+	//min for z  and x is 0, max is 500
+	if (position.x > maxBoundary.x )
+	{
+		position.x = maxBoundary.x;
+	}
+	if (position.z > maxBoundary.z)
+	{
+		position.z = maxBoundary.z;
+	}
+	if (position.x < minBoundary.x)
+	{
+		position.x = minBoundary.x;
+	}
+	if (position.z < minBoundary.z)
+	{
+		position.z = minBoundary.z;
+	}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+	
 }
 
 CameraBase * Player::getCamera()
