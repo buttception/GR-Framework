@@ -37,6 +37,17 @@ void EnemyEntity::Render()
 	ms.PopMatrix();
 }
 
+int EnemyEntity::GetHealth()
+{
+	return health;
+}
+
+void EnemyEntity::SetHealth(int _value)
+{
+	health = _value;
+}
+
+
 void EnemyEntity::Update(double dt)
 {
 }

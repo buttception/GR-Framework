@@ -15,6 +15,7 @@ class Mouse;
 class SceneText;
 class CWeaponInfo;
 class Weapon;
+class Projectile;
 
 class Player : public Singleton<Player>, public GenericEntity
 {

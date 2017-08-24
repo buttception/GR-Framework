@@ -16,6 +16,9 @@ public:
 	void Render();
 	virtual void Update(double dt);
 
+	int GetHealth();
+	void SetHealth(int _value);
+
 	virtual void CollisionResponse(GenericEntity* thatEntity);
 
 	virtual void Attack(GenericEntity* thatEntity, double dt);
