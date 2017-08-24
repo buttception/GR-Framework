@@ -571,10 +571,14 @@ bool Player::RightClick()
 				}
 			}
 		}
-		
+		else
+		{
 			CSoundEngine::GetInstance()->playsinglesound("NULL", 0.2f);
 			std::cout << "Null Sound Played" << std::endl;
+
+		}
 		
+			
 
 		
 	}
