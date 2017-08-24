@@ -433,9 +433,10 @@ bool Player::LeftClick(float dt)
 		else
 		{
 			DischargePrimaryWeapon(dt, position, playerMouse_Direction);
+			CSoundEngine::GetInstance()->playthesound("PewPew", 0.2f);
 		}
 
-		CSoundEngine::GetInstance()->playthesound("PewPew", 0.2f);
+		
 	}
 	catch (DivideByZero)
 	{

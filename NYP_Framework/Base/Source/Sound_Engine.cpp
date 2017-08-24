@@ -100,12 +100,24 @@ void CSoundEngine::playthesound(const std::string & _soundIndex, float volume)
 {
 
 	std::string aSound = getthesound(_soundIndex);
-	//if (!isthesoundEngine->isCurrentlyPlaying(aSound.c_str()))
+	if (!isthesoundEngine->isCurrentlyPlaying(aSound.c_str()))
 	{
 		isthesoundEngine->play2D(aSound.c_str(), false, false);
 		isthesoundEngine->setSoundVolume(volume);
 		
 	}
+}
+
+void CSoundEngine::playsinglesound(const std::string & _soundIndex, float volume)
+{
+	std::string bsound = getthesound(_soundIndex);
+	/*if (!isthesoundEngine->isCurrentlyPlaying(bsound.c_str()))
+	{*/
+		isthesoundEngine->play2D(bsound.c_str(), false, false);
+		isthesoundEngine->setSoundVolume(volume);
+	//}
+	
+
 }
 
 //void CSoundEngine::setVolume(int newvolume, float volume)

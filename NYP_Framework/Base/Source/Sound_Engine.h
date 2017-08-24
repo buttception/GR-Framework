@@ -36,6 +36,7 @@ public:
 
 	bool removethesound(const std::string& _soundIndex);
 	void playthesound(const std::string& _soundIndex,float volume);
+	void playsinglesound(const std::string& _soundIndex, float volume);
 
 
 

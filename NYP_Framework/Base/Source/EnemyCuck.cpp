@@ -74,7 +74,7 @@ void EnemyCuck::Update(double dt)
 				stateStack.pop();
 
 			attacking = true;
-			CSoundEngine::GetInstance()->playthesound("CUCK", 0.1f);
+			CSoundEngine::GetInstance()->playsinglesound("CUCK", 0.1f);
 			stateStack.pop();
 
 			break;
