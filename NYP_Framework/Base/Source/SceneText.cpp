@@ -183,9 +183,10 @@ void SceneText::Init()
 
 	//Equipment Meshes
 	MeshBuilder::GetInstance()->GenerateOBJ("Turret", "OBJ//cube.obj"); //remember to change obj
-	MeshBuilder::GetInstance()->GenerateOBJ("Healing Station", "OBJ//cube.obj"); //remember to change obj
-	MeshList::GetInstance()->GetMesh("Healing Station")->textureID[0] = LoadTGA("Image//Heal_Active.tga");
-	MeshBuilder::GetInstance()->GenerateOBJ("Floor Spike", "OBJ//cube.obj"); //remember to change obj
+	MeshBuilder::GetInstance()->GenerateOBJ("Healing Station", "OBJ//cube.obj");
+	MeshList::GetInstance()->GetMesh("Healing Station")->textureID[0] = LoadTGA("Image//Equipment//Heal_Active.tga");
+	MeshBuilder::GetInstance()->GenerateOBJ("Floor Spike", "OBJ//cube.obj");
+	MeshList::GetInstance()->GetMesh("Floor Spike")->textureID[0] = LoadTGA("Image//Equipment//Spike.tga");
 	MeshBuilder::GetInstance()->GenerateOBJ("Shield", "OBJ//cube.obj"); //remember to change obj
 
 	//Enemy Mesh

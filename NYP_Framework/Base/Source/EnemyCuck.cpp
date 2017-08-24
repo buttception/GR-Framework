@@ -2,6 +2,7 @@
 #include "MeshList.h"
 #include "EnemyManager.h"
 #include "../Source/Sound_Engine.h"
+#include "PlayerInfo\PlayerInfo.h"
 
 float EquipmentEntity::spikeTimer = 0.f;
 float EquipmentEntity::spikeCoolDown = 1.f;
@@ -39,20 +40,27 @@ void EnemyCuck::Update(double dt)
 			if ((int)position.x == optimalRoute.top().x && (int)position.z == optimalRoute.top().z) {
 				// pop the stack
 				optimalRoute.pop();
-				// find new direction to next node
-				if (optimalRoute.empty())
-					stateStack.push(StateMachine::NONE);
-				else {
-					direction = (optimalRoute.top() - position).Normalized();
-					direction.x = round(direction.x);
-					direction.z = round(direction.z);
-				}
 			}
+			// find new direction to next node
+			if (optimalRoute.empty())
+				stateStack.push(StateMachine::NONE);
+			else {
+				direction = (optimalRoute.top() - position).Normalized();
+			}
+			direction.y = 0;
+			direction.Normalize();
+			direction.x = round(direction.x);
+			direction.z = round(direction.z);
 			position += direction * speed * dt;
 			//updates AABB if enemy move
 			SetAABB(Vector3(position.x + size, position.y + size, position.z + size), Vector3(position.x - size, position.y - size, position.z - size));
+			if (CollisionManager::GetInstance()->CheckPointToSphereCollision(position, Player::GetInstance())) {
+				stateStack.push(CHASE_STATE);
+				target = Player::GetInstance();
+			}
 			break;
 		case StateMachine::ATTACK_STATE:
+
 			if (target != nullptr) {
 				attacking = true;
 				/*if (attacking = true)
@@ -63,10 +71,27 @@ void EnemyCuck::Update(double dt)
 			}
 			else
 				stateStack.pop();
+
+			attacking = true;
+			CSoundEngine::GetInstance()->playthesound("CUCK", 0.4f);
+			stateStack.pop();
+
 			break;
 		case StateMachine::CHASE_STATE:
-			direction = (target->GetPosition() - position).Normalized();
+			try {
+				if (target == nullptr)
+					stateStack.pop();
+				else {
+					direction = (target->GetPosition() - position);
+					direction.y = 0;
+					direction.Normalize();
+				}
+			}
+			catch (std::exception &e) {
+				direction.SetZero();
+			}
 			position += direction * speed * dt;
+			SetAABB(Vector3(position.x + size, position.y + size, position.z + size), Vector3(position.x - size, position.y - size, position.z - size));
 			break;
 		default:
 			return;
@@ -141,6 +166,8 @@ void EnemyCuck::Attack(GenericEntity * thatEntity, double dt)
 		std::cout << "attack\n";
 		//check if still in contact with its target
 		//test if this is too weak against player
+		if (target)
+		{
 		//if (CollisionManager::GetInstance()->CheckAABBCollision(this, thatEntity)){
 			if (thatEntity->objectType == BUILDING) {
 				BuildingEntity* building = dynamic_cast<BuildingEntity*>(thatEntity);
@@ -152,12 +179,21 @@ void EnemyCuck::Attack(GenericEntity * thatEntity, double dt)
 					if (building->GetHealth() <= 0) {
 						//destroy the building
 						building->SetIsDone(true);
-						target = nullptr;
 						//pop the attack state
 						stateStack.pop();
+						if (stateStack.top() == CHASE_STATE)
+							target = Player::GetInstance();
+						else
+							target = nullptr;
 					}
 				}
-			//}
+				//}
+			}
+			else {
+				stateStack.pop();
+				if (stateStack.top() == CHASE_STATE)
+					target = Player::GetInstance();
+			}
 		}
 		// resets attack time
 		attackElaspedTime = 0.f;

@@ -65,13 +65,6 @@ void EnemyManager::SpawnEnemies()
 		// init the enemy
 		first->Init();
 
-		first = Create::Cuck("Cuck", Vector3(310, 0, 190));
-		// only need to calculate one optimal route thus saving the stack
-		first->Pathfind(PathfindNode(first->GetPosition()));
-		route = first->GetRoute();
-		// init the enemy
-		first->Init();
-
 		first = Create::Cuck("Cuck", Vector3(310, 0, 250));
 		// only need to calculate one optimal route thus saving the stack
 		first->Pathfind(PathfindNode(first->GetPosition()));

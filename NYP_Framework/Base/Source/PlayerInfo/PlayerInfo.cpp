@@ -215,6 +215,8 @@ void Player::Update(double dt)
 
 	//healTimer update
 	EquipmentEntity::healTimer += (float)dt;
+	if(EquipmentEntity::healTimer >= EquipmentEntity::healCoolDown)
+		MeshList::GetInstance()->GetMesh("Healing Station")->textureID[0] = LoadTGA("Image//Equipment//Heal_Active.tga");
 
 	switch (fatigue)
 	{
@@ -223,9 +225,13 @@ void Player::Update(double dt)
 		break;
 	case NORMAL:
 		maxPlayerHealth = 100.f;
+		if (playerHealth >= 100.f)
+			playerHealth = 100.f;
 		break;
 	case ENERGETIC:
 		maxPlayerHealth = 50.f;
+		if (playerHealth >= 50.f)
+			playerHealth = 50.f;
 		break;
 	}
 }
@@ -466,6 +472,7 @@ void Player::CollisionResponse(EntityBase *thatEntity)
 				{
 					playerHealth = Math::Min(maxPlayerHealth, playerHealth + 20.f);
 					EquipmentEntity::healTimer = 0.f;
+					MeshList::GetInstance()->GetMesh("Healing Station")->textureID[0] = LoadTGA("Image//Equipment//Heal_Inactive.tga");
 				}
 				break;
 			}
@@ -473,7 +480,7 @@ void Player::CollisionResponse(EntityBase *thatEntity)
 			break;
 		case GenericEntity::ENEMY: {
 			EnemyEntity* e = dynamic_cast<EnemyEntity*>(thatEntity);
-			e->AddState(StateMachine::CHASE_STATE);
+			e->AddState(StateMachine::ATTACK_STATE);
 			e->SetTarget(Player::GetInstance());
 		}
 			break;
