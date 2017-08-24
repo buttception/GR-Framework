@@ -26,7 +26,7 @@ bool Mouse::Create(Player* thePlayerInfo)
 		cout << "Mouse::Create()" << endl;
 
 	KeyList[CONTROLLER_LEFTCLICK] = MouseController::LMB;
-	KeyList[CONTROLLER_AIM] = MouseController::RMB;
+	KeyList[CONTROLLER_RIGHTCLICK] = MouseController::RMB;
 
 	return false;
 }

@@ -28,7 +28,7 @@ public:
 		CONTROLLER_ISWEAPON,
 
 		CONTROLLER_LEFTCLICK,
-		CONTROLLER_AIM,
+		CONTROLLER_RIGHTCLICK,
 
         NUM_CONRTOLLER,
     };
@@ -52,7 +52,7 @@ public:
 	virtual bool SwitchWeapon(double dt);
 	virtual bool Reset(double dt);
 	virtual bool LeftClick(double dt);
-	virtual bool Aim(double dt);
+	virtual bool RightClick(double dt);
 	virtual bool MapResize(double dt);
 	virtual bool isBuilding(double dt);
 	virtual bool isEquipment(double dt);

@@ -4,13 +4,18 @@
 #include "Sound_Engine.h"
 #include "PlayerInfo\PlayerInfo.h"
 
+//BuildingEntity* BuildingTile::leftWall = nullptr;
+//BuildingEntity* BuildingTile::rightWall = nullptr;
+//BuildingEntity* BuildingTile::bottomWall = nullptr;
+//BuildingEntity* BuildingTile::topWall = nullptr;
+//BuildingEntity* BuildingTile::floor = nullptr;
+//EquipmentEntity* BuildingTile::equipment = nullptr;
 
 BuildingTile::BuildingTile()
-	: leftWall(nullptr)
+	: topWall(nullptr)
+	, leftWall(nullptr)
 	, rightWall(nullptr)
 	, bottomWall(nullptr)
-	, topWall(nullptr)
-
 	, floor(nullptr)
 	, equipment(nullptr)
 {
@@ -60,7 +65,7 @@ void BuildingTile::AddWall(BuildingEntity * entity, TILE_SIDE direction)
 	Player::GetInstance()->SetMaterial(Math::Max(0, Player::GetInstance()->GetMaterial() - 150));
 	EntityManager::GetInstance()->AddEntity(entity);
 	CSoundEngine::GetInstance()->playthesound("Build", 0.4f);
-	std::cout << "Buld sound Played" << std::endl;
+	std::cout << "Build sound Played" << std::endl;
 }
 
 void BuildingTile::AddFloor(BuildingEntity * entity)
