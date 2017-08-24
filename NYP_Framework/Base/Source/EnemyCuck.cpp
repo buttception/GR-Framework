@@ -55,8 +55,11 @@ void EnemyCuck::Update(double dt)
 		case StateMachine::ATTACK_STATE:
 			if (target != nullptr) {
 				attacking = true;
-				CSoundEngine::GetInstance()->playthesound("CUCK", 0.4f);
-				std::cout << "Muslim Sound Played" << std::endl;
+				/*if (attacking = true)
+				{
+					CSoundEngine::GetInstance()->playthesound("CUCK", 0.4f);
+				}*/
+				
 			}
 			else
 				stateStack.pop();
@@ -88,6 +91,8 @@ void EnemyCuck::CollisionResponse(GenericEntity * thatEntity)
 		if (stateStack.top() != ATTACK_STATE)
 			stateStack.push(ATTACK_STATE);
 		target = thatEntity;
+		/*CSoundEngine::GetInstance()->playthesound("CUCK", 0.4f);
+		std::cout << "Muslim Sound Played" << std::endl;*/
 		break;
 	case GenericEntity::PROJECTILE:
 
@@ -159,6 +164,8 @@ void EnemyCuck::Attack(GenericEntity * thatEntity, double dt)
 		// stop attack animation
 		attacking = false;
 	}
+	CSoundEngine::GetInstance()->playthesound("CUCK", 0.4f);
+	std::cout << "Muslim Sound Played" << std::endl;
 	//else
 		//std::cout << "waiting for attack speed\n";
 }
