@@ -57,7 +57,7 @@ void SceneInstructions::Init()
 		Vector3(halfWindowWidth, halfWindowHeight, 0.0f),
 		Vector3(800.0f, 600.0f, 0.0f));
 
-	BGM_I->play2D("Image//Relax.mp3", GL_TRUE); //play music
+	BGM_I->play2D("Image//YEEYEEYEEYEEYEE.mp3", GL_TRUE); //play music
 }
 void SceneInstructions::Update(double dt)
 {

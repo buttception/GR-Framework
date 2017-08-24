@@ -274,6 +274,7 @@ bool Player::DischargePrimaryWeapon(const float deltaTime, Vector3 position, Vec
 		weaponManager[m_iCurrentWeapon]->Discharge(position, target, this);
 
 		//CSoundEngine::GetInstance()->playthesound("PewPew", 0.3);
+		CSoundEngine::GetInstance()->playsinglesound("PewPew", 0.2f);
 
 		return true;
 	}
@@ -434,7 +435,7 @@ bool Player::LeftClick(float dt)
 		else
 		{
 			DischargePrimaryWeapon(dt, position, playerMouse_Direction);
-			CSoundEngine::GetInstance()->playsinglesound("PewPew", 0.2f);
+			
 		}
 
 		
