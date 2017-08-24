@@ -79,7 +79,9 @@ void EnemyEntity::Reset()
 	attacking = false;
 	while (!stateStack.empty())
 		stateStack.pop();
-	optimalRoute.pop();
-	possibleRoutes.clear();
+	if (!optimalRoute.empty())
+		optimalRoute.pop();
+	if (!possibleRoutes.empty())
+		possibleRoutes.clear();
 	attackElaspedTime = 0;
 }

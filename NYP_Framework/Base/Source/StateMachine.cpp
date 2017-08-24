@@ -12,8 +12,9 @@ StateMachine::~StateMachine()
 
 void StateMachine::AddState(STATE_TYPE _state)
 {
-	if (stateStack.top() != _state)
-		stateStack.push(_state);
+	if (!stateStack.empty())
+		if (stateStack.top() != _state)
+			stateStack.push(_state);
 }
 
 bool StateMachine::RemoverState()

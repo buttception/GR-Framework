@@ -785,7 +785,9 @@ void SceneText::RenderPassMain()
 	Light* light = dynamic_cast<Light*>(g->GetLight("lights[0]"));
 
 	//placed down so alpha will work properly on ldq.
+	ms.PushMatrix();
 	RenderWorld();
+	ms.PopMatrix();
 
 	int halfWindowWidth = Application::GetInstance().GetWindowWidth() / 2;
 	int halfWindowHeight = Application::GetInstance().GetWindowHeight() / 2;

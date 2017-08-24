@@ -4,6 +4,7 @@
 #include "GL\glew.h"
 #include "Application.h"
 #include "GenericEntity.h"
+#include "EnemyEntity.h"
 
 CMinimap::CMinimap(void)
 	: m_cMinimap_Background(NULL)
@@ -178,13 +179,15 @@ void CMinimap::RenderUI()
 					float gPosZ = (250.f - g->GetPosition().z) / MAX_CELLS * CELL_SIZE * 0.5f * 0.01f;
 					if (g->objectType == GenericEntity::ENEMY)
 					{
-						modelStack.PushMatrix();
-						modelStack.Translate(position.x, position.y, position.z);
-						modelStack.Translate(gPosX * (scale.x  * 0.5f), gPosZ * (scale.y * 0.5f), 0.f);
-						modelStack.Scale(scale.x, scale.y, scale.z);
-						if (m_cMinimap_Target)
-							RenderHelper::RenderMesh(m_cMinimap_Target);
-						modelStack.PopMatrix();
+						if (dynamic_cast<EnemyEntity*>(g)->GetActive()) {
+							modelStack.PushMatrix();
+							modelStack.Translate(position.x, position.y, position.z);
+							modelStack.Translate(gPosX * (scale.x  * 0.5f), gPosZ * (scale.y * 0.5f), 0.f);
+							modelStack.Scale(scale.x, scale.y, scale.z);
+							if (m_cMinimap_Target)
+								RenderHelper::RenderMesh(m_cMinimap_Target);
+							modelStack.PopMatrix();
+						}
 					}
 				}
 			}

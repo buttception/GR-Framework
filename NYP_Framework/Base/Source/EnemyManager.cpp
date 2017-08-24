@@ -143,8 +143,6 @@ void EnemyManager::SpawnEnemies()
 			c->Init();
 		}
 	}
-
-		
 }
 
 // clearing all enemies in the case of day

@@ -139,7 +139,7 @@ void Projectile::CollisionResponse(GenericEntity * thatEntity)
 		std::cout << "hito\n";
 		if (enemy->GetHealth() <= 0)
 		{
-			thatEntity->SetIsDone(true);
+			enemy->SetActive(false);
 		}
 		break;
 	case BUILDING:

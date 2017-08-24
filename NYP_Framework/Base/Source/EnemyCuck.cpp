@@ -19,7 +19,7 @@ EnemyCuck::~EnemyCuck()
 void EnemyCuck::Init()
 {
 	stateStack.push(DEFAULT_STATE);
-	speed = 20.f;
+	speed = 5.f;
 	health = 100;
 	damage = 10;
 	size = 3.f;
@@ -58,7 +58,7 @@ void EnemyCuck::Update(double dt)
 			direction.z = round(direction.z);
 			position += direction * speed * dt;
 			//updates AABB if enemy move
-			SetAABB(Vector3(position.x + size, position.y + size, position.z + size), Vector3(position.x - size, position.y - size, position.z - size));
+			SetAABB(Vector3(position.x + size / 2, position.y + size / 2, position.z + size / 2), Vector3(position.x - size / 2, position.y - size / 2, position.z - size / 2));
 			if (CollisionManager::GetInstance()->CheckPointToSphereCollision(position, Player::GetInstance())) {
 				stateStack.push(CHASE_STATE);
 				target = Player::GetInstance();
@@ -97,7 +97,7 @@ void EnemyCuck::Update(double dt)
 				direction.SetZero();
 			}
 			position += direction * speed * dt;
-			SetAABB(Vector3(position.x + size, position.y + size, position.z + size), Vector3(position.x - size, position.y - size, position.z - size));
+			SetAABB(Vector3(position.x + size / 2, position.y + size / 2, position.z + size / 2), Vector3(position.x - size / 2, position.y - size / 2, position.z - size / 2));
 			break;
 		default:
 			return;
