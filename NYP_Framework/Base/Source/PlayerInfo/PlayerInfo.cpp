@@ -87,6 +87,7 @@ void Player::Init(void)
 	CSoundEngine::GetInstance()->Addthefuckingsound("CUCK" , "Image//AA.mp3");
 	//CSoundEngine::GetInstance()->Addthefuckingsound("ISIS", "Image//ISIS.mp3");
 	CSoundEngine::GetInstance()->Addthefuckingsound("Remove", "Image//out.ogg");
+	CSoundEngine::GetInstance()->Addthefuckingsound("NULL", "Image//click.ogg");
 
 	// Set the pistol as the primary weapon
 	Loader::GetInstance()->ReadFileWeapon("weapon.csv", weaponList);
@@ -433,7 +434,7 @@ bool Player::LeftClick(float dt)
 		else
 		{
 			DischargePrimaryWeapon(dt, position, playerMouse_Direction);
-			CSoundEngine::GetInstance()->playthesound("PewPew", 0.2f);
+			CSoundEngine::GetInstance()->playsinglesound("PewPew", 0.2f);
 		}
 
 		
@@ -478,6 +479,8 @@ bool Player::RightClick()
 				{
 					tile->topWall->SetIsDone(true);
 					tile->topWall = nullptr;
+					CSoundEngine::GetInstance()->playthesound("Remove", 0.2f);
+					std::cout << "Remove Sound Played" << std::endl;
 				}
 			}
 			// Left
@@ -488,6 +491,8 @@ bool Player::RightClick()
 				{
 					tile->leftWall->SetIsDone(true);
 					tile->leftWall = nullptr;
+					CSoundEngine::GetInstance()->playthesound("Remove", 0.2f);
+					std::cout << "Remove Sound Played" << std::endl;
 				}
 			}
 			// Right
@@ -500,6 +505,8 @@ bool Player::RightClick()
 					{
 						tile->leftWall->SetIsDone(true);
 						tile->leftWall = nullptr;
+						CSoundEngine::GetInstance()->playthesound("Remove", 0.2f);
+						std::cout << "Remove Sound Played" << std::endl;
 					}
 				}
 				else
@@ -509,6 +516,8 @@ bool Player::RightClick()
 					{
 						tile->rightWall->SetIsDone(true);
 						tile->rightWall = nullptr;
+						CSoundEngine::GetInstance()->playthesound("Remove", 0.2f);
+						std::cout << "Remove Sound Played" << std::endl;
 					}
 				}
 			}
@@ -522,6 +531,8 @@ bool Player::RightClick()
 					{
 						tile->topWall->SetIsDone(true);
 						tile->topWall = nullptr;
+						CSoundEngine::GetInstance()->playthesound("Remove", 0.2f);
+						std::cout << "Remove Sound Played" << std::endl;
 					}
 				}
 				else
@@ -531,6 +542,8 @@ bool Player::RightClick()
 					{
 						tile->bottomWall->SetIsDone(true);
 						tile->bottomWall = nullptr;
+						CSoundEngine::GetInstance()->playthesound("Remove", 0.2f);
+						std::cout << "Remove Sound Played" << std::endl;
 					}
 				}
 			}
@@ -542,6 +555,8 @@ bool Player::RightClick()
 				{
 					tile->floor->SetIsDone(true);
 					tile->floor = nullptr;
+					CSoundEngine::GetInstance()->playthesound("Remove", 0.2f);
+					std::cout << "Remove Sound Played" << std::endl;
 				}
 			}
 			else if (isEquipment)
@@ -551,12 +566,17 @@ bool Player::RightClick()
 				{
 					tile->equipment->SetIsDone(true);
 					tile->equipment = nullptr;
+					CSoundEngine::GetInstance()->playthesound("Remove", 0.2f);
+					std::cout << "Remove Sound Played" << std::endl;
 				}
 			}
 		}
+		
+			CSoundEngine::GetInstance()->playsinglesound("NULL", 0.2f);
+			std::cout << "Null Sound Played" << std::endl;
+		
 
-		CSoundEngine::GetInstance()->playthesound("Remove", 0.2f);
-		std::cout << "Remove Sound Played" << std::endl;
+		
 	}
 	catch (DivideByZero)
 	{
