@@ -45,7 +45,7 @@ private:
 	static SceneInstructions* sInstance;
 
 	Menu SelectedOptions = GAME;
-	SpriteEntity* Instructions;
+	SpriteEntity* MainMenu;
 	SpriteEntity* Arrow;
 
 	bool b_GAME, b_QUIT;

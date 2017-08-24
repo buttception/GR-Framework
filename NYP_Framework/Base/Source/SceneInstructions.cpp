@@ -53,7 +53,7 @@ void SceneInstructions::Init()
 	Arrow = Create::Sprite2DObject("ARROW",
 		Vector3(halfWindowWidth * 0.75f, halfWindowHeight * 0.235f, 2.f),
 		Vector3(12.5f, 12.5f, 0.0f));
-	Instructions = Create::Sprite2DObject("Scene_Instructions",
+	MainMenu = Create::Sprite2DObject("Scene_Instructions",
 		Vector3(halfWindowWidth, halfWindowHeight, 0.0f),
 		Vector3(800.0f, 600.0f, 0.0f));
 
@@ -67,8 +67,8 @@ void SceneInstructions::Update(double dt)
 	float halfWindowWidth = (float)Application::GetInstance().GetWindowWidth() / 2.0f;
 	float halfWindowHeight = (float)Application::GetInstance().GetWindowHeight() / 2.0f;
 
-	Instructions->SetPosition(Vector3(halfWindowWidth, halfWindowHeight, 0.f));
-	Instructions->SetScale(Vector3((float)Application::GetInstance().GetWindowWidth(),
+	MainMenu->SetPosition(Vector3(halfWindowWidth, halfWindowHeight, 0.f));
+	MainMenu->SetScale(Vector3((float)Application::GetInstance().GetWindowWidth(),
 		(float)Application::GetInstance().GetWindowHeight(), 0.f));
 
 	Arrow->SetPosition(Vector3(halfWindowWidth * 0.75f, halfWindowHeight * 0.235f, 2.f));
@@ -146,6 +146,6 @@ void SceneInstructions::Exit()
 {
 	GraphicsManager::GetInstance()->DetachCamera();
 	Arrow->SetIsDone(true);
-	Instructions->SetIsDone(true);
+	MainMenu->SetIsDone(true);
 	BGM_I->stopAllSounds();
 }

@@ -77,6 +77,21 @@ void ScenePause::Update(double dt)
 {
 	EntityManager::GetInstance()->Update(dt);
 
+	//Update position based on window size
+	float halfWindowWidth = (float)Application::GetInstance().GetWindowWidth() / 2.0f;
+	float halfWindowHeight = (float)Application::GetInstance().GetWindowHeight() / 2.0f;
+
+	MainMenu->SetPosition(Vector3(halfWindowWidth, halfWindowHeight, 0.f));
+	MainMenu->SetScale(Vector3((float)Application::GetInstance().GetWindowWidth(),
+		(float)Application::GetInstance().GetWindowHeight(), 0.f));
+
+	Arrow->SetPosition((Vector3(halfWindowWidth, halfWindowHeight, 2.f)));
+	Arrow->SetScale(Vector3((float)Application::GetInstance().GetWindowWidth() / 32,
+		(float)Application::GetInstance().GetWindowHeight() / 24, 0.f));
+
+
+
+
 	// THIS WHOLE CHUNK TILL <THERE> CAN REMOVE INTO ENTITIES LOGIC! Or maybe into a scene function to keep the update clean
 	if (KeyboardController::GetInstance()->IsKeyDown('1'))
 		glEnable(GL_CULL_FACE);
@@ -165,11 +180,13 @@ void ScenePause::Update(double dt)
 
 	if (b_Return)
 	{
-		Arrow->SetPosition(Vector3(130, 150, 2));
+		Arrow->SetPosition(Vector3((float)Application::GetInstance().GetWindowWidth() / 7.2f,
+			(float)Application::GetInstance().GetWindowHeight() / 3.875f, 2.f));
 	}
 	if (b_Exit_to_Main_Menu)
 	{
-		Arrow->SetPosition(Vector3(130, 80, 2));
+		Arrow->SetPosition(Vector3((float)Application::GetInstance().GetWindowWidth() / 7.2f,
+			(float)Application::GetInstance().GetWindowHeight() / 8.5f, 2.f));
 	}
 
 	
