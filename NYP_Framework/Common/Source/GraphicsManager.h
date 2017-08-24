@@ -66,10 +66,27 @@ public:
 		U_SHADOW_COLOR_TEXTURE_ENABLED3,
 		U_SHADOW_COLOR_TEXTURE3,
 
+
+
+		//I'll put the fog stuff here,don't get mad ah
+		U_FOG_COLOR,
+		U_FOG_START,
+		U_FOG_END,
+		U_FOG_DENSITY,
+		U_FOG_TYPE,
+		U_FOG_ENABLED,
+
+
+
+
+
+
+
 		GPASS_UNIFORM_TYPE_COUNT
 	};
 	unsigned gPass_params[GPASS_UNIFORM_TYPE_COUNT];
 	unsigned m_gPassShaderID;
+	unsigned m_programID;
 	DepthFBO m_lightDepthFBO;
 	Mtx44 m_lightDepthProj;
 	Mtx44 m_lightDepthView;
