@@ -137,6 +137,7 @@ void SceneText::Init()
 		glGetUniformLocation(GraphicsManager::GetInstance()->m_gPassShaderID, "lightDepthMVP");
 	GraphicsManager::GetInstance()->m_lightDepthFBO.Init(1024, 1024);
 
+
 	////Fog 
 	//GraphicsManager::GetInstance()->gPass_params[GraphicsManager::GPASS_UNIFORM_TYPE::U_FOG_COLOR] = 
 	//	glGetUniformLocation(GraphicsManager::GetInstance()->, "fogParam.color");

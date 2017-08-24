@@ -86,6 +86,7 @@ void Player::Init(void)
 	CSoundEngine::GetInstance()->Addthefuckingsound("Floor", "Image//stone6.ogg");
 	CSoundEngine::GetInstance()->Addthefuckingsound("CUCK" , "Image//AA.mp3");
 	//CSoundEngine::GetInstance()->Addthefuckingsound("ISIS", "Image//ISIS.mp3");
+	CSoundEngine::GetInstance()->Addthefuckingsound("Remove", "Image//out.ogg");
 
 	// Set the pistol as the primary weapon
 	Loader::GetInstance()->ReadFileWeapon("weapon.csv", weaponList);
@@ -550,6 +551,8 @@ bool Player::RightClick()
 				}
 			}
 		}
+		CSoundEngine::GetInstance()->playthesound("Remove", 0.2f);
+		std::cout << "Remove Sound Played" << std::endl;
 	}
 	catch (DivideByZero)
 	{
