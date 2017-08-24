@@ -34,11 +34,9 @@ public:
 	BuildingEntity* bottomWall;
 	BuildingEntity* topWall;
 	BuildingEntity* floor;
+	EquipmentEntity* equipment;
 
 	Collision hitbox;
-
-private:
-	EquipmentEntity* equipment;
 
 };
 

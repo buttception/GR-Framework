@@ -33,7 +33,7 @@ bool Controller::Create(Player* thePlayerInfo)
 	this->controllerfunc[CONTROLLER_SWITCHWEAPON] = &Controller::SwitchWeapon;
 	this->controllerfunc[CONTROLLER_RESET] = &Controller::Reset;
 	this->controllerfunc[CONTROLLER_LEFTCLICK] = &Controller::LeftClick;
-	this->controllerfunc[CONTROLLER_AIM] = &Controller::Aim;
+	this->controllerfunc[CONTROLLER_RIGHTCLICK] = &Controller::RightClick;
 	this->controllerfunc[CONTROLLER_MAPRESIZE] = &Controller::MapResize;
 	this->controllerfunc[CONTROLLER_ISBUILDING] = &Controller::isBuilding;
 	this->controllerfunc[CONTROLLER_ISEQUIPMENT] = &Controller::isEquipment;
@@ -105,9 +105,9 @@ bool Controller::LeftClick(double dt)
 	return false;
 }
 
-bool Controller::Aim(double dt)
+bool Controller::RightClick(double dt)
 {
-	std::cout << "Aim" << std::endl;
+	thePlayerInfo->RightClick();
 	return false;
 }
 

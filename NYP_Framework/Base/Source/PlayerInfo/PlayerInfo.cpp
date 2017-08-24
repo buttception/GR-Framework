@@ -85,7 +85,9 @@ void Player::Init(void)
 	CSoundEngine::GetInstance()->Addthefuckingsound("PewPew", "Image//9mm.mp3");
 	CSoundEngine::GetInstance()->Addthefuckingsound("Floor", "Image//stone6.ogg");
 	CSoundEngine::GetInstance()->Addthefuckingsound("CUCK" , "Image//AA.mp3");
-	CSoundEngine::GetInstance()->Addthefuckingsound("ISIS", "Image//ISIS.mp3");
+	//CSoundEngine::GetInstance()->Addthefuckingsound("ISIS", "Image//ISIS.mp3");
+	CSoundEngine::GetInstance()->Addthefuckingsound("Remove", "Image//out.ogg");
+	CSoundEngine::GetInstance()->Addthefuckingsound("NULL", "Image//click.ogg");
 
 	// Set the pistol as the primary weapon
 	Loader::GetInstance()->ReadFileWeapon("weapon.csv", weaponList);
@@ -424,9 +426,7 @@ bool Player::LeftClick(float dt)
 					BuildingManager::GetInstance()->AddBuilding((int)(Player::GetInstance()->GetPosition().x / CELL_SIZE), (int)(Player::GetInstance()->GetPosition().z / CELL_SIZE), BuildingTile::BOTTOM, currentBuilding);
 			}
 			else if (isEquipment)
-			{
 				BuildingManager::GetInstance()->AddEquipment((int)(Player::GetInstance()->GetPosition().x / CELL_SIZE), (int)(Player::GetInstance()->GetPosition().z / CELL_SIZE), currentEquipment);
-			}
 			else if (currentBuilding == BuildingEntity::BUILDING_FLOOR)
 				BuildingManager::GetInstance()->AddBuilding((int)(Player::GetInstance()->GetPosition().x / CELL_SIZE), (int)(Player::GetInstance()->GetPosition().z / CELL_SIZE), BuildingTile::LEFT, BuildingEntity::BUILDING_FLOOR);
 			return true;
@@ -434,11 +434,157 @@ bool Player::LeftClick(float dt)
 		else
 		{
 			DischargePrimaryWeapon(dt, position, playerMouse_Direction);
+			CSoundEngine::GetInstance()->playsinglesound("PewPew", 0.2f);
 		}
+
+		
 	}
 	catch (DivideByZero)
 	{
 		std::cout << "Cannot move mouse to center, divide by zero(Normalize for placing buildings)" << std::endl;
+	}
+	return false;
+}
+
+bool Player::RightClick()
+{
+	//convert mouse pos on window onto world
+	double mouseX, mouseY;
+	MouseController::GetInstance()->GetMousePosition(mouseX, mouseY);
+	MouseController::GetInstance()->UpdateMousePosition(mouseX, Application::GetInstance().GetWindowHeight() - mouseY);
+	MouseController::GetInstance()->GetMousePosition(mouseX, mouseY);
+
+	float windowWidth = (float)Application::GetInstance().GetWindowWidth();
+	float windowHeight = (float)Application::GetInstance().GetWindowHeight();
+	//for the direction player is pointing at
+	Vector3 Up_Direction = Vector3(windowWidth / 2.f, windowHeight, 0.f) - Vector3(windowWidth / 2.f, windowHeight / 2.f, 0.f);
+	Vector3 playerMouse_Direction = Vector3((float)mouseX, (float)mouseY, 0.f) - Vector3(windowWidth / 2.f, windowHeight / 2.f, 0.f);
+
+	try
+	{
+		playerMouse_Direction.Normalize();
+		float angle = Math::RadianToDegree(acosf(playerMouse_Direction.Dot(Up_Direction) / (playerMouse_Direction.Length() * Up_Direction.Length())));
+		if (playerMouse_Direction.x < 0)
+			angle = -angle;
+
+		int x = (int)(position.x / CELL_SIZE);
+		int z = (int)(position.z / CELL_SIZE);
+		if (SceneText::isDay)
+		{
+			// Up
+			if ((angle >= -180.f && angle <= -127.f) || (angle <= 180.f && angle >= 127.f))
+			{
+				BuildingTile* tile = &BuildingManager::GetInstance()->GetBuildingArray()[x][z];
+				if (tile->topWall != nullptr)
+				{
+					tile->topWall->SetIsDone(true);
+					tile->topWall = nullptr;
+					CSoundEngine::GetInstance()->playthesound("Remove", 0.2f);
+					std::cout << "Remove Sound Played" << std::endl;
+				}
+			}
+			// Left
+			else if (angle >= -127.f && angle <= -53.f)
+			{
+				BuildingTile* tile = &BuildingManager::GetInstance()->GetBuildingArray()[x][z];
+				if (tile->leftWall != nullptr)
+				{
+					tile->leftWall->SetIsDone(true);
+					tile->leftWall = nullptr;
+					CSoundEngine::GetInstance()->playthesound("Remove", 0.2f);
+					std::cout << "Remove Sound Played" << std::endl;
+				}
+			}
+			// Right
+			else if (angle >= 53.f && angle <= 127.f)
+			{
+				if (x + 1 != MAX_CELLS)
+				{
+					BuildingTile* tile = &BuildingManager::GetInstance()->GetBuildingArray()[x + 1][z];
+					if (tile->leftWall != nullptr)
+					{
+						tile->leftWall->SetIsDone(true);
+						tile->leftWall = nullptr;
+						CSoundEngine::GetInstance()->playthesound("Remove", 0.2f);
+						std::cout << "Remove Sound Played" << std::endl;
+					}
+				}
+				else
+				{
+					BuildingTile* tile = &BuildingManager::GetInstance()->GetBuildingArray()[x][z];
+					if (tile->rightWall != nullptr)
+					{
+						tile->rightWall->SetIsDone(true);
+						tile->rightWall = nullptr;
+						CSoundEngine::GetInstance()->playthesound("Remove", 0.2f);
+						std::cout << "Remove Sound Played" << std::endl;
+					}
+				}
+			}
+			// Down
+			else if (angle >= -53.f && angle <= 53.f)
+			{
+				if (z >= 0)
+				{
+					BuildingTile* tile = &BuildingManager::GetInstance()->GetBuildingArray()[x][z + 1];
+					if (tile->topWall != nullptr)
+					{
+						tile->topWall->SetIsDone(true);
+						tile->topWall = nullptr;
+						CSoundEngine::GetInstance()->playthesound("Remove", 0.2f);
+						std::cout << "Remove Sound Played" << std::endl;
+					}
+				}
+				else
+				{
+					BuildingTile* tile = &BuildingManager::GetInstance()->GetBuildingArray()[x][z];
+					if (tile->bottomWall != nullptr)
+					{
+						tile->bottomWall->SetIsDone(true);
+						tile->bottomWall = nullptr;
+						CSoundEngine::GetInstance()->playthesound("Remove", 0.2f);
+						std::cout << "Remove Sound Played" << std::endl;
+					}
+				}
+			}
+			// Floor
+			if (isBuilding && currentBuilding == BuildingEntity::BUILDING_FLOOR)
+			{
+				BuildingTile* tile = &BuildingManager::GetInstance()->GetBuildingArray()[x][z];
+				if (tile->floor != nullptr)
+				{
+					tile->floor->SetIsDone(true);
+					tile->floor = nullptr;
+					CSoundEngine::GetInstance()->playthesound("Remove", 0.2f);
+					std::cout << "Remove Sound Played" << std::endl;
+				}
+			}
+			else if (isEquipment)
+			{
+				BuildingTile* tile = &BuildingManager::GetInstance()->GetBuildingArray()[x][z];
+				if (tile->equipment != nullptr)
+				{
+					tile->equipment->SetIsDone(true);
+					tile->equipment = nullptr;
+					CSoundEngine::GetInstance()->playthesound("Remove", 0.2f);
+					std::cout << "Remove Sound Played" << std::endl;
+				}
+			}
+		}
+		else
+		{
+			CSoundEngine::GetInstance()->playsinglesound("NULL", 0.2f);
+			std::cout << "Null Sound Played" << std::endl;
+
+		}
+		
+			
+
+		
+	}
+	catch (DivideByZero)
+	{
+		std::cout << "Cannot move mouse to center, divide by zero(Normalize to find angle)" << std::endl;
 	}
 	return false;
 }

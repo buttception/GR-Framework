@@ -13,6 +13,7 @@ CWeaponInfo::CWeaponInfo()
 	, elapsedTime(0.0)
 	, bFire(true)
 	, weaponName("")
+	, damage(10)
 {
 }
 
@@ -21,7 +22,7 @@ CWeaponInfo::~CWeaponInfo()
 {
 }
 
-void CWeaponInfo::WeaponDamage(const int damage)
+void CWeaponInfo::SetWeaponDamage(const int damage)
 {
 	this->damage = damage;
 }
@@ -145,7 +146,7 @@ void CWeaponInfo::Init(void)
 	// Boolean flag to indicate if weapon can fire now
 	bFire = true;
 
-	
+
 
 }
 
@@ -183,6 +184,7 @@ void CWeaponInfo::Discharge(Vector3 position, Vector3 target, Player* _source)
 			aProjectile->SetPosition(Player::GetInstance()->GetPosition());
 			aProjectile->SetCollider(true);
 			aProjectile->SetLifetime(10);
+			aProjectile->SetDamage(GetWeaponDamage());
 			aProjectile->SetDirection(target);
 			aProjectile->SetStatus(true);
 			aProjectile->SetAABB(Vector3(0.5f, 0.5f, 0.5f), Vector3(-0.5f, -0.5f, -0.5f));
@@ -233,6 +235,7 @@ void CWeaponInfo::PrintSelf(void)
 	cout << "maxTotalRounds\t\t:\t" << maxTotalRounds << endl;
 	cout << "timeBetweenShots\t:\t" << timeBetweenShots << endl;
 	cout << "elapsedTime\t\t:\t" << elapsedTime << endl;
+	cout << "Damage\t\t:\t" << damage << endl;
 	cout << "bFire\t\t:\t" << bFire << endl;
 }
 

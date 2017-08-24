@@ -11,6 +11,7 @@ Projectile::Projectile(std::string _meshName) : GenericEntity(MeshList::GetInsta
 , theDirection(0, 0, 0)
 , m_fLifetime(-1.0f)
 , m_fSpeed(10.0f)
+, damage(0)
 {
 
 }
@@ -31,12 +32,13 @@ bool Projectile::GetStatus(void) const
 	return m_bStatus;
 }
 
-void Projectile::Set(Vector3 theNewPosition, Vector3 theNewDirection, const float m_fLifetime, const float m_fSpeed)
+void Projectile::Set(Vector3 theNewPosition, Vector3 theNewDirection, const float m_fLifetime, const float m_fSpeed, const int damage)
 {
 	position = theNewPosition;
 	theDirection = theNewDirection;
 	this->m_fLifetime = m_fLifetime;
 	this->m_fSpeed = m_fSpeed;
+	this->damage = damage;
 }
 
 void Projectile::SetDirection(Vector3 theNewDirection)
@@ -69,6 +71,16 @@ float Projectile::GetSpeed(void) const
 	return m_fSpeed;
 }
 
+void Projectile::SetDamage(const int m_damage)
+{
+	this->damage = m_damage;
+}
+
+float Projectile::GetDamage(void) const
+{
+	return damage;
+}
+
 void Projectile::Update(double dt)
 {
 	if (m_bStatus == false)
@@ -83,9 +95,13 @@ void Projectile::Update(double dt)
 		return;
 	}
 
+	SetAABB(Vector3(position.x + 0.5, position.y + 0.5, position.z + 0.5),
+		Vector3(position.x - 0.5, position.y + 0.5, position.z - 0.5));
+
 	// Update Position
 	Vector3 d(theDirection.x, 0, -theDirection.y);
 	position += d * (float)dt * m_fSpeed;
+
 }
 
 void Projectile::Render(void)
@@ -107,7 +123,29 @@ void Projectile::Render(void)
 Projectile * Create::Bullet(std::string _meshName)
 {
 	Projectile* p = new Projectile(_meshName);
+	p->objectType = GenericEntity::PROJECTILE;
 	EntityManager::GetInstance()->AddEntity(p);
 	return p;
-	
+}
+
+void Projectile::CollisionResponse(GenericEntity * thatEntity)
+{
+	EnemyEntity* enemy = dynamic_cast<EnemyEntity*>(thatEntity);
+
+	switch (thatEntity->objectType) {
+	case ENEMY:
+		this->SetIsDone(true);
+		enemy->SetHealth(enemy->GetHealth() - damage); 
+		std::cout << "hito\n";
+		if (enemy->GetHealth() <= 0)
+		{
+			thatEntity->SetIsDone(true);
+		}
+		break;
+	case BUILDING:
+		this->SetIsDone(true);
+		break;
+	default:
+		return;
+	}
 }

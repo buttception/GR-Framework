@@ -3,10 +3,17 @@
 #define PROJECTILE_H
 
 #include "../GenericEntity.h"
+#include "../EnemyEntity.h"
 #include "MeshList.h"
+#include "../PlayerInfo/PlayerInfo.h"
+
+class Player;
 
 class Projectile : public GenericEntity {
 public:
+
+	Player* player;
+
 	Projectile(std::string _meshName);
 	~Projectile();
 
@@ -18,7 +25,8 @@ public:
 	void Set(Vector3 theNewPosition,
 		Vector3 theNewDirection,
 		const float m_fLifetime,
-		const float m_fSpeed);
+		const float m_fSpeed,
+		const int damage);
 	void SetDirection(Vector3 theNewDirection);
 	// Get the direction of the projectile
 	Vector3 GetDirection(void);
@@ -31,10 +39,16 @@ public:
 	// Get the speed of the projectile
 	float GetSpeed(void) const;
 
+	//set damage
+	void SetDamage(const int m_damage);
+	//get damage
+	float GetDamage(void) const;
 	// Update the status of this projectile
 	virtual void Update(double dt = 0.0333f);
 	// Render this projectile
 	virtual void Render(void);
+
+	void CollisionResponse(GenericEntity* thatEntity);
 protected:
 	// Boolean flag to indicate if this projectile is active. If not active, then do not compute/update
 	bool m_bStatus;
@@ -42,6 +56,8 @@ protected:
 	float m_fLifetime;
 	// Speed of this projectile in unit / sec
 	float m_fSpeed;
+	// damage of the projectile
+	int damage;
 	// The direction of the projectile
 	Vector3 theDirection;
 

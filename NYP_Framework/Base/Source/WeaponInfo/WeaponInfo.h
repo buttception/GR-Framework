@@ -7,6 +7,7 @@
 
 
 class Player;
+class Projectile;
 
 class CWeaponInfo
 {
@@ -40,7 +41,7 @@ public:
 	int totalRounds;
 	// The max total number of rounds currently carried by this player
 	int maxTotalRounds;
-
+	Player* player;
 protected:
 	// The time between shots in milliseconds
 	double timeBetweenShots;
@@ -57,7 +58,7 @@ protected:
 
 public:
 	//set the damage for the bullet
-	virtual void WeaponDamage(const int damage);
+	virtual void SetWeaponDamage(const int damage);
 	// Set the number of ammunition in the magazine for this player
 	virtual void SetMagRound(const int magRounds);
 	// Set the maximum number of ammunition in the magazine for this weapon
@@ -69,7 +70,7 @@ public:
 
 	// Get the weapon ID
 	virtual int GetWeaponID(void) const;
-	// Get the weapon damage for this weapon
+	// Get the weapon damage for this weapon5
 	virtual int GetWeaponDamage(void) const;
 	// Get the number of ammunition in the magazine for this player
 	virtual int GetMagRound(void) const;

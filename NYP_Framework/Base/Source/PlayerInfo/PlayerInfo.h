@@ -15,6 +15,7 @@ class Mouse;
 class SceneText;
 class CWeaponInfo;
 class Weapon;
+class Projectile;
 
 class Player : public Singleton<Player>, public GenericEntity
 {
@@ -48,6 +49,7 @@ public:
 	bool MoveFrontBack(const float deltaTime, const bool direction, const float speedMultiplier = 1.0f);
 	bool MoveLeftRight(const float deltaTime, const bool direction, const float speedMultiplier = 1.0f);
 	bool LeftClick(float dt);
+	bool RightClick();
 	bool MapResize();
 	void CollisionResponse(EntityBase* thatEntity);
 

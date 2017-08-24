@@ -57,6 +57,8 @@ void SceneText::Init()
 {
 	currProg = GraphicsManager::GetInstance()->LoadShader("default", "Shader//Shadow.vertexshader", "Shader//Shadow.fragmentshader");
 	
+
+
 	// Tell the shader program to store these uniform locations
 	currProg->AddUniform("MVP");
 	currProg->AddUniform("MV");
@@ -112,6 +114,8 @@ void SceneText::Init()
 	currProg->AddUniform("lightDepthMVP");
 	
 	GraphicsManager::GetInstance()->m_gPassShaderID = LoadShaders("Shader//GPass.vertexshader", "Shader//GPass.fragmentshader");
+
+
 	GraphicsManager::GetInstance()->gPass_params[GraphicsManager::GPASS_UNIFORM_TYPE::U_SHADOW_COLOR_TEXTURE_ENABLED] =
 		glGetUniformLocation(GraphicsManager::GetInstance()->m_gPassShaderID, "colorTextureEnabled[0]");
 	GraphicsManager::GetInstance()->gPass_params[GraphicsManager::GPASS_UNIFORM_TYPE::U_SHADOW_COLOR_TEXTURE] =
@@ -132,6 +136,36 @@ void SceneText::Init()
 	GraphicsManager::GetInstance()->gPass_params[GraphicsManager::GPASS_UNIFORM_TYPE::U_LIGHT_DEPTH_MVP_GPASS] =
 		glGetUniformLocation(GraphicsManager::GetInstance()->m_gPassShaderID, "lightDepthMVP");
 	GraphicsManager::GetInstance()->m_lightDepthFBO.Init(1024, 1024);
+
+
+	////Fog 
+	//GraphicsManager::GetInstance()->gPass_params[GraphicsManager::GPASS_UNIFORM_TYPE::U_FOG_COLOR] = 
+	//	glGetUniformLocation(GraphicsManager::GetInstance()->, "fogParam.color");
+	//GraphicsManager::GetInstance()->gPass_params[GraphicsManager::GPASS_UNIFORM_TYPE::U_FOG_START] = 
+	//	glGetUniformLocation(GraphicsManager::GetInstance()->, "fogParam.start");
+	//GraphicsManager::GetInstance()->gPass_params[GraphicsManager::GPASS_UNIFORM_TYPE::U_FOG_END] = 
+	//	glGetUniformLocation(GraphicsManager::GetInstance()->, "fogParam.end");
+	//GraphicsManager::GetInstance()->gPass_params[GraphicsManager::GPASS_UNIFORM_TYPE::U_FOG_DENSITY] = 
+	//	glGetUniformLocation(GraphicsManager::GetInstance()->, "fogParam.density");
+	//GraphicsManager::GetInstance()->gPass_params[GraphicsManager::GPASS_UNIFORM_TYPE::U_FOG_TYPE] = 
+	//	glGetUniformLocation(GraphicsManager::GetInstance()->, "fogParam.type");
+	//GraphicsManager::GetInstance()->gPass_params[GraphicsManager::GPASS_UNIFORM_TYPE::U_FOG_ENABLED] = 
+	//	glGetUniformLocation(GraphicsManager::GetInstance()->, "fogparam.enabled");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	// Tell the graphics manager to use the shader we just loaded
 	GraphicsManager::GetInstance()->SetActiveShader("default");
@@ -246,6 +280,7 @@ void SceneText::Init()
 	generatorCoreScale = 1.98f;
 	ghostPos.SetZero();
 	ghostScale.SetZero();
+	//CSoundEngine::GetInstance()->playthesound("HELLO", 0.2f);
 }
 
 void SceneText::Update(double dt)
@@ -301,6 +336,8 @@ void SceneText::Update(double dt)
 	Vector3 pos(lights[0]->position.x, lights[0]->position.y, lights[0]->position.z);
 	lights[0]->position = rotate * lights[0]->position;
 
+
+
 	//std::cout << lights[0]->position.z << std::endl;
 
 	if (lights[0]->position.z <= 210  /*|| lights[0]->position.z > 364*/ ) {
@@ -308,7 +345,7 @@ void SceneText::Update(double dt)
 		//std::cout << "Light Color is Orange" << std::endl;
 	}
 	else if (lights[0]->position.z >= 490 /*&& lights[0]->position.z <=490*/) {
-		lights[0]->color.Set(255/255, 255/255, 0);
+		//lights[0]->color.Set(255/255, 255/255, 0);
 		//std::cout << "Light Color is Yellow" << std::endl;
 		lights[0]->color.Set(1, 1, 1);
 		//std::cout << "Light Color is White" << std::endl;
@@ -646,6 +683,7 @@ void SceneText::Update(double dt)
 		std::cout << "Pause Selected" << std::endl;
 	}
 	
+
 }
 
 void SceneText::Render()
