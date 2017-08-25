@@ -18,8 +18,6 @@
 
 bool SceneText::isDay = true;
 bool CMinimap::isResizing = false;
-float EquipmentEntity::healTimer = 0.f;
-float EquipmentEntity::healCoolDown = 2.f;
 // Allocating and initializing Player's static data member.  
 // The pointer is allocated but not the object's constructor.
 
@@ -215,9 +213,9 @@ void Player::Update(double dt)
 		weaponManager[m_iCurrentWeapon]->Update(dt);
 
 	//healTimer update
-	EquipmentEntity::healTimer += (float)dt;
-	if(EquipmentEntity::healTimer >= EquipmentEntity::healCoolDown)
-		MeshList::GetInstance()->GetMesh("Healing Station")->textureID[0] = LoadTGA("Image//Equipment//Heal_Active.tga");
+	//equipment->healTimer += (float)dt;
+	//if(equipment->healTimer >= equipment->healCoolDown)
+		//MeshList::GetInstance()->GetMesh("Healing Station")->textureID[0] = LoadTGA("Image//Equipment//Heal_Active.tga");
 
 	switch (fatigue)
 	{
@@ -677,12 +675,11 @@ void Player::CollisionResponse(EntityBase *thatEntity)
 			switch (equipment->type)
 			{
 			case EquipmentEntity::EQUIPMENT_HEALING_STATION:
-				if (EquipmentEntity::healTimer >= EquipmentEntity::healCoolDown &&
+				if (equipment->healTimer >= equipment->healCoolDown &&
 					!SceneText::isDay)
 				{
 					playerHealth = Math::Min(maxPlayerHealth, playerHealth + 20);
-					EquipmentEntity::healTimer = 0.f;
-					MeshList::GetInstance()->GetMesh("Healing Station")->textureID[0] = LoadTGA("Image//Equipment//Heal_Inactive.tga");
+					equipment->healTimer = 0.f;
 				}
 				break;
 			}

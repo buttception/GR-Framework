@@ -19,7 +19,7 @@ public:
 	}type;
 
 	void Render();
-
+	void Update(double dt);
 	int GetHealth();
 	void SetHealth(int _value);
 
@@ -33,7 +33,7 @@ public:
 	int GetGridZ();
 	void SetGrid(int _x, int _z);
 
-	static float healTimer, healCoolDown,
+	float healTimer, healCoolDown,
 				 spikeTimer, spikeCoolDown;
 private:
 	int health;

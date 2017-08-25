@@ -5,7 +5,12 @@
 #include "GraphicsManager.h"
 #include "RenderHelper.h"
 
-EquipmentEntity::EquipmentEntity(const std::string _meshName) : GenericEntity(MeshList::GetInstance()->GetMesh(_meshName))
+EquipmentEntity::EquipmentEntity(const std::string _meshName)
+	: GenericEntity(MeshList::GetInstance()->GetMesh(_meshName))
+	, healTimer(0.f)
+	, healCoolDown(3.f)
+	, spikeTimer(0.f)
+	, spikeCoolDown(2.f)
 {
 	modelMesh = MeshList::GetInstance()->GetMesh(_meshName);
 	SetIsFixed(true);
@@ -23,6 +28,12 @@ void EquipmentEntity::Render()
 	modelStack.Scale(scale.x, scale.y, scale.z);
 	RenderHelper::RenderMeshWithLight(modelMesh);
 	modelStack.PopMatrix();
+}
+
+void EquipmentEntity::Update(double dt)
+{
+	healTimer += (float)dt;
+	spikeTimer += (float)dt;
 }
 
 int EquipmentEntity::GetHealth()

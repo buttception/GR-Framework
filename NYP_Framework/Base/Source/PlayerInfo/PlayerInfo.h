@@ -56,8 +56,8 @@ public:
 
 	int GetMaterial(void) const { return material; }
 	void SetMaterial(int material) { this->material = material; }
-	float GetPlayerHealth(void) const { return playerHealth; }
-	void SetPlayerHealth(float playerHealth) { this->playerHealth = playerHealth; }
+	int GetPlayerHealth(void) const { return playerHealth; }
+	void SetPlayerHealth(int playerHealth) { this->playerHealth = playerHealth; }
 	BuildingEntity::BUILDING_TYPE GetCurrentBuilding(void) const { return currentBuilding; }
 	void SetCurrentBuilding(BuildingEntity::BUILDING_TYPE currentBuilding) { this->currentBuilding = currentBuilding; }
 	bool GetIsBuilding(void) const { return isBuilding; }
