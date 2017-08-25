@@ -12,7 +12,6 @@
 #include "BuildingManager.h"
 #include "SpriteEntity.h"
 
-
 class ShaderProgram;
 class SceneManager;
 class TextEntity;
@@ -60,6 +59,8 @@ private:
 	Mesh* wireFrameBox;
 	Mesh* Shop;
 	CMinimap* theMiniMap;
+
+	BuildingEntity* core;
 
 	float worldWidth, worldHeight, generatorCoreScale
 		, Delay = 0.0f;

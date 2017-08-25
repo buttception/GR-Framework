@@ -20,12 +20,12 @@ BuildingManager::~BuildingManager()
 {
 }
 
-void BuildingManager::AddBuilding(int _x, int _y, BuildingTile::TILE_SIDE direction, BuildingEntity::BUILDING_TYPE type)
+BuildingEntity* BuildingManager::AddBuilding(int _x, int _y, BuildingTile::TILE_SIDE direction, BuildingEntity::BUILDING_TYPE type)
 {
 	// where _x and _y is 0 to 49
 	if (_x >= MAX_CELLS || _y >= MAX_CELLS || _x < 0 || _y < 0) {
 		std::cout << "Wall placement exceeds max cell size" << std::endl;
-		return;
+		return nullptr;
 	}
 
 	BuildingEntity* wall;
@@ -77,7 +77,7 @@ void BuildingManager::AddBuilding(int _x, int _y, BuildingTile::TILE_SIDE direct
 		else {
 			std::cout << "Invalid building direction" << std::endl;
 			delete wall;
-			return;
+			return nullptr;
 		}
 
 		Vector3 max(wall->GetPosition().x + wall->GetScale().x / 2, 1, wall->GetPosition().z + wall->GetScale().z / 2);
@@ -100,6 +100,7 @@ void BuildingManager::AddBuilding(int _x, int _y, BuildingTile::TILE_SIDE direct
 		Vector3 min(wall->GetPosition().x - wall->GetScale().x / 2, 0, wall->GetPosition().z - wall->GetScale().z / 2);
 		wall->SetAABB(max, min);
 	}
+	return wall;
 }
 
 void BuildingManager::AddEquipment(int _x, int _y, EquipmentEntity::EQUIPMENT_TYPE _type)

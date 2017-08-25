@@ -276,7 +276,7 @@ void SceneText::Init()
 	Shop = MeshBuilder::GetInstance()->GenerateQuad("Shop", Color(1, 1, 1), 1.0f);
 	Shop->textureID[0] = LoadTGA("Image//towertab.tga");
 
-	
+	core = Player::GetInstance()->core;
 
 	
 
@@ -395,7 +395,13 @@ void SceneText::Update(double dt)
 		isDay = true;
 		time = dayDuration;
 		noOfDays++;
-		generatorCoreScale = Math::Max(0.f, generatorCoreScale - 0.198f); // decrease generator core health on top
+
+		// decrease generator core health
+		generatorCoreScale = Math::Max(0.f, generatorCoreScale - 0.198f);
+		core->SetHealth(core->GetHealth() - 10);
+		
+		if (core->GetHealth() <= 0)
+			core->SetIsDone(true);
 	}
 	if (KeyboardController::GetInstance()->IsKeyPressed(VK_F6))
 		Player::GetInstance()->fatigue = Player::FATIGUE::TIRED;

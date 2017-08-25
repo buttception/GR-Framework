@@ -24,6 +24,7 @@ public:
 	Player();
 	~Player();
 
+	BuildingEntity* core;
 	// Initialise this class instance
 	void Init(void);
 	// Reset this player instance to default
@@ -116,6 +117,7 @@ private:
 	BuildingEntity::BUILDING_TYPE currentBuilding;
 	bool isBuilding, isEquipment, isWeapon;
 	EquipmentEntity::EQUIPMENT_TYPE currentEquipment;
+
 
 	int m_iCurrentWeapon;
 	const int m_iNumOfWeapon = 2;

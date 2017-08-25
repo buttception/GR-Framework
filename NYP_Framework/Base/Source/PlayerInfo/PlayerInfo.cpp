@@ -104,7 +104,7 @@ void Player::Init(void)
 	SetScale(Vector3(size, size, size));
 
 	
-	BuildingManager::GetInstance()->AddBuilding((int)(Player::GetInstance()->GetPosition().x / CELL_SIZE),
+	core = BuildingManager::GetInstance()->AddBuilding((int)(Player::GetInstance()->GetPosition().x / CELL_SIZE),
 		(int)(Player::GetInstance()->GetPosition().z / CELL_SIZE),
 		BuildingTile::TOP, BuildingEntity::BUILDING_CORE);
 }

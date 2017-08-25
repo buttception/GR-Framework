@@ -16,7 +16,7 @@ public:
 	BuildingManager();
 	virtual ~BuildingManager();
 
-	void AddBuilding(int _x, int _y, BuildingTile::TILE_SIDE direction, BuildingEntity::BUILDING_TYPE type);
+	BuildingEntity* AddBuilding(int _x, int _y, BuildingTile::TILE_SIDE direction, BuildingEntity::BUILDING_TYPE type);
 	void AddEquipment(int _x, int _y, EquipmentEntity::EQUIPMENT_TYPE _type);
 
 	BuildingTile** GetBuildingArray() {
