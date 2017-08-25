@@ -12,7 +12,6 @@
 #include "BuildingManager.h"
 #include "SpriteEntity.h"
 
-
 class ShaderProgram;
 class SceneManager;
 class TextEntity;
@@ -59,7 +58,10 @@ private:
 	Mesh* playerHealthBar;
 	Mesh* wireFrameBox;
 	Mesh* Shop;
+	Mesh* Constrain;
 	CMinimap* theMiniMap;
+
+	BuildingEntity* core;
 
 	float worldWidth, worldHeight, generatorCoreScale
 		, Delay = 0.0f;
@@ -69,6 +71,7 @@ private:
 	const float ButtonCooldown = 0.20f;
 
 	bool Render_Quad = false;
+	
 };
 
 #endif

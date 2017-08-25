@@ -23,7 +23,7 @@ public:
 
 	void AddWall(BuildingEntity* entity, TILE_SIDE direction);
 	void AddFloor(BuildingEntity* entity);
-	bool RemoveBuilding(BuildingEntity* entity);
+	void AddCore(BuildingEntity* entity);
 	
 	void AddEquipment(EquipmentEntity* entity);
 

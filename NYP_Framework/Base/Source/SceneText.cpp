@@ -177,18 +177,19 @@ void SceneText::Init()
 	MeshList::GetInstance()->GetMesh("GRASS_LIGHTGREEN")->textureID[0] = LoadTGA("Image//grass_lightgreen.tga");
 
 	//Building Meshes
+	MeshBuilder::GetInstance()->GenerateOBJ("core", "OBJ//cube.obj");
 	MeshBuilder::GetInstance()->GenerateOBJ("wall", "OBJ//cube.obj");
 	MeshBuilder::GetInstance()->GenerateOBJ("door", "OBJ//cube.obj"); //remember to change texture
 	MeshBuilder::GetInstance()->GenerateOBJ("cover", "OBJ//cube.obj"); //remember to change obj
 	MeshBuilder::GetInstance()->GenerateOBJ("floor", "OBJ//cube.obj"); //remember to change texture
 
 	//Equipment Meshes
-	MeshBuilder::GetInstance()->GenerateOBJ("Turret", "OBJ//cube.obj"); //remember to change obj
-	MeshBuilder::GetInstance()->GenerateOBJ("Healing Station", "OBJ//cube.obj");
+	MeshBuilder::GetInstance()->GenerateOBJ("Turret", "OBJ//equipmentCube.obj"); //remember to change obj
+	MeshBuilder::GetInstance()->GenerateOBJ("Healing Station", "OBJ//equipmentCube.obj");
 	MeshList::GetInstance()->GetMesh("Healing Station")->textureID[0] = LoadTGA("Image//Equipment//Heal_Active.tga");
-	MeshBuilder::GetInstance()->GenerateOBJ("Floor Spike", "OBJ//cube.obj");
+	MeshBuilder::GetInstance()->GenerateOBJ("Floor Spike", "OBJ//equipmentCube.obj");
 	MeshList::GetInstance()->GetMesh("Floor Spike")->textureID[0] = LoadTGA("Image//Equipment//Spike.tga");
-	MeshBuilder::GetInstance()->GenerateOBJ("Shield", "OBJ//cube.obj"); //remember to change obj
+	MeshBuilder::GetInstance()->GenerateOBJ("Shield", "OBJ//equipmentCube.obj"); //remember to change obj
 
 	
 	//Shop
@@ -275,9 +276,10 @@ void SceneText::Init()
 	Shop = MeshBuilder::GetInstance()->GenerateQuad("Shop", Color(1, 1, 1), 1.0f);
 	Shop->textureID[0] = LoadTGA("Image//towertab.tga");
 
-	
+	core = Player::GetInstance()->core;
 
-	
+	Constrain = MeshBuilder::GetInstance()->GenerateQuad("Constrain", Color(1, 1, 1), 1.0f);
+	Constrain->textureID[0] = LoadTGA("Image//Return_to_the_playzone.tga");
 
 
 	//light testing
@@ -395,7 +397,13 @@ void SceneText::Update(double dt)
 		isDay = true;
 		time = dayDuration;
 		noOfDays++;
-		generatorCoreScale = Math::Max(0.f, generatorCoreScale - 0.198f); // decrease generator core health on top
+
+		// decrease generator core health
+		generatorCoreScale = Math::Max(0.f, generatorCoreScale - 0.198f);
+		core->SetHealth(core->GetHealth() - 10);
+		
+		if (core->GetHealth() <= 0)
+			core->SetIsDone(true);
 	}
 	if (KeyboardController::GetInstance()->IsKeyPressed(VK_F6))
 		Player::GetInstance()->fatigue = Player::FATIGUE::TIRED;
@@ -711,10 +719,6 @@ void SceneText::Update(double dt)
 		Render_Quad = false;
 		std::cout << "Shop not Rendered" << std::endl;
 	}
-	
-		
-		
-	
 
 	
 }
@@ -852,6 +856,15 @@ void SceneText::RenderPassMain()
 		ms.PopMatrix();
 	}
 	
+	if (Player::GetInstance()->Render_Another_qUAD)
+	{
+		ms.PushMatrix();
+		ms.Scale((float)Application::GetInstance().GetWindowWidth() * 0.75f, (float)Application::GetInstance().GetWindowHeight() * 0.75f, 0.f);
+		RenderHelper::RenderMesh(Constrain);
+		ms.PopMatrix();
+
+	}
+
 
 	//RenderHelper::RenderTextOnScreen(text, std::to_string(fps), Color(0, 1, 0), 2, 0, 0);
 	glEnable(GL_DEPTH_TEST);
