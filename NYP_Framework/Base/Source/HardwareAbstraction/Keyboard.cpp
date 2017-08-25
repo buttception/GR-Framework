@@ -55,69 +55,76 @@ int Keyboard::Read(const float deltaTime)
 	{
 		if (i >= 0 && i <= 4)
 		{
-			if (Player::GetInstance()->fatigue == Player::FATIGUE::NORMAL)
+			if (KeyboardController::GetInstance()->IsKeyDown(KeyList[i]) ||
+				KeyboardController::GetInstance()->IsKeyReleased(KeyList[i]))
 			{
-				if (KeyboardController::GetInstance()->IsKeyDown(KeyList[CONTROLLER_RUN]))
+				if (Player::GetInstance()->fatigue == Player::FATIGUE::NORMAL)
+				{
+					if (KeyboardController::GetInstance()->IsKeyDown(KeyList[CONTROLLER_RUN]))
+					{
+						if (KeyboardController::GetInstance()->IsKeyDown(KeyList[CONTROLLER_MOVEFRONT]))
+							thePlayerInfo->MoveFrontBack(deltaTime, true, 2.0f);
+						if (KeyboardController::GetInstance()->IsKeyDown(KeyList[CONTROLLER_MOVEBACK]))
+							thePlayerInfo->MoveFrontBack(deltaTime, false, 2.0f);
+						if (KeyboardController::GetInstance()->IsKeyDown(KeyList[CONTROLLER_MOVELEFT]))
+							thePlayerInfo->MoveLeftRight(deltaTime, false, 2.0f);
+						if (KeyboardController::GetInstance()->IsKeyDown(KeyList[CONTROLLER_MOVERIGHT]))
+							thePlayerInfo->MoveLeftRight(deltaTime, true, 2.0f);
+						break;
+					}
+					else
+					{
+						if (KeyboardController::GetInstance()->IsKeyDown(KeyList[i]))
+							(this->*(controllerfunc[i]))(deltaTime);
+					}
+				}
+				else if (Player::GetInstance()->fatigue == Player::FATIGUE::ENERGETIC)
+				{
+					if (KeyboardController::GetInstance()->IsKeyDown(KeyList[CONTROLLER_RUN]))
+					{
+						if (KeyboardController::GetInstance()->IsKeyDown(KeyList[CONTROLLER_MOVEFRONT]))
+							thePlayerInfo->MoveFrontBack(deltaTime, true, 4.0f);
+						if (KeyboardController::GetInstance()->IsKeyDown(KeyList[CONTROLLER_MOVEBACK]))
+							thePlayerInfo->MoveFrontBack(deltaTime, false, 4.0f);
+						if (KeyboardController::GetInstance()->IsKeyDown(KeyList[CONTROLLER_MOVELEFT]))
+							thePlayerInfo->MoveLeftRight(deltaTime, false, 4.0f);
+						if (KeyboardController::GetInstance()->IsKeyDown(KeyList[CONTROLLER_MOVERIGHT]))
+							thePlayerInfo->MoveLeftRight(deltaTime, true, 4.0f);
+						break;
+					}
+					else
+					{
+						if (KeyboardController::GetInstance()->IsKeyDown(KeyList[CONTROLLER_MOVEFRONT]))
+							thePlayerInfo->MoveFrontBack(deltaTime, true, 2.0f);
+						if (KeyboardController::GetInstance()->IsKeyDown(KeyList[CONTROLLER_MOVEBACK]))
+							thePlayerInfo->MoveFrontBack(deltaTime, false, 2.0f);
+						if (KeyboardController::GetInstance()->IsKeyDown(KeyList[CONTROLLER_MOVELEFT]))
+							thePlayerInfo->MoveLeftRight(deltaTime, false, 2.0f);
+						if (KeyboardController::GetInstance()->IsKeyDown(KeyList[CONTROLLER_MOVERIGHT]))
+							thePlayerInfo->MoveLeftRight(deltaTime, true, 2.0f);
+						break;
+					}
+				}
+				else if (Player::GetInstance()->fatigue == Player::FATIGUE::TIRED)
 				{
 					if (KeyboardController::GetInstance()->IsKeyDown(KeyList[CONTROLLER_MOVEFRONT]))
-						thePlayerInfo->MoveFrontBack(deltaTime, true, 2.0f);
+						thePlayerInfo->MoveFrontBack(deltaTime, true, 0.5f);
 					if (KeyboardController::GetInstance()->IsKeyDown(KeyList[CONTROLLER_MOVEBACK]))
-						thePlayerInfo->MoveFrontBack(deltaTime, false, 2.0f);
+						thePlayerInfo->MoveFrontBack(deltaTime, false, 0.5f);
 					if (KeyboardController::GetInstance()->IsKeyDown(KeyList[CONTROLLER_MOVELEFT]))
-						thePlayerInfo->MoveLeftRight(deltaTime, false, 2.0f);
+						thePlayerInfo->MoveLeftRight(deltaTime, false, 0.5f);
 					if (KeyboardController::GetInstance()->IsKeyDown(KeyList[CONTROLLER_MOVERIGHT]))
-						thePlayerInfo->MoveLeftRight(deltaTime, true, 2.0f);
+						thePlayerInfo->MoveLeftRight(deltaTime, true, 0.5f);
 					break;
 				}
-				else
-				{
-					if (KeyboardController::GetInstance()->IsKeyDown(KeyList[i]))
-						(this->*(controllerfunc[i]))(deltaTime);
-				}
-			}
-			else if (Player::GetInstance()->fatigue == Player::FATIGUE::ENERGETIC)
-			{
-				if (KeyboardController::GetInstance()->IsKeyDown(KeyList[CONTROLLER_RUN]))
-				{
-					if (KeyboardController::GetInstance()->IsKeyDown(KeyList[CONTROLLER_MOVEFRONT]))
-						thePlayerInfo->MoveFrontBack(deltaTime, true, 4.0f);
-					if (KeyboardController::GetInstance()->IsKeyDown(KeyList[CONTROLLER_MOVEBACK]))
-						thePlayerInfo->MoveFrontBack(deltaTime, false, 4.0f);
-					if (KeyboardController::GetInstance()->IsKeyDown(KeyList[CONTROLLER_MOVELEFT]))
-						thePlayerInfo->MoveLeftRight(deltaTime, false, 4.0f);
-					if (KeyboardController::GetInstance()->IsKeyDown(KeyList[CONTROLLER_MOVERIGHT]))
-						thePlayerInfo->MoveLeftRight(deltaTime, true, 4.0f);
-					break;
-				}
-				else
-				{
-					if (KeyboardController::GetInstance()->IsKeyDown(KeyList[CONTROLLER_MOVEFRONT]))
-						thePlayerInfo->MoveFrontBack(deltaTime, true, 2.0f);
-					if (KeyboardController::GetInstance()->IsKeyDown(KeyList[CONTROLLER_MOVEBACK]))
-						thePlayerInfo->MoveFrontBack(deltaTime, false, 2.0f);
-					if (KeyboardController::GetInstance()->IsKeyDown(KeyList[CONTROLLER_MOVELEFT]))
-						thePlayerInfo->MoveLeftRight(deltaTime, false, 2.0f);
-					if (KeyboardController::GetInstance()->IsKeyDown(KeyList[CONTROLLER_MOVERIGHT]))
-						thePlayerInfo->MoveLeftRight(deltaTime, true, 2.0f);
-					break;
-				}
-			}
-			else if (Player::GetInstance()->fatigue == Player::FATIGUE::TIRED)
-			{
-				if (KeyboardController::GetInstance()->IsKeyDown(KeyList[CONTROLLER_MOVEFRONT]))
-					thePlayerInfo->MoveFrontBack(deltaTime, true, 0.5f);
-				if (KeyboardController::GetInstance()->IsKeyDown(KeyList[CONTROLLER_MOVEBACK]))
-					thePlayerInfo->MoveFrontBack(deltaTime, false, 0.5f);
-				if (KeyboardController::GetInstance()->IsKeyDown(KeyList[CONTROLLER_MOVELEFT]))
-					thePlayerInfo->MoveLeftRight(deltaTime, false, 0.5f);
-				if (KeyboardController::GetInstance()->IsKeyDown(KeyList[CONTROLLER_MOVERIGHT]))
-					thePlayerInfo->MoveLeftRight(deltaTime, true, 0.5f);
-				break;
 			}
 		}
-		else if (KeyboardController::GetInstance()->IsKeyReleased(KeyList[i]))
+		else if (i >= 5)
 		{
-			(this->*(controllerfunc[i]))(deltaTime);
+			if (KeyboardController::GetInstance()->IsKeyReleased(KeyList[i]))
+			{
+				(this->*(controllerfunc[i]))(deltaTime);
+			}
 		}
 	}
 	return 0;

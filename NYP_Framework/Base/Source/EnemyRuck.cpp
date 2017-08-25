@@ -96,9 +96,6 @@ void EnemyRuck::Update(double dt)
 	else if (attacking) {
 		Attack(target, dt);
 	}
-
-	//Equipment Timer Update
-	EquipmentEntity::spikeTimer += (float)dt;
 }
 
 void EnemyRuck::CollisionResponse(GenericEntity * thatEntity)

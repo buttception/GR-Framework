@@ -18,8 +18,6 @@
 
 bool SceneText::isDay = true;
 bool CMinimap::isResizing = false;
-float EquipmentEntity::healTimer = 0.f;
-float EquipmentEntity::healCoolDown = 2.f;
 // Allocating and initializing Player's static data member.  
 // The pointer is allocated but not the object's constructor.
 
@@ -32,8 +30,8 @@ Player::Player(void)
 	, m_pTerrain(NULL)
 	, speedMultiplier(1.0)
 	, size(5)
-	, maxPlayerHealth(100.f)
-	, playerHealth(100.f)
+	, maxPlayerHealth(100)
+	, playerHealth(100)
 	, material(3000)
 	, currentBuilding(BuildingEntity::BUILDING_WALL)
 	, isBuilding(true)
@@ -60,7 +58,7 @@ Player::~Player(void)
 void Player::Init(void)
 {
 	// Set the current values
-	position.Set(MAX_CELLS * CELL_SIZE / 2, 0, MAX_CELLS * CELL_SIZE / 2);
+	position.Set(MAX_CELLS * CELL_SIZE / 2, 0, (MAX_CELLS * CELL_SIZE / 2) + 5.f);
 
 	// Set the default values
 	defaultPosition = position;
@@ -105,6 +103,11 @@ void Player::Init(void)
 	weaponManager[2]->Init();
 
 	SetScale(Vector3(size, size, size));
+
+	
+	core = BuildingManager::GetInstance()->AddBuilding((int)(Player::GetInstance()->GetPosition().x / CELL_SIZE),
+		(int)(Player::GetInstance()->GetPosition().z / CELL_SIZE),
+		BuildingTile::TOP, BuildingEntity::BUILDING_CORE);
 }
 
 // Set the boundary for the player info
@@ -137,12 +140,6 @@ void Player::Reset(void)
  ********************************************************************************/
 void Player::Update(double dt)
 {
-	double mouse_diff_x, mouse_diff_y;
-	MouseController::GetInstance()->GetMouseDelta(mouse_diff_x, mouse_diff_y);
-
-	double camera_yaw = mouse_diff_x * 0.0174555555555556;		// 3.142 / 180.0
-	double camera_pitch = mouse_diff_y * 0.0174555555555556;	// 3.142 / 180.0
-
 	keyboard->Read((float)dt);
 	mouse->Read((float)dt);
 
@@ -219,9 +216,9 @@ void Player::Update(double dt)
 		weaponManager[m_iCurrentWeapon]->Update(dt);
 
 	//healTimer update
-	EquipmentEntity::healTimer += (float)dt;
-	if(EquipmentEntity::healTimer >= EquipmentEntity::healCoolDown)
-		MeshList::GetInstance()->GetMesh("Healing Station")->textureID[0] = LoadTGA("Image//Equipment//Heal_Active.tga");
+	//equipment->healTimer += (float)dt;
+	//if(equipment->healTimer >= equipment->healCoolDown)
+		//MeshList::GetInstance()->GetMesh("Healing Station")->textureID[0] = LoadTGA("Image//Equipment//Heal_Active.tga");
 
 	switch (fatigue)
 	{
@@ -238,6 +235,13 @@ void Player::Update(double dt)
 		if (playerHealth >= 50.f)
 			playerHealth = 50.f;
 		break;
+	}
+
+	if (playerHealth <= 0)
+	{
+		playerHealth = maxPlayerHealth;
+		material = Math::Max(0, material - 100);
+		position.Set(MAX_CELLS * CELL_SIZE / 2 + 10, 0, (MAX_CELLS * CELL_SIZE / 2) + 10);
 	}
 }
 
@@ -306,27 +310,36 @@ std::list<Projectile*> Player::GetProj()
 // Constrain the position within the borders
 void Player::Constrain(void)
 {
-
 	//constrain the player to stay within the map/play area 
 	//min for z  and x is 0, max is 500
 	if (position.x > maxBoundary.x )
 	{
 		position.x = maxBoundary.x;
+		playerHealth = Math::Max(0, playerHealth - 1);
+		Render_Another_qUAD = true;
 	}
 	if (position.z > maxBoundary.z)
 	{
 		position.z = maxBoundary.z;
+		playerHealth = Math::Max(0, playerHealth - 1);
+		Render_Another_qUAD = true;
 	}
 	if (position.x < minBoundary.x)
 	{
 		position.x = minBoundary.x;
+		playerHealth = Math::Max(0, playerHealth - 1);
+		Render_Another_qUAD = true;
 	}
 	if (position.z < minBoundary.z)
 	{
 		position.z = minBoundary.z;
+		playerHealth = Math::Max(0, playerHealth - 1);
+		Render_Another_qUAD = true;
 	}
-
-	
+	else
+	{
+		Render_Another_qUAD = false;
+	}
 }
 
 CameraBase * Player::getCamera()
@@ -421,18 +434,61 @@ bool Player::LeftClick(float dt)
 		{
 			if (isBuilding)
 			{
+				int x = (int)(position.x / CELL_SIZE);
+				int z = (int)(position.z / CELL_SIZE);
+				Vector3 ghostPos, ghostScale;
 				// Up
 				if (angle >= -53.f && angle <= 53.f)
-					BuildingManager::GetInstance()->AddBuilding((int)(Player::GetInstance()->GetPosition().x / CELL_SIZE), (int)(Player::GetInstance()->GetPosition().z / CELL_SIZE), BuildingTile::TOP, currentBuilding);
+				{
+					ghostPos.Set(x * CELL_SIZE + CELL_SIZE / 2, 1, z * CELL_SIZE);
+					ghostScale.Set(CELL_SIZE, 10, 2);
+					if (position.x + scale.x / 2.f >= ghostPos.x - ghostScale.x / 2.f &&
+						position.x - scale.x / 2.f <= ghostPos.x + ghostScale.x / 2.f &&
+						position.z + scale.z / 2.f >= ghostPos.z - ghostScale.z / 2.f &&
+						position.z - scale.z / 2.f <= ghostPos.z + ghostScale.z / 2.f)
+						return false;
+
+					BuildingManager::GetInstance()->AddBuilding(x, z, BuildingTile::TOP, currentBuilding);
+				}
 				// Left
 				else if (angle >= -127.f && angle <= -53.f)
-					BuildingManager::GetInstance()->AddBuilding((int)(Player::GetInstance()->GetPosition().x / CELL_SIZE), (int)(Player::GetInstance()->GetPosition().z / CELL_SIZE), BuildingTile::LEFT, currentBuilding);
+				{
+					ghostPos.Set(x * CELL_SIZE, 1, z * CELL_SIZE + CELL_SIZE / 2);
+					ghostScale.Set(2, 10, CELL_SIZE);
+					if (position.x + scale.x / 2.f >= ghostPos.x - ghostScale.x / 2.f &&
+						position.x - scale.x / 2.f <= ghostPos.x + ghostScale.x / 2.f &&
+						position.z + scale.z / 2.f >= ghostPos.z - ghostScale.z / 2.f &&
+						position.z - scale.z / 2.f <= ghostPos.z + ghostScale.z / 2.f)
+						return false;
+
+					BuildingManager::GetInstance()->AddBuilding(x, z, BuildingTile::LEFT, currentBuilding);
+				}
 				// Right
 				else if (angle >= 53.f && angle <= 127.f)
-					BuildingManager::GetInstance()->AddBuilding((int)(Player::GetInstance()->GetPosition().x / CELL_SIZE), (int)(Player::GetInstance()->GetPosition().z / CELL_SIZE), BuildingTile::RIGHT, currentBuilding);
+				{
+					ghostPos.Set(x * CELL_SIZE + CELL_SIZE, 1, z * CELL_SIZE + CELL_SIZE / 2);
+					ghostScale.Set(2, 10, CELL_SIZE);
+					if (position.x + scale.x / 2.f >= ghostPos.x - ghostScale.x / 2.f &&
+						position.x - scale.x / 2.f <= ghostPos.x + ghostScale.x / 2.f &&
+						position.z + scale.z / 2.f >= ghostPos.z - ghostScale.z / 2.f &&
+						position.z - scale.z / 2.f <= ghostPos.z + ghostScale.z / 2.f)
+						return false;
+
+					BuildingManager::GetInstance()->AddBuilding(x, z, BuildingTile::RIGHT, currentBuilding);
+				}
 				// Down
 				else if ((angle >= -180.f && angle <= -127.f) || (angle >= 127.f && angle <= 180.f))
-					BuildingManager::GetInstance()->AddBuilding((int)(Player::GetInstance()->GetPosition().x / CELL_SIZE), (int)(Player::GetInstance()->GetPosition().z / CELL_SIZE), BuildingTile::BOTTOM, currentBuilding);
+				{
+					ghostPos.Set(x * CELL_SIZE + CELL_SIZE / 2, 1, z * CELL_SIZE + CELL_SIZE);
+					ghostScale.Set(CELL_SIZE, 10, 2);
+					if (position.x + scale.x / 2.f >= ghostPos.x - ghostScale.x / 2.f &&
+						position.x - scale.x / 2.f <= ghostPos.x + ghostScale.x / 2.f &&
+						position.z + scale.z / 2.f >= ghostPos.z - ghostScale.z / 2.f &&
+						position.z - scale.z / 2.f <= ghostPos.z + ghostScale.z / 2.f)
+						return false;
+
+					BuildingManager::GetInstance()->AddBuilding(x, z, BuildingTile::BOTTOM, currentBuilding);
+				}
 			}
 			else if (isEquipment)
 				BuildingManager::GetInstance()->AddEquipment((int)(Player::GetInstance()->GetPosition().x / CELL_SIZE), (int)(Player::GetInstance()->GetPosition().z / CELL_SIZE), currentEquipment);
@@ -622,12 +678,11 @@ void Player::CollisionResponse(EntityBase *thatEntity)
 			switch (equipment->type)
 			{
 			case EquipmentEntity::EQUIPMENT_HEALING_STATION:
-				if (EquipmentEntity::healTimer >= EquipmentEntity::healCoolDown &&
+				if (equipment->healTimer >= equipment->healCoolDown &&
 					!SceneText::isDay)
 				{
-					playerHealth = Math::Min(maxPlayerHealth, playerHealth + 20.f);
-					EquipmentEntity::healTimer = 0.f;
-					MeshList::GetInstance()->GetMesh("Healing Station")->textureID[0] = LoadTGA("Image//Equipment//Heal_Inactive.tga");
+					playerHealth = Math::Min(maxPlayerHealth, playerHealth + 20);
+					equipment->healTimer = 0.f;
 				}
 				break;
 			}

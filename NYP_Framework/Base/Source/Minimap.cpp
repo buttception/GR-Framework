@@ -179,7 +179,8 @@ void CMinimap::RenderUI()
 					float gPosZ = (250.f - g->GetPosition().z) / MAX_CELLS * CELL_SIZE * 0.5f * 0.01f;
 					if (g->objectType == GenericEntity::ENEMY)
 					{
-						if (dynamic_cast<EnemyEntity*>(g)->GetActive()) {
+						if (dynamic_cast<EnemyEntity*>(g)->GetActive())
+						{
 							modelStack.PushMatrix();
 							modelStack.Translate(position.x, position.y, position.z);
 							modelStack.Translate(gPosX * (scale.x  * 0.5f), gPosZ * (scale.y * 0.5f), 0.f);
@@ -234,13 +235,16 @@ void CMinimap::RenderUI()
 					float gPosZ = (250.f - g->GetPosition().z) / MAX_CELLS * CELL_SIZE * 0.5f * 0.01f;
 					if (g->objectType == GenericEntity::ENEMY)
 					{
-						modelStack.PushMatrix();
-						modelStack.Scale(2.5f, 2.5f, 1.f);
-						modelStack.Translate(gPosX * (scale.x  * 0.5f), gPosZ * (scale.y * 0.5f), 0.f);
-						modelStack.Scale(scale.x, scale.y, scale.z);
-						if (m_cMinimap_Target)
-							RenderHelper::RenderMesh(m_cMinimap_Target);
-						modelStack.PopMatrix();
+						if (dynamic_cast<EnemyEntity*>(g)->GetActive())
+						{
+							modelStack.PushMatrix();
+							modelStack.Scale(2.5f, 2.5f, 1.f);
+							modelStack.Translate(gPosX * (scale.x  * 0.5f), gPosZ * (scale.y * 0.5f), 0.f);
+							modelStack.Scale(scale.x, scale.y, scale.z);
+							if (m_cMinimap_Target)
+								RenderHelper::RenderMesh(m_cMinimap_Target);
+							modelStack.PopMatrix();
+						}
 					}
 				}
 			}

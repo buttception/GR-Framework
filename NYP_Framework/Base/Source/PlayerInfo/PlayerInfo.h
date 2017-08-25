@@ -24,6 +24,7 @@ public:
 	Player();
 	~Player();
 
+	BuildingEntity* core;
 	// Initialise this class instance
 	void Init(void);
 	// Reset this player instance to default
@@ -55,8 +56,8 @@ public:
 
 	int GetMaterial(void) const { return material; }
 	void SetMaterial(int material) { this->material = material; }
-	float GetPlayerHealth(void) const { return playerHealth; }
-	void SetPlayerHealth(float playerHealth) { this->playerHealth = playerHealth; }
+	int GetPlayerHealth(void) const { return playerHealth; }
+	void SetPlayerHealth(int playerHealth) { this->playerHealth = playerHealth; }
 	BuildingEntity::BUILDING_TYPE GetCurrentBuilding(void) const { return currentBuilding; }
 	void SetCurrentBuilding(BuildingEntity::BUILDING_TYPE currentBuilding) { this->currentBuilding = currentBuilding; }
 	bool GetIsBuilding(void) const { return isBuilding; }
@@ -83,6 +84,8 @@ public:
 	// Discharge Secondary Weapon
 	bool DischargeSecondaryWeapon(const float deltaTime);
 
+
+	bool Render_Another_qUAD = false;
 	//GetProj
 	std::list<Projectile*>GetProj();
 
@@ -112,10 +115,11 @@ private:
 	Mouse* mouse;
 
 	int material;
-	float playerHealth, maxPlayerHealth;
+	int playerHealth, maxPlayerHealth;
 	BuildingEntity::BUILDING_TYPE currentBuilding;
 	bool isBuilding, isEquipment, isWeapon;
 	EquipmentEntity::EQUIPMENT_TYPE currentEquipment;
+
 
 	int m_iCurrentWeapon;
 	const int m_iNumOfWeapon = 2;

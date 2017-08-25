@@ -4,9 +4,6 @@
 #include "../Source/Sound_Engine.h"
 #include "PlayerInfo\PlayerInfo.h"
 
-float EquipmentEntity::spikeTimer = 0.f;
-float EquipmentEntity::spikeCoolDown = 1.f;
-
 EnemyCuck::EnemyCuck(std::string _meshName, Vector3 position) : EnemyEntity(_meshName)
 {
 	this->position = position;
@@ -56,7 +53,7 @@ void EnemyCuck::Update(double dt)
 			direction.Normalize();
 			direction.x = round(direction.x);
 			direction.z = round(direction.z);
-			position += direction * speed * dt;
+			position += direction * speed * (float)dt;
 			//updates AABB if enemy move
 			SetAABB(Vector3(position.x + size / 2, position.y + size / 2, position.z + size / 2), Vector3(position.x - size / 2, position.y - size / 2, position.z - size / 2));
 			if (CollisionManager::GetInstance()->CheckPointToSphereCollision(position, Player::GetInstance())) {
@@ -90,7 +87,7 @@ void EnemyCuck::Update(double dt)
 			catch (std::exception &e) {
 				direction.SetZero();
 			}
-			position += direction * speed * dt;
+			position += direction * speed * (float)dt;
 			SetAABB(Vector3(position.x + size / 2, position.y + size / 2, position.z + size / 2), Vector3(position.x - size / 2, position.y - size / 2, position.z - size / 2));
 			break;
 		default:
@@ -102,7 +99,10 @@ void EnemyCuck::Update(double dt)
 	}
 
 	//Equipment Timer Update
-	EquipmentEntity::spikeTimer += (float)dt;
+	//{
+	//	EquipmentEntity* equipment;
+	//	equipment->spikeTimer += (float)dt;
+	//}
 				/*static int i = 0;
 				++i;
 
@@ -114,7 +114,7 @@ void EnemyCuck::Update(double dt)
 
 void EnemyCuck::CollisionResponse(GenericEntity * thatEntity)
 {
-	if (!active) {
+	if (active) {
 		switch (thatEntity->objectType) {
 		case GenericEntity::BUILDING:
 			//if collide with a building
@@ -124,33 +124,31 @@ void EnemyCuck::CollisionResponse(GenericEntity * thatEntity)
 				if (stateStack.top() != ATTACK_STATE)
 					stateStack.push(ATTACK_STATE);
 			target = thatEntity;
-			/*CSoundEngine::GetInstance()->playthesound("CUCK", 0.4f);
-			std::cout << "Muslim Sound Played" << std::endl;*/
 			break;
-		case GenericEntity::PROJECTILE:
+		case EntityBase::PROJECTILE:
 
 			break;
-		case GenericEntity::EQUIPMENT:
-		{
+		case EntityBase::EQUIPMENT: {
 			EquipmentEntity* equipment = dynamic_cast<EquipmentEntity*>(thatEntity);
 			// Attack Equipment except floor spike and healing station
 			if (stateStack.top() != ATTACK_STATE &&
 				equipment->type != EquipmentEntity::EQUIPMENT_FLOOR_SPIKE &&
 				equipment->type != EquipmentEntity::EQUIPMENT_HEALING_STATION)
-				stateStack.push(ATTACK_STATE);
-			target = thatEntity;
-
-			switch (equipment->type)
 			{
+				stateStack.push(ATTACK_STATE);
+				target = thatEntity;
+			}
+			break;
+			switch (equipment->type) {
 			case EquipmentEntity::EQUIPMENT_TURRET:
 				std::cout << "collided with turret" << std::endl;
 				break;
 			case EquipmentEntity::EQUIPMENT_FLOOR_SPIKE:
-				if (EquipmentEntity::spikeTimer >= EquipmentEntity::spikeCoolDown)
+				if (equipment->spikeTimer >= equipment->spikeCoolDown)
 				{
 					health = Math::Max(0, health - 10);
-					speed = 5.f;
-					EquipmentEntity::spikeTimer = 0.f;
+					speed = 2.f;
+					equipment->spikeTimer = 0.f;
 				}
 				if (health == 0)
 					SetIsDone(true);
@@ -160,7 +158,7 @@ void EnemyCuck::CollisionResponse(GenericEntity * thatEntity)
 				break;
 			}
 		}
-		break;
+			break;
 		default:
 			return;
 		}
@@ -171,7 +169,7 @@ void EnemyCuck::CollisionResponse(GenericEntity * thatEntity)
 
 void EnemyCuck::Attack(GenericEntity * thatEntity, double dt)
 {
-	attackElaspedTime += dt;
+	attackElaspedTime += (float)dt;
 	if (attackElaspedTime >= attackSpeed) {
 		std::cout << "attack\n";
 		//check if still in contact with its target

@@ -140,6 +140,7 @@ void Projectile::CollisionResponse(GenericEntity * thatEntity)
 		if (enemy->GetHealth() <= 0)
 		{
 			enemy->SetActive(false);
+			Player::GetInstance()->SetMaterial(Player::GetInstance()->GetMaterial() + 100);
 		}
 		break;
 	case BUILDING:

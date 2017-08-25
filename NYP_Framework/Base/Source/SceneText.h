@@ -10,6 +10,7 @@
 #include "MatrixStack.h"
 #include "GenericEntity.h"
 #include "BuildingManager.h"
+#include "SpriteEntity.h"
 
 class ShaderProgram;
 class SceneManager;
@@ -59,7 +60,11 @@ private:
 	Mesh* generatorCoreHealthBar;
 	Mesh* playerHealthBar;
 	Mesh* wireFrameBox;
+	Mesh* Shop;
+	Mesh* Constrain;
 	CMinimap* theMiniMap;
+
+	BuildingEntity* core;
 
 	float worldWidth, worldHeight, generatorCoreScale
 		, Delay = 0.0f;
@@ -67,6 +72,9 @@ private:
 	double time, dayDuration;
 	int noOfDays;
 	const float ButtonCooldown = 0.20f;
+
+	bool Render_Quad = false;
+	
 };
 
 #endif
