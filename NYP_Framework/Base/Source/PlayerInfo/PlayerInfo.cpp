@@ -60,7 +60,7 @@ Player::~Player(void)
 void Player::Init(void)
 {
 	// Set the current values
-	position.Set(MAX_CELLS * CELL_SIZE / 2, 0, MAX_CELLS * CELL_SIZE / 2);
+	position.Set(MAX_CELLS * CELL_SIZE / 2, 0, (MAX_CELLS * CELL_SIZE / 2) + 5.f);
 
 	// Set the default values
 	defaultPosition = position;
@@ -102,6 +102,11 @@ void Player::Init(void)
 	weaponManager[2]->Init();
 
 	SetScale(Vector3(size, size, size));
+
+	
+	BuildingManager::GetInstance()->AddBuilding((int)(Player::GetInstance()->GetPosition().x / CELL_SIZE),
+		(int)(Player::GetInstance()->GetPosition().z / CELL_SIZE),
+		BuildingTile::TOP, BuildingEntity::BUILDING_CORE);
 }
 
 // Set the boundary for the player info

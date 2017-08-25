@@ -29,17 +29,20 @@ void BuildingManager::AddBuilding(int _x, int _y, BuildingTile::TILE_SIDE direct
 	}
 
 	BuildingEntity* wall;
-	if (type != BuildingEntity::BUILDING_FLOOR)
+	if (type != BuildingEntity::BUILDING_FLOOR && type != BuildingEntity::BUILDING_CORE)
 		wall = new BuildingEntity("wall");
-	else
+	else if (type == BuildingEntity::BUILDING_FLOOR)
 		wall = new BuildingEntity("floor");
+	else if (type == BuildingEntity::BUILDING_CORE)
+		wall = new BuildingEntity("core");
 	wall->SetHealth(100);
 	wall->SetGrid(_x, _y);
 	wall->SetLevel(1);
 	wall->objectType = GenericEntity::BUILDING;
 	wall->type = type;
 
-	if (type != BuildingEntity::BUILDING_FLOOR) {
+	if (type != BuildingEntity::BUILDING_FLOOR && type != BuildingEntity::BUILDING_CORE)
+	{
 		//where 1 -> left, 2 -> top, 3 -> right, 4 ->bottom
 		if (direction == BuildingTile::LEFT) {
 			wall->SetScale(Vector3(2, 10, CELL_SIZE));
@@ -81,10 +84,21 @@ void BuildingManager::AddBuilding(int _x, int _y, BuildingTile::TILE_SIDE direct
 		Vector3 min(wall->GetPosition().x - wall->GetScale().x / 2, 0, wall->GetPosition().z - wall->GetScale().z / 2);
 		wall->SetAABB(max, min);
 	}
-	else {
+	else if(type == BuildingEntity::BUILDING_FLOOR)
+	{
 		wall->SetScale(Vector3(CELL_SIZE, 1.f, CELL_SIZE));
 		wall->SetPosition(Vector3((float)_x * CELL_SIZE + CELL_SIZE / 2.f, 0.1f, (float)_y * CELL_SIZE + CELL_SIZE / 2.f));
 		buildingArray[_x][_y].AddFloor(wall);
+	}
+	else if (type == BuildingEntity::BUILDING_CORE)
+	{
+		wall->SetScale(Vector3(CELL_SIZE / 4.f, 5.f, CELL_SIZE / 4.f));
+		wall->SetPosition(Vector3((float)_x * CELL_SIZE + CELL_SIZE / 2.f, 0.1f, (float)_y * CELL_SIZE + CELL_SIZE / 2.f));
+		buildingArray[_x][_y].AddCore(wall);
+
+		Vector3 max(wall->GetPosition().x + wall->GetScale().x / 2, 1, wall->GetPosition().z + wall->GetScale().z / 2);
+		Vector3 min(wall->GetPosition().x - wall->GetScale().x / 2, 0, wall->GetPosition().z - wall->GetScale().z / 2);
+		wall->SetAABB(max, min);
 	}
 }
 

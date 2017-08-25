@@ -177,6 +177,7 @@ void SceneText::Init()
 	MeshList::GetInstance()->GetMesh("GRASS_LIGHTGREEN")->textureID[0] = LoadTGA("Image//grass_lightgreen.tga");
 
 	//Building Meshes
+	MeshBuilder::GetInstance()->GenerateOBJ("core", "OBJ//cube.obj");
 	MeshBuilder::GetInstance()->GenerateOBJ("wall", "OBJ//cube.obj");
 	MeshBuilder::GetInstance()->GenerateOBJ("door", "OBJ//cube.obj"); //remember to change texture
 	MeshBuilder::GetInstance()->GenerateOBJ("cover", "OBJ//cube.obj"); //remember to change obj

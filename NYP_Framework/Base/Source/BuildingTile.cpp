@@ -81,11 +81,9 @@ void BuildingTile::AddFloor(BuildingEntity * entity)
 	CSoundEngine::GetInstance()->playthesound("Floor", 0.4f);
 }
 
-bool BuildingTile::RemoveBuilding(BuildingEntity * entity)
+void BuildingTile::AddCore(BuildingEntity * entity)
 {
-	
-
-	return false;
+	EntityManager::GetInstance()->AddEntity(entity);
 }
 
 void BuildingTile::AddEquipment(EquipmentEntity * entity)
