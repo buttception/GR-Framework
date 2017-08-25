@@ -414,15 +414,8 @@ void SceneText::Update(double dt)
 		time = dayDuration;
 		isDay = false;
 	}
-	if (time <= 0.00 && !isDay)
-	{
-		time = dayDuration;
-		isDay = true;
-		noOfDays++;
-	}
-
 	//if a day(day and night) past,but no sleep
-	if (!isDay && !Player::GetInstance()->GetSlept() && time <= 0.02)
+	if (!isDay && !Player::GetInstance()->GetSlept() && time <= 0.01)
 	{
 		switch (Player::GetInstance()->fatigue)
 		{
@@ -448,6 +441,13 @@ void SceneText::Update(double dt)
 		}
 		Player::GetInstance()->SetSlept(false);
 	}
+	if (time <= 0.00 && !isDay)
+	{
+		time = dayDuration;
+		isDay = true;
+		noOfDays++;
+	}
+
 	//convert mouse pos on window onto world
 	double mouseX, mouseY;
 	MouseController::GetInstance()->GetMousePosition(mouseX, mouseY);
