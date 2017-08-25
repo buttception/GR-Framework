@@ -191,6 +191,11 @@ void SceneText::Init()
 	MeshList::GetInstance()->GetMesh("Floor Spike")->textureID[0] = LoadTGA("Image//Equipment//Spike.tga");
 	MeshBuilder::GetInstance()->GenerateOBJ("Shield", "OBJ//cube.obj"); //remember to change obj
 
+	
+	//Shop
+	/*MeshBuilder::GetInstance()->GenerateQuad("Shop", Color(1, 1, 1), 1.f);
+	MeshList::GetInstance()->GetMesh("Shop")->textureID[0] = LoadTGA("Image//towertab.tga");*/
+
 	//Enemy Mesh
 	MeshBuilder::GetInstance()->GenerateOBJ("Cuck", "OBJ//cube.obj");
 
@@ -267,6 +272,14 @@ void SceneText::Init()
 	fpscamera = new FPSCamera();
 	Player::GetInstance()->AttachCamera(camera);
 	GraphicsManager::GetInstance()->AttachCamera(camera);
+
+	Shop = MeshBuilder::GetInstance()->GenerateQuad("Shop", Color(1, 1, 1), 1.0f);
+	Shop->textureID[0] = LoadTGA("Image//towertab.tga");
+
+	
+
+	
+
 
 	//light testing
 	light_depth_mesh = MeshBuilder::GetInstance()->GenerateQuad("light_depth_mewsh", Color(1, 0, 1), 1);
@@ -686,7 +699,22 @@ void SceneText::Update(double dt)
 	}
 	
 
+	
 
+	if (KeyboardController::GetInstance()->IsKeyReleased('B') && !Render_Quad)
+	{
+		Render_Quad = true;
+		std::cout << "Shop Rendered" << std::endl;
+	}
+	else if (KeyboardController::GetInstance()->IsKeyReleased('B') && Render_Quad)
+	{
+		Render_Quad = false;
+		std::cout << "Shop not Rendered" << std::endl;
+	}
+	
+		
+		
+	
 
 	
 }
@@ -814,6 +842,17 @@ void SceneText::RenderPassMain()
 	RenderHelper::RenderMesh(playerHealthBar);
 	ms.PopMatrix();
 
+	if (Render_Quad == true)
+	{
+		ms.PushMatrix();
+		//ms.Translate((float)-halfWindowWidth, (float)halfWindowHeight * 0.92f, 0.f);
+		ms.Translate(0.f, 0.f, 0.f);
+		ms.Scale((float)Application::GetInstance().GetWindowWidth() * 0.75f, (float)Application::GetInstance().GetWindowHeight() * 0.75f, 0.f);
+		RenderHelper::RenderMesh(Shop);
+		ms.PopMatrix();
+	}
+	
+
 	//RenderHelper::RenderTextOnScreen(text, std::to_string(fps), Color(0, 1, 0), 2, 0, 0);
 	glEnable(GL_DEPTH_TEST);
 }
@@ -858,6 +897,8 @@ void SceneText::RenderWorld()
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		ms.PopMatrix();
 	}
+
+	
 	EntityManager::GetInstance()->Render();
 }
 
