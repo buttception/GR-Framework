@@ -11,16 +11,15 @@ EnemyManager::EnemyManager():
 	active(false),
 	spawningAngle(0)
 {
+	//initializing of the map
 	std::list<EnemyEntity*> list;
 	std::list<EnemyEntity*> list2;
 	std::list<EnemyEntity*> list3;
-	std::list<EnemyEntity*> list4;
 	std::list<EnemyEntity*> list5;
 	std::list<EnemyEntity*> list6;
 	enemyMap.insert(std::make_pair("Cuck", list));
 	enemyMap.insert(std::make_pair("Ruck", list2));
 	enemyMap.insert(std::make_pair("Tuck", list3));
-	enemyMap.insert(std::make_pair("Luck", list4));
 	enemyMap.insert(std::make_pair("Auck", list5));
 	enemyMap.insert(std::make_pair("Buck", list6));
 }
@@ -96,37 +95,50 @@ void EnemyManager::Init()
 	std::cout << "max: " << maxDistance << std::endl;
 	std::cout << "min: " << minDistance << std::endl;
 
-	//first time set up
-	switch (SceneText::GetScene()->GetNoOfDays()) {
-	case 1:
-		for (size_t i = 0; i < 10; ++i) {
-			enemyMap["Cuck"].push_back(Create::Cuck("Cuck", Vector3(0, 0, 0)));
-		}
-		break;
-	case 2:
-		for (size_t i = 0; i < 5; ++i) {
-			enemyMap["Ruck"].push_back(Create::Ruck("Ruck", Vector3(0, 0, 0)));
-			if (i < 3)
+	bool test = true;
+
+	if (test) {
+		enemyMap["Ruck"].push_back(Create::Ruck("Ruck", Vector3(0, 0, 0)));
+		enemyMap["Cuck"].push_back(Create::Cuck("Cuck", Vector3(0, 0, 0)));
+		//enemyMap["Ruck"].push_back(Create::Ruck("Ruck", Vector3(0, 0, 0)));
+		//enemyMap["Ruck"].push_back(Create::Ruck("Ruck", Vector3(0, 0, 0)));
+		//enemyMap["Ruck"].push_back(Create::Ruck("Ruck", Vector3(0, 0, 0)));
+		//enemyMap["Ruck"].push_back(Create::Ruck("Ruck", Vector3(0, 0, 0)));
+	}
+	else {
+		//this is for the game itself
+		//first time set up
+		switch (SceneText::GetScene()->GetNoOfDays()) {
+		case 1:
+			for (size_t i = 0; i < 10; ++i) {
 				enemyMap["Cuck"].push_back(Create::Cuck("Cuck", Vector3(0, 0, 0)));
+			}
+			break;
+		case 2:
+			for (size_t i = 0; i < 5; ++i) {
+				enemyMap["Ruck"].push_back(Create::Ruck("Ruck", Vector3(0, 0, 0)));
+				if (i < 3)
+					enemyMap["Cuck"].push_back(Create::Cuck("Cuck", Vector3(0, 0, 0)));
+			}
+			break;
+		case 3:
+
+			break;
+		case 4:
+
+			break;
+		case 5:
+
+			break;
+		case 6:
+
+			break;
+		default:
+			//for (size_t i = 0; i < 10; ++i) {
+			//	enemyMap["Cuck"].push_back(Create::Cuck("Cuck", Vector3(0, 0, 0)));
+			//}
+			break;
 		}
-		break;
-	case 3:
-
-		break;
-	case 4:
-
-		break;
-	case 5:
-
-		break;
-	case 6:
-
-		break;
-	default:
-		//for (size_t i = 0; i < 10; ++i) {
-		//	enemyMap["Cuck"].push_back(Create::Cuck("Cuck", Vector3(0, 0, 0)));
-		//}
-		break;
 	}
 
 	active = true;

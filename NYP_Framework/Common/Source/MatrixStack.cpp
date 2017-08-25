@@ -152,12 +152,6 @@ void MS::Scale(float scaleX, float scaleY, float scaleZ) {
 	ms.top() = ms.top() * mat;
 }
 
-void MS::Scale(Vector3 _scale) {
-	Mtx44 mat;
-	mat.SetToScale(_scale.x, _scale.y, _scale.z);
-	ms.top() = ms.top() * mat;
-}
-
 /******************************************************************************/
 /*!
 \brief
@@ -175,12 +169,6 @@ parameters
 void MS::Translate(float translateX, float translateY, float translateZ) {
 	Mtx44 mat;
 	mat.SetToTranslation(translateX, translateY, translateZ);
-	ms.top() = ms.top() * mat;
-}
-
-void MS::Translate(Vector3 _translate) {
-	Mtx44 mat;
-	mat.SetToTranslation(_translate.x, _translate.y, _translate.z);
 	ms.top() = ms.top() * mat;
 }
 

@@ -20,7 +20,6 @@ CSoundEngine::~CSoundEngine()
 
 bool CSoundEngine::Init(void)
 {
-
 	isthesoundEngine = createIrrKlangDevice();
 	if (!isthesoundEngine)
 	{

@@ -17,6 +17,11 @@ public:
 	Projectile(std::string _meshName);
 	~Projectile();
 
+	enum SOURCE_TYPE {
+		ENEMY_SOURCE,
+		PLAYER_SOURCE
+	}source;
+
 	// Activate the projectile. true == active, false == inactive
 	void SetStatus(const bool m_bStatus);
 	// get status of the projectile. true == active, false == inactive
@@ -60,8 +65,8 @@ protected:
 	int damage;
 	// The direction of the projectile
 	Vector3 theDirection;
-
-
+	// Size of the projectile
+	float size;
 };
 
 namespace Create {

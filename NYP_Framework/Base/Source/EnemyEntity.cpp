@@ -34,9 +34,9 @@ void EnemyEntity::Render()
 	MS& ms = GraphicsManager::GetInstance()->GetModelStack();
 	ms.PushMatrix();
 	ms.Translate(position.x, position.y, position.z);
-	ms.Rotate(0, 0, 1, 0);
+	ms.Rotate(Math::RadianToDegree(atan2(direction.x, direction.z)), 0, 1, 0);
 	ms.Scale(scale.x, scale.y, scale.z);
-	RenderHelper::RenderMesh(modelMesh);
+	RenderHelper::RenderMeshWithLight(modelMesh);
 	ms.PopMatrix();
 }
 

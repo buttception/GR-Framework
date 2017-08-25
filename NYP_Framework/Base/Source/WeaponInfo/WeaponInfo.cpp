@@ -188,6 +188,7 @@ void CWeaponInfo::Discharge(Vector3 position, Vector3 target, Player* _source)
 			aProjectile->SetDirection(target);
 			aProjectile->SetStatus(true);
 			aProjectile->SetAABB(Vector3(0.5f, 0.5f, 0.5f), Vector3(-0.5f, -0.5f, -0.5f));
+			aProjectile->source = Projectile::PLAYER_SOURCE;
 			bullets.push_back(aProjectile);
 			bFire = false;
 			bFired = true;

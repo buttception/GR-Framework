@@ -703,40 +703,53 @@ bool Player::MapResize()
 	return false;
 }
 
-void Player::CollisionResponse(EntityBase *thatEntity)
+void Player::CollisionResponse(GenericEntity *thatEntity)
 {
-	GenericEntity* entity;
-	if (entity = dynamic_cast<GenericEntity*>(thatEntity))
+	switch (thatEntity->objectType)
 	{
-		switch (entity->objectType)
+	case BUILDING:
+		// if collide with building, move player to previous position
+		position = defaultPosition;
+		break;
+	case EQUIPMENT: {
+		//down cast to equipment entity
+		EquipmentEntity* equipment = dynamic_cast<EquipmentEntity*>(thatEntity);
+		switch (equipment->type)
 		{
-		case GenericEntity::BUILDING:
-			position = defaultPosition;
-			break;
-		case GenericEntity::EQUIPMENT: {
-			EquipmentEntity* equipment = dynamic_cast<EquipmentEntity*>(thatEntity);
-			switch (equipment->type)
+		case EquipmentEntity::EQUIPMENT_HEALING_STATION:
+			if (equipment->healTimer >= equipment->healCoolDown &&
+				!SceneText::isDay)
 			{
-			case EquipmentEntity::EQUIPMENT_HEALING_STATION:
-				if (equipment->healTimer >= equipment->healCoolDown &&
-					!SceneText::isDay)
-				{
-					playerHealth = Math::Min(maxPlayerHealth, playerHealth + 20);
-					equipment->healTimer = 0.f;
-				}
+				playerHealth = Math::Min(maxPlayerHealth, playerHealth + 20);
+				equipment->healTimer = 0.f;
+			}
+			break;
+		}
+	}
+	   break;
+	case ENEMY: {
+		//make the enemy attack the player
+		EnemyEntity* e = dynamic_cast<EnemyEntity*>(thatEntity);
+		e->AddState(StateMachine::ATTACK_STATE);
+		e->SetTarget(Player::GetInstance());
+	}
+	   break;
+	case PROJECTILE:{
+		Projectile* p = dynamic_cast<Projectile*>(thatEntity);
+		if (p) {
+			switch (p->source) {
+			case Projectile::ENEMY_SOURCE:
+				playerHealth -= p->GetDamage();
+				p->SetIsDone(true);
 				break;
+			default:
+				return;
 			}
 		}
-			break;
-		case GenericEntity::ENEMY: {
-			EnemyEntity* e = dynamic_cast<EnemyEntity*>(thatEntity);
-			e->AddState(StateMachine::ATTACK_STATE);
-			e->SetTarget(Player::GetInstance());
-		}
-			break;
-		default:
-			return;
-		}
+	}
+	   break;
+	default:
+		return;
 	}
 	return;
 }

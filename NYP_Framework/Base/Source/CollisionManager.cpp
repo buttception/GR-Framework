@@ -116,8 +116,10 @@ void CollisionManager::Update(std::list<EntityBase*> collisionList)
 	for (it = collisionList.begin(); it != end; ++it) {
 		if (!(*it)->HasCollider())
 			continue;
+
 		if (CheckAABBCollision((*it), Player::GetInstance())){
-			Player::GetInstance()->CollisionResponse((*it));
+			GenericEntity* thisEntity = dynamic_cast<GenericEntity*>(*it);
+			Player::GetInstance()->CollisionResponse(thisEntity);
 		}
 	}
 }

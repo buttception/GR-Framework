@@ -20,6 +20,9 @@ public:
 	void CollisionResponse(GenericEntity* thatEntity);
 
 	void Attack(GenericEntity* thatEntity, double dt);
+
+private:
+	float range;
 };
 
 namespace Create {

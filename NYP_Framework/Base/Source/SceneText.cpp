@@ -26,9 +26,6 @@
 #include "HardwareAbstraction\Keyboard.h"
 #include "BuildingManager.h" 
 #include "../Source/Sound_Engine.h"
-//using namespace irrklang;
-//#pragma comment(lib,"irrKlang.lib")
-//ISoundEngine*Hello = createIrrKlangDevice();
 
 #include <iostream>
 #include "RenderHelper.h"
@@ -152,21 +149,6 @@ void SceneText::Init()
 	//GraphicsManager::GetInstance()->gPass_params[GraphicsManager::GPASS_UNIFORM_TYPE::U_FOG_ENABLED] = 
 	//	glGetUniformLocation(GraphicsManager::GetInstance()->, "fogparam.enabled");
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	// Tell the graphics manager to use the shader we just loaded
 	GraphicsManager::GetInstance()->SetActiveShader("default");
 
@@ -197,8 +179,10 @@ void SceneText::Init()
 	MeshList::GetInstance()->GetMesh("Shop")->textureID[0] = LoadTGA("Image//towertab.tga");*/
 
 	//Enemy Mesh
-	MeshBuilder::GetInstance()->GenerateOBJ("Cuck", "OBJ//cube.obj");
+	MeshBuilder::GetInstance()->GenerateOBJ("Cuck", "OBJ//Cuck.obj");
+	MeshList::GetInstance()->GetMesh("Cuck")->textureID[0] = LoadTGA("Image//Red.tga");
 	MeshBuilder::GetInstance()->GenerateOBJ("Ruck", "OBJ//cube.obj");
+	MeshList::GetInstance()->GetMesh("Ruck")->textureID[0] = LoadTGA("Image//Yellow.tga");
 	MeshBuilder::GetInstance()->GenerateOBJ("Tuck", "OBJ//cube.obj");
 	MeshBuilder::GetInstance()->GenerateOBJ("Luck", "OBJ//cube.obj");
 	MeshBuilder::GetInstance()->GenerateOBJ("Auck", "OBJ//cube.obj");
@@ -831,6 +815,8 @@ void SceneText::RenderPassMain()
 
 	//placed down so alpha will work properly on ldq.
 	ms.PushMatrix();
+	//attempt to fix shadow issue
+	ms.Translate(0, 0, 0);
 	RenderWorld();
 	ms.PopMatrix();
 
@@ -906,9 +892,9 @@ void SceneText::RenderWorld()
 	ms.PopMatrix();
 
 	ms.PushMatrix();
-	ms.Translate(Player::GetInstance()->GetPosition());
-	ms.Scale(Player::GetInstance()->GetScale());
-	RenderHelper::RenderMesh(Player::GetInstance()->GetMesh());
+	ms.Translate(Player::GetInstance()->GetPosition().x, Player::GetInstance()->GetPosition().y, Player::GetInstance()->GetPosition().z);
+	ms.Scale(Player::GetInstance()->GetScale().x, Player::GetInstance()->GetScale().y, Player::GetInstance()->GetScale().z);
+	RenderHelper::RenderMeshWithLight(Player::GetInstance()->GetMesh());
 	ms.PopMatrix();
 
 	if (isDay) // Only render wireframe box in day time

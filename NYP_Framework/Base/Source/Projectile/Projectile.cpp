@@ -12,6 +12,7 @@ Projectile::Projectile(std::string _meshName) : GenericEntity(MeshList::GetInsta
 , m_fLifetime(-1.0f)
 , m_fSpeed(10.0f)
 , damage(0)
+, size(0.5)
 {
 
 }
@@ -95,13 +96,12 @@ void Projectile::Update(double dt)
 		return;
 	}
 
-	SetAABB(Vector3(position.x + 0.5, position.y + 0.5, position.z + 0.5),
-		Vector3(position.x - 0.5, position.y + 0.5, position.z - 0.5));
+	SetAABB(Vector3(position.x + size / 2, position.y + size / 2, position.z + size / 2),
+		Vector3(position.x - size / 2, position.y + size / 2, position.z - size / 2));
 
 	// Update Position
 	Vector3 d(theDirection.x, 0, -theDirection.y);
 	position += d * (float)dt * m_fSpeed;
-
 }
 
 void Projectile::Render(void)
@@ -115,7 +115,7 @@ void Projectile::Render(void)
 	MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
 	modelStack.PushMatrix();
 	modelStack.Translate(position.x, position.y, position.z);
-	//modelStack.Scale(scale.x, scale.y, scale.z);
+	modelStack.Scale(size, size, size);
 	RenderHelper::RenderMesh(modelMesh);
 	modelStack.PopMatrix();
 }
@@ -134,13 +134,16 @@ void Projectile::CollisionResponse(GenericEntity * thatEntity)
 
 	switch (thatEntity->objectType) {
 	case ENEMY:
-		this->SetIsDone(true);
-		enemy->SetHealth(enemy->GetHealth() - damage); 
-		std::cout << "hito\n";
-		if (enemy->GetHealth() <= 0)
-		{
-			enemy->SetActive(false);
-			Player::GetInstance()->SetMaterial(Player::GetInstance()->GetMaterial() + 100);
+		if (source != ENEMY_SOURCE) {
+			this->SetIsDone(true);
+			enemy->SetHealth(enemy->GetHealth() - damage);
+			std::cout << "hito\n";
+			if (enemy->GetHealth() <= 0)
+			{
+				enemy->SetActive(false);
+				enemy->Reset();
+				Player::GetInstance()->SetMaterial(Player::GetInstance()->GetMaterial() + 100);
+			}
 		}
 		break;
 	case BUILDING:
