@@ -89,7 +89,7 @@ void Player::Init(void)
 
 	// Set the pistol as the primary weapon
 	Loader::GetInstance()->ReadFileWeapon("weapon.csv", weaponList);
-	primaryWeapon = weaponList[1];
+	primaryWeapon = weaponList[0];
 	primaryWeapon->Init();
 
 	weaponManager = new CWeaponInfo*[m_iNumOfWeapon];
@@ -296,6 +296,46 @@ bool Player::DischargeSecondaryWeapon(const float deltaTime)
 	}
 
 	return false;
+}
+
+void Player::changeSecondaryWeapon(int weaponID)
+{
+	switch (weaponID)
+	{
+	case 1:
+		std::cout << weaponList.size() << std::endl;
+	/*	weaponManager[2] = weaponList[1];
+		weaponManager[2]->Init();*/
+		break;
+	case 2:
+		weaponManager[2] = weaponList[2];
+		weaponManager[2]->Init();
+		break;
+	case 3:
+		weaponManager[2] = weaponList[3];
+		weaponManager[2]->Init();
+		break;
+	case 4:
+		weaponManager[2] = weaponList[4];
+		weaponManager[2]->Init();
+		break;
+	case 5:
+		weaponManager[2] = weaponList[5];
+		weaponManager[2]->Init();
+		break;
+	case 6:
+		weaponManager[2] = weaponList[6];
+		weaponManager[2]->Init();
+		break;
+	case 7:
+		weaponManager[2] = weaponList[7];
+		weaponManager[2]->Init();
+		break;
+	case 8:
+		weaponManager[2] = weaponList[8];
+		weaponManager[2]->Init();
+		break;
+	}
 }
 
 std::list<Projectile*> Player::GetProj()

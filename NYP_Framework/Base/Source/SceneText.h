@@ -37,7 +37,7 @@ private:
 	
 	ShaderProgram* currProg;
 
-	Player* playerInfo;
+	//Player* playerInfo;
 	GroundEntity* groundEntity;
 	TopDownCamera *camera;
 	FPSCamera* fpscamera;

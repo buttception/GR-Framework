@@ -84,6 +84,7 @@ public:
 	// Discharge Secondary Weapon
 	bool DischargeSecondaryWeapon(const float deltaTime);
 
+	void changeSecondaryWeapon(int weaponID);
 
 	bool Render_Another_qUAD = false;
 	//GetProj
