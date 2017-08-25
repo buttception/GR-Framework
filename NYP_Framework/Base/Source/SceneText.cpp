@@ -728,7 +728,11 @@ void SceneText::Update(double dt)
 		std::cout << "Shop not Rendered" << std::endl;
 	}
 
-	
+	if (KeyboardController::GetInstance()->IsKeyDown('Z') && Render_Quad)
+	{
+		std::cout << "hi" << std::endl;
+		Player::GetInstance()->changeSecondaryWeapon(1);
+	}
 }
 
 void SceneText::Render()

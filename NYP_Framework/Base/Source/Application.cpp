@@ -163,8 +163,8 @@ void Application::UpdateInput()
 	double mouse_currX, mouse_currY;
 	glfwGetCursorPos(m_window, &mouse_currX, &mouse_currY);
 	MouseController::GetInstance()->UpdateMousePosition(mouse_currX, mouse_currY);
-	std::cout << "mouseX: " << mouse_currX << std::endl;
-	std::cout << "mouseY: " << mouse_currY << std::endl;
+	//std::cout << "mouseX: " << mouse_currX << std::endl;
+	//std::cout << "mouseY: " << mouse_currY << std::endl;
 
 	// Update Keyboard Input
 	for (int i = 0; i < KeyboardController::MAX_KEYS; ++i)
