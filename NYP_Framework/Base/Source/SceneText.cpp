@@ -278,7 +278,8 @@ void SceneText::Init()
 
 	core = Player::GetInstance()->core;
 
-	
+	Constrain = MeshBuilder::GetInstance()->GenerateQuad("Constrain", Color(1, 1, 1), 1.0f);
+	Constrain->textureID[0] = LoadTGA("Image//Return_to_the_playzone.tga");
 
 
 	//light testing
@@ -717,10 +718,6 @@ void SceneText::Update(double dt)
 		Render_Quad = false;
 		std::cout << "Shop not Rendered" << std::endl;
 	}
-	
-		
-		
-	
 
 	
 }
@@ -858,6 +855,15 @@ void SceneText::RenderPassMain()
 		ms.PopMatrix();
 	}
 	
+	if (Player::GetInstance()->Render_Another_qUAD)
+	{
+		ms.PushMatrix();
+		ms.Scale((float)Application::GetInstance().GetWindowWidth() * 0.75f, (float)Application::GetInstance().GetWindowHeight() * 0.75f, 0.f);
+		RenderHelper::RenderMesh(Constrain);
+		ms.PopMatrix();
+
+	}
+
 
 	//RenderHelper::RenderTextOnScreen(text, std::to_string(fps), Color(0, 1, 0), 2, 0, 0);
 	glEnable(GL_DEPTH_TEST);

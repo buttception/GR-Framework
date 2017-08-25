@@ -84,6 +84,8 @@ public:
 	// Discharge Secondary Weapon
 	bool DischargeSecondaryWeapon(const float deltaTime);
 
+
+	bool Render_Another_qUAD = false;
 	//GetProj
 	std::list<Projectile*>GetProj();
 

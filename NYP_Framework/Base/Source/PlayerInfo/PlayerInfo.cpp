@@ -314,22 +314,30 @@ void Player::Constrain(void)
 	if (position.x > maxBoundary.x )
 	{
 		position.x = maxBoundary.x;
-		playerHealth = Math::Max(0, playerHealth - 10);
+		playerHealth = Math::Max(0, playerHealth - 1);
+		Render_Another_qUAD = true;
 	}
 	if (position.z > maxBoundary.z)
 	{
 		position.z = maxBoundary.z;
-		playerHealth = Math::Max(0, playerHealth - 10);
+		playerHealth = Math::Max(0, playerHealth - 1);
+		Render_Another_qUAD = true;
 	}
 	if (position.x < minBoundary.x)
 	{
 		position.x = minBoundary.x;
-		playerHealth = Math::Max(0, playerHealth - 10);
+		playerHealth = Math::Max(0, playerHealth - 1);
+		Render_Another_qUAD = true;
 	}
 	if (position.z < minBoundary.z)
 	{
 		position.z = minBoundary.z;
-		playerHealth = Math::Max(0, playerHealth - 10);
+		playerHealth = Math::Max(0, playerHealth - 1);
+		Render_Another_qUAD = true;
+	}
+	else
+	{
+		Render_Another_qUAD = false;
 	}
 }
 

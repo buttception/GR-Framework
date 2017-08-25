@@ -58,6 +58,7 @@ private:
 	Mesh* playerHealthBar;
 	Mesh* wireFrameBox;
 	Mesh* Shop;
+	Mesh* Constrain;
 	CMinimap* theMiniMap;
 
 	BuildingEntity* core;
@@ -70,6 +71,7 @@ private:
 	const float ButtonCooldown = 0.20f;
 
 	bool Render_Quad = false;
+	
 };
 
 #endif
