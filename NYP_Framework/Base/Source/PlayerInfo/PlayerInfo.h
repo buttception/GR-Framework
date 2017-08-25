@@ -113,7 +113,7 @@ private:
 	Mouse* mouse;
 
 	int material;
-	float playerHealth, maxPlayerHealth;
+	int playerHealth, maxPlayerHealth;
 	BuildingEntity::BUILDING_TYPE currentBuilding;
 	bool isBuilding, isEquipment, isWeapon;
 	EquipmentEntity::EQUIPMENT_TYPE currentEquipment;

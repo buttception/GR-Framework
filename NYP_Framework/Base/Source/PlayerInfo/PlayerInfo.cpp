@@ -32,8 +32,8 @@ Player::Player(void)
 	, m_pTerrain(NULL)
 	, speedMultiplier(1.0)
 	, size(5)
-	, maxPlayerHealth(100.f)
-	, playerHealth(100.f)
+	, maxPlayerHealth(100)
+	, playerHealth(100)
 	, material(3000)
 	, currentBuilding(BuildingEntity::BUILDING_WALL)
 	, isBuilding(true)
@@ -139,12 +139,6 @@ void Player::Reset(void)
  ********************************************************************************/
 void Player::Update(double dt)
 {
-	double mouse_diff_x, mouse_diff_y;
-	MouseController::GetInstance()->GetMouseDelta(mouse_diff_x, mouse_diff_y);
-
-	double camera_yaw = mouse_diff_x * 0.0174555555555556;		// 3.142 / 180.0
-	double camera_pitch = mouse_diff_y * 0.0174555555555556;	// 3.142 / 180.0
-
 	keyboard->Read((float)dt);
 	mouse->Read((float)dt);
 
@@ -241,6 +235,13 @@ void Player::Update(double dt)
 			playerHealth = 50.f;
 		break;
 	}
+
+	if (playerHealth <= 0)
+	{
+		playerHealth = maxPlayerHealth;
+		material = Math::Max(0, material - 100);
+		position.Set(MAX_CELLS * CELL_SIZE / 2 + 10, 0, (MAX_CELLS * CELL_SIZE / 2) + 10);
+	}
 }
 
 // Reload current weapon
@@ -308,27 +309,28 @@ std::list<Projectile*> Player::GetProj()
 // Constrain the position within the borders
 void Player::Constrain(void)
 {
-
 	//constrain the player to stay within the map/play area 
 	//min for z  and x is 0, max is 500
 	if (position.x > maxBoundary.x )
 	{
 		position.x = maxBoundary.x;
+		playerHealth = Math::Max(0, playerHealth - 10);
 	}
 	if (position.z > maxBoundary.z)
 	{
 		position.z = maxBoundary.z;
+		playerHealth = Math::Max(0, playerHealth - 10);
 	}
 	if (position.x < minBoundary.x)
 	{
 		position.x = minBoundary.x;
+		playerHealth = Math::Max(0, playerHealth - 10);
 	}
 	if (position.z < minBoundary.z)
 	{
 		position.z = minBoundary.z;
+		playerHealth = Math::Max(0, playerHealth - 10);
 	}
-
-	
 }
 
 CameraBase * Player::getCamera()
@@ -627,7 +629,7 @@ void Player::CollisionResponse(EntityBase *thatEntity)
 				if (EquipmentEntity::healTimer >= EquipmentEntity::healCoolDown &&
 					!SceneText::isDay)
 				{
-					playerHealth = Math::Min(maxPlayerHealth, playerHealth + 20.f);
+					playerHealth = Math::Min(maxPlayerHealth, playerHealth + 20);
 					EquipmentEntity::healTimer = 0.f;
 					MeshList::GetInstance()->GetMesh("Healing Station")->textureID[0] = LoadTGA("Image//Equipment//Heal_Inactive.tga");
 				}
