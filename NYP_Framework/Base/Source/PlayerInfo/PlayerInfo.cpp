@@ -433,18 +433,61 @@ bool Player::LeftClick(float dt)
 		{
 			if (isBuilding)
 			{
+				int x = (int)(position.x / CELL_SIZE);
+				int z = (int)(position.z / CELL_SIZE);
+				Vector3 ghostPos, ghostScale;
 				// Up
 				if (angle >= -53.f && angle <= 53.f)
-					BuildingManager::GetInstance()->AddBuilding((int)(Player::GetInstance()->GetPosition().x / CELL_SIZE), (int)(Player::GetInstance()->GetPosition().z / CELL_SIZE), BuildingTile::TOP, currentBuilding);
+				{
+					ghostPos.Set(x * CELL_SIZE + CELL_SIZE / 2, 1, z * CELL_SIZE);
+					ghostScale.Set(CELL_SIZE, 10, 2);
+					if (position.x + scale.x / 2.f >= ghostPos.x - ghostScale.x / 2.f &&
+						position.x - scale.x / 2.f <= ghostPos.x + ghostScale.x / 2.f &&
+						position.z + scale.z / 2.f >= ghostPos.z - ghostScale.z / 2.f &&
+						position.z - scale.z / 2.f <= ghostPos.z + ghostScale.z / 2.f)
+						return false;
+
+					BuildingManager::GetInstance()->AddBuilding(x, z, BuildingTile::TOP, currentBuilding);
+				}
 				// Left
 				else if (angle >= -127.f && angle <= -53.f)
-					BuildingManager::GetInstance()->AddBuilding((int)(Player::GetInstance()->GetPosition().x / CELL_SIZE), (int)(Player::GetInstance()->GetPosition().z / CELL_SIZE), BuildingTile::LEFT, currentBuilding);
+				{
+					ghostPos.Set(x * CELL_SIZE, 1, z * CELL_SIZE + CELL_SIZE / 2);
+					ghostScale.Set(2, 10, CELL_SIZE);
+					if (position.x + scale.x / 2.f >= ghostPos.x - ghostScale.x / 2.f &&
+						position.x - scale.x / 2.f <= ghostPos.x + ghostScale.x / 2.f &&
+						position.z + scale.z / 2.f >= ghostPos.z - ghostScale.z / 2.f &&
+						position.z - scale.z / 2.f <= ghostPos.z + ghostScale.z / 2.f)
+						return false;
+
+					BuildingManager::GetInstance()->AddBuilding(x, z, BuildingTile::LEFT, currentBuilding);
+				}
 				// Right
 				else if (angle >= 53.f && angle <= 127.f)
-					BuildingManager::GetInstance()->AddBuilding((int)(Player::GetInstance()->GetPosition().x / CELL_SIZE), (int)(Player::GetInstance()->GetPosition().z / CELL_SIZE), BuildingTile::RIGHT, currentBuilding);
+				{
+					ghostPos.Set(x * CELL_SIZE + CELL_SIZE, 1, z * CELL_SIZE + CELL_SIZE / 2);
+					ghostScale.Set(2, 10, CELL_SIZE);
+					if (position.x + scale.x / 2.f >= ghostPos.x - ghostScale.x / 2.f &&
+						position.x - scale.x / 2.f <= ghostPos.x + ghostScale.x / 2.f &&
+						position.z + scale.z / 2.f >= ghostPos.z - ghostScale.z / 2.f &&
+						position.z - scale.z / 2.f <= ghostPos.z + ghostScale.z / 2.f)
+						return false;
+
+					BuildingManager::GetInstance()->AddBuilding(x, z, BuildingTile::RIGHT, currentBuilding);
+				}
 				// Down
 				else if ((angle >= -180.f && angle <= -127.f) || (angle >= 127.f && angle <= 180.f))
-					BuildingManager::GetInstance()->AddBuilding((int)(Player::GetInstance()->GetPosition().x / CELL_SIZE), (int)(Player::GetInstance()->GetPosition().z / CELL_SIZE), BuildingTile::BOTTOM, currentBuilding);
+				{
+					ghostPos.Set(x * CELL_SIZE + CELL_SIZE / 2, 1, z * CELL_SIZE + CELL_SIZE);
+					ghostScale.Set(CELL_SIZE, 10, 2);
+					if (position.x + scale.x / 2.f >= ghostPos.x - ghostScale.x / 2.f &&
+						position.x - scale.x / 2.f <= ghostPos.x + ghostScale.x / 2.f &&
+						position.z + scale.z / 2.f >= ghostPos.z - ghostScale.z / 2.f &&
+						position.z - scale.z / 2.f <= ghostPos.z + ghostScale.z / 2.f)
+						return false;
+
+					BuildingManager::GetInstance()->AddBuilding(x, z, BuildingTile::BOTTOM, currentBuilding);
+				}
 			}
 			else if (isEquipment)
 				BuildingManager::GetInstance()->AddEquipment((int)(Player::GetInstance()->GetPosition().x / CELL_SIZE), (int)(Player::GetInstance()->GetPosition().z / CELL_SIZE), currentEquipment);
