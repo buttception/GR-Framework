@@ -9,6 +9,15 @@ public:
 	EntityBase();
 	virtual ~EntityBase();
 
+	enum OBJECT_TYPE {
+		NONE = 0,
+		PLAYER,
+		BUILDING,
+		EQUIPMENT,
+		ENEMY,
+		PROJECTILE
+	}objectType;
+
 	virtual void Update(double _dt);
 	virtual void Render();
 	virtual void RenderUI();
@@ -36,6 +45,7 @@ public:
 	virtual void SetPhysic(const bool _value);
 
 protected:
+
 	Vector3 position;
 	Vector3 scale;
 
