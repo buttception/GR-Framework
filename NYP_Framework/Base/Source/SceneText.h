@@ -30,6 +30,9 @@ public:
 	virtual void Render();
 	virtual void Exit();
 
+	int GetNoOfDays() { return noOfDays; }
+	static SceneText* GetScene() { return sInstance; }
+
 	static bool isDay;
 private:
 	SceneText(SceneManager* _sceneMgr); // This is used to register to SceneManager

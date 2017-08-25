@@ -8,12 +8,14 @@ using namespace irrklang;
 
 class CSoundEngine : public Singleton<CSoundEngine>
 {
+	friend Singleton<CSoundEngine>;
 protected:
 	ISoundEngine* isthesoundEngine;
 
 	//The library map of souunds created
 	std::map<std::string, std::string> soundMap;
-
+	ISound* background;
+	
 	int volume;
 
 

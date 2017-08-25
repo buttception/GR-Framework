@@ -13,15 +13,6 @@ public:
 	GenericEntity(Mesh* _modelMesh);
 	virtual ~GenericEntity();
 
-	enum OBJECT_TYPE {
-		NONE = 0,
-		PLAYER,
-		BUILDING,
-		EQUIPMENT,
-		ENEMY,
-		PROJECTILE
-	}objectType;
-
 	virtual void Update(double _dt);
 	virtual void Render();
 

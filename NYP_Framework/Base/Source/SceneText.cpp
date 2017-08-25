@@ -192,6 +192,11 @@ void SceneText::Init()
 
 	//Enemy Mesh
 	MeshBuilder::GetInstance()->GenerateOBJ("Cuck", "OBJ//cube.obj");
+	MeshBuilder::GetInstance()->GenerateOBJ("Ruck", "OBJ//cube.obj");
+	MeshBuilder::GetInstance()->GenerateOBJ("Tuck", "OBJ//cube.obj");
+	MeshBuilder::GetInstance()->GenerateOBJ("Luck", "OBJ//cube.obj");
+	MeshBuilder::GetInstance()->GenerateOBJ("Auck", "OBJ//cube.obj");
+	MeshBuilder::GetInstance()->GenerateOBJ("Buck", "OBJ//cube.obj");
 
 	sun = MeshBuilder::GetInstance()->GenerateSphere("sphere", Color(1, 1, 1), 24, 24, 1);
 	generatorCoreHealthBar = MeshBuilder::GetInstance()->GenerateQuad("generatorCoreHealthBar", Color(1, 0, 0), 1.f);
@@ -298,12 +303,15 @@ void SceneText::Update(double dt)
 	EntityManager::GetInstance()->Update(dt);
 
 	if (isDay) {
-		if (EnemyManager::GetInstance()->active)
+		if (EnemyManager::GetInstance()->active) {
 			EnemyManager::GetInstance()->End();
+		}
 	}
 	else {
-		if (!EnemyManager::GetInstance()->active)
+		if (!EnemyManager::GetInstance()->active) {
 			EnemyManager::GetInstance()->Init();
+			CSoundEngine::GetInstance()->playthesound("NIGHT", 0.3f);
+		}
 		EnemyManager::GetInstance()->Update(dt);
 	}
 

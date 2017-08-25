@@ -100,6 +100,9 @@ void CollisionManager::Update(std::list<EntityBase*> collisionList)
 			if (!(*it)->HasCollider() || !(*it2)->HasCollider())
 				continue;
 
+			if ((*it)->objectType == (*it2)->objectType)
+				continue;
+
 			// do your checks here
 			if (CheckAABBCollision(*it, *it2))
 			{

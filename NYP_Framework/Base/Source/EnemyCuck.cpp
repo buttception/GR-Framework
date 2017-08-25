@@ -68,18 +68,12 @@ void EnemyCuck::Update(double dt)
 
 			if (target != nullptr) {
 				attacking = true;
-				//CSoundEngine::GetInstance()->playthesound("CUCK", 0.4f);
-
-				/*if (attacking = true)
-				{
-				}*/
-				
 			}
 			else
 				stateStack.pop();
 
 			attacking = true;
-			CSoundEngine::GetInstance()->playsinglesound("CUCK", 0.1f);
+			CSoundEngine::GetInstance()->playsinglesound("MELEE", 0.1f);
 			stateStack.pop();
 
 			break;
@@ -120,56 +114,59 @@ void EnemyCuck::Update(double dt)
 
 void EnemyCuck::CollisionResponse(GenericEntity * thatEntity)
 {
-	
-	switch (thatEntity->objectType) {
-	case GenericEntity::BUILDING:
-		//if collide with a building
-		//set state to attack mode
-		//if enemy is not already in attack mode
-		if (stateStack.top() != ATTACK_STATE)
-			stateStack.push(ATTACK_STATE);
-		target = thatEntity;
-		/*CSoundEngine::GetInstance()->playthesound("CUCK", 0.4f);
-		std::cout << "Muslim Sound Played" << std::endl;*/
-		break;
-	case GenericEntity::PROJECTILE:
+	if (!active) {
+		switch (thatEntity->objectType) {
+		case GenericEntity::BUILDING:
+			//if collide with a building
+			//set state to attack mode
+			//if enemy is not already in attack mode
+			if (!stateStack.empty())
+				if (stateStack.top() != ATTACK_STATE)
+					stateStack.push(ATTACK_STATE);
+			target = thatEntity;
+			/*CSoundEngine::GetInstance()->playthesound("CUCK", 0.4f);
+			std::cout << "Muslim Sound Played" << std::endl;*/
+			break;
+		case GenericEntity::PROJECTILE:
 
-		break;
-	case GenericEntity::EQUIPMENT:
-	{
-		EquipmentEntity* equipment = dynamic_cast<EquipmentEntity*>(thatEntity);
-		// Attack Equipment except floor spike and healing station
-		if (stateStack.top() != ATTACK_STATE &&
-			equipment->type != EquipmentEntity::EQUIPMENT_FLOOR_SPIKE &&
-			equipment->type != EquipmentEntity::EQUIPMENT_HEALING_STATION)
-			stateStack.push(ATTACK_STATE);
-		target = thatEntity;
-
-		switch (equipment->type)
+			break;
+		case GenericEntity::EQUIPMENT:
 		{
-		case EquipmentEntity::EQUIPMENT_TURRET:
-			std::cout << "collided with turret" << std::endl;
-			break;
-		case EquipmentEntity::EQUIPMENT_FLOOR_SPIKE:
-			if (EquipmentEntity::spikeTimer >= EquipmentEntity::spikeCoolDown)
+			EquipmentEntity* equipment = dynamic_cast<EquipmentEntity*>(thatEntity);
+			// Attack Equipment except floor spike and healing station
+			if (stateStack.top() != ATTACK_STATE &&
+				equipment->type != EquipmentEntity::EQUIPMENT_FLOOR_SPIKE &&
+				equipment->type != EquipmentEntity::EQUIPMENT_HEALING_STATION)
+				stateStack.push(ATTACK_STATE);
+			target = thatEntity;
+
+			switch (equipment->type)
 			{
-				health = Math::Max(0, health - 10);
-				speed = 5.f;
-				EquipmentEntity::spikeTimer = 0.f;
+			case EquipmentEntity::EQUIPMENT_TURRET:
+				std::cout << "collided with turret" << std::endl;
+				break;
+			case EquipmentEntity::EQUIPMENT_FLOOR_SPIKE:
+				if (EquipmentEntity::spikeTimer >= EquipmentEntity::spikeCoolDown)
+				{
+					health = Math::Max(0, health - 10);
+					speed = 5.f;
+					EquipmentEntity::spikeTimer = 0.f;
+				}
+				if (health == 0)
+					SetIsDone(true);
+				break;
+			case EquipmentEntity::EQUIPMENT_SHIELD:
+				std::cout << "collided with shield" << std::endl;
+				break;
 			}
-			if (health == 0)
-				SetIsDone(true);
-			break;
-		case EquipmentEntity::EQUIPMENT_SHIELD:
-			std::cout << "collided with shield" << std::endl;
-			break;
+		}
+		break;
+		default:
+			return;
 		}
 	}
-	break;
-	default:
+	else
 		return;
-	}
-	
 }
 
 void EnemyCuck::Attack(GenericEntity * thatEntity, double dt)
@@ -213,8 +210,7 @@ void EnemyCuck::Attack(GenericEntity * thatEntity, double dt)
 		// stop attack animation
 		attacking = false;
 	}
-	CSoundEngine::GetInstance()->playthesound("CUCK", 0.4f);
-	std::cout << "Muslim Sound Played" << std::endl;
+	//std::cout << "Muslim Sound Played" << std::endl;
 	//else
 		//std::cout << "waiting for attack speed\n";
 }

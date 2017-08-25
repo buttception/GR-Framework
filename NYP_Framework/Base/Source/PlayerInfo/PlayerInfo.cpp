@@ -88,6 +88,9 @@ void Player::Init(void)
 	//CSoundEngine::GetInstance()->Addthefuckingsound("ISIS", "Image//ISIS.mp3");
 	CSoundEngine::GetInstance()->Addthefuckingsound("Remove", "Image//out.ogg");
 	CSoundEngine::GetInstance()->Addthefuckingsound("NULL", "Image//click.ogg");
+	CSoundEngine::GetInstance()->Addthefuckingsound("PEW", "Image//pew.mp3");
+	CSoundEngine::GetInstance()->Addthefuckingsound("MELEE", "Image//melee.mp3");
+	CSoundEngine::GetInstance()->Addthefuckingsound("NIGHT", "Image//night ost.mp3");
 
 	// Set the pistol as the primary weapon
 	Loader::GetInstance()->ReadFileWeapon("weapon.csv", weaponList);
