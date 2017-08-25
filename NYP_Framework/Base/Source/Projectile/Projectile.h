@@ -12,7 +12,7 @@ class Player;
 class Projectile : public GenericEntity {
 public:
 
-	Player* player;
+	Player *player;
 
 	Projectile(std::string _meshName);
 	~Projectile();

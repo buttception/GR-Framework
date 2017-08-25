@@ -29,8 +29,8 @@ public:
 	int GetWindowWidth();
 	
 	// Should make these not hard-coded :P
-	int m_window_width = 800;
-	int m_window_height = 600;
+	int m_window_width = 1920;
+	int m_window_height = 1080;
 private:
 	Application();
 	~Application();
