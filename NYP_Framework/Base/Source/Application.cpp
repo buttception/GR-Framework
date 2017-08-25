@@ -84,7 +84,7 @@ void Application::Init()
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE); //We don't want the old OpenGL 
 
 	//Create a window and create its OpenGL context
-	m_window = glfwCreateWindow(m_window_width, m_window_height, "NYP Framework", NULL, NULL);
+	m_window = glfwCreateWindow(m_window_width, m_window_height, "NYP Framework", glfwGetPrimaryMonitor(), NULL);
 
 	//If the window couldn't be created
 	if (!m_window)
@@ -163,6 +163,8 @@ void Application::UpdateInput()
 	double mouse_currX, mouse_currY;
 	glfwGetCursorPos(m_window, &mouse_currX, &mouse_currY);
 	MouseController::GetInstance()->UpdateMousePosition(mouse_currX, mouse_currY);
+	std::cout << "mouseX: " << mouse_currX << std::endl;
+	std::cout << "mouseY: " << mouse_currY << std::endl;
 
 	// Update Keyboard Input
 	for (int i = 0; i < KeyboardController::MAX_KEYS; ++i)
