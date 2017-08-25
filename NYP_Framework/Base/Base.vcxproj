@@ -21,6 +21,7 @@
     <ClCompile Include="Source\EnemyEntity.cpp" />
     <ClCompile Include="Source\EnemyManager.cpp" />
     <ClCompile Include="Source\EnemyRuck.cpp" />
+    <ClCompile Include="Source\EnemyTuck.cpp" />
     <ClCompile Include="Source\EntityManager.cpp" />
     <ClCompile Include="Source\EquipmentEntity.cpp" />
     <ClCompile Include="Source\FPSCamera.cpp" />
@@ -60,6 +61,7 @@
     <ClInclude Include="Source\EnemyEntity.h" />
     <ClInclude Include="Source\EnemyManager.h" />
     <ClInclude Include="Source\EnemyRuck.h" />
+    <ClInclude Include="Source\EnemyTuck.h" />
     <ClInclude Include="Source\EntityManager.h" />
     <ClInclude Include="Source\EquipmentEntity.h" />
     <ClInclude Include="Source\FontType.h" />

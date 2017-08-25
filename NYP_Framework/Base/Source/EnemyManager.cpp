@@ -2,6 +2,7 @@
 
 #include "EnemyCuck.h"
 #include "EnemyRuck.h"
+#include "EnemyTuck.h"
 
 #include "MyMath.h"
 #include "Mtx44.h"
@@ -100,7 +101,7 @@ void EnemyManager::Init()
 	if (test) {
 		enemyMap["Ruck"].push_back(Create::Ruck("Ruck", Vector3(0, 0, 0)));
 		enemyMap["Cuck"].push_back(Create::Cuck("Cuck", Vector3(0, 0, 0)));
-		//enemyMap["Ruck"].push_back(Create::Ruck("Ruck", Vector3(0, 0, 0)));
+		enemyMap["Tuck"].push_back(Create::Tuck("Tuck", Vector3(0, 0, 0)));
 		//enemyMap["Ruck"].push_back(Create::Ruck("Ruck", Vector3(0, 0, 0)));
 		//enemyMap["Ruck"].push_back(Create::Ruck("Ruck", Vector3(0, 0, 0)));
 		//enemyMap["Ruck"].push_back(Create::Ruck("Ruck", Vector3(0, 0, 0)));
@@ -177,26 +178,39 @@ EnemyEntity * EnemyManager::FetchEnemy(std::string _type)
 // to spawn enemy based on how many days
 void EnemyManager::SpawnEnemies()
 {
-	EnemyEntity* e;
-	Vector3 center(MAX_CELLS * CELL_SIZE / 2, 0, MAX_CELLS * CELL_SIZE / 2);
-	int spawnAnglePosition = Math::RandIntMinMax(0, spawningSize) + spawningAngle;
-	Vector3 spawnDir(1, 0, 0);
-	Mtx44 rotate;	rotate.SetToRotation(spawnAnglePosition, 0, 1, 0);
-	spawnDir = rotate * spawnDir;
-	if (e = FetchEnemy("Cuck")) {
-		EnemyCuck*c = dynamic_cast<EnemyCuck*>(e);
-		if (c) {
-			c->SetPosition(center + spawnDir * Math::RandFloatMinMax(minDistance, maxDistance));
-			c->Init();
+	static int i = 0;
+	if (i > 30) {
+		EnemyEntity* e;
+		Vector3 center(MAX_CELLS * CELL_SIZE / 2, 0, MAX_CELLS * CELL_SIZE / 2);
+		int spawnAnglePosition = Math::RandIntMinMax(0, spawningSize) + spawningAngle;
+		Vector3 spawnDir(1, 0, 0);
+		Mtx44 rotate;	rotate.SetToRotation(spawnAnglePosition, 0, 1, 0);
+		spawnDir = rotate * spawnDir;
+		if (e = FetchEnemy("Cuck")) {
+			EnemyCuck*c = dynamic_cast<EnemyCuck*>(e);
+			if (c) {
+				c->SetPosition(center + spawnDir * Math::RandFloatMinMax(minDistance, maxDistance));
+				c->Init();
+			}
 		}
-	}
-	else if (e = FetchEnemy("Ruck")) {
-		EnemyRuck*r = dynamic_cast<EnemyRuck*>(e);
-		if (r) {
-			r->SetPosition(center + spawnDir * Math::RandFloatMinMax(minDistance, maxDistance));
-			r->Init();
+		else if (e = FetchEnemy("Ruck")) {
+			EnemyRuck*r = dynamic_cast<EnemyRuck*>(e);
+			if (r) {
+				r->SetPosition(center + spawnDir * Math::RandFloatMinMax(minDistance, maxDistance));
+				r->Init();
+			}
 		}
+		else if (e = FetchEnemy("Tuck")) {
+			EnemyTuck*t = dynamic_cast<EnemyTuck*>(e);
+			if (t) {
+				t->SetPosition(center + spawnDir * Math::RandFloatMinMax(minDistance, maxDistance));
+				t->Init();
+			}
+		}
+
+		i = 0;
 	}
+	++i;
 }
 
 // clearing all enemies in the case of day

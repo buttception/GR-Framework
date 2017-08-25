@@ -183,7 +183,8 @@ void SceneText::Init()
 	MeshList::GetInstance()->GetMesh("Cuck")->textureID[0] = LoadTGA("Image//Red.tga");
 	MeshBuilder::GetInstance()->GenerateOBJ("Ruck", "OBJ//cube.obj");
 	MeshList::GetInstance()->GetMesh("Ruck")->textureID[0] = LoadTGA("Image//Yellow.tga");
-	MeshBuilder::GetInstance()->GenerateOBJ("Tuck", "OBJ//cube.obj");
+	MeshBuilder::GetInstance()->GenerateOBJ("Tuck", "OBJ//Cuck.obj");
+	MeshList::GetInstance()->GetMesh("Tuck")->textureID[0] = LoadTGA("Image//Green.tga");
 	MeshBuilder::GetInstance()->GenerateOBJ("Luck", "OBJ//cube.obj");
 	MeshBuilder::GetInstance()->GenerateOBJ("Auck", "OBJ//cube.obj");
 	MeshBuilder::GetInstance()->GenerateOBJ("Buck", "OBJ//cube.obj");
