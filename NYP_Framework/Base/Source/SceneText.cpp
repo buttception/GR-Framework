@@ -383,7 +383,7 @@ void SceneText::Update(double dt)
 	else {
 		change = false;
 	}
-	std::cout << "Light Color: [" << lights[0]->color.r << ", " << lights[0]->color.g << ", " << lights[0]->color.b << "]\n";
+	//std::cout << "Light Color: [" << lights[0]->color.r << ", " << lights[0]->color.g << ", " << lights[0]->color.b << "]\n";
 	// old light code
 	/*
 	if (lights[0]->position.z <= 210  ) {
@@ -505,6 +505,7 @@ void SceneText::Update(double dt)
 		float angle = Math::RadianToDegree(acosf(playerMouse_Direction.Dot(Up_Direction) / (playerMouse_Direction.Length() * Up_Direction.Length())));
 		if (playerMouse_Direction.x < 0)
 			angle = -angle;
+		std::cout << "angle: " << angle << std::endl;
 		CMinimap::GetInstance()->SetAngle(angle);
 
 		//Set & Update wireFrameBox's position & scale
@@ -536,7 +537,7 @@ void SceneText::Update(double dt)
 					ghostScale.Set(2, 10, CELL_SIZE);
 				}
 				// Down
-				else if (angle >= -180.f && angle <= -127.f)
+				else if ((angle >= -180.f && angle <= -127.f) || (angle >= 127.f && angle <= 180.f))
 				{
 					ghostPos.Set(x * CELL_SIZE + CELL_SIZE / 2, 1, z * CELL_SIZE + CELL_SIZE);
 					ghostScale.Set(CELL_SIZE, 10, 2);
