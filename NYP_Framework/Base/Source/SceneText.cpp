@@ -279,7 +279,7 @@ void SceneText::Init()
 
 	//Hello->play2D("Image//Hello.mp3", GL_TRUE);
 	isDay = true;
-	dayDuration = 30.f;
+	dayDuration = 180.f;
 	time = dayDuration;
 	noOfDays = 1;
 	generatorCoreScale = 1.98f;
@@ -298,6 +298,9 @@ void SceneText::Update(double dt)
 	float fontSize = 25.0f;
 	float halfFontSize = fontSize / 2.0f;
 
+	if (KeyboardController::GetInstance()->IsKeyDown(VK_OEM_PLUS))
+		dt *= 10.f;
+
 	for (int i = 0; i < 6; ++i)
 	{
 		textObj[i]->SetPosition(Vector3(-halfWindowWidth, -halfWindowHeight + fontSize*i + halfFontSize, 0.0f));
@@ -310,6 +313,7 @@ void SceneText::Update(double dt)
 			EnemyManager::GetInstance()->End();
 			CSoundEngine::GetInstance()->StopBackground();
 			CSoundEngine::GetInstance()->PlayBackground("DAY");
+			lights[0]->position.Set(0, MAX_CELLS * CELL_SIZE, 0);
 		}
 	}
 	else {
@@ -317,6 +321,8 @@ void SceneText::Update(double dt)
 			EnemyManager::GetInstance()->Init();
 			CSoundEngine::GetInstance()->StopBackground();
 			CSoundEngine::GetInstance()->PlayBackground("NIGHT");
+			lights[0]->position.Set(0, MAX_CELLS * CELL_SIZE, 0);
+			lights[0]->color.Set(0.25, 0.25, 0.5);
 		}
 		EnemyManager::GetInstance()->Update(dt);
 	}
@@ -351,20 +357,46 @@ void SceneText::Update(double dt)
 	Vector3 pos(lights[0]->position.x, lights[0]->position.y, lights[0]->position.z);
 	lights[0]->position = rotate * lights[0]->position;
 
-
-
-	//std::cout << lights[0]->position.z << std::endl;
-
-	if (lights[0]->position.z <= 210  /*|| lights[0]->position.z > 364*/ ) {
+	static double r = 1;
+	static double g = 0.6;
+	static double b = 0;
+	static bool change = false;
+	if (isDay) {
+		lights[0]->color.Set(r, g, b);
+		if (b > 0)
+			b = Math::Min((float)b, 1.f);
+		else
+			b = Math::Max((float)b, 0.f);
+		if (!change) {
+			g += dt / dayDuration * 2 * 0.4;
+			if (g > 0.7)
+				b += dt / dayDuration * 8;
+			if (g >= 1)
+				change = true;
+		}
+		else {
+			g -= dt / dayDuration * 2 * 0.4;
+			if (g > 0.7)
+				b -= dt / dayDuration * 8;
+		}
+	}
+	else {
+		change = false;
+	}
+	std::cout << "Light Color: [" << lights[0]->color.r << ", " << lights[0]->color.g << ", " << lights[0]->color.b << "]\n";
+	// old light code
+	/*
+	if (lights[0]->position.z <= 210  ) {
 		lights[0]->color.Set(255 / 255, (float)165 / (float)255, 0); //keep it this way for now
 		//std::cout << "Light Color is Orange" << std::endl;
 	}
-	else if (lights[0]->position.z >= 490 /*&& lights[0]->position.z <=490*/) {
+	else if (lights[0]->position.z >= 490) {
 		//lights[0]->color.Set(255/255, 255/255, 0);
 		//std::cout << "Light Color is Yellow" << std::endl;
 		lights[0]->color.Set(1, 1, 1);
 		//std::cout << "Light Color is White" << std::endl;
 	}
+	*/
 	
 	//============================================================================================================================================//
 
@@ -885,20 +917,7 @@ void SceneText::RenderWorld()
 	ms.PopMatrix();
 
 	ms.PushMatrix();
-	ms.Translate(lights[0]->position.x / 2, lights[0]->position.y / 2, lights[0]->position.z / 2);
-	ms.Scale(50.f, 50.f, 50.f);
-	//RenderHelper::RenderMesh(sun);
-	ms.PopMatrix();
-
-	ms.PushMatrix();
-	ms.Translate(CELL_SIZE / 2 * MAX_CELLS, 10, CELL_SIZE / 2 * MAX_CELLS);
-	ms.Rotate(-90, 1, 0, 0);
-	ms.Scale(50, 50, 50);	
-	//RenderHelper::RenderMesh(light_depth_mesh);
-	ms.PopMatrix();
-
-	ms.PushMatrix();
-	ms.Translate(Player::GetInstance()->GetPosition().x, Player::GetInstance()->GetPosition().y, Player::GetInstance()->GetPosition().z);
+	ms.Translate(Player::GetInstance()->GetPosition().x, Player::GetInstance()->GetPosition().y + Player::GetInstance()->GetScale().y / 2, Player::GetInstance()->GetPosition().z);
 	ms.Scale(Player::GetInstance()->GetScale().x, Player::GetInstance()->GetScale().y, Player::GetInstance()->GetScale().z);
 	RenderHelper::RenderMeshWithLight(Player::GetInstance()->GetMesh());
 	ms.PopMatrix();

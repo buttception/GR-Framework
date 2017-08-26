@@ -46,12 +46,12 @@ BuildingEntity* BuildingManager::AddBuilding(int _x, int _y, BuildingTile::TILE_
 		//where 1 -> left, 2 -> top, 3 -> right, 4 ->bottom
 		if (direction == BuildingTile::LEFT) {
 			wall->SetScale(Vector3(2, 10, CELL_SIZE));
-			wall->SetPosition(Vector3((float)_x * CELL_SIZE, wall->GetScale().y / 2.f, (float)_y * CELL_SIZE + CELL_SIZE / 2.f));
+			wall->SetPosition(Vector3((float)_x * CELL_SIZE, 0.f, (float)_y * CELL_SIZE + CELL_SIZE / 2.f));
 			buildingArray[_x][_y].AddWall(wall, BuildingTile::LEFT);
 		}
 		else if (direction == BuildingTile::TOP) {
 			wall->SetScale(Vector3(CELL_SIZE, 10, 2));
-			wall->SetPosition(Vector3((float)_x * CELL_SIZE + CELL_SIZE / 2.f, wall->GetScale().y / 2.f, (float)_y * CELL_SIZE));
+			wall->SetPosition(Vector3((float)_x * CELL_SIZE + CELL_SIZE / 2.f, 0.f, (float)_y * CELL_SIZE));
 			buildingArray[_x][_y].AddWall(wall, BuildingTile::TOP);
 		}
 		else if (direction == BuildingTile::RIGHT) {
@@ -60,7 +60,7 @@ BuildingEntity* BuildingManager::AddBuilding(int _x, int _y, BuildingTile::TILE_
 			if (_x + 1 != MAX_CELLS)
 				AddBuilding(_x + 1, _y, BuildingTile::LEFT, type);
 			else {
-				wall->SetPosition(Vector3(MAX_CELLS * CELL_SIZE, wall->GetScale().y / 2.f, (float)_y * CELL_SIZE + CELL_SIZE / 2.f));
+				wall->SetPosition(Vector3(MAX_CELLS * CELL_SIZE, 0.f, (float)_y * CELL_SIZE + CELL_SIZE / 2.f));
 				buildingArray[_x][_y].AddWall(wall, BuildingTile::RIGHT);
 			}
 		}
@@ -70,7 +70,7 @@ BuildingEntity* BuildingManager::AddBuilding(int _x, int _y, BuildingTile::TILE_
 			if (_y >= 0)
 				AddBuilding(_x, _y + 1, BuildingTile::TOP, type);
 			else {
-				wall->SetPosition(Vector3((float)_x * CELL_SIZE + CELL_SIZE / 2.f, wall->GetScale().y / 2.f, MAX_CELLS * CELL_SIZE));
+				wall->SetPosition(Vector3((float)_x * CELL_SIZE + CELL_SIZE / 2.f, 0.f, MAX_CELLS * CELL_SIZE));
 				buildingArray[_x][_y].AddWall(wall, BuildingTile::BOTTOM);
 			}
 		}

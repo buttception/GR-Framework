@@ -3,6 +3,7 @@
 #include "EnemyCuck.h"
 #include "EnemyRuck.h"
 #include "EnemyTuck.h"
+#include "EnemyAuck.h"
 
 #include "MyMath.h"
 #include "Mtx44.h"
@@ -205,6 +206,13 @@ void EnemyManager::SpawnEnemies()
 			if (t) {
 				t->SetPosition(center + spawnDir * Math::RandFloatMinMax(minDistance, maxDistance));
 				t->Init();
+			}
+		}
+		else if (e = FetchEnemy("Auck")) {
+			EnemyAuck*a = dynamic_cast<EnemyAuck*>(e);
+			if (a) {
+				a->SetPosition(center + spawnDir * Math::RandFloatMinMax(minDistance, maxDistance));
+				a->Init();
 			}
 		}
 

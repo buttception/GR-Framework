@@ -19,7 +19,7 @@ void BuildingEntity::Render()
 {
 	MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
 	modelStack.PushMatrix();
-	modelStack.Translate(position.x, position.y, position.z);
+	modelStack.Translate(position.x, position.y + scale.y / 2, position.z);
 	modelStack.Scale(scale.x, scale.y, scale.z);
 	RenderHelper::RenderMeshWithLight(modelMesh);
 	modelStack.PopMatrix();
