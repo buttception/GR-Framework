@@ -243,7 +243,7 @@ void SceneText::Init()
 	//groundEntity->SetPosition(Vector3(CELL_SIZE * MAX_CELLS / 2, 0, -CELL_SIZE * MAX_CELLS / 2));
 	//groundEntity->SetScale(Vector3(CELL_SIZE * MAX_CELLS, CELL_SIZE * MAX_CELLS, 1.f));
 	//groundEntity->SetGrids(Vector3(1.f, 1.0f, 1.f));
-	ground = MeshBuilder::GetInstance()->GenerateQuad("ground", Color(1, 1, 1), 1.f);
+	ground = MeshBuilder::GetInstance()->GenerateGround("ground", Color(1, 1, 1), 1.f);
 	ground->textureID[0] = LoadTGA("Image//grass_lightgreen.tga");
 
 
