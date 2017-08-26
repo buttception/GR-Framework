@@ -100,7 +100,7 @@ void EnemyManager::Init()
 	std::cout << "max: " << maxDistance << std::endl;
 	std::cout << "min: " << minDistance << std::endl;
 
-	bool test = true;
+	bool test = false;
 
 	if (test) {
 		//enemyMap["Ruck"].push_back(Create::Ruck("Ruck", Vector3(0, 0, 0)));
@@ -115,7 +115,7 @@ void EnemyManager::Init()
 		//first time set up
 		switch (SceneText::GetScene()->GetNoOfDays()) {
 		case 1:
-			for (size_t i = 0; i < 10; ++i) {
+			for (size_t i = 0; i < 5; ++i) {
 				enemyMap["Cuck"].push_back(Create::Cuck("Cuck", Vector3(0, 0, 0)));
 			}
 			break;
@@ -127,10 +127,14 @@ void EnemyManager::Init()
 			}
 			break;
 		case 3:
-
+			for (size_t i = 0; i < 3; ++i) {
+				enemyMap["Tuck"].push_back(Create::Tuck("Tuck", Vector3(0, 0, 0)));
+			}
 			break;
 		case 4:
-
+			for (size_t i = 0; i < 3; ++i) {
+				enemyMap["Auck"].push_back(Create::Auck("Auck", Vector3(0, 0, 0)));
+			}
 			break;
 		case 5:
 
