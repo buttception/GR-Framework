@@ -5,6 +5,7 @@ using namespace std;
 CSoundEngine::CSoundEngine()
 	:isthesoundEngine(NULL)
 {
+	background = nullptr;
 }
 
 CSoundEngine::~CSoundEngine()
@@ -101,22 +102,28 @@ void CSoundEngine::playthesound(const std::string & _soundIndex, float volume)
 	std::string aSound = getthesound(_soundIndex);
 	if (!isthesoundEngine->isCurrentlyPlaying(aSound.c_str()))
 	{
-		isthesoundEngine->play2D(aSound.c_str(), false, false);
-		isthesoundEngine->setSoundVolume(volume);
-		
+		isthesoundEngine->play2D(aSound.c_str(), false, false, true)->setVolume(volume);
 	}
 }
 
 void CSoundEngine::playsinglesound(const std::string & _soundIndex, float volume)
 {
 	std::string bsound = getthesound(_soundIndex);
-	/*if (!isthesoundEngine->isCurrentlyPlaying(bsound.c_str()))
-	{*/
-		isthesoundEngine->play2D(bsound.c_str(), false, false);
-		isthesoundEngine->setSoundVolume(volume);
-	//}
-	
+	isthesoundEngine->play2D(bsound.c_str(), false, false, true)->setVolume(volume);
+}
 
+void CSoundEngine::PlayBackground(const std::string & _soundIndex)
+{
+	std::string bsound = getthesound(_soundIndex);
+	background = isthesoundEngine->play2D(bsound.c_str(), false, false, true);
+	background->setVolume(0.2f);
+}
+
+void CSoundEngine::StopBackground()
+{
+	if (background) {
+		background->setIsPaused(true);
+	}
 }
 
 //void CSoundEngine::setVolume(int newvolume, float volume)

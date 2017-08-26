@@ -13,7 +13,6 @@ protected:
 
 	//The library map of souunds created
 	std::map<std::string, std::string> soundMap;
-	ISound* background;
 	
 	int volume;
 
@@ -39,7 +38,11 @@ public:
 	void playthesound(const std::string& _soundIndex,float volume);
 	void playsinglesound(const std::string& _soundIndex, float volume);
 
+	void PlayBackground(const std::string& _soundIndex);
+	void StopBackground();
 
+
+	ISound* background;
 
 	//Volume Control
 	void setVolume(int newvolume,float volume);

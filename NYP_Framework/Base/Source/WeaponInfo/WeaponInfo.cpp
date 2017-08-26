@@ -192,6 +192,8 @@ void CWeaponInfo::Discharge(Vector3 position, Vector3 target, Player* _source)
 			bullets.push_back(aProjectile);
 			bFire = false;
 			bFired = true;
+
+			CSoundEngine::GetInstance()->playsinglesound("PewPew", 0.2f);
 			//magRounds--;
 		}
 	}

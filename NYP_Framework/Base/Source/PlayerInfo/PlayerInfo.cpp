@@ -89,6 +89,7 @@ void Player::Init(void)
 	CSoundEngine::GetInstance()->Addthefuckingsound("PEW", "Image//pew.mp3");
 	CSoundEngine::GetInstance()->Addthefuckingsound("MELEE", "Image//melee.mp3");
 	CSoundEngine::GetInstance()->Addthefuckingsound("NIGHT", "Image//night ost.mp3");
+	CSoundEngine::GetInstance()->Addthefuckingsound("DAY", "Image//day.mp3");
 
 	// Set the pistol as the primary weapon
 	Loader::GetInstance()->ReadFileWeapon("weapon.csv", weaponList);
@@ -279,9 +280,6 @@ bool Player::DischargePrimaryWeapon(const float deltaTime, Vector3 position, Vec
 		weaponManager[m_iCurrentWeapon]->PrintSelf();
 		//std::cout << "fire" << std::endl;
 		weaponManager[m_iCurrentWeapon]->Discharge(position, target, this);
-
-		//CSoundEngine::GetInstance()->playthesound("PewPew", 0.3);
-		CSoundEngine::GetInstance()->playsinglesound("PewPew", 0.2f);
 
 		return true;
 	}

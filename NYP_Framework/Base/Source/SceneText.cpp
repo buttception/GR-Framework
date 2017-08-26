@@ -287,6 +287,8 @@ void SceneText::Init()
 	ghostScale.SetZero();
 	//CSoundEngine::GetInstance()->playthesound("HELLO", 0.2f);
 	Math::InitRNG();
+
+	CSoundEngine::GetInstance()->PlayBackground("DAY");
 }
 
 void SceneText::Update(double dt)
@@ -306,12 +308,15 @@ void SceneText::Update(double dt)
 	if (isDay) {
 		if (EnemyManager::GetInstance()->active) {
 			EnemyManager::GetInstance()->End();
+			CSoundEngine::GetInstance()->StopBackground();
+			CSoundEngine::GetInstance()->PlayBackground("DAY");
 		}
 	}
 	else {
 		if (!EnemyManager::GetInstance()->active) {
 			EnemyManager::GetInstance()->Init();
-			CSoundEngine::GetInstance()->playthesound("NIGHT", 0.3f);
+			CSoundEngine::GetInstance()->StopBackground();
+			CSoundEngine::GetInstance()->PlayBackground("NIGHT");
 		}
 		EnemyManager::GetInstance()->Update(dt);
 	}
