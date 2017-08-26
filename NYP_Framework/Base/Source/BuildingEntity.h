@@ -5,6 +5,7 @@
 #include "GenericEntity.h"
 
 class Mesh;
+class BuildingTile;
 
 class BuildingEntity : public GenericEntity {
 public:
@@ -34,6 +35,7 @@ public:
 	int GetGridZ();
 	void SetGrid(int _x, int _z);
 
+	BuildingTile* tile;
 private:
 	int health;
 	int level;

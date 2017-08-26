@@ -62,10 +62,6 @@ void EnemyTuck::Update(double dt)
 			if (target != nullptr) {
 				attacking = true;
 			}
-			else
-				stateStack.pop();
-
-			attacking = true;
 			stateStack.pop();
 
 			break;
@@ -153,7 +149,7 @@ void EnemyTuck::Attack(GenericEntity * thatEntity, double dt)
 {
 	attackElaspedTime += (float)dt;
 	if (attackElaspedTime >= attackSpeed) {
-		std::cout << "attack\n";
+		CSoundEngine::GetInstance()->playsinglesound("MELEE", 0.1f);
 		//check if still in contact with its target
 		//test if this is too weak against player
 		if (target)
@@ -169,6 +165,20 @@ void EnemyTuck::Attack(GenericEntity * thatEntity, double dt)
 					if (building->GetHealth() <= 0) {
 						//destroy the building
 						building->SetIsDone(true);
+						if (building->type != BuildingEntity::BUILDING_CORE) {
+							if (building->tile->leftWall == building) {
+								building->tile->leftWall = nullptr;
+							}
+							else if (building->tile->rightWall == building) {
+								building->tile->rightWall = nullptr;
+							}
+							else if (building->tile->topWall == building) {
+								building->tile->topWall = nullptr;
+							}
+							else if (building->tile->bottomWall == building) {
+								building->tile->bottomWall = nullptr;
+							}
+						}
 						if (stateStack.top() == CHASE_STATE)
 							target = Player::GetInstance();
 						else
@@ -187,12 +197,14 @@ void EnemyTuck::Attack(GenericEntity * thatEntity, double dt)
 		// stop attack animation
 		attacking = false;
 
-		if (CollisionManager::GetInstance()->CheckPointToSphereCollision(position, Player::GetInstance())) {
+		/*if (CollisionManager::GetInstance()->CheckPointToSphereCollision(position, Player::GetInstance())) {
 			stateStack.push(CHASE_STATE);
 			target = Player::GetInstance();
-		}
+		}*/
 
-		CSoundEngine::GetInstance()->playsinglesound("MELEE", 0.1f);
+		if (!stateStack.empty())
+			if (stateStack.top() == ATTACK_STATE)
+				stateStack.pop();
 	}
 }
 

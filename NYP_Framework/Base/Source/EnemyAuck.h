@@ -17,6 +17,8 @@ public:
 	void Attack(GenericEntity* thatEntity, double dt);
 
 private:
+
+	float range;
 };
 
 namespace Create {

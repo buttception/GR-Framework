@@ -82,7 +82,7 @@ void Player::Init(void)
 	CSoundEngine::GetInstance()->Addthefuckingsound("Build", "Image//wood1.ogg");
 	CSoundEngine::GetInstance()->Addthefuckingsound("PewPew", "Image//9mm.mp3");
 	CSoundEngine::GetInstance()->Addthefuckingsound("Floor", "Image//stone6.ogg");
-	CSoundEngine::GetInstance()->Addthefuckingsound("CUCK" , "Image//AA.mp3");
+	CSoundEngine::GetInstance()->Addthefuckingsound("ALLAH" , "Image//AA.mp3");
 	//CSoundEngine::GetInstance()->Addthefuckingsound("ISIS", "Image//ISIS.mp3");
 	CSoundEngine::GetInstance()->Addthefuckingsound("Remove", "Image//out.ogg");
 	CSoundEngine::GetInstance()->Addthefuckingsound("NULL", "Image//click.ogg");

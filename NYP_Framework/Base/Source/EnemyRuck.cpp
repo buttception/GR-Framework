@@ -67,10 +67,6 @@ void EnemyRuck::Update(double dt)
 			if (target != nullptr) {
 				attacking = true;
 			}
-			else
-				stateStack.pop();
-
-			attacking = true;
 			stateStack.pop();
 			break;
 		case StateMachine::CHASE_STATE:
@@ -195,6 +191,20 @@ void EnemyRuck::Attack(GenericEntity * thatEntity, double dt)
 						if (building->GetHealth() <= 0) {
 							//destroy the building
 							building->SetIsDone(true);
+							if (building->type != BuildingEntity::BUILDING_CORE) {
+								if (building->tile->leftWall == building) {
+									building->tile->leftWall = nullptr;
+								}
+								else if (building->tile->rightWall == building) {
+									building->tile->rightWall = nullptr;
+								}
+								else if (building->tile->topWall == building) {
+									building->tile->topWall = nullptr;
+								}
+								else if (building->tile->bottomWall == building) {
+									building->tile->bottomWall = nullptr;
+								}
+							}
 							if (stateStack.top() == CHASE_STATE)
 								target = Player::GetInstance();
 							else

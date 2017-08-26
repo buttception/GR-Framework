@@ -14,6 +14,7 @@ EquipmentEntity::EquipmentEntity(const std::string _meshName)
 {
 	modelMesh = MeshList::GetInstance()->GetMesh(_meshName);
 	SetIsFixed(true);
+	health = 100;
 }
 
 EquipmentEntity::~EquipmentEntity()

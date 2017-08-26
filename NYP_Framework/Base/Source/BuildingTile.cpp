@@ -35,6 +35,7 @@ void BuildingTile::AddWall(BuildingEntity * entity, TILE_SIDE direction)
 			return;
 		}
 		leftWall = entity;
+		entity->tile = this;
 		break;
 	case TOP:
 		if (topWall) {
@@ -42,6 +43,7 @@ void BuildingTile::AddWall(BuildingEntity * entity, TILE_SIDE direction)
 			return;
 		}
 		topWall = entity;
+		entity->tile = this;
 		break;
 	case RIGHT:
 		if (rightWall) {
@@ -49,6 +51,7 @@ void BuildingTile::AddWall(BuildingEntity * entity, TILE_SIDE direction)
 			return;
 		}
 		rightWall = entity;
+		entity->tile = this;
 		break;
 	case BOTTOM:
 		if (bottomWall) {
@@ -56,6 +59,7 @@ void BuildingTile::AddWall(BuildingEntity * entity, TILE_SIDE direction)
 			return;
 		}
 		bottomWall = entity;
+		entity->tile = this;
 		break;
 	default:
 		return;

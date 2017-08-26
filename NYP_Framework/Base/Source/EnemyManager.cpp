@@ -37,73 +37,76 @@ void EnemyManager::Init()
 	// set the angle size
 	spawningSize = Math::RandIntMinMax(40, 60);
 	
-	int angle = spawningAngle + spawningSize / 2;
-	int x, y;	x = y = MAX_CELLS / 2;
-	//right
-	if (angle <= 45 || angle > 315) {
-		while (x < MAX_CELLS) {
-			BuildingTile* tile = &BuildingManager::GetInstance()->GetBuildingArray()[x][y];
-			//check if tile contain nth
-			if (tile->leftWall || tile->rightWall || tile->bottomWall || tile->topWall || tile->floor || tile->equipment) {
-					++x;
-			}
-			else
-				break;
-		}
-	}
-	else if (angle > 45 && angle <= 135) {
-		while (y < MAX_CELLS) {
-			BuildingTile* tile = &BuildingManager::GetInstance()->GetBuildingArray()[x][y];
-			//check if tile contain nth
-			if (tile->leftWall || tile->rightWall || tile->bottomWall || tile->topWall || tile->floor || tile->equipment) {
-					--y;
-			}
-			else
-				break;
-		}
-	}
-	else if (angle > 135 && angle <= 225) {
-		//right
-		while (x >= 0) {
-			BuildingTile* tile = &BuildingManager::GetInstance()->GetBuildingArray()[x][y];
-			//check if tile contain nth
-			if (tile->leftWall || tile->rightWall || tile->bottomWall || tile->topWall || tile->floor || tile->equipment) {
-					--x;
-			}
-			else
-				break;
-		}
-	}
-	else if (angle > 225 && angle <= 315) {
-		//bottom
-		while (y >= 0) {
-			BuildingTile* tile = &BuildingManager::GetInstance()->GetBuildingArray()[x][y];
-			//check if tile contain nth
-			if (tile->leftWall || tile->rightWall || tile->bottomWall || tile->topWall || tile->floor || tile->equipment) {
-					++y;
-			}
-			else
-				break;
-		}
-	}
-	minDistance = 5 * CELL_SIZE;
-	if (x != MAX_CELLS / 2) {
-		minDistance += abs((x - MAX_CELLS /2) * CELL_SIZE);
-	}
-	else if (y != MAX_CELLS / 2) {
-		minDistance += abs((y - MAX_CELLS / 2) * CELL_SIZE);
-	}
-	maxDistance = minDistance + CELL_SIZE;
+	//int angle = spawningAngle + spawningSize / 2;
+	//int x, y;	x = y = MAX_CELLS / 2;
+	////right
+	//if (angle <= 45 || angle > 315) {
+	//	while (x < MAX_CELLS) {
+	//		BuildingTile* tile = &BuildingManager::GetInstance()->GetBuildingArray()[x][y];
+	//		//check if tile contain nth
+	//		if (tile->leftWall || tile->rightWall || tile->bottomWall || tile->topWall || tile->floor || tile->equipment) {
+	//				++x;
+	//		}
+	//		else
+	//			break;
+	//	}
+	//}
+	//else if (angle > 45 && angle <= 135) {
+	//	while (y < MAX_CELLS) {
+	//		BuildingTile* tile = &BuildingManager::GetInstance()->GetBuildingArray()[x][y];
+	//		//check if tile contain nth
+	//		if (tile->leftWall || tile->rightWall || tile->bottomWall || tile->topWall || tile->floor || tile->equipment) {
+	//				--y;
+	//		}
+	//		else
+	//			break;
+	//	}
+	//}
+	//else if (angle > 135 && angle <= 225) {
+	//	//right
+	//	while (x >= 0) {
+	//		BuildingTile* tile = &BuildingManager::GetInstance()->GetBuildingArray()[x][y];
+	//		//check if tile contain nth
+	//		if (tile->leftWall || tile->rightWall || tile->bottomWall || tile->topWall || tile->floor || tile->equipment) {
+	//				--x;
+	//		}
+	//		else
+	//			break;
+	//	}
+	//}
+	//else if (angle > 225 && angle <= 315) {
+	//	//bottom
+	//	while (y >= 0) {
+	//		BuildingTile* tile = &BuildingManager::GetInstance()->GetBuildingArray()[x][y];
+	//		//check if tile contain nth
+	//		if (tile->leftWall || tile->rightWall || tile->bottomWall || tile->topWall || tile->floor || tile->equipment) {
+	//				++y;
+	//		}
+	//		else
+	//			break;
+	//	}
+	//}
+	//minDistance = 5 * CELL_SIZE;
+	//if (x != MAX_CELLS / 2) {
+	//	minDistance += abs((x - MAX_CELLS /2) * CELL_SIZE);
+	//}
+	//else if (y != MAX_CELLS / 2) {
+	//	minDistance += abs((y - MAX_CELLS / 2) * CELL_SIZE);
+	//}
+	//maxDistance = minDistance + CELL_SIZE;
+
+	maxDistance = (MAX_CELLS / 2 - 1) * CELL_SIZE;
+	minDistance = (MAX_CELLS / 2 - 2) * CELL_SIZE;
 	std::cout << "max: " << maxDistance << std::endl;
 	std::cout << "min: " << minDistance << std::endl;
 
 	bool test = true;
 
 	if (test) {
-		enemyMap["Ruck"].push_back(Create::Ruck("Ruck", Vector3(0, 0, 0)));
-		enemyMap["Cuck"].push_back(Create::Cuck("Cuck", Vector3(0, 0, 0)));
-		enemyMap["Tuck"].push_back(Create::Tuck("Tuck", Vector3(0, 0, 0)));
 		//enemyMap["Ruck"].push_back(Create::Ruck("Ruck", Vector3(0, 0, 0)));
+		//enemyMap["Cuck"].push_back(Create::Cuck("Cuck", Vector3(0, 0, 0)));
+		//enemyMap["Tuck"].push_back(Create::Tuck("Tuck", Vector3(0, 0, 0)));
+		enemyMap["Auck"].push_back(Create::Auck("Auck", Vector3(0, 0, 0)));
 		//enemyMap["Ruck"].push_back(Create::Ruck("Ruck", Vector3(0, 0, 0)));
 		//enemyMap["Ruck"].push_back(Create::Ruck("Ruck", Vector3(0, 0, 0)));
 	}

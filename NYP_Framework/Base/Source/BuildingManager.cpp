@@ -86,8 +86,8 @@ BuildingEntity* BuildingManager::AddBuilding(int _x, int _y, BuildingTile::TILE_
 	}
 	else if(type == BuildingEntity::BUILDING_FLOOR)
 	{
-		wall->SetScale(Vector3(CELL_SIZE, 1.f, CELL_SIZE));
-		wall->SetPosition(Vector3((float)_x * CELL_SIZE + CELL_SIZE / 2.f, 0.1f, (float)_y * CELL_SIZE + CELL_SIZE / 2.f));
+		wall->SetScale(Vector3(CELL_SIZE, 0.1f, CELL_SIZE));
+		wall->SetPosition(Vector3((float)_x * CELL_SIZE + CELL_SIZE / 2.f, wall->GetScale().y / 2, (float)_y * CELL_SIZE + CELL_SIZE / 2.f));
 		buildingArray[_x][_y].AddFloor(wall);
 	}
 	else if (type == BuildingEntity::BUILDING_CORE)

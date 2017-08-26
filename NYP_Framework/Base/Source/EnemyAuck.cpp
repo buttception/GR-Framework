@@ -16,11 +16,12 @@ EnemyAuck::~EnemyAuck()
 void EnemyAuck::Init()
 {
 	stateStack.push(DEFAULT_STATE);
-	speed = 8.f;
-	health = 100;
-	damage = 10;
-	size = 2.f;
+	speed = 10.f;
+	health = 50;
+	damage = 20;
+	size = 2.5f;
 	scale.Set(size, size, size);
+	range = CELL_SIZE;
 	attackSpeed = 1.f;
 	optimalRoute.push(Vector3(MAX_CELLS * CELL_SIZE / 2, 0, MAX_CELLS * CELL_SIZE / 2));
 	direction = (optimalRoute.top() - position).Normalized();
@@ -58,16 +59,10 @@ void EnemyAuck::Update(double dt)
 			}
 			break;
 		case StateMachine::ATTACK_STATE:
-
 			if (target != nullptr) {
 				attacking = true;
 			}
-			else
-				stateStack.pop();
-
-			attacking = true;
 			stateStack.pop();
-
 			break;
 		case StateMachine::CHASE_STATE:
 			try {
@@ -140,7 +135,7 @@ void EnemyAuck::CollisionResponse(GenericEntity * thatEntity)
 				break;
 			}
 		}
-									break;
+			break;
 		default:
 			return;
 		}
@@ -153,33 +148,102 @@ void EnemyAuck::Attack(GenericEntity * thatEntity, double dt)
 {
 	attackElaspedTime += (float)dt;
 	if (attackElaspedTime >= attackSpeed) {
-		std::cout << "attack\n";
+		CSoundEngine::GetInstance()->playsinglesound("ALLAH", 0.1f);
 		//check if still in contact with its target
 		//test if this is too weak against player
 		if (target)
 		{
-			//if (CollisionManager::GetInstance()->CheckAABBCollision(this, thatEntity)){
-			if (thatEntity->objectType == BUILDING) {
-				BuildingEntity* building = dynamic_cast<BuildingEntity*>(thatEntity);
-				if (building) {
-					// damage the building
-					building->SetHealth(building->GetHealth() - damage);
-					std::cout << "building health: " << building->GetHealth() << std::endl;
-					// check if the building is dead
-					if (building->GetHealth() <= 0) {
-						//destroy the building
-						building->SetIsDone(true);
-						if (stateStack.top() == CHASE_STATE)
-							target = Player::GetInstance();
-						else
-							target = nullptr;
+			////if (CollisionManager::GetInstance()->CheckAABBCollision(this, thatEntity)){
+			//if (thatEntity->objectType == BUILDING) {
+			//	BuildingEntity* building = dynamic_cast<BuildingEntity*>(thatEntity);
+			//	if (building) {
+			//		// damage the building
+			//		building->SetHealth(building->GetHealth() - damage);
+			//		std::cout << "building health: " << building->GetHealth() << std::endl;
+			//		// check if the building is dead
+			//		if (building->GetHealth() <= 0) {
+			//			//destroy the building
+			//			building->SetIsDone(true);
+			//			if (stateStack.top() == CHASE_STATE)
+			//				target = Player::GetInstance();
+			//			else
+			//				target = nullptr;
+			//		}
+			//	}
+			//	//}
+			//}
+			//else {
+			//	if (stateStack.top() == CHASE_STATE)
+			//		target = Player::GetInstance();
+			//}
+			if ((position - Player::GetInstance()->GetPosition()).LengthSquared() < range * range) {
+				active = false;
+				Player::GetInstance()->SetPlayerHealth(Player::GetInstance()->GetPlayerHealth() - damage);
+			}
+
+			std::list<EntityBase*>temp = EntityManager::GetInstance()->GetEntityList();
+			for (auto it : temp) {
+				if (it->objectType != PROJECTILE) {
+					GenericEntity* entity;
+					if (entity = dynamic_cast<GenericEntity*>(it)) {
+						EnemyEntity* e;
+						BuildingEntity* b;
+						switch (entity->objectType) {
+						case ENEMY:
+							if ((position - entity->GetPosition()).LengthSquared() < range * range) {
+								if (e = dynamic_cast<EnemyEntity*>(entity)) {
+									if (e->GetActive()) {
+										e->SetHealth(e->GetHealth() - damage);
+										if (e->GetHealth() <= 0) {
+											e->SetActive(false);
+										}
+									}
+								}
+							}
+						break;
+						case BUILDING:
+							if ((position - entity->GetPosition()).LengthSquared() < range * range) {
+								if (b = dynamic_cast<BuildingEntity*>(entity)) {
+									b->SetHealth(b->GetHealth() - damage);
+									if (b->GetHealth() <= 0) {
+										b->SetIsDone(true);
+										if (b->type != BuildingEntity::BUILDING_CORE) {
+											if (b->tile->leftWall == b) {
+												b->tile->leftWall = nullptr;
+											}
+											else if (b->tile->rightWall == b) {
+												b->tile->rightWall = nullptr;
+											}
+											else if (b->tile->topWall == b) {
+												b->tile->topWall = nullptr;
+											}
+											else if (b->tile->bottomWall == b) {
+												b->tile->bottomWall = nullptr;
+											}
+										}
+									}
+								}
+							}
+						break;
+						case EQUIPMENT:
+							if ((position - entity->GetPosition()).LengthSquared() < range * range) {
+								if (b = dynamic_cast<BuildingEntity*>(entity)) {
+									b->SetHealth(b->GetHealth() - damage);
+									EquipmentEntity* temp = dynamic_cast<EquipmentEntity*>(b);
+									if (b->GetHealth() <= 0) {
+										b->SetIsDone(true);
+										if (b->tile->equipment == temp) {
+											b->tile->equipment = nullptr;
+										}
+									}
+								}
+							}
+						break;
+						default:
+							continue;
+						}
 					}
 				}
-				//}
-			}
-			else {
-				if (stateStack.top() == CHASE_STATE)
-					target = Player::GetInstance();
 			}
 		}
 		// resets attack time
@@ -187,12 +251,15 @@ void EnemyAuck::Attack(GenericEntity * thatEntity, double dt)
 		// stop attack animation
 		attacking = false;
 
-		if (CollisionManager::GetInstance()->CheckPointToSphereCollision(position, Player::GetInstance())) {
-			stateStack.push(CHASE_STATE);
-			target = Player::GetInstance();
-		}
+		active = false;
 
-		CSoundEngine::GetInstance()->playsinglesound("MELEE", 0.1f);
+		if (!stateStack.empty())
+			if (stateStack.top() == ATTACK_STATE)
+				stateStack.pop();
+		//if (CollisionManager::GetInstance()->CheckPointToSphereCollision(position, Player::GetInstance())) {
+		//	stateStack.push(CHASE_STATE);
+		//	target = Player::GetInstance();
+		//}
 	}
 }
 

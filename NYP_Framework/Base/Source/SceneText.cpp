@@ -185,7 +185,7 @@ void SceneText::Init()
 	MeshList::GetInstance()->GetMesh("Ruck")->textureID[0] = LoadTGA("Image//Yellow.tga");
 	MeshBuilder::GetInstance()->GenerateOBJ("Tuck", "OBJ//Cuck.obj");
 	MeshList::GetInstance()->GetMesh("Tuck")->textureID[0] = LoadTGA("Image//Green.tga");
-	MeshBuilder::GetInstance()->GenerateOBJ("Luck", "OBJ//cube.obj");
+	//MeshBuilder::GetInstance()->GenerateOBJ("Luck", "OBJ//cube.obj");
 	MeshBuilder::GetInstance()->GenerateOBJ("Auck", "OBJ//cube.obj");
 	MeshBuilder::GetInstance()->GenerateOBJ("Buck", "OBJ//cube.obj");
 
@@ -383,7 +383,6 @@ void SceneText::Update(double dt)
 	else {
 		change = false;
 	}
-	std::cout << "Light Color: [" << lights[0]->color.r << ", " << lights[0]->color.g << ", " << lights[0]->color.b << "]\n";
 	// old light code
 	/*
 	if (lights[0]->position.z <= 210  ) {
@@ -733,11 +732,9 @@ void SceneText::Update(double dt)
 	if (KeyboardController::GetInstance()->IsKeyDown('P') && Delay >= ButtonCooldown)
 	{
 		SceneManager::GetInstance()->SetActiveScene("Pause");
+		CSoundEngine::GetInstance()->StopBackground();
 		std::cout << "Pause Selected" << std::endl;
 	}
-	
-
-	
 
 	if (KeyboardController::GetInstance()->IsKeyReleased('B') && !Render_Quad)
 	{
