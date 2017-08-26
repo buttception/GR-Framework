@@ -794,7 +794,7 @@ void SceneText::RenderPassGPass()
 	//These matrices should change when light position or direction changes
 	Light* light = dynamic_cast<Light*>(g->GetLight("lights[0]"));
 	if (light->type == Light::LIGHT_DIRECTIONAL) {
-		g->m_lightDepthProj.SetToOrtho(-MAX_CELLS * CELL_SIZE / 2, MAX_CELLS * CELL_SIZE / 2, -MAX_CELLS * CELL_SIZE / 2, MAX_CELLS * CELL_SIZE / 2, -MAX_CELLS * CELL_SIZE, MAX_CELLS * CELL_SIZE * 2);
+		g->m_lightDepthProj.SetToOrtho(-MAX_CELLS * CELL_SIZE / 2, MAX_CELLS * CELL_SIZE / 2, -MAX_CELLS * CELL_SIZE / 2, MAX_CELLS * CELL_SIZE / 2, -MAX_CELLS * CELL_SIZE, MAX_CELLS * CELL_SIZE * 3);
 		//g->m_lightDepthProj.SetToOrtho(-100, 100, -100, 100, -100, 100);
 	}
 	else
