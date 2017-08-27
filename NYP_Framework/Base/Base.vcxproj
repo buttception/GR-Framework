@@ -18,6 +18,7 @@
     <ClCompile Include="Source\CollisionManager.cpp" />
     <ClCompile Include="Source\EnemyAI.cpp" />
     <ClCompile Include="Source\EnemyAuck.cpp" />
+    <ClCompile Include="Source\EnemyBuck.cpp" />
     <ClCompile Include="Source\EnemyCuck.cpp" />
     <ClCompile Include="Source\EnemyEntity.cpp" />
     <ClCompile Include="Source\EnemyManager.cpp" />
@@ -59,6 +60,7 @@
     <ClInclude Include="Source\CollisionManager.h" />
     <ClInclude Include="Source\EnemyAI.h" />
     <ClInclude Include="Source\EnemyAuck.h" />
+    <ClInclude Include="Source\EnemyBuck.h" />
     <ClInclude Include="Source\EnemyCuck.h" />
     <ClInclude Include="Source\EnemyEntity.h" />
     <ClInclude Include="Source\EnemyManager.h" />

@@ -170,6 +170,9 @@
     <ClCompile Include="Source\EnemyAuck.cpp">
       <Filter>Enemy</Filter>
     </ClCompile>
+    <ClCompile Include="Source\EnemyBuck.cpp">
+      <Filter>Enemy</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h">
@@ -287,6 +290,9 @@
       <Filter>Enemy</Filter>
     </ClInclude>
     <ClInclude Include="Source\EnemyAuck.h">
+      <Filter>Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\EnemyBuck.h">
       <Filter>Enemy</Filter>
     </ClInclude>
   </ItemGroup>

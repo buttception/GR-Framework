@@ -4,6 +4,7 @@
 #include "EnemyRuck.h"
 #include "EnemyTuck.h"
 #include "EnemyAuck.h"
+#include "EnemyBuck.h"
 
 #include "MyMath.h"
 #include "Mtx44.h"
@@ -100,14 +101,14 @@ void EnemyManager::Init()
 	std::cout << "max: " << maxDistance << std::endl;
 	std::cout << "min: " << minDistance << std::endl;
 
-	bool test = false;
+	bool test = true;
 
 	if (test) {
 		//enemyMap["Ruck"].push_back(Create::Ruck("Ruck", Vector3(0, 0, 0)));
 		//enemyMap["Cuck"].push_back(Create::Cuck("Cuck", Vector3(0, 0, 0)));
 		//enemyMap["Tuck"].push_back(Create::Tuck("Tuck", Vector3(0, 0, 0)));
-		enemyMap["Auck"].push_back(Create::Auck("Auck", Vector3(0, 0, 0)));
-		//enemyMap["Ruck"].push_back(Create::Ruck("Ruck", Vector3(0, 0, 0)));
+		//enemyMap["Auck"].push_back(Create::Auck("Auck", Vector3(0, 0, 0)));
+		enemyMap["Buck"].push_back(Create::Buck("Buck", Vector3(0, 0, 0)));
 		//enemyMap["Ruck"].push_back(Create::Ruck("Ruck", Vector3(0, 0, 0)));
 	}
 	else {
@@ -138,14 +139,6 @@ void EnemyManager::Init()
 			break;
 		case 5:
 
-			break;
-		case 6:
-
-			break;
-		default:
-			//for (size_t i = 0; i < 10; ++i) {
-			//	enemyMap["Cuck"].push_back(Create::Cuck("Cuck", Vector3(0, 0, 0)));
-			//}
 			break;
 		}
 	}
