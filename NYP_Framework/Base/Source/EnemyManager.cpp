@@ -101,7 +101,7 @@ void EnemyManager::Init()
 	std::cout << "max: " << maxDistance << std::endl;
 	std::cout << "min: " << minDistance << std::endl;
 
-	bool test = true;
+	bool test = false;
 
 	if (test) {
 		//enemyMap["Ruck"].push_back(Create::Ruck("Ruck", Vector3(0, 0, 0)));

@@ -8,7 +8,6 @@
 EquipmentTurret * Create::Turret(Vector3 pos)
 {
 	EquipmentTurret* t = new EquipmentTurret(pos);
-	EntityManager::GetInstance()->AddEntity(t);
 
 	t->SetScale(Vector3(CELL_SIZE/4, CELL_SIZE/4, CELL_SIZE/4));
 	t->SetDirection(Vector3(1, 0, 0));
@@ -101,6 +100,8 @@ void EquipmentTurret::search()
 						if (it->objectType == BUILDING) {
 							GenericEntity* g = dynamic_cast<GenericEntity*>(it);
 							if (rayCast(e->GetPosition() - position, position, g)) {
+								if ((g->GetPosition() - position).LengthSquared() > (e->GetPosition() - position).LengthSquared())
+									continue;
 								target = nullptr;
 								break;
 							}
@@ -124,6 +125,14 @@ void EquipmentTurret::attack()
 	static int i = 0;
 	if (i < 60) {
 		i = 0;
+		try {
+			target->GetPosition();
+		}
+		catch (std::exception& e) {
+			target = nullptr;
+			states.pop();
+			return;
+		}
 		direction = (target->GetPosition() - position).Normalized();
 		if (attackElasped > attackSpeed) {
 			attackElasped = 0.f;
