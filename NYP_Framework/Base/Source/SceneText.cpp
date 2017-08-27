@@ -504,7 +504,7 @@ void SceneText::Update(double dt)
 		float angle = Math::RadianToDegree(acosf(playerMouse_Direction.Dot(Up_Direction) / (playerMouse_Direction.Length() * Up_Direction.Length())));
 		if (playerMouse_Direction.x < 0)
 			angle = -angle;
-		std::cout << "angle: " << angle << std::endl;
+		//std::cout << "angle: " << angle << std::endl;
 		CMinimap::GetInstance()->SetAngle(angle);
 
 		//Set & Update wireFrameBox's position & scale

@@ -136,19 +136,34 @@ void Projectile::CollisionResponse(GenericEntity * thatEntity)
 	case ENEMY:
 		if (source != ENEMY_SOURCE) {
 			this->SetIsDone(true);
-			enemy->SetHealth(enemy->GetHealth() - damage);
-			std::cout << "hito\n";
-			if (enemy->GetHealth() <= 0)
-			{
-				enemy->SetActive(false);
-				enemy->Reset();
-				Player::GetInstance()->SetMaterial(Player::GetInstance()->GetMaterial() + 100);
+			if (enemy->GetActive()) {
+				enemy->SetHealth(enemy->GetHealth() - damage);
+				std::cout << "hito\n";
+				if (enemy->GetHealth() <= 0)
+				{
+					enemy->SetActive(false);
+					enemy->Reset();
+					Player::GetInstance()->SetMaterial(Player::GetInstance()->GetMaterial() + 100);
+				}
 			}
 		}
 		break;
 	case BUILDING:
+		if (source == ENEMY_SOURCE) {
+			BuildingEntity* b = dynamic_cast<BuildingEntity*>(thatEntity);
+			b->SetHealth(b->GetHealth() - damage);
+			if (b->GetHealth() <= 0) {
+				b->SetIsDone(true);
+			}
+		}
 		this->SetIsDone(true);
 		break;
+	case EQUIPMENT:
+		if (source == PLAYER_SOURCE) {
+			break;
+		}
+
+		this->SetIsDone(true);
 	default:
 		return;
 	}

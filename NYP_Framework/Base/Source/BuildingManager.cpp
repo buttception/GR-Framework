@@ -132,9 +132,9 @@ void BuildingManager::AddEquipment(int _x, int _y, EquipmentEntity::EQUIPMENT_TY
 			e = new EquipmentEntity("Shield");
 			break;
 		case EquipmentEntity::EQUIPMENT_TURRET:
-			EquipmentTurret* t = new EquipmentTurret(Vector3((float)_x * CELL_SIZE + CELL_SIZE / 2.f, 0.1f, (float)_y * CELL_SIZE + CELL_SIZE / 2.f));
-			t->type = _type;
-			t->objectType = GenericEntity::EQUIPMENT;
+			EquipmentTurret* t = Create::Turret(Vector3((float)_x * CELL_SIZE + CELL_SIZE / 2.f, 0.2f, (float)_y * CELL_SIZE + CELL_SIZE / 2.f));
+			buildingArray[_x][_y].AddEquipment(t);
+			return;
 			break;
 		}
 		e->type = _type;

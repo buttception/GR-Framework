@@ -3,7 +3,7 @@
 
 #include "EquipmentEntity.h"
 
-#include <vector>
+#include <stack>
 
 class EnemyEntity;
 
@@ -14,19 +14,31 @@ public:
 
 	void Update(double dt);
 
+	enum STATE {
+		ATTACK,
+		SEARCH
+	}state;
+
 	//returns distance from the collided hit
 	bool rayCast(Vector3 dir, Vector3 origin, GenericEntity* hitbox);
+
+	void search();
+	void attack();
+
+	void SetDirection(Vector3 _dir) { direction = _dir; }
+	Vector3 GetDirection() { return direction; }
 
 private:
 	Vector3 direction;
 	EnemyEntity* target;
 
-	std::vector<GenericEntity*>vision;
-
 	float projectileSpeed;
 	float attackSpeed;
 	float attackElasped;
+	float range;
 	int damage;
+
+	std::stack<STATE>states;
 };
 
 namespace Create {

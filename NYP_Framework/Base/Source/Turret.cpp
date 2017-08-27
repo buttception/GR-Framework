@@ -1,18 +1,30 @@
 #include "Turret.h"
 
 #include "EntityManager.h"
+#include "BuildingManager.h"
+#include "EnemyEntity.h"
+#include "Projectile\Projectile.h"
 
 EquipmentTurret * Create::Turret(Vector3 pos)
 {
 	EquipmentTurret* t = new EquipmentTurret(pos);
 	EntityManager::GetInstance()->AddEntity(t);
+
+	t->SetScale(Vector3(CELL_SIZE/4, CELL_SIZE/4, CELL_SIZE/4));
+	t->SetDirection(Vector3(1, 0, 0));
 	return t;
 }
 
 EquipmentTurret::EquipmentTurret(Vector3 pos)
 	:EquipmentEntity("Turret")
+	,projectileSpeed(20)
+	,attackSpeed(1)
+	,attackElasped(0)
+	,damage(20)
+	,range(40)
 {
 	SetPosition(pos);
+	states.push(SEARCH);
 }
 
 EquipmentTurret::~EquipmentTurret()
@@ -21,7 +33,17 @@ EquipmentTurret::~EquipmentTurret()
 
 void EquipmentTurret::Update(double dt)
 {
+	if (attackElasped < attackSpeed)
+		attackElasped += dt;
 
+	switch (states.top()) {
+	case ATTACK:
+		attack();
+		break;
+	case SEARCH:
+		search();
+		break;
+	}
 }
 
 bool EquipmentTurret::rayCast(Vector3 dir, Vector3 origin, GenericEntity* hitbox)
@@ -59,4 +81,65 @@ bool EquipmentTurret::rayCast(Vector3 dir, Vector3 origin, GenericEntity* hitbox
 	if (hit) {
 		return true;
 	}
+	return false;
+}
+
+void EquipmentTurret::search()
+{
+	static int i = 0;
+	// do a search once every 60 frames to improves frames
+	if (i > 120) {
+		i = 0;
+		for (auto it : EntityManager::GetInstance()->GetEntityList()) {
+			if (it->objectType == ENEMY) {
+				if ((it->GetPosition() - position).LengthSquared() > range * range)
+					continue;
+				EnemyEntity* e = dynamic_cast<EnemyEntity*>(it);
+				if (e->GetActive()) {
+					target = e;
+					for (auto it : EntityManager::GetInstance()->GetEntityList()) {
+						if (it->objectType == BUILDING) {
+							GenericEntity* g = dynamic_cast<GenericEntity*>(it);
+							if (rayCast(e->GetPosition() - position, position, g)) {
+								target = nullptr;
+								break;
+							}
+						}
+					}
+					if (target)
+						states.push(ATTACK);
+				}
+				else
+					continue;
+			}
+			else
+				continue;
+		}
+	}
+	++i;
+}
+
+void EquipmentTurret::attack()
+{
+	static int i = 0;
+	if (i < 60) {
+		i = 0;
+		direction = (target->GetPosition() - position).Normalized();
+		if (attackElasped > attackSpeed) {
+			attackElasped = 0.f;
+
+			Projectile* p = Create::Bullet("sphere");
+			p->SetPosition(position);
+			p->SetDamage(damage);
+			p->SetSpeed(projectileSpeed);
+			p->SetDirection(Vector3(direction.x, -direction.z, 0));
+			p->SetLifetime(10);
+			p->SetAABB(Vector3(0.5f, 0.5f, 0.5f), Vector3(-0.5f, -0.5f, -0.5f));
+			p->source = Projectile::PLAYER_SOURCE;
+			p->SetStatus(true);
+
+			states.pop();
+		}
+	}
+	++i;
 }

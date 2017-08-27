@@ -215,6 +215,13 @@ void EnemyManager::SpawnEnemies()
 				a->Init();
 			}
 		}
+		else if (e = FetchEnemy("Buck")) {
+			EnemyBuck* b = dynamic_cast<EnemyBuck*>(e);
+			if (b) {
+				b->SetPosition(center + spawnDir * Math::RandFloatMinMax(minDistance, maxDistance));
+				b->Init();
+			}
+		}
 
 		i = 0;
 	}
