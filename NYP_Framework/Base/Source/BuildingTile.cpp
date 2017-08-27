@@ -32,6 +32,7 @@ void BuildingTile::AddWall(BuildingEntity * entity, TILE_SIDE direction)
 	case LEFT:
 		if (leftWall) {
 			std::cout << "Position occupied" << std::endl;
+			delete entity;
 			return;
 		}
 		leftWall = entity;
@@ -40,6 +41,7 @@ void BuildingTile::AddWall(BuildingEntity * entity, TILE_SIDE direction)
 	case TOP:
 		if (topWall) {
 			std::cout << "Position occupied" << std::endl;
+			delete entity;
 			return;
 		}
 		topWall = entity;
@@ -48,6 +50,7 @@ void BuildingTile::AddWall(BuildingEntity * entity, TILE_SIDE direction)
 	case RIGHT:
 		if (rightWall) {
 			std::cout << "Position occupied" << std::endl;
+			delete entity;
 			return;
 		}
 		rightWall = entity;
@@ -56,6 +59,7 @@ void BuildingTile::AddWall(BuildingEntity * entity, TILE_SIDE direction)
 	case BOTTOM:
 		if (bottomWall) {
 			std::cout << "Position occupied" << std::endl;
+			delete entity;
 			return;
 		}
 		bottomWall = entity;
@@ -76,6 +80,7 @@ void BuildingTile::AddFloor(BuildingEntity * entity)
 {
 	if (floor) {
 		std::cout << "Floor position occupied\n";
+		delete entity;
 		return;
 	}
 	if (entity->type != BuildingEntity::BUILDING_FLOOR)
@@ -94,6 +99,7 @@ void BuildingTile::AddEquipment(EquipmentEntity * entity)
 {
 	if (equipment) {
 		std::cout << "Equipment slot is occupied\n";
+		delete entity;
 		return;
 	}
 	equipment = entity;

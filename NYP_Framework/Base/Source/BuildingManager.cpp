@@ -1,5 +1,7 @@
 #include "BuildingManager.h"
 
+#include "Turret.h"
+
 BuildingManager::BuildingManager()
 {
 	// new all the buildingtiles
@@ -47,30 +49,46 @@ BuildingEntity* BuildingManager::AddBuilding(int _x, int _y, BuildingTile::TILE_
 		if (direction == BuildingTile::LEFT) {
 			wall->SetScale(Vector3(2, 10, CELL_SIZE));
 			wall->SetPosition(Vector3((float)_x * CELL_SIZE, 0.f, (float)_y * CELL_SIZE + CELL_SIZE / 2.f));
+			Vector3 max(wall->GetPosition().x + wall->GetScale().x / 2, 1, wall->GetPosition().z + wall->GetScale().z / 2);
+			Vector3 min(wall->GetPosition().x - wall->GetScale().x / 2, 0, wall->GetPosition().z - wall->GetScale().z / 2);
+			wall->SetAABB(max, min);
 			buildingArray[_x][_y].AddWall(wall, BuildingTile::LEFT);
 		}
 		else if (direction == BuildingTile::TOP) {
 			wall->SetScale(Vector3(CELL_SIZE, 10, 2));
 			wall->SetPosition(Vector3((float)_x * CELL_SIZE + CELL_SIZE / 2.f, 0.f, (float)_y * CELL_SIZE));
+			Vector3 max(wall->GetPosition().x + wall->GetScale().x / 2, 1, wall->GetPosition().z + wall->GetScale().z / 2);
+			Vector3 min(wall->GetPosition().x - wall->GetScale().x / 2, 0, wall->GetPosition().z - wall->GetScale().z / 2);
+			wall->SetAABB(max, min);
 			buildingArray[_x][_y].AddWall(wall, BuildingTile::TOP);
 		}
 		else if (direction == BuildingTile::RIGHT) {
 			wall->SetScale(Vector3(2, 10, CELL_SIZE));
 			//if it is on the right, which is the next tile set unless is end
-			if (_x + 1 != MAX_CELLS)
+			if (_x + 1 != MAX_CELLS) {
+				delete wall;
 				AddBuilding(_x + 1, _y, BuildingTile::LEFT, type);
+			}
 			else {
 				wall->SetPosition(Vector3(MAX_CELLS * CELL_SIZE, 0.f, (float)_y * CELL_SIZE + CELL_SIZE / 2.f));
+				Vector3 max(wall->GetPosition().x + wall->GetScale().x / 2, 1, wall->GetPosition().z + wall->GetScale().z / 2);
+				Vector3 min(wall->GetPosition().x - wall->GetScale().x / 2, 0, wall->GetPosition().z - wall->GetScale().z / 2);
+				wall->SetAABB(max, min);
 				buildingArray[_x][_y].AddWall(wall, BuildingTile::RIGHT);
 			}
 		}
 		else if (direction == BuildingTile::BOTTOM) {
 			wall->SetScale(Vector3(CELL_SIZE, 10, 2));
 			//if it is on the bottom, which is the bottom tile set unless is end
-			if (_y >= 0)
+			if (_y >= 0) {
+				delete wall;
 				AddBuilding(_x, _y + 1, BuildingTile::TOP, type);
+			}
 			else {
 				wall->SetPosition(Vector3((float)_x * CELL_SIZE + CELL_SIZE / 2.f, 0.f, MAX_CELLS * CELL_SIZE));
+				Vector3 max(wall->GetPosition().x + wall->GetScale().x / 2, 1, wall->GetPosition().z + wall->GetScale().z / 2);
+				Vector3 min(wall->GetPosition().x - wall->GetScale().x / 2, 0, wall->GetPosition().z - wall->GetScale().z / 2);
+				wall->SetAABB(max, min);
 				buildingArray[_x][_y].AddWall(wall, BuildingTile::BOTTOM);
 			}
 		}
@@ -79,10 +97,6 @@ BuildingEntity* BuildingManager::AddBuilding(int _x, int _y, BuildingTile::TILE_
 			delete wall;
 			return nullptr;
 		}
-
-		Vector3 max(wall->GetPosition().x + wall->GetScale().x / 2, 1, wall->GetPosition().z + wall->GetScale().z / 2);
-		Vector3 min(wall->GetPosition().x - wall->GetScale().x / 2, 0, wall->GetPosition().z - wall->GetScale().z / 2);
-		wall->SetAABB(max, min);
 	}
 	else if(type == BuildingEntity::BUILDING_FLOOR)
 	{
@@ -118,7 +132,9 @@ void BuildingManager::AddEquipment(int _x, int _y, EquipmentEntity::EQUIPMENT_TY
 			e = new EquipmentEntity("Shield");
 			break;
 		case EquipmentEntity::EQUIPMENT_TURRET:
-			e = new EquipmentEntity("Turret");
+			EquipmentTurret* t = new EquipmentTurret(Vector3((float)_x * CELL_SIZE + CELL_SIZE / 2.f, 0.1f, (float)_y * CELL_SIZE + CELL_SIZE / 2.f));
+			t->type = _type;
+			t->objectType = GenericEntity::EQUIPMENT;
 			break;
 		}
 		e->type = _type;
