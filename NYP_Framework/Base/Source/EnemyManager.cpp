@@ -138,7 +138,7 @@ void EnemyManager::Init()
 			}
 			break;
 		case 5:
-
+			enemyMap["Buck"].push_back(Create::Buck("Buck", Vector3(0, 0, 0)));
 			break;
 		}
 	}

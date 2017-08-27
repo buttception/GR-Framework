@@ -32,7 +32,6 @@
     <ClCompile Include="Source\HardwareAbstraction\Controller.cpp" />
     <ClCompile Include="Source\HardwareAbstraction\Keyboard.cpp" />
     <ClCompile Include="Source\HardwareAbstraction\Mouse.cpp" />
-    <ClCompile Include="Source\HealingStation.cpp" />
     <ClCompile Include="Source\Light.cpp" />
     <ClCompile Include="Source\LoadTextData.cpp" />
     <ClCompile Include="Source\main.cpp" />
@@ -46,7 +45,6 @@
     <ClCompile Include="Source\SceneText.cpp" />
     <ClCompile Include="Source\SkyBox\SkyBoxEntity.cpp" />
     <ClCompile Include="Source\Sound_Engine.cpp" />
-    <ClCompile Include="Source\Spike.cpp" />
     <ClCompile Include="Source\SpriteEntity.cpp" />
     <ClCompile Include="Source\StateMachine.cpp" />
     <ClCompile Include="Source\TextEntity.cpp" />
@@ -78,7 +76,6 @@
     <ClInclude Include="Source\HardwareAbstraction\Controller.h" />
     <ClInclude Include="Source\HardwareAbstraction\Keyboard.h" />
     <ClInclude Include="Source\HardwareAbstraction\Mouse.h" />
-    <ClInclude Include="Source\HealingStation.h" />
     <ClInclude Include="Source\Light.h" />
     <ClInclude Include="Source\LoadTextData.h" />
     <ClInclude Include="Source\Minimap.h" />
@@ -91,7 +88,6 @@
     <ClInclude Include="Source\SceneText.h" />
     <ClInclude Include="Source\SkyBox\SkyBoxEntity.h" />
     <ClInclude Include="Source\Sound_Engine.h" />
-    <ClInclude Include="Source\Spike.h" />
     <ClInclude Include="Source\SpriteEntity.h" />
     <ClInclude Include="Source\StateMachine.h" />
     <ClInclude Include="Source\TextEntity.h" />

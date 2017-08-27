@@ -16,10 +16,10 @@ EnemyBuck::~EnemyBuck()
 void EnemyBuck::Init()
 {
 	stateStack.push(DEFAULT_STATE);
-	speed = 8.f;
-	health = 100;
-	damage = 10;
-	size = 3.f;
+	speed = 5.f;
+	health = 1000;
+	damage = 30;
+	size = 8.f;
 	scale.Set(size, size, size);
 	attackSpeed = 1.f;
 	optimalRoute.push(Vector3(MAX_CELLS * CELL_SIZE / 2, 0, MAX_CELLS * CELL_SIZE / 2));

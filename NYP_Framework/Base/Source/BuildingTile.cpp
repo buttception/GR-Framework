@@ -72,7 +72,7 @@ void BuildingTile::AddWall(BuildingEntity * entity, TILE_SIDE direction)
 		std::cout << "Cover placed down" << std::endl;
 	Player::GetInstance()->SetMaterial(Math::Max(0, Player::GetInstance()->GetMaterial() - 150));
 	EntityManager::GetInstance()->AddEntity(entity);
-	CSoundEngine::GetInstance()->playthesound("Build", 0.4f);
+	CSoundEngine::GetInstance()->playsinglesound("Build", 0.4f);
 	std::cout << "Build sound Played" << std::endl;
 }
 
@@ -87,7 +87,7 @@ void BuildingTile::AddFloor(BuildingEntity * entity)
 		return;
 	floor = entity;
 	EntityManager::GetInstance()->AddEntity(floor);
-	CSoundEngine::GetInstance()->playthesound("Floor", 0.4f);
+	CSoundEngine::GetInstance()->playsinglesound("Floor", 0.4f);
 }
 
 void BuildingTile::AddCore(BuildingEntity * entity)

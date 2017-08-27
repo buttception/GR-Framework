@@ -126,8 +126,15 @@ void EnemyRuck::CollisionResponse(GenericEntity * thatEntity)
 					stateStack.push(ATTACK_STATE);
 			target = thatEntity;
 			break;
-		case EntityBase::PROJECTILE:
-
+		case EntityBase::PROJECTILE: {
+			Projectile* p = dynamic_cast<Projectile*>(thatEntity);
+			if (p->source != Projectile::ENEMY_SOURCE) {
+				health -= p->GetDamage();
+				if (health <= 0)
+					active = false;
+			}
+			p->SetIsDone(true);
+		}
 			break;
 		case EntityBase::EQUIPMENT: {
 			EquipmentEntity* equipment = dynamic_cast<EquipmentEntity*>(thatEntity);

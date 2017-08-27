@@ -4,6 +4,7 @@
 #include "BuildingManager.h"
 #include "EnemyEntity.h"
 #include "Projectile\Projectile.h"
+#include "Sound_Engine.h"
 
 EquipmentTurret * Create::Turret(Vector3 pos)
 {
@@ -146,6 +147,8 @@ void EquipmentTurret::attack()
 			p->SetAABB(Vector3(0.5f, 0.5f, 0.5f), Vector3(-0.5f, -0.5f, -0.5f));
 			p->source = Projectile::PLAYER_SOURCE;
 			p->SetStatus(true);
+
+			CSoundEngine::GetInstance()->playsinglesound("PEW", 0.2f);
 
 			states.pop();
 		}
