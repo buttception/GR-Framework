@@ -159,12 +159,11 @@ void SceneText::Init()
 	//Building Meshes
 	MeshBuilder::GetInstance()->GenerateOBJ("core", "OBJ//cube.obj");
 	MeshBuilder::GetInstance()->GenerateOBJ("wall", "OBJ//cube.obj");
-	MeshBuilder::GetInstance()->GenerateOBJ("door", "OBJ//cube.obj"); //remember to change texture
 	MeshBuilder::GetInstance()->GenerateOBJ("cover", "OBJ//cube.obj"); //remember to change obj
 	MeshBuilder::GetInstance()->GenerateOBJ("floor", "OBJ//cube.obj"); //remember to change texture
 
 	//Equipment Meshes
-	MeshBuilder::GetInstance()->GenerateOBJ("Turret", "OBJ//turret.obj"); //remember to change obj
+	MeshBuilder::GetInstance()->GenerateOBJ("Turret", "OBJ//turret.obj");
 	MeshBuilder::GetInstance()->GenerateOBJ("Healing Station", "OBJ//healStation.obj");
 	MeshList::GetInstance()->GetMesh("Healing Station")->textureID[0] = LoadTGA("Image//Equipment//Heal_Active.tga");
 	MeshBuilder::GetInstance()->GenerateOBJ("Floor Spike", "OBJ//spike.obj");
@@ -282,7 +281,6 @@ void SceneText::Init()
 	dayDuration = 180.f;
 	time = dayDuration;
 	noOfDays = 1;
-	generatorCoreScale = 1.98f;
 	ghostPos.SetZero();
 	ghostScale.SetZero();
 	//CSoundEngine::GetInstance()->playthesound("HELLO", 0.2f);
