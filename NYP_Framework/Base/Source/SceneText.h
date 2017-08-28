@@ -69,7 +69,7 @@ private:
 
 	float worldWidth, worldHeight, Delay = 0.0f;
 	Vector3 ghostPos, ghostScale;
-	double time, dayDuration;
+	double time, dayDuration, calendarTime;
 	int noOfDays;
 	const float ButtonCooldown = 0.20f;
 

@@ -170,6 +170,13 @@ void SceneText::Init()
 	MeshList::GetInstance()->GetMesh("Floor Spike")->textureID[0] = LoadTGA("Image//Equipment//Spike.tga");
 	MeshBuilder::GetInstance()->GenerateOBJ("Shield", "OBJ//equipmentCube.obj"); //remember to change obj
 
+	//Fatigue Mesh
+	MeshBuilder::GetInstance()->GenerateQuad("Fatigue", Color(1, 1, 1), 1.f);
+	MeshList::GetInstance()->GetMesh("Fatigue")->textureID[0] = LoadTGA("Image//Fatigue//Normal.tga");
+
+	//Calendar Mesh
+	MeshBuilder::GetInstance()->GenerateQuad("sunMoon", Color(1, 1, 1), 1.f);
+	MeshList::GetInstance()->GetMesh("sunMoon")->textureID[0] = LoadTGA("Image//sunMoon.tga");
 	
 	//Shop
 	/*MeshBuilder::GetInstance()->GenerateQuad("Shop", Color(1, 1, 1), 1.f);
@@ -280,6 +287,7 @@ void SceneText::Init()
 	isDay = true;
 	dayDuration = 180.f;
 	time = dayDuration;
+	calendarTime = dayDuration;
 	noOfDays = 1;
 	ghostPos.SetZero();
 	ghostScale.SetZero();
@@ -425,9 +433,11 @@ void SceneText::Update(double dt)
 		time = dayDuration;
 		noOfDays++;
 		core->SetHealth(core->GetHealth() - 10);
-		
-		if (core->GetHealth() <= 0)
-			core->SetIsDone(true);
+	}
+	if (core->GetHealth() <= 0)
+	{
+		core->SetIsDone(true);
+		SceneManager::GetInstance()->SetActiveScene("Lose");
 	}
 	if (KeyboardController::GetInstance()->IsKeyPressed(VK_F6))
 		Player::GetInstance()->fatigue = Player::FATIGUE::TIRED;
@@ -442,6 +452,9 @@ void SceneText::Update(double dt)
 	
 	//day night shift
 	time -= dt;
+	calendarTime -= dt;
+	if (calendarTime <= -180.f)
+		calendarTime = dayDuration;
 	if ((time <= 0.00 || Player::GetInstance()->GetSlept()) && isDay)
 	{
 		time = dayDuration;
@@ -454,9 +467,11 @@ void SceneText::Update(double dt)
 		{
 		case Player::FATIGUE::ENERGETIC:
 			Player::GetInstance()->fatigue = Player::FATIGUE::NORMAL;
+			MeshList::GetInstance()->GetMesh("Fatigue")->textureID[0] = LoadTGA("Image//Fatigue//Normal.tga");
 			break;
 		case Player::FATIGUE::NORMAL:
 			Player::GetInstance()->fatigue = Player::FATIGUE::TIRED;
+			MeshList::GetInstance()->GetMesh("Fatigue")->textureID[0] = LoadTGA("Image//Fatigue//Tired.tga");
 			break;
 		}
 	}
@@ -467,9 +482,11 @@ void SceneText::Update(double dt)
 		{
 		case Player::FATIGUE::TIRED:
 			Player::GetInstance()->fatigue = Player::FATIGUE::NORMAL;
+			MeshList::GetInstance()->GetMesh("Fatigue")->textureID[0] = LoadTGA("Image//Fatigue//Normal.tga");
 			break;
 		case Player::FATIGUE::NORMAL:
 			Player::GetInstance()->fatigue = Player::FATIGUE::ENERGETIC;
+			MeshList::GetInstance()->GetMesh("Fatigue")->textureID[0] = LoadTGA("Image//Fatigue//Energetic.tga");
 			break;
 		}
 		Player::GetInstance()->SetSlept(false);
@@ -701,20 +718,20 @@ void SceneText::Update(double dt)
 	}
 	textObj[4]->SetText(ss.str());
 
-	ss.str("");
-	switch (Player::GetInstance()->fatigue)
-	{
-	case Player::FATIGUE::TIRED:
-		ss << "Fatigue Level: Tired";
-		break;
-	case Player::FATIGUE::NORMAL:
-		ss << "Fatigue Level: Normal";
-		break;
-	case Player::FATIGUE::ENERGETIC:
-		ss << "Fatigue Level: Energetic";
-		break;
-	}
-	textObj[5]->SetText(ss.str());
+	//ss.str("");
+	//switch (Player::GetInstance()->fatigue)
+	//{
+	//case Player::FATIGUE::TIRED:
+	//	ss << "Fatigue Level: Tired";
+	//	break;
+	//case Player::FATIGUE::NORMAL:
+	//	ss << "Fatigue Level: Normal";
+	//	break;
+	//case Player::FATIGUE::ENERGETIC:
+	//	ss << "Fatigue Level: Energetic";
+	//	break;
+	//}
+	//textObj[5]->SetText(ss.str());
 
 	Delay += (float)dt;
 	if (Delay > 0.5f)
@@ -870,6 +887,20 @@ void SceneText::RenderPassMain()
 	ms.Translate((float)-halfWindowWidth, (float)halfWindowHeight * 0.92f, 0.f);
 	ms.Scale(Player::GetInstance()->GetPlayerHealth(), 10.f, 0.f);
 	RenderHelper::RenderMesh(playerHealthBar);
+	ms.PopMatrix();
+
+	ms.PushMatrix();
+	ms.Translate((float)-halfWindowWidth + 50.f, (float)halfWindowHeight * 0.82f, 0.f);
+	ms.Scale(50.f, 50.f, 0.f);
+	RenderHelper::RenderMesh(MeshList::GetInstance()->GetMesh("Fatigue"));
+	ms.PopMatrix();
+
+	ms.PushMatrix();
+	ms.Translate((float)halfWindowWidth, (float)halfWindowHeight * 0.475f, 0.f);
+	ms.Rotate(180.f + 45.f, 0, 0, -1);
+	ms.Rotate(calendarTime, 0, 0, -1);
+	ms.Scale(130.f, 130.f, 0.f);
+	RenderHelper::RenderMesh(MeshList::GetInstance()->GetMesh("sunMoon"));
 	ms.PopMatrix();
 
 	if (Render_Quad == true)
