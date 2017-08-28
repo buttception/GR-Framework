@@ -258,7 +258,7 @@ void SceneText::Init()
 	float halfWindowHeight = Application::GetInstance().GetWindowHeight() / 2.0f;
 	float fontSize = 25.0f;
 	float halfFontSize = fontSize / 2.0f;
-	for (int i = 0; i < 6; ++i)
+	for (int i = 0; i < 5; ++i)
 	{
 		textObj[i] = Create::Text2DObject("text", Vector3(-halfWindowWidth, -halfWindowHeight + fontSize*i + halfFontSize, 0.0f), "", Vector3(fontSize, fontSize, fontSize), Color(0.0f,1.0f,0.0f));
 	}
@@ -605,12 +605,11 @@ void SceneText::Update(double dt)
 	// Eg. FPSRenderEntity or inside RenderUI for LightEntity
 	std::ostringstream ss;
 	ss << std::fixed;
-	ss.precision(1);
+	ss.precision(3);
 	float fps = (float)(1.f / dt);
 	ss << "FPS: " << fps;
 	textObj[0]->SetText(ss.str());
 
-	// Update the player position into textObj[2]
 	ss.str("");
 	ss.precision(1);
 	ss << "Player:" << Player::GetInstance()->GetPosition();
@@ -618,47 +617,27 @@ void SceneText::Update(double dt)
 
 	ss.str("");
 	ss.precision(0);
-	if (isDay)
+	switch (noOfDays)
 	{
-		switch (noOfDays)
-		{
-		case 1:
-			ss << noOfDays << "st Day " << time;
-			break;
-		case 2:
-			ss << noOfDays << "nd Day " << time;
-			break;
-		case 3:
-			ss << noOfDays << "rd Day " << time;
-			break;
-		default:
-			ss << noOfDays << "th Day " << time;
-			break;
-		}
-		textObj[2]->SetText(ss.str());
+	case 1:
+		ss << noOfDays << "st";
+		break;
+	case 2:
+		ss << noOfDays << "nd";
+		break;
+	case 3:
+		ss << noOfDays << "rd";
+		break;
+	default:
+		ss << noOfDays << "th";
+		break;
 	}
-	else
-	{
-		switch (noOfDays)
-		{
-		case 1:
-			ss << noOfDays << "st Night " << time;
-			break;
-		case 2:
-			ss << noOfDays << "nd Night " << time;
-			break;
-		case 3:
-			ss << noOfDays << "rd Night " << time;
-			break;
-		default:
-			ss << noOfDays << "th Night " << time;
-			break;
-		}
-		textObj[2]->SetText(ss.str());
-	}
+	textObj[2]->SetPosition(Vector3(halfWindowWidth - 30.f, halfWindowHeight * 0.4f, 0.0f));
+	textObj[2]->SetText(ss.str());
 
 	ss.str("");
 	ss << "Material: " << Player::GetInstance()->GetMaterial();
+	textObj[3]->SetPosition(Vector3(-halfWindowWidth, -halfWindowHeight + fontSize * 2 + halfFontSize, 0.0f));
 	textObj[3]->SetText(ss.str());
 
 	ss.str("");
@@ -716,22 +695,8 @@ void SceneText::Update(double dt)
 			}
 		}
 	}
+	textObj[4]->SetPosition(Vector3(-halfWindowWidth, -halfWindowHeight + fontSize * 3 + halfFontSize, 0.0f));
 	textObj[4]->SetText(ss.str());
-
-	//ss.str("");
-	//switch (Player::GetInstance()->fatigue)
-	//{
-	//case Player::FATIGUE::TIRED:
-	//	ss << "Fatigue Level: Tired";
-	//	break;
-	//case Player::FATIGUE::NORMAL:
-	//	ss << "Fatigue Level: Normal";
-	//	break;
-	//case Player::FATIGUE::ENERGETIC:
-	//	ss << "Fatigue Level: Energetic";
-	//	break;
-	//}
-	//textObj[5]->SetText(ss.str());
 
 	Delay += (float)dt;
 	if (Delay > 0.5f)
@@ -896,7 +861,7 @@ void SceneText::RenderPassMain()
 	ms.PopMatrix();
 
 	ms.PushMatrix();
-	ms.Translate((float)halfWindowWidth, (float)halfWindowHeight * 0.475f, 0.f);
+	ms.Translate((float)halfWindowWidth, (float)halfWindowHeight * 0.4f, 0.f);
 	ms.Rotate(180.f + 45.f, 0, 0, -1);
 	ms.Rotate(calendarTime, 0, 0, -1);
 	ms.Scale(130.f, 130.f, 0.f);

@@ -27,69 +27,85 @@ BuildingTile::~BuildingTile()
 
 void BuildingTile::AddWall(BuildingEntity * entity, TILE_SIDE direction)
 {
-	//where 1 -> left, 2 -> top, 3 -> right, 4 ->bottom
-	switch (direction) {
-	case LEFT:
-		if (leftWall) {
-			std::cout << "Position occupied" << std::endl;
-			delete entity;
+	if (Player::GetInstance()->GetMaterial() >= 100)
+	{
+		//where 1 -> left, 2 -> top, 3 -> right, 4 ->bottom
+		switch (direction) {
+		case LEFT:
+			if (leftWall) {
+				std::cout << "Position occupied" << std::endl;
+				delete entity;
+				return;
+			}
+			leftWall = entity;
+			entity->tile = this;
+			break;
+		case TOP:
+			if (topWall) {
+				std::cout << "Position occupied" << std::endl;
+				delete entity;
+				return;
+			}
+			topWall = entity;
+			entity->tile = this;
+			break;
+		case RIGHT:
+			if (rightWall) {
+				std::cout << "Position occupied" << std::endl;
+				delete entity;
+				return;
+			}
+			rightWall = entity;
+			entity->tile = this;
+			break;
+		case BOTTOM:
+			if (bottomWall) {
+				std::cout << "Position occupied" << std::endl;
+				delete entity;
+				return;
+			}
+			bottomWall = entity;
+			entity->tile = this;
+			break;
+		default:
 			return;
 		}
-		leftWall = entity;
-		entity->tile = this;
-		break;
-	case TOP:
-		if (topWall) {
-			std::cout << "Position occupied" << std::endl;
-			delete entity;
-			return;
-		}
-		topWall = entity;
-		entity->tile = this;
-		break;
-	case RIGHT:
-		if (rightWall) {
-			std::cout << "Position occupied" << std::endl;
-			delete entity;
-			return;
-		}
-		rightWall = entity;
-		entity->tile = this;
-		break;
-	case BOTTOM:
-		if (bottomWall) {
-			std::cout << "Position occupied" << std::endl;
-			delete entity;
-			return;
-		}
-		bottomWall = entity;
-		entity->tile = this;
-		break;
-	default:
+		if (entity->type == BuildingEntity::BUILDING_COVER)
+			std::cout << "Cover placed down" << std::endl;
+		Player::GetInstance()->SetMaterial(Math::Max(0, Player::GetInstance()->GetMaterial() - 100));
+		EntityManager::GetInstance()->AddEntity(entity);
+		CSoundEngine::GetInstance()->playsinglesound("Build", 0.4f);
+		std::cout << "Build sound Played" << std::endl;
+	}
+	else
+	{
+		delete entity;
 		return;
 	}
-	if (entity->type == BuildingEntity::BUILDING_COVER)
-		std::cout << "Cover placed down" << std::endl;
-	Player::GetInstance()->SetMaterial(Math::Max(0, Player::GetInstance()->GetMaterial() - 100));
-	EntityManager::GetInstance()->AddEntity(entity);
-	CSoundEngine::GetInstance()->playsinglesound("Build", 0.4f);
-	std::cout << "Build sound Played" << std::endl;
 }
 
 void BuildingTile::AddFloor(BuildingEntity * entity)
 {
-	if (floor) {
-		std::cout << "Floor position occupied\n";
+	if (Player::GetInstance()->GetMaterial() >= 50)
+	{
+		if (floor) {
+			std::cout << "Floor position occupied\n";
+			delete entity;
+			return;
+		}
+		if (entity->type != BuildingEntity::BUILDING_FLOOR)
+			return;
+		floor = entity;
+		entity->tile = this;
+		Player::GetInstance()->SetMaterial(Math::Max(0, Player::GetInstance()->GetMaterial() - 50));
+		EntityManager::GetInstance()->AddEntity(floor);
+		CSoundEngine::GetInstance()->playsinglesound("Floor", 0.4f);
+	}
+	else
+	{
 		delete entity;
 		return;
 	}
-	if (entity->type != BuildingEntity::BUILDING_FLOOR)
-		return;
-	floor = entity;
-	entity->tile = this;
-	Player::GetInstance()->SetMaterial(Math::Max(0, Player::GetInstance()->GetMaterial() - 50));
-	EntityManager::GetInstance()->AddEntity(floor);
-	CSoundEngine::GetInstance()->playsinglesound("Floor", 0.4f);
 }
 
 void BuildingTile::AddCore(BuildingEntity * entity)
@@ -100,15 +116,23 @@ void BuildingTile::AddCore(BuildingEntity * entity)
 
 void BuildingTile::AddEquipment(EquipmentEntity * entity)
 {
-	if (equipment) {
-		std::cout << "Equipment slot is occupied\n";
+	if (Player::GetInstance()->GetMaterial() >= 200)
+	{
+		if (equipment) {
+			std::cout << "Equipment slot is occupied\n";
+			delete entity;
+			return;
+		}
+		equipment = entity;
+		entity->tile = this;
+		Player::GetInstance()->SetMaterial(Math::Max(0, Player::GetInstance()->GetMaterial() - 200));
+		EntityManager::GetInstance()->AddEntity(equipment);
+	}
+	else
+	{
 		delete entity;
 		return;
 	}
-	equipment = entity;
-	entity->tile = this;
-	Player::GetInstance()->SetMaterial(Math::Max(0, Player::GetInstance()->GetMaterial() - 200));
-	EntityManager::GetInstance()->AddEntity(equipment);
 }
 
 bool BuildingTile::GetEmpty()
