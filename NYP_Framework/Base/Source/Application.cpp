@@ -23,6 +23,8 @@
 #include "SceneMainMenu.h"
 #include "SceneInstructions.h"
 #include "ScenePause.h"
+#include "SceneLose.h"
+#include "SceneWin.h"
 #include "FontType.h"
 #include "LoadTextData.h"
 

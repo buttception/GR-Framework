@@ -40,9 +40,11 @@
     <ClCompile Include="Source\PlayerInfo\PlayerInfo.cpp" />
     <ClCompile Include="Source\Projectile\Projectile.cpp" />
     <ClCompile Include="Source\SceneInstructions.cpp" />
+    <ClCompile Include="Source\SceneLose.cpp" />
     <ClCompile Include="Source\SceneMainMenu.cpp" />
     <ClCompile Include="Source\ScenePause.cpp" />
     <ClCompile Include="Source\SceneText.cpp" />
+    <ClCompile Include="Source\SceneWin.cpp" />
     <ClCompile Include="Source\SkyBox\SkyBoxEntity.cpp" />
     <ClCompile Include="Source\Sound_Engine.cpp" />
     <ClCompile Include="Source\SpriteEntity.cpp" />
@@ -83,9 +85,11 @@
     <ClInclude Include="Source\PlayerInfo\PlayerInfo.h" />
     <ClInclude Include="Source\Projectile\Projectile.h" />
     <ClInclude Include="Source\SceneInstructions.h" />
+    <ClInclude Include="Source\SceneLose.h" />
     <ClInclude Include="Source\SceneMainMenu.h" />
     <ClInclude Include="Source\ScenePause.h" />
     <ClInclude Include="Source\SceneText.h" />
+    <ClInclude Include="Source\SceneWin.h" />
     <ClInclude Include="Source\SkyBox\SkyBoxEntity.h" />
     <ClInclude Include="Source\Sound_Engine.h" />
     <ClInclude Include="Source\SpriteEntity.h" />

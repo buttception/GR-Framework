@@ -26,6 +26,8 @@ public:
 	void SpawnEnemies();
 	void ClearEnemies();
 
+	void ClearAll();
+
 private:
 	// spawning angle for the enemies
 	int spawningAngle;

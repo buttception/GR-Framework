@@ -241,7 +241,7 @@ void Player::Update(double dt)
 	if (playerHealth <= 0)
 	{
 		playerHealth = maxPlayerHealth;
-		material = Math::Max(0, material - 100);
+		material = Math::Max(0, material - 300);
 		position.Set(MAX_CELLS * CELL_SIZE / 2 + 10, 0, (MAX_CELLS * CELL_SIZE / 2) + 10);
 	}
 }
@@ -575,7 +575,7 @@ bool Player::RightClick()
 
 		if (isBuilding && currentBuilding != BuildingEntity::BUILDING_FLOOR)
 		{
-			BuildingTile* tile = &BuildingManager::GetInstance()->GetBuildingArray()[x][z];
+			BuildingTile* tile = BuildingManager::GetInstance()->GetBuildingArray()[x][z];
 			// Up
 			if ((angle >= -180.f && angle <= -127.f) || (angle <= 180.f && angle >= 127.f))
 			{
@@ -613,7 +613,7 @@ bool Player::RightClick()
 			{
 				if (x + 1 != MAX_CELLS)
 				{
-					BuildingTile* nextTile = &BuildingManager::GetInstance()->GetBuildingArray()[x + 1][z];
+					BuildingTile* nextTile = BuildingManager::GetInstance()->GetBuildingArray()[x + 1][z];
 					if (nextTile->leftWall != nullptr)
 					{
 						nextTile->leftWall->SetIsDone(true);
@@ -648,7 +648,7 @@ bool Player::RightClick()
 			{
 				if (z >= 0)
 				{
-					BuildingTile* nextTile = &BuildingManager::GetInstance()->GetBuildingArray()[x][z + 1];
+					BuildingTile* nextTile = BuildingManager::GetInstance()->GetBuildingArray()[x][z + 1];
 					if (nextTile->topWall != nullptr)
 					{
 						nextTile->topWall->SetIsDone(true);
@@ -684,7 +684,7 @@ bool Player::RightClick()
 		// Floor
 		if (isBuilding && currentBuilding == BuildingEntity::BUILDING_FLOOR)
 		{
-			BuildingTile* tile = &BuildingManager::GetInstance()->GetBuildingArray()[x][z];
+			BuildingTile* tile = BuildingManager::GetInstance()->GetBuildingArray()[x][z];
 			if (tile->floor != nullptr)
 			{
 				tile->floor->SetIsDone(true);
@@ -701,7 +701,7 @@ bool Player::RightClick()
 		}
 		else if (isEquipment)
 		{
-			BuildingTile* tile = &BuildingManager::GetInstance()->GetBuildingArray()[x][z];
+			BuildingTile* tile = BuildingManager::GetInstance()->GetBuildingArray()[x][z];
 			if (tile->equipment != nullptr)
 			{
 				tile->equipment->SetIsDone(true);

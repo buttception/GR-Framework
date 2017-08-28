@@ -444,8 +444,12 @@ void SceneText::Update(double dt)
 		Player::GetInstance()->SetSlept(true);
 
 	if (core->GetHealth() <= 0)
+	{
 		core->SetIsDone(true);
-
+		SceneManager::GetInstance()->SetActiveScene("Lose");
+	}
+	if(noOfDays >= 6)
+		SceneManager::GetInstance()->SetActiveScene("Win");
 	//day night shift
 	time -= dt;
 	if ((time <= 0.00 || Player::GetInstance()->GetSlept()) && isDay)
@@ -939,7 +943,17 @@ void SceneText::Exit()
 	// Detach camera from other entities
 	GraphicsManager::GetInstance()->DetachCamera();
 
+	std::list<EntityBase*> entityList = EntityManager::GetInstance()->GetEntityList();
+	std::list<EntityBase*>::iterator it, end;
+	end = entityList.end();
+	for (it = entityList.begin(); it != end; ++it)
+	{
+		if ((*it) != nullptr)
+			(*it)->SetIsDone(true);
+	}
 
+	EnemyManager::GetInstance()->ClearAll();
+	BuildingManager::GetInstance()->Clear();
 	// Delete the lights
 	//delete lights[0];
 }
