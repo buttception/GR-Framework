@@ -5,6 +5,7 @@
 #include "GenericEntity.h"
 
 class Mesh;
+class BuildingTile;
 
 class EquipmentEntity : public GenericEntity {
 public:
@@ -35,6 +36,8 @@ public:
 
 	float healTimer, healCoolDown,
 				 spikeTimer, spikeCoolDown;
+	
+	BuildingTile* tile;
 private:
 	int health;
 	int level;

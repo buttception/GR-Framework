@@ -55,6 +55,7 @@ private:
 	void RenderWorld();
 
 	Mesh* ground;
+	Mesh* background;
 	Mesh* sun;
 	Mesh* light_depth_mesh;
 	Mesh* generatorCoreHealthBar;

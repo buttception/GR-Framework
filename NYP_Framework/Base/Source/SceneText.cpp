@@ -164,10 +164,10 @@ void SceneText::Init()
 	MeshBuilder::GetInstance()->GenerateOBJ("floor", "OBJ//cube.obj"); //remember to change texture
 
 	//Equipment Meshes
-	MeshBuilder::GetInstance()->GenerateOBJ("Turret", "OBJ//equipmentCube.obj"); //remember to change obj
-	MeshBuilder::GetInstance()->GenerateOBJ("Healing Station", "OBJ//equipmentCube.obj");
+	MeshBuilder::GetInstance()->GenerateOBJ("Turret", "OBJ//turret.obj"); //remember to change obj
+	MeshBuilder::GetInstance()->GenerateOBJ("Healing Station", "OBJ//healStation.obj");
 	MeshList::GetInstance()->GetMesh("Healing Station")->textureID[0] = LoadTGA("Image//Equipment//Heal_Active.tga");
-	MeshBuilder::GetInstance()->GenerateOBJ("Floor Spike", "OBJ//equipmentCube.obj");
+	MeshBuilder::GetInstance()->GenerateOBJ("Floor Spike", "OBJ//spike.obj");
 	MeshList::GetInstance()->GetMesh("Floor Spike")->textureID[0] = LoadTGA("Image//Equipment//Spike.tga");
 	MeshBuilder::GetInstance()->GenerateOBJ("Shield", "OBJ//equipmentCube.obj"); //remember to change obj
 
@@ -243,6 +243,8 @@ void SceneText::Init()
 	//groundEntity->SetGrids(Vector3(1.f, 1.0f, 1.f));
 	ground = MeshBuilder::GetInstance()->GenerateGround("ground", Color(1, 1, 1), 1.f);
 	ground->textureID[0] = LoadTGA("Image//grass_lightgreen.tga");
+	background = MeshBuilder::GetInstance()->GenerateGround("background", Color(1, 1, 1), 1.f);
+	background->textureID[0] = LoadTGA("Image//water.tga");
 
 
 	// Setup the 2D entities
@@ -280,7 +282,7 @@ void SceneText::Init()
 	dayDuration = 180.f;
 	time = dayDuration;
 	noOfDays = 1;
-	
+	generatorCoreScale = 1.98f;
 	ghostPos.SetZero();
 	ghostScale.SetZero();
 	//CSoundEngine::GetInstance()->playthesound("HELLO", 0.2f);
@@ -368,14 +370,14 @@ void SceneText::Update(double dt)
 		if (!change) {
 			g += dt / dayDuration * 2 * 0.4;
 			if (g > 0.7)
-				b += dt / dayDuration * 8;
+				b += dt / dayDuration * 16;
 			if (g >= 1)
 				change = true;
 		}
 		else {
 			g -= dt / dayDuration * 2 * 0.4;
 			if (g > 0.7)
-				b -= dt / dayDuration * 8;
+				b -= dt / dayDuration * 16;
 		}
 	}
 	else {
@@ -425,6 +427,9 @@ void SceneText::Update(double dt)
 		time = dayDuration;
 		noOfDays++;
 		core->SetHealth(core->GetHealth() - 10);
+		
+		if (core->GetHealth() <= 0)
+			core->SetIsDone(true);
 	}
 	if (KeyboardController::GetInstance()->IsKeyPressed(VK_F6))
 		Player::GetInstance()->fatigue = Player::FATIGUE::TIRED;
@@ -436,14 +441,7 @@ void SceneText::Update(double dt)
 		Player::GetInstance()->SetSlept(false);
 	if (KeyboardController::GetInstance()->IsKeyPressed(VK_F10))
 		Player::GetInstance()->SetSlept(true);
-
-	if (core->GetHealth() <= 0)
-	{
-		core->SetIsDone(true);
-		SceneManager::GetInstance()->SetActiveScene("Lose");
-	}
-	if(noOfDays >= 6)
-		SceneManager::GetInstance()->SetActiveScene("Win");
+	
 	//day night shift
 	time -= dt;
 	if ((time <= 0.00 || Player::GetInstance()->GetSlept()) && isDay)
@@ -788,7 +786,7 @@ void SceneText::RenderPassGPass()
 	//These matrices should change when light position or direction changes
 	Light* light = dynamic_cast<Light*>(g->GetLight("lights[0]"));
 	if (light->type == Light::LIGHT_DIRECTIONAL) {
-		g->m_lightDepthProj.SetToOrtho(-MAX_CELLS * CELL_SIZE / 2, MAX_CELLS * CELL_SIZE / 2, -MAX_CELLS * CELL_SIZE / 2, MAX_CELLS * CELL_SIZE / 2, -MAX_CELLS * CELL_SIZE, MAX_CELLS * CELL_SIZE * 3);
+		g->m_lightDepthProj.SetToOrtho(-MAX_CELLS * CELL_SIZE / 1.5, MAX_CELLS * CELL_SIZE /  1.5, -MAX_CELLS * CELL_SIZE / 1.5, MAX_CELLS * CELL_SIZE / 1.5, -MAX_CELLS * CELL_SIZE * 2, MAX_CELLS * CELL_SIZE *  4);
 		//g->m_lightDepthProj.SetToOrtho(-100, 100, -100, 100, -100, 100);
 	}
 	else
@@ -911,13 +909,20 @@ void SceneText::RenderWorld()
 	ms.PopMatrix();
 
 	ms.PushMatrix();
+	ms.Translate(MAX_CELLS * CELL_SIZE / 2, -0.1, MAX_CELLS * CELL_SIZE / 2);
+	ms.Rotate(-90, 1, 0, 0);
+	ms.Scale(MAX_CELLS * CELL_SIZE * 2, MAX_CELLS * CELL_SIZE * 2, MAX_CELLS * CELL_SIZE);
+	RenderHelper::RenderMeshWithLight(background);
+	ms.PopMatrix();
+
+	ms.PushMatrix();
 	ms.Translate(Player::GetInstance()->GetPosition().x, Player::GetInstance()->GetPosition().y + Player::GetInstance()->GetScale().y / 2, Player::GetInstance()->GetPosition().z);
 	ms.Scale(Player::GetInstance()->GetScale().x, Player::GetInstance()->GetScale().y, Player::GetInstance()->GetScale().z);
 	RenderHelper::RenderMeshWithLight(Player::GetInstance()->GetMesh());
 	ms.PopMatrix();
 
-	//if (isDay) // Only render wireframe box in day time
-	//{
+	if (isDay) // Only render wireframe box in day time
+	{
 		ms.PushMatrix();
 		ms.Translate(ghostPos.x, ghostPos.y, ghostPos.z);
 		ms.Rotate(-90, 1, 0, 0);
@@ -926,7 +931,7 @@ void SceneText::RenderWorld()
 		RenderHelper::RenderMesh(wireFrameBox);
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		ms.PopMatrix();
-	//}
+	}
 
 	
 	EntityManager::GetInstance()->Render();
@@ -937,17 +942,7 @@ void SceneText::Exit()
 	// Detach camera from other entities
 	GraphicsManager::GetInstance()->DetachCamera();
 
-	std::list<EntityBase*> entityList = EntityManager::GetInstance()->GetEntityList();
-	std::list<EntityBase*>::iterator it, end;
-	end = entityList.end();
-	for (it = entityList.begin(); it != end; ++it)
-	{
-		if ((*it) != nullptr)
-			(*it)->SetIsDone(true);
-	}
 
-	EnemyManager::GetInstance()->ClearAll();
-	BuildingManager::GetInstance()->Clear();
 	// Delete the lights
 	//delete lights[0];
 }

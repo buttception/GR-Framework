@@ -126,10 +126,10 @@ void EquipmentTurret::attack()
 	static int i = 0;
 	if (i < 60) {
 		i = 0;
-		try {
+		if (target){
 			target->GetPosition();
 		}
-		catch (std::exception& e) {
+		else{
 			target = nullptr;
 			states.pop();
 			return;

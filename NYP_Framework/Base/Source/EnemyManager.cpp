@@ -116,7 +116,7 @@ void EnemyManager::Init()
 		//first time set up
 		switch (SceneText::GetScene()->GetNoOfDays()) {
 		case 1:
-			for (size_t i = 0; i < 5; ++i) {
+			for (size_t i = 0; i < 10; ++i) {
 				enemyMap["Cuck"].push_back(Create::Cuck("Cuck", Vector3(0, 0, 0)));
 			}
 			break;
