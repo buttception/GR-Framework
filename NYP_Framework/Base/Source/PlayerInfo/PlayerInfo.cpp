@@ -15,6 +15,7 @@
 #include "MeshList.h"
 #include "../EnemyEntity.h"
 #include "LoadTGA.cpp"
+#include "../InteractionEntity.h"
 
 bool SceneText::isDay = true;
 bool CMinimap::isResizing = false;
@@ -109,6 +110,15 @@ void Player::Init(void)
 	core = BuildingManager::GetInstance()->AddBuilding((int)(Player::GetInstance()->GetPosition().x / CELL_SIZE),
 		(int)(Player::GetInstance()->GetPosition().z / CELL_SIZE),
 		BuildingTile::TOP, BuildingEntity::BUILDING_CORE);
+
+	interactionList.push_back(InteractionEntity(-0.53f, 0.25f, 0.12f, 0.07f));
+	interactionList.push_back(InteractionEntity(-0.53f, 0.05, 0.12f, 0.07f));
+	interactionList.push_back(InteractionEntity(-0.53f, -0.21, 0.12f, 0.07f));
+	interactionList.push_back(InteractionEntity(-0.53f, -0.44, 0.12f, 0.07f));
+	interactionList.push_back(InteractionEntity(0.15, 0.25f, 0.12f, 0.07f));
+	interactionList.push_back(InteractionEntity(0.15, 0.05, 0.12f, 0.07f));
+	interactionList.push_back(InteractionEntity(0.15f, -0.21, 0.12f, 0.07f));
+	interactionList.push_back(InteractionEntity(0.15f, -0.44, 0.12f, 0.07f));
 }
 
 // Set the boundary for the player info
@@ -470,7 +480,7 @@ bool Player::LeftClick(float dt)
 		//Add buildings according to angles formed with pre-detemined vectors based on mouse and player positions
 		if (SceneText::isDay)
 		{
-			if (isBuilding)
+			if (isBuilding && !SceneText::GetScene()->Render_Quad)
 			{
 				int x = (int)(position.x / CELL_SIZE);
 				int z = (int)(position.z / CELL_SIZE);
@@ -528,10 +538,76 @@ bool Player::LeftClick(float dt)
 					BuildingManager::GetInstance()->AddBuilding(x, z, BuildingTile::BOTTOM, currentBuilding);
 				}
 			}
-			else if (isEquipment)
+			else if (isEquipment && !SceneText::GetScene()->Render_Quad)
 				BuildingManager::GetInstance()->AddEquipment((int)(Player::GetInstance()->GetPosition().x / CELL_SIZE), (int)(Player::GetInstance()->GetPosition().z / CELL_SIZE), currentEquipment);
-			else if (currentBuilding == BuildingEntity::BUILDING_FLOOR)
+			else if (currentBuilding == BuildingEntity::BUILDING_FLOOR && !SceneText::GetScene()->Render_Quad)
 				BuildingManager::GetInstance()->AddBuilding((int)(Player::GetInstance()->GetPosition().x / CELL_SIZE), (int)(Player::GetInstance()->GetPosition().z / CELL_SIZE), BuildingTile::LEFT, BuildingEntity::BUILDING_FLOOR);
+			else if (SceneText::GetScene()->Render_Quad)
+			{
+				int i = 0;
+				for (i = 0; i < interactionList.size(); ++i)
+				{
+					double x, y;
+					//MouseController::GetInstance()->UpdateMousePosition(mouseX, Application::GetInstance().GetWindowHeight() - mouseY);
+
+					MouseController::GetInstance()->GetMousePosition(x, y);
+
+					float halfWindowWidth = Application::GetInstance().GetWindowWidth() / 2.0f;
+					float halfWindowHeight = Application::GetInstance().GetWindowHeight() / 2.0f;
+
+					//x -= Application::GetInstance().GetWindowWidth() / 2.0f;
+					//y -= Application::GetInstance().GetWindowHeight() / 2.0f;
+
+					//std::cout << "X:" << x - halfWindowWidth << std::endl;
+					//std::cout << "Y:" << y - halfWindowHeight << std::endl;
+					//std::cout << "max X:" << interactionList[i].GetMaxAABB().x << std::endl;
+					//std::cout << "min X:" << interactionList[i].GetMinAABB().x << std::endl;
+					//std::cout << "max Y:" << interactionList[i].GetMaxAABB().y << std::endl;
+					//std::cout << "min Y:" << interactionList[i].GetMinAABB().y << std::endl;
+					if (x - halfWindowWidth <= interactionList[i].GetMaxAABB().x && x - halfWindowWidth >= interactionList[i].GetMinAABB().x &&
+						y - halfWindowHeight <= interactionList[i].GetMaxAABB().y && y - halfWindowHeight >= interactionList[i].GetMinAABB().y) {
+						//based on what is i
+						//based on the push order, u need to noe what button they clicked
+						std::cout << "true\n";
+						if (i == 0)
+						{
+							changeSecondaryWeapon(1);
+						}
+						else if (i == 1)
+						{
+							changeSecondaryWeapon(2);
+						}
+						else if (i == 2)
+						{
+							changeSecondaryWeapon(3);
+						}
+						else if (i == 3)
+						{
+							changeSecondaryWeapon(4);
+						}
+						else if (i == 4)
+						{
+							changeSecondaryWeapon(5);
+						}
+						else if (i == 5)
+						{
+							changeSecondaryWeapon(6);
+						}
+						else if (i == 6)
+						{
+							changeSecondaryWeapon(7);
+						}
+						else if (i == 7)
+						{
+							changeSecondaryWeapon(8);
+						}
+					}
+					else
+					{
+						std::cout << "yee\n";
+					}
+				}
+			}
 			return true;
 		}
 		else
@@ -807,4 +883,19 @@ void Player::SetIsWeapon()
 	isEquipment = false;
 	
 	isWeapon = true;
+}
+
+int Player::CurrentWeaponID(void)
+{
+	return weaponManager[m_iCurrentWeapon]->GetWeaponID();
+}
+
+int Player::CurrentWeaponTotalRound(void)
+{
+	return  weaponManager[m_iCurrentWeapon]->GetTotalRound();
+}
+
+int Player::CurrentWeaponMagRound(void)
+{
+	return weaponManager[m_iCurrentWeapon]->GetMagRound();
 }

@@ -35,6 +35,7 @@ public:
 	static SceneText* GetScene() { return sInstance; }
 
 	static bool isDay;
+	bool Render_Quad = false;
 private:
 	SceneText(SceneManager* _sceneMgr); // This is used to register to SceneManager
 	
@@ -62,6 +63,16 @@ private:
 	Mesh* playerHealthBar;
 	Mesh* wireFrameBox;
 	Mesh* Shop;
+	Mesh* pistol;
+	Mesh* rifle;
+	Mesh* sniper;
+	Mesh* chickengun;
+	Mesh* gravitygun;
+	Mesh* machinegun;
+	Mesh* nailgun;
+	Mesh* rocketlauncher;
+	Mesh* railgun;
+	Mesh* redquad;
 	Mesh* Constrain;
 	CMinimap* theMiniMap;
 
@@ -73,7 +84,7 @@ private:
 	int noOfDays;
 	const float ButtonCooldown = 0.20f;
 
-	bool Render_Quad = false;
+
 	
 };
 

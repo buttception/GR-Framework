@@ -16,6 +16,7 @@ class SceneText;
 class CWeaponInfo;
 class Weapon;
 class Projectile;
+class InteractionEntity;
 
 class Player : public Singleton<Player>, public GenericEntity
 {
@@ -69,6 +70,9 @@ public:
 	EquipmentEntity::EQUIPMENT_TYPE GetCurrentEquipment(void) const { return currentEquipment; }
 	void SetCurrentEquipment(EquipmentEntity::EQUIPMENT_TYPE currentEquipment) { this->currentEquipment = currentEquipment; }
 	int GetCurrentWeapon(void) const { return m_iCurrentWeapon; }
+	int CurrentWeaponID(void);
+	int CurrentWeaponTotalRound(void);
+	int CurrentWeaponMagRound(void);
 	int GetNumberOfWeapon(void) const { return m_iNumOfWeapon; }
 	void SetCurrentWeapon(int currentWeapon) { this->m_iCurrentWeapon = currentWeapon; }
 	bool GetSlept(void) const { return slept; }
@@ -102,6 +106,7 @@ public:
 	}fatigue;
 
 	float size;
+	std::vector<InteractionEntity>interactionList;
 private:
 	Vector3 defaultPosition;
 	Vector3 direction;

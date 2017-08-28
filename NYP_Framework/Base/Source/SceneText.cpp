@@ -198,6 +198,38 @@ void SceneText::Init()
 	playerHealthBar = MeshBuilder::GetInstance()->GenerateQuad("playerHealthBar", Color(1, 0.64706f, 0), 1.f);
 	wireFrameBox = MeshBuilder::GetInstance()->GenerateQuad("wireFrameBox", Color(1, 0, 0), 1.f);
 
+	// current weapon UI
+
+	pistol = MeshBuilder::GetInstance()->GenerateQuad("pistol", Color(1, 1, 1), 1.0f);
+	pistol->textureID[0] = LoadTGA("Image//weapon//pistol.tga");
+
+	rifle = MeshBuilder::GetInstance()->GenerateQuad("rifle", Color(1, 1, 1), 1.0f);
+	rifle->textureID[0] = LoadTGA("Image//weapon//rifle.tga");
+
+	sniper = MeshBuilder::GetInstance()->GenerateQuad("sniper", Color(1, 1, 1), 1.0f);
+	sniper->textureID[0] = LoadTGA("Image//weapon//sniper.tga");
+
+	machinegun = MeshBuilder::GetInstance()->GenerateQuad("machinegun", Color(1, 1, 1), 1.0f);
+	machinegun->textureID[0] = LoadTGA("Image//weapon//machinegun.tga");
+
+	railgun = MeshBuilder::GetInstance()->GenerateQuad("railgun", Color(1, 1, 1), 1.0f);
+	railgun->textureID[0] = LoadTGA("Image//weapon//railgun.tga");
+
+	rocketlauncher = MeshBuilder::GetInstance()->GenerateQuad("rocketlauncher", Color(1, 1, 1), 1.0f);
+	rocketlauncher->textureID[0] = LoadTGA("Image//weapon//rocketlauncher.tga");
+
+	nailgun = MeshBuilder::GetInstance()->GenerateQuad("nailgun", Color(1, 1, 1), 1.0f);
+	nailgun->textureID[0] = LoadTGA("Image//weapon//nailgun.tga");
+
+	gravitygun = MeshBuilder::GetInstance()->GenerateQuad("gravitygun", Color(1, 1, 1), 1.0f);
+	gravitygun->textureID[0] = LoadTGA("Image//weapon//gravitygun.tga");
+
+	chickengun = MeshBuilder::GetInstance()->GenerateQuad("chickengun", Color(1, 1, 1), 1.0f);
+	chickengun->textureID[0] = LoadTGA("Image//weapon//chickengun.tga");
+
+	redquad = MeshBuilder::GetInstance()->GenerateQuad("redquad", Color(1, 1, 1), 1.0f);
+	redquad->textureID[0] = LoadTGA("Image//Red.tga");
+
 	//Minimap
 	theMiniMap = Create::Minimap();
 	theMiniMap->SetTarget(MeshBuilder::GetInstance()->GenerateQuad("miniMapTarget", Color(1, 1, 1), 0.0625f));
@@ -610,9 +642,11 @@ void SceneText::Update(double dt)
 	ss << "FPS: " << fps;
 	textObj[0]->SetText(ss.str());
 
+	// Update the player position into textObj[2]
 	ss.str("");
 	ss.precision(1);
-	ss << "Player:" << Player::GetInstance()->GetPosition();
+	ss << Player::GetInstance()->CurrentWeaponMagRound() << "/" << Player::GetInstance()->CurrentWeaponTotalRound();//Vector3(-halfWindowWidth, -halfWindowHeight + fontSize*i + halfFontSize, 0.0f)
+	textObj[1]->SetPosition(Vector3(halfWindowWidth - 100, -halfWindowHeight + fontSize + halfFontSize, 0.0f));
 	textObj[1]->SetText(ss.str());
 
 	ss.str("");
@@ -876,6 +910,83 @@ void SceneText::RenderPassMain()
 		ms.Scale((float)Application::GetInstance().GetWindowWidth() * 0.75f, (float)Application::GetInstance().GetWindowHeight() * 0.75f, 0.f);
 		RenderHelper::RenderMesh(Shop);
 		ms.PopMatrix();
+	}
+
+	switch (Player::GetInstance()->CurrentWeaponID())
+	{
+	case 1:
+		ms.PushMatrix();
+		ms.Translate((float)halfWindowWidth * 0.88f, (float)halfWindowHeight * -0.78f, 0);
+		ms.Translate(0.f, 0.f, 0.f);
+		ms.Scale((float)Application::GetInstance().GetWindowWidth() * 0.08f, (float)Application::GetInstance().GetWindowHeight() * 0.06f, 0.f);
+		RenderHelper::RenderMesh(pistol);
+		ms.PopMatrix();
+		break;
+	case 2:
+		ms.PushMatrix();
+		ms.Translate((float)halfWindowWidth * 0.88f, (float)halfWindowHeight * -0.78f, 0);
+		ms.Translate(0.f, 0.f, 0.f);
+		ms.Scale((float)Application::GetInstance().GetWindowWidth() * 0.08f, (float)Application::GetInstance().GetWindowHeight() * 0.06f, 0.f);
+		RenderHelper::RenderMesh(rifle);
+		ms.PopMatrix();
+		break;
+	case 3:
+		ms.PushMatrix();
+		ms.Translate((float)halfWindowWidth * 0.88f, (float)halfWindowHeight * -0.78f, 0);
+		ms.Translate(0.f, 0.f, 0.f);
+		ms.Scale((float)Application::GetInstance().GetWindowWidth() * 0.08f, (float)Application::GetInstance().GetWindowHeight() * 0.06f, 0.f);
+		RenderHelper::RenderMesh(sniper);
+		ms.PopMatrix();
+		break;
+	case 4:
+		ms.PushMatrix();
+		ms.Translate((float)halfWindowWidth * 0.88f, (float)halfWindowHeight * -0.78f, 0);
+		ms.Translate(0.f, 0.f, 0.f);
+		ms.Scale((float)Application::GetInstance().GetWindowWidth() * 0.08f, (float)Application::GetInstance().GetWindowHeight() * 0.06f, 0.f);
+		RenderHelper::RenderMesh(nailgun);
+		ms.PopMatrix();
+		break;
+	case 5:
+		ms.PushMatrix();
+		ms.Translate((float)halfWindowWidth * 0.88f, (float)halfWindowHeight * -0.78f, 0);
+		ms.Translate(0.f, 0.f, 0.f);
+		ms.Scale((float)Application::GetInstance().GetWindowWidth() * 0.08f, (float)Application::GetInstance().GetWindowHeight() * 0.06f, 0.f);
+		RenderHelper::RenderMesh(rocketlauncher);
+		ms.PopMatrix();
+		break;
+	case 6:
+		ms.PushMatrix();
+		ms.Translate((float)halfWindowWidth * 0.88f, (float)halfWindowHeight * -0.78f, 0);
+		ms.Translate(0.f, 0.f, 0.f);
+		ms.Scale((float)Application::GetInstance().GetWindowWidth() * 0.08f, (float)Application::GetInstance().GetWindowHeight() * 0.06f, 0.f);
+		RenderHelper::RenderMesh(railgun);
+		ms.PopMatrix();
+		break;
+	case 7:
+		ms.PushMatrix();
+		ms.Translate((float)halfWindowWidth * 0.88f, (float)halfWindowHeight * -0.78f, 0);
+		ms.Translate(0.f, 0.f, 0.f);
+		ms.Scale((float)Application::GetInstance().GetWindowWidth() * 0.08f, (float)Application::GetInstance().GetWindowHeight() * 0.06f, 0.f);
+		RenderHelper::RenderMesh(machinegun);
+		ms.PopMatrix();
+		break;
+	case 8:
+		ms.PushMatrix();
+		ms.Translate((float)halfWindowWidth * 0.88f, (float)halfWindowHeight * -0.78f, 0);
+		ms.Translate(0.f, 0.f, 0.f);
+		ms.Scale((float)Application::GetInstance().GetWindowWidth() * 0.08f, (float)Application::GetInstance().GetWindowHeight() * 0.06f, 0.f);
+		RenderHelper::RenderMesh(gravitygun);
+		ms.PopMatrix();
+		break;
+	case 9:
+		ms.PushMatrix();
+		ms.Translate((float)halfWindowWidth * 0.88f, (float)halfWindowHeight * -0.78f, 0);
+		ms.Translate(0.f, 0.f, 0.f);
+		ms.Scale((float)Application::GetInstance().GetWindowWidth() * 0.08f, (float)Application::GetInstance().GetWindowHeight() * 0.06f, 0.f);
+		RenderHelper::RenderMesh(chickengun);
+		ms.PopMatrix();
+		break;
+
 	}
 	
 	if (Player::GetInstance()->Render_Another_qUAD)
