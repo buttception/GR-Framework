@@ -242,13 +242,13 @@ Vector3 EnemyAI::FindNextTile(Vector3 _pos)
 
 	//all boxes around the enemy
 	if (_x < MAX_CELLS - 1)
-		allBoxes.push_back(BuildingManager::GetInstance()->GetBuildingArray()[_x + 1][_y].hitbox);
+		allBoxes.push_back(BuildingManager::GetInstance()->GetBuildingArray()[_x + 1][_y]->hitbox);
 	if (_x > 0)
-		allBoxes.push_back(BuildingManager::GetInstance()->GetBuildingArray()[_x - 1][_y].hitbox);
+		allBoxes.push_back(BuildingManager::GetInstance()->GetBuildingArray()[_x - 1][_y]->hitbox);
 	if (_y < MAX_CELLS - 1)
-		allBoxes.push_back(BuildingManager::GetInstance()->GetBuildingArray()[_x][_y + 1].hitbox);
+		allBoxes.push_back(BuildingManager::GetInstance()->GetBuildingArray()[_x][_y + 1]->hitbox);
 	if (_y > 0)
-		allBoxes.push_back(BuildingManager::GetInstance()->GetBuildingArray()[_x][_y - 1].hitbox);
+		allBoxes.push_back(BuildingManager::GetInstance()->GetBuildingArray()[_x][_y - 1]->hitbox);
 
 	for (auto it : allBoxes) {
 		// if line intersects the hitbox

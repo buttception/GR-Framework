@@ -70,7 +70,7 @@ void BuildingTile::AddWall(BuildingEntity * entity, TILE_SIDE direction)
 	}
 	if (entity->type == BuildingEntity::BUILDING_COVER)
 		std::cout << "Cover placed down" << std::endl;
-	Player::GetInstance()->SetMaterial(Math::Max(0, Player::GetInstance()->GetMaterial() - 150));
+	Player::GetInstance()->SetMaterial(Math::Max(0, Player::GetInstance()->GetMaterial() - 100));
 	EntityManager::GetInstance()->AddEntity(entity);
 	CSoundEngine::GetInstance()->playsinglesound("Build", 0.4f);
 	std::cout << "Build sound Played" << std::endl;
@@ -87,12 +87,14 @@ void BuildingTile::AddFloor(BuildingEntity * entity)
 		return;
 	floor = entity;
 	entity->tile = this;
+	Player::GetInstance()->SetMaterial(Math::Max(0, Player::GetInstance()->GetMaterial() - 50));
 	EntityManager::GetInstance()->AddEntity(floor);
 	CSoundEngine::GetInstance()->playsinglesound("Floor", 0.4f);
 }
 
 void BuildingTile::AddCore(BuildingEntity * entity)
 {
+	floor = entity;
 	EntityManager::GetInstance()->AddEntity(entity);
 }
 
@@ -105,6 +107,7 @@ void BuildingTile::AddEquipment(EquipmentEntity * entity)
 	}
 	equipment = entity;
 	entity->tile = this;
+	Player::GetInstance()->SetMaterial(Math::Max(0, Player::GetInstance()->GetMaterial() - 200));
 	EntityManager::GetInstance()->AddEntity(equipment);
 }
 

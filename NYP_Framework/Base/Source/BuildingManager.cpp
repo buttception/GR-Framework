@@ -5,15 +5,16 @@
 BuildingManager::BuildingManager()
 {
 	// new all the buildingtiles
-	buildingArray = new BuildingTile*[MAX_CELLS];
+	buildingArray = new BuildingTile**[MAX_CELLS];
 	for (size_t i = 0; i < MAX_CELLS; ++i)
-		buildingArray[i] = new BuildingTile[MAX_CELLS];
+		buildingArray[i] = new BuildingTile*[MAX_CELLS];
 
 	for (size_t i = 0; i < MAX_CELLS; ++i) {
 		for (size_t j = 0; j < MAX_CELLS; ++j) {
+			buildingArray[i][j] = new BuildingTile();
 			Vector3 max(((float)i + 1.f) * CELL_SIZE, 1, ((float)j + 1.f) * CELL_SIZE);
 			Vector3 min((float)i * CELL_SIZE, - 1.f, (float)j * CELL_SIZE);
-			buildingArray[i][j].hitbox.SetAABB(max, min);
+			buildingArray[i][j]->hitbox.SetAABB(max, min);
 		}
 	}
 }
@@ -52,7 +53,7 @@ BuildingEntity* BuildingManager::AddBuilding(int _x, int _y, BuildingTile::TILE_
 			Vector3 max(wall->GetPosition().x + wall->GetScale().x / 2, 1, wall->GetPosition().z + wall->GetScale().z / 2);
 			Vector3 min(wall->GetPosition().x - wall->GetScale().x / 2, 0, wall->GetPosition().z - wall->GetScale().z / 2);
 			wall->SetAABB(max, min);
-			buildingArray[_x][_y].AddWall(wall, BuildingTile::LEFT);
+			buildingArray[_x][_y]->AddWall(wall, BuildingTile::LEFT);
 		}
 		else if (direction == BuildingTile::TOP) {
 			wall->SetScale(Vector3(CELL_SIZE, 10, 2));
@@ -60,7 +61,7 @@ BuildingEntity* BuildingManager::AddBuilding(int _x, int _y, BuildingTile::TILE_
 			Vector3 max(wall->GetPosition().x + wall->GetScale().x / 2, 1, wall->GetPosition().z + wall->GetScale().z / 2);
 			Vector3 min(wall->GetPosition().x - wall->GetScale().x / 2, 0, wall->GetPosition().z - wall->GetScale().z / 2);
 			wall->SetAABB(max, min);
-			buildingArray[_x][_y].AddWall(wall, BuildingTile::TOP);
+			buildingArray[_x][_y]->AddWall(wall, BuildingTile::TOP);
 		}
 		else if (direction == BuildingTile::RIGHT) {
 			wall->SetScale(Vector3(2, 10, CELL_SIZE));
@@ -74,7 +75,7 @@ BuildingEntity* BuildingManager::AddBuilding(int _x, int _y, BuildingTile::TILE_
 				Vector3 max(wall->GetPosition().x + wall->GetScale().x / 2, 1, wall->GetPosition().z + wall->GetScale().z / 2);
 				Vector3 min(wall->GetPosition().x - wall->GetScale().x / 2, 0, wall->GetPosition().z - wall->GetScale().z / 2);
 				wall->SetAABB(max, min);
-				buildingArray[_x][_y].AddWall(wall, BuildingTile::RIGHT);
+				buildingArray[_x][_y]->AddWall(wall, BuildingTile::RIGHT);
 			}
 		}
 		else if (direction == BuildingTile::BOTTOM) {
@@ -89,7 +90,7 @@ BuildingEntity* BuildingManager::AddBuilding(int _x, int _y, BuildingTile::TILE_
 				Vector3 max(wall->GetPosition().x + wall->GetScale().x / 2, 1, wall->GetPosition().z + wall->GetScale().z / 2);
 				Vector3 min(wall->GetPosition().x - wall->GetScale().x / 2, 0, wall->GetPosition().z - wall->GetScale().z / 2);
 				wall->SetAABB(max, min);
-				buildingArray[_x][_y].AddWall(wall, BuildingTile::BOTTOM);
+				buildingArray[_x][_y]->AddWall(wall, BuildingTile::BOTTOM);
 			}
 		}
 		else {
@@ -102,13 +103,13 @@ BuildingEntity* BuildingManager::AddBuilding(int _x, int _y, BuildingTile::TILE_
 	{
 		wall->SetScale(Vector3(CELL_SIZE, 0.1f, CELL_SIZE));
 		wall->SetPosition(Vector3((float)_x * CELL_SIZE + CELL_SIZE / 2.f, wall->GetScale().y / 2, (float)_y * CELL_SIZE + CELL_SIZE / 2.f));
-		buildingArray[_x][_y].AddFloor(wall);
+		buildingArray[_x][_y]->AddFloor(wall);
 	}
 	else if (type == BuildingEntity::BUILDING_CORE)
 	{
 		wall->SetScale(Vector3(CELL_SIZE / 4.f, 5.f, CELL_SIZE / 4.f));
 		wall->SetPosition(Vector3((float)_x * CELL_SIZE + CELL_SIZE / 2.f, 0.1f, (float)_y * CELL_SIZE + CELL_SIZE / 2.f));
-		buildingArray[_x][_y].AddCore(wall);
+		buildingArray[_x][_y]->AddCore(wall);
 
 		Vector3 max(wall->GetPosition().x + wall->GetScale().x / 2, 1, wall->GetPosition().z + wall->GetScale().z / 2);
 		Vector3 min(wall->GetPosition().x - wall->GetScale().x / 2, 0, wall->GetPosition().z - wall->GetScale().z / 2);
@@ -119,7 +120,7 @@ BuildingEntity* BuildingManager::AddBuilding(int _x, int _y, BuildingTile::TILE_
 
 void BuildingManager::AddEquipment(int _x, int _y, EquipmentEntity::EQUIPMENT_TYPE _type)
 {
-	if (buildingArray[_x][_y].floor) {
+	if (buildingArray[_x][_y]->floor) {
 		EquipmentEntity* e;
 		switch (_type) {
 		case EquipmentEntity::EQUIPMENT_FLOOR_SPIKE:
@@ -133,7 +134,7 @@ void BuildingManager::AddEquipment(int _x, int _y, EquipmentEntity::EQUIPMENT_TY
 			break;
 		case EquipmentEntity::EQUIPMENT_TURRET:
 			EquipmentTurret* t = Create::Turret(Vector3((float)_x * CELL_SIZE + CELL_SIZE / 2.f, 0.2f, (float)_y * CELL_SIZE + CELL_SIZE / 2.f));
-			buildingArray[_x][_y].AddEquipment(t);
+			buildingArray[_x][_y]->AddEquipment(t);
 			return;
 			break;
 		}
@@ -144,8 +145,35 @@ void BuildingManager::AddEquipment(int _x, int _y, EquipmentEntity::EQUIPMENT_TY
 		Vector3 max(e->GetPosition().x + e->GetScale().x / 2, 1, e->GetPosition().z + e->GetScale().z / 2);
 		Vector3 min(e->GetPosition().x - e->GetScale().x / 2, 0, e->GetPosition().z - e->GetScale().z / 2);
 		e->SetAABB(max, min);
-		buildingArray[_x][_y].AddEquipment(e);
+		buildingArray[_x][_y]->AddEquipment(e);
 	}
 	else
 		std::cout << "No floor to place equipment on\n";
+}
+
+void BuildingManager::Clear()
+{
+	for (size_t i = 0; i < MAX_CELLS; ++i)
+	{
+		for (size_t j = 0; j < MAX_CELLS; ++j) 
+		{
+			delete[] buildingArray[i][j];
+		}
+	}
+
+	delete []buildingArray;
+
+	// new all the buildingtiles
+	buildingArray = new BuildingTile**[MAX_CELLS];
+	for (size_t i = 0; i < MAX_CELLS; ++i)
+		buildingArray[i] = new BuildingTile*[MAX_CELLS];
+
+	for (size_t i = 0; i < MAX_CELLS; ++i) {
+		for (size_t j = 0; j < MAX_CELLS; ++j) {
+			buildingArray[i][j] = new BuildingTile();
+			Vector3 max(((float)i + 1.f) * CELL_SIZE, 1, ((float)j + 1.f) * CELL_SIZE);
+			Vector3 min((float)i * CELL_SIZE, -1.f, (float)j * CELL_SIZE);
+			buildingArray[i][j]->hitbox.SetAABB(max, min);
+		}
+	}
 }

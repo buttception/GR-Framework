@@ -33,6 +33,7 @@
 #include "Minimap.h"
 
 SceneText* SceneText::sInstance = new SceneText(SceneManager::GetInstance());
+float SceneText::generatorCoreScale = 1.98f;
 
 SceneText::SceneText()
 {
@@ -661,9 +662,6 @@ void SceneText::Update(double dt)
 			case BuildingEntity::BUILDING_WALL:
 				ss << "Current Building: Wall";
 				break;
-			case BuildingEntity::BUILDING_DOOR:
-				ss << "Current Building: Door";
-				break;
 			case BuildingEntity::BUILDING_COVER:
 				ss << "Current Building: Cover";
 				break;
@@ -794,7 +792,7 @@ void SceneText::RenderPassGPass()
 	//These matrices should change when light position or direction changes
 	Light* light = dynamic_cast<Light*>(g->GetLight("lights[0]"));
 	if (light->type == Light::LIGHT_DIRECTIONAL) {
-		g->m_lightDepthProj.SetToOrtho(-MAX_CELLS * CELL_SIZE / 1.5, MAX_CELLS * CELL_SIZE /  1.5, -MAX_CELLS * CELL_SIZE / 1.5, MAX_CELLS * CELL_SIZE / 1.5, -MAX_CELLS * CELL_SIZE * 2, MAX_CELLS * CELL_SIZE * 4);
+		g->m_lightDepthProj.SetToOrtho(-MAX_CELLS * CELL_SIZE / 1.5, MAX_CELLS * CELL_SIZE /  1.5, -MAX_CELLS * CELL_SIZE / 1.5, MAX_CELLS * CELL_SIZE / 1.5, -MAX_CELLS * CELL_SIZE * 2, MAX_CELLS * CELL_SIZE *  4);
 		//g->m_lightDepthProj.SetToOrtho(-100, 100, -100, 100, -100, 100);
 	}
 	else

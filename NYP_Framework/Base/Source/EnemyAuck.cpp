@@ -3,6 +3,7 @@
 #include "EnemyManager.h"
 #include "../Source/Sound_Engine.h"
 #include "PlayerInfo\PlayerInfo.h"
+#include "SceneText.h"
 
 EnemyAuck::EnemyAuck(std::string _meshName, Vector3 position) : EnemyEntity(_meshName)
 {
@@ -206,6 +207,8 @@ void EnemyAuck::Attack(GenericEntity * thatEntity, double dt)
 							if ((position - entity->GetPosition()).LengthSquared() < range * range) {
 								if (b = dynamic_cast<BuildingEntity*>(entity)) {
 									b->SetHealth(b->GetHealth() - damage);
+									if (b->type == BuildingEntity::BUILDING_CORE)
+										SceneText::generatorCoreScale = Math::Max(0.f, SceneText::generatorCoreScale - 0.198f);
 									if (b->GetHealth() <= 0) {
 										if (b->type != BuildingEntity::BUILDING_CORE) {
 											if (b->tile->leftWall == b) {

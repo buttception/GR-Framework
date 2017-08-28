@@ -238,3 +238,8 @@ void EnemyManager::ClearEnemies()
 		}
 	}
 }
+
+void EnemyManager::ClearAll()
+{
+	enemyMap.clear();
+}
