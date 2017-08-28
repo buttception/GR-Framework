@@ -2,6 +2,7 @@
 #include "EntityBase.h"
 #include "CollisionManager.h"
 #include "EnemyManager.h"
+#include "ParticleManager.h"
 
 #include <iostream>
 using namespace std;
@@ -36,6 +37,7 @@ void EntityManager::Update(double _dt)
 
 	CollisionManager::GetInstance()->Update(entityList);
 	EnemyManager::GetInstance()->Update(_dt);
+	ParticleManager::GetInstance()->Update(_dt);
 }
 
 // Render all entities
@@ -48,6 +50,7 @@ void EntityManager::Render()
 	{
 		(*it)->Render();
 	}
+	ParticleManager::GetInstance()->Render();
 }
 
 // Render the UI entities

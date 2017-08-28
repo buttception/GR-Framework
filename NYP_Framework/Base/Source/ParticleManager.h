@@ -13,8 +13,10 @@ public:
 
 	void Update(double dt);
 	void Render();
+	
+	void GenerateBlood(Vector3 _pos);
 
-	bool AddParticle(ParticleEntity::PARTICLE_TYPE _p, Vector3 _pos);
+	ParticleEntity* AddParticle(ParticleEntity::PARTICLE_TYPE _p, Mesh* _mesh, Vector3 _pos);
 
 private:
 	ParticleManager();

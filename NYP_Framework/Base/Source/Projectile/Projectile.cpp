@@ -5,6 +5,7 @@
 #include "GraphicsManager.h"
 #include "RenderHelper.h"
 #include "../Sound_Engine.h"
+#include "../ParticleManager.h"
 
 Projectile::Projectile(std::string _meshName) : GenericEntity(MeshList::GetInstance()->GetMesh(_meshName))
 , m_bStatus(false)
@@ -136,6 +137,7 @@ void Projectile::CollisionResponse(GenericEntity * thatEntity)
 	case ENEMY:
 		if (source != ENEMY_SOURCE) {
 			this->SetIsDone(true);
+			ParticleManager::GetInstance()->GenerateBlood(enemy->GetPosition());
 			if (enemy->GetActive()) {
 				enemy->SetHealth(enemy->GetHealth() - damage);
 				std::cout << "hito\n";
