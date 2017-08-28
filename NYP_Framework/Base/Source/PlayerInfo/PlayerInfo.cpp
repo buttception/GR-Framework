@@ -223,7 +223,7 @@ void Player::Update(double dt)
 
 	switch (fatigue)
 	{
-	case TIRED:
+	case ENERGETIC:
 		maxPlayerHealth = 150.f;
 		break;
 	case NORMAL:
@@ -231,7 +231,7 @@ void Player::Update(double dt)
 		if (playerHealth >= 100.f)
 			playerHealth = 100.f;
 		break;
-	case ENERGETIC:
+	case TIRED:
 		maxPlayerHealth = 50.f;
 		if (playerHealth >= 50.f)
 			playerHealth = 50.f;
@@ -572,12 +572,13 @@ bool Player::RightClick()
 
 		int x = (int)(position.x / CELL_SIZE);
 		int z = (int)(position.z / CELL_SIZE);
-		if (SceneText::isDay)
+
+		if (isBuilding && currentBuilding != BuildingEntity::BUILDING_FLOOR)
 		{
+			BuildingTile* tile = &BuildingManager::GetInstance()->GetBuildingArray()[x][z];
 			// Up
 			if ((angle >= -180.f && angle <= -127.f) || (angle <= 180.f && angle >= 127.f))
 			{
-				BuildingTile* tile = &BuildingManager::GetInstance()->GetBuildingArray()[x][z];
 				if (tile->topWall != nullptr)
 				{
 					tile->topWall->SetIsDone(true);
@@ -585,11 +586,15 @@ bool Player::RightClick()
 					CSoundEngine::GetInstance()->playthesound("Remove", 0.2f);
 					std::cout << "Remove Sound Played" << std::endl;
 				}
+				else
+				{
+					CSoundEngine::GetInstance()->playsinglesound("NULL", 0.2f);
+					std::cout << "Null Sound Played" << std::endl;
+				}
 			}
 			// Left
 			else if (angle >= -127.f && angle <= -53.f)
 			{
-				BuildingTile* tile = &BuildingManager::GetInstance()->GetBuildingArray()[x][z];
 				if (tile->leftWall != nullptr)
 				{
 					tile->leftWall->SetIsDone(true);
@@ -597,30 +602,44 @@ bool Player::RightClick()
 					CSoundEngine::GetInstance()->playthesound("Remove", 0.2f);
 					std::cout << "Remove Sound Played" << std::endl;
 				}
+				else
+				{
+					CSoundEngine::GetInstance()->playsinglesound("NULL", 0.2f);
+					std::cout << "Null Sound Played" << std::endl;
+				}
 			}
 			// Right
 			else if (angle >= 53.f && angle <= 127.f)
 			{
 				if (x + 1 != MAX_CELLS)
 				{
-					BuildingTile* tile = &BuildingManager::GetInstance()->GetBuildingArray()[x + 1][z];
-					if (tile->leftWall != nullptr)
+					BuildingTile* nextTile = &BuildingManager::GetInstance()->GetBuildingArray()[x + 1][z];
+					if (nextTile->leftWall != nullptr)
 					{
-						tile->leftWall->SetIsDone(true);
-						tile->leftWall = nullptr;
+						nextTile->leftWall->SetIsDone(true);
+						nextTile->leftWall = nullptr;
 						CSoundEngine::GetInstance()->playthesound("Remove", 0.2f);
 						std::cout << "Remove Sound Played" << std::endl;
+					}
+					else
+					{
+						CSoundEngine::GetInstance()->playsinglesound("NULL", 0.2f);
+						std::cout << "Null Sound Played" << std::endl;
 					}
 				}
 				else
 				{
-					BuildingTile* tile = &BuildingManager::GetInstance()->GetBuildingArray()[x][z];
 					if (tile->rightWall != nullptr)
 					{
 						tile->rightWall->SetIsDone(true);
 						tile->rightWall = nullptr;
 						CSoundEngine::GetInstance()->playthesound("Remove", 0.2f);
 						std::cout << "Remove Sound Played" << std::endl;
+					}
+					else
+					{
+						CSoundEngine::GetInstance()->playsinglesound("NULL", 0.2f);
+						std::cout << "Null Sound Played" << std::endl;
 					}
 				}
 			}
@@ -629,18 +648,22 @@ bool Player::RightClick()
 			{
 				if (z >= 0)
 				{
-					BuildingTile* tile = &BuildingManager::GetInstance()->GetBuildingArray()[x][z + 1];
-					if (tile->topWall != nullptr)
+					BuildingTile* nextTile = &BuildingManager::GetInstance()->GetBuildingArray()[x][z + 1];
+					if (nextTile->topWall != nullptr)
 					{
-						tile->topWall->SetIsDone(true);
-						tile->topWall = nullptr;
+						nextTile->topWall->SetIsDone(true);
+						nextTile->topWall = nullptr;
 						CSoundEngine::GetInstance()->playthesound("Remove", 0.2f);
 						std::cout << "Remove Sound Played" << std::endl;
+					}
+					else
+					{
+						CSoundEngine::GetInstance()->playsinglesound("NULL", 0.2f);
+						std::cout << "Null Sound Played" << std::endl;
 					}
 				}
 				else
 				{
-					BuildingTile* tile = &BuildingManager::GetInstance()->GetBuildingArray()[x][z];
 					if (tile->bottomWall != nullptr)
 					{
 						tile->bottomWall->SetIsDone(true);
@@ -648,42 +671,51 @@ bool Player::RightClick()
 						CSoundEngine::GetInstance()->playthesound("Remove", 0.2f);
 						std::cout << "Remove Sound Played" << std::endl;
 					}
+					else
+					{
+						CSoundEngine::GetInstance()->playsinglesound("NULL", 0.2f);
+						std::cout << "Null Sound Played" << std::endl;
+					}
 				}
 			}
-			// Floor
-			if (isBuilding && currentBuilding == BuildingEntity::BUILDING_FLOOR)
-			{
-				BuildingTile* tile = &BuildingManager::GetInstance()->GetBuildingArray()[x][z];
-				if (tile->floor != nullptr)
-				{
-					tile->floor->SetIsDone(true);
-					tile->floor = nullptr;
-					CSoundEngine::GetInstance()->playthesound("Remove", 0.2f);
-					std::cout << "Remove Sound Played" << std::endl;
-				}
-			}
-			else if (isEquipment)
-			{
-				BuildingTile* tile = &BuildingManager::GetInstance()->GetBuildingArray()[x][z];
-				if (tile->equipment != nullptr)
-				{
-					tile->equipment->SetIsDone(true);
-					tile->equipment = nullptr;
-					CSoundEngine::GetInstance()->playthesound("Remove", 0.2f);
-					std::cout << "Remove Sound Played" << std::endl;
-				}
-			}
+			Player::GetInstance()->SetMaterial(Math::Min(999999, Player::GetInstance()->GetMaterial() + 50));
 		}
-		else
+
+		// Floor
+		if (isBuilding && currentBuilding == BuildingEntity::BUILDING_FLOOR)
 		{
-			CSoundEngine::GetInstance()->playsinglesound("NULL", 0.2f);
-			std::cout << "Null Sound Played" << std::endl;
-
+			BuildingTile* tile = &BuildingManager::GetInstance()->GetBuildingArray()[x][z];
+			if (tile->floor != nullptr)
+			{
+				tile->floor->SetIsDone(true);
+				tile->floor = nullptr;
+				Player::GetInstance()->SetMaterial(Math::Min(999999, Player::GetInstance()->GetMaterial() + 20));
+				CSoundEngine::GetInstance()->playthesound("Remove", 0.2f);
+				std::cout << "Remove Sound Played" << std::endl;
+			}
+			else
+			{
+				CSoundEngine::GetInstance()->playsinglesound("NULL", 0.2f);
+				std::cout << "Null Sound Played" << std::endl;
+			}
 		}
-		
-			
-
-		
+		else if (isEquipment)
+		{
+			BuildingTile* tile = &BuildingManager::GetInstance()->GetBuildingArray()[x][z];
+			if (tile->equipment != nullptr)
+			{
+				tile->equipment->SetIsDone(true);
+				tile->equipment = nullptr;
+				Player::GetInstance()->SetMaterial(Math::Min(999999, Player::GetInstance()->GetMaterial() + 100));
+				CSoundEngine::GetInstance()->playthesound("Remove", 0.2f);
+				std::cout << "Remove Sound Played" << std::endl;
+			}
+			else
+			{
+				CSoundEngine::GetInstance()->playsinglesound("NULL", 0.2f);
+				std::cout << "Null Sound Played" << std::endl;
+			}
+		}
 	}
 	catch (DivideByZero)
 	{

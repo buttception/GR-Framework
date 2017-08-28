@@ -35,6 +35,7 @@ public:
 	static SceneText* GetScene() { return sInstance; }
 
 	static bool isDay;
+	static float generatorCoreScale;
 private:
 	SceneText(SceneManager* _sceneMgr); // This is used to register to SceneManager
 	
@@ -66,7 +67,7 @@ private:
 
 	BuildingEntity* core;
 
-	float worldWidth, worldHeight, generatorCoreScale
+	float worldWidth, worldHeight
 		, Delay = 0.0f;
 	Vector3 ghostPos, ghostScale;
 	double time, dayDuration;

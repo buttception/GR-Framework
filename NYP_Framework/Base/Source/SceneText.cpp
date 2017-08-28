@@ -33,6 +33,7 @@
 #include "Minimap.h"
 
 SceneText* SceneText::sInstance = new SceneText(SceneManager::GetInstance());
+float SceneText::generatorCoreScale = 1.98f;
 
 SceneText::SceneText()
 {
@@ -282,7 +283,7 @@ void SceneText::Init()
 	dayDuration = 180.f;
 	time = dayDuration;
 	noOfDays = 1;
-	generatorCoreScale = 1.98f;
+	
 	ghostPos.SetZero();
 	ghostScale.SetZero();
 	//CSoundEngine::GetInstance()->playthesound("HELLO", 0.2f);
@@ -430,9 +431,6 @@ void SceneText::Update(double dt)
 		// decrease generator core health
 		generatorCoreScale = Math::Max(0.f, generatorCoreScale - 0.198f);
 		core->SetHealth(core->GetHealth() - 10);
-		
-		if (core->GetHealth() <= 0)
-			core->SetIsDone(true);
 	}
 	if (KeyboardController::GetInstance()->IsKeyPressed(VK_F6))
 		Player::GetInstance()->fatigue = Player::FATIGUE::TIRED;
@@ -444,7 +442,10 @@ void SceneText::Update(double dt)
 		Player::GetInstance()->SetSlept(false);
 	if (KeyboardController::GetInstance()->IsKeyPressed(VK_F10))
 		Player::GetInstance()->SetSlept(true);
-	
+
+	if (core->GetHealth() <= 0)
+		core->SetIsDone(true);
+
 	//day night shift
 	time -= dt;
 	if ((time <= 0.00 || Player::GetInstance()->GetSlept()) && isDay)

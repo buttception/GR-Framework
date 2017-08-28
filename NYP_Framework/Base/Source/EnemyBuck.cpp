@@ -3,6 +3,7 @@
 #include "EnemyManager.h"
 #include "../Source/Sound_Engine.h"
 #include "PlayerInfo\PlayerInfo.h"
+#include "SceneText.h"
 
 EnemyBuck::EnemyBuck(std::string _meshName, Vector3 position) : EnemyEntity(_meshName)
 {
@@ -160,6 +161,8 @@ void EnemyBuck::Attack(GenericEntity * thatEntity, double dt)
 					// damage the building
 					building->SetHealth(building->GetHealth() - damage);
 					std::cout << "building health: " << building->GetHealth() << std::endl;
+					if (building->type == BuildingEntity::BUILDING_CORE)
+						SceneText::generatorCoreScale = Math::Max(0.f, SceneText::generatorCoreScale - 0.198f);
 					// check if the building is dead
 					if (building->GetHealth() <= 0) {
 						//destroy the building
