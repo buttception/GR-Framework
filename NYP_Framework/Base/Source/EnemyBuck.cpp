@@ -19,7 +19,7 @@ void EnemyBuck::Init()
 	speed = 5.f;
 	health = 1000;
 	damage = 30;
-	size = 8.f;
+	size = 15.f;
 	scale.Set(size, size, size);
 	attackSpeed = 1.f;
 	optimalRoute.push(Vector3(MAX_CELLS * CELL_SIZE / 2, 0, MAX_CELLS * CELL_SIZE / 2));

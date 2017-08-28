@@ -86,6 +86,7 @@ void BuildingTile::AddFloor(BuildingEntity * entity)
 	if (entity->type != BuildingEntity::BUILDING_FLOOR)
 		return;
 	floor = entity;
+	entity->tile = this;
 	EntityManager::GetInstance()->AddEntity(floor);
 	CSoundEngine::GetInstance()->playsinglesound("Floor", 0.4f);
 }
@@ -103,6 +104,7 @@ void BuildingTile::AddEquipment(EquipmentEntity * entity)
 		return;
 	}
 	equipment = entity;
+	entity->tile = this;
 	EntityManager::GetInstance()->AddEntity(equipment);
 }
 

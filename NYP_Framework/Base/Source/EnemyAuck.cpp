@@ -188,6 +188,7 @@ void EnemyAuck::Attack(GenericEntity * thatEntity, double dt)
 					if (entity = dynamic_cast<GenericEntity*>(it)) {
 						EnemyEntity* e;
 						BuildingEntity* b;
+						EquipmentEntity* eq;
 						switch (entity->objectType) {
 						case ENEMY:
 							if ((position - entity->GetPosition()).LengthSquared() < range * range) {
@@ -206,7 +207,6 @@ void EnemyAuck::Attack(GenericEntity * thatEntity, double dt)
 								if (b = dynamic_cast<BuildingEntity*>(entity)) {
 									b->SetHealth(b->GetHealth() - damage);
 									if (b->GetHealth() <= 0) {
-										b->SetIsDone(true);
 										if (b->type != BuildingEntity::BUILDING_CORE) {
 											if (b->tile->leftWall == b) {
 												b->tile->leftWall = nullptr;
@@ -220,6 +220,7 @@ void EnemyAuck::Attack(GenericEntity * thatEntity, double dt)
 											else if (b->tile->bottomWall == b) {
 												b->tile->bottomWall = nullptr;
 											}
+										b->SetIsDone(true);
 										}
 									}
 								}
@@ -227,13 +228,13 @@ void EnemyAuck::Attack(GenericEntity * thatEntity, double dt)
 						break;
 						case EQUIPMENT:
 							if ((position - entity->GetPosition()).LengthSquared() < range * range) {
-								if (b = dynamic_cast<BuildingEntity*>(entity)) {
-									b->SetHealth(b->GetHealth() - damage);
-									EquipmentEntity* temp = dynamic_cast<EquipmentEntity*>(b);
-									if (b->GetHealth() <= 0) {
-										b->SetIsDone(true);
-										if (b->tile->equipment == temp) {
-											b->tile->equipment = nullptr;
+								if (eq = dynamic_cast<EquipmentEntity*>(entity)) {
+									eq->SetHealth(eq->GetHealth() - damage);
+									EquipmentEntity* temp = dynamic_cast<EquipmentEntity*>(eq);
+									if (eq->GetHealth() <= 0) {
+										eq->SetIsDone(true);
+										if (eq->tile->equipment == temp) {
+											eq->tile->equipment = nullptr;
 										}
 									}
 								}

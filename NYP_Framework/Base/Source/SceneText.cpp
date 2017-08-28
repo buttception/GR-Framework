@@ -166,10 +166,10 @@ void SceneText::Init()
 	MeshBuilder::GetInstance()->GenerateOBJ("floor", "OBJ//cube.obj"); //remember to change texture
 
 	//Equipment Meshes
-	MeshBuilder::GetInstance()->GenerateOBJ("Turret", "OBJ//equipmentCube.obj"); //remember to change obj
-	MeshBuilder::GetInstance()->GenerateOBJ("Healing Station", "OBJ//equipmentCube.obj");
+	MeshBuilder::GetInstance()->GenerateOBJ("Turret", "OBJ//turret.obj"); //remember to change obj
+	MeshBuilder::GetInstance()->GenerateOBJ("Healing Station", "OBJ//healStation.obj");
 	MeshList::GetInstance()->GetMesh("Healing Station")->textureID[0] = LoadTGA("Image//Equipment//Heal_Active.tga");
-	MeshBuilder::GetInstance()->GenerateOBJ("Floor Spike", "OBJ//equipmentCube.obj");
+	MeshBuilder::GetInstance()->GenerateOBJ("Floor Spike", "OBJ//spike.obj");
 	MeshList::GetInstance()->GetMesh("Floor Spike")->textureID[0] = LoadTGA("Image//Equipment//Spike.tga");
 	MeshBuilder::GetInstance()->GenerateOBJ("Shield", "OBJ//equipmentCube.obj"); //remember to change obj
 
@@ -245,6 +245,8 @@ void SceneText::Init()
 	//groundEntity->SetGrids(Vector3(1.f, 1.0f, 1.f));
 	ground = MeshBuilder::GetInstance()->GenerateGround("ground", Color(1, 1, 1), 1.f);
 	ground->textureID[0] = LoadTGA("Image//grass_lightgreen.tga");
+	background = MeshBuilder::GetInstance()->GenerateGround("background", Color(1, 1, 1), 1.f);
+	background->textureID[0] = LoadTGA("Image//water.tga");
 
 
 	// Setup the 2D entities
@@ -370,14 +372,14 @@ void SceneText::Update(double dt)
 		if (!change) {
 			g += dt / dayDuration * 2 * 0.4;
 			if (g > 0.7)
-				b += dt / dayDuration * 8;
+				b += dt / dayDuration * 16;
 			if (g >= 1)
 				change = true;
 		}
 		else {
 			g -= dt / dayDuration * 2 * 0.4;
 			if (g > 0.7)
-				b -= dt / dayDuration * 8;
+				b -= dt / dayDuration * 16;
 		}
 	}
 	else {
@@ -792,7 +794,7 @@ void SceneText::RenderPassGPass()
 	//These matrices should change when light position or direction changes
 	Light* light = dynamic_cast<Light*>(g->GetLight("lights[0]"));
 	if (light->type == Light::LIGHT_DIRECTIONAL) {
-		g->m_lightDepthProj.SetToOrtho(-MAX_CELLS * CELL_SIZE / 2, MAX_CELLS * CELL_SIZE / 2, -MAX_CELLS * CELL_SIZE / 2, MAX_CELLS * CELL_SIZE / 2, -MAX_CELLS * CELL_SIZE, MAX_CELLS * CELL_SIZE * 3);
+		g->m_lightDepthProj.SetToOrtho(-MAX_CELLS * CELL_SIZE / 1.5, MAX_CELLS * CELL_SIZE /  1.5, -MAX_CELLS * CELL_SIZE / 1.5, MAX_CELLS * CELL_SIZE / 1.5, -MAX_CELLS * CELL_SIZE * 2, MAX_CELLS * CELL_SIZE * 4);
 		//g->m_lightDepthProj.SetToOrtho(-100, 100, -100, 100, -100, 100);
 	}
 	else
@@ -912,6 +914,13 @@ void SceneText::RenderWorld()
 	ms.Rotate(-90, 1, 0, 0);
 	ms.Scale(MAX_CELLS * CELL_SIZE, MAX_CELLS * CELL_SIZE, MAX_CELLS * CELL_SIZE);
 	RenderHelper::RenderMeshWithLight(ground);
+	ms.PopMatrix();
+
+	ms.PushMatrix();
+	ms.Translate(MAX_CELLS * CELL_SIZE / 2, -0.1, MAX_CELLS * CELL_SIZE / 2);
+	ms.Rotate(-90, 1, 0, 0);
+	ms.Scale(MAX_CELLS * CELL_SIZE * 2, MAX_CELLS * CELL_SIZE * 2, MAX_CELLS * CELL_SIZE);
+	RenderHelper::RenderMeshWithLight(background);
 	ms.PopMatrix();
 
 	ms.PushMatrix();
