@@ -37,6 +37,8 @@
     <ClCompile Include="Source\main.cpp" />
     <ClCompile Include="Source\Minimap.cpp" />
     <ClCompile Include="Source\OBJMesh.cpp" />
+    <ClCompile Include="Source\ParticleEntity.cpp" />
+    <ClCompile Include="Source\ParticleManager.cpp" />
     <ClCompile Include="Source\PlayerInfo\PlayerInfo.cpp" />
     <ClCompile Include="Source\Projectile\Projectile.cpp" />
     <ClCompile Include="Source\SceneInstructions.cpp" />
@@ -82,6 +84,8 @@
     <ClInclude Include="Source\LoadTextData.h" />
     <ClInclude Include="Source\Minimap.h" />
     <ClInclude Include="Source\OBJMesh.h" />
+    <ClInclude Include="Source\ParticleEntity.h" />
+    <ClInclude Include="Source\ParticleManager.h" />
     <ClInclude Include="Source\PlayerInfo\PlayerInfo.h" />
     <ClInclude Include="Source\Projectile\Projectile.h" />
     <ClInclude Include="Source\SceneInstructions.h" />
