@@ -660,9 +660,6 @@ void SceneText::Update(double dt)
 			case BuildingEntity::BUILDING_WALL:
 				ss << "Current Building: Wall";
 				break;
-			case BuildingEntity::BUILDING_DOOR:
-				ss << "Current Building: Door";
-				break;
 			case BuildingEntity::BUILDING_COVER:
 				ss << "Current Building: Cover";
 				break;
@@ -921,8 +918,8 @@ void SceneText::RenderWorld()
 	RenderHelper::RenderMeshWithLight(Player::GetInstance()->GetMesh());
 	ms.PopMatrix();
 
-	if (isDay) // Only render wireframe box in day time
-	{
+	//if (isDay) // Only render wireframe box in day time
+	//{
 		ms.PushMatrix();
 		ms.Translate(ghostPos.x, ghostPos.y, ghostPos.z);
 		ms.Rotate(-90, 1, 0, 0);
@@ -931,7 +928,7 @@ void SceneText::RenderWorld()
 		RenderHelper::RenderMesh(wireFrameBox);
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		ms.PopMatrix();
-	}
+	//}
 
 	
 	EntityManager::GetInstance()->Render();

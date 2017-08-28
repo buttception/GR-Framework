@@ -60,12 +60,9 @@ int Mouse::Read(const float deltaTime)
 					Player::GetInstance()->SetCurrentBuilding(BuildingEntity::BUILDING_WALL);
 					break;
 				case 2:
-					Player::GetInstance()->SetCurrentBuilding(BuildingEntity::BUILDING_DOOR);
-					break;
-				case 3:
 					Player::GetInstance()->SetCurrentBuilding(BuildingEntity::BUILDING_COVER);
 					break;
-				case 4:
+				case 3:
 					Player::GetInstance()->SetCurrentBuilding(BuildingEntity::BUILDING_FLOOR);
 					break;
 				}
