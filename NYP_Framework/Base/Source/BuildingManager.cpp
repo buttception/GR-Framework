@@ -107,6 +107,7 @@ BuildingEntity* BuildingManager::AddBuilding(int _x, int _y, BuildingTile::TILE_
 	}
 	else if (type == BuildingEntity::BUILDING_CORE)
 	{
+		wall->SetHealth(1900);
 		wall->SetScale(Vector3(CELL_SIZE / 4.f, 5.f, CELL_SIZE / 4.f));
 		wall->SetPosition(Vector3((float)_x * CELL_SIZE + CELL_SIZE / 2.f, 0.1f, (float)_y * CELL_SIZE + CELL_SIZE / 2.f));
 		buildingArray[_x][_y]->AddCore(wall);

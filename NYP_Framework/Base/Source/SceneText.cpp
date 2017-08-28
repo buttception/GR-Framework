@@ -33,7 +33,6 @@
 #include "Minimap.h"
 
 SceneText* SceneText::sInstance = new SceneText(SceneManager::GetInstance());
-float SceneText::generatorCoreScale = 1.98f;
 
 SceneText::SceneText()
 {
@@ -54,8 +53,6 @@ SceneText::~SceneText()
 void SceneText::Init()
 {
 	currProg = GraphicsManager::GetInstance()->LoadShader("default", "Shader//Shadow.vertexshader", "Shader//Shadow.fragmentshader");
-	
-
 
 	// Tell the shader program to store these uniform locations
 	currProg->AddUniform("MVP");
@@ -427,9 +424,6 @@ void SceneText::Update(double dt)
 		isDay = true;
 		time = dayDuration;
 		noOfDays++;
-
-		// decrease generator core health
-		generatorCoreScale = Math::Max(0.f, generatorCoreScale - 0.198f);
 		core->SetHealth(core->GetHealth() - 10);
 	}
 	if (KeyboardController::GetInstance()->IsKeyPressed(VK_F6))
@@ -458,7 +452,7 @@ void SceneText::Update(double dt)
 		isDay = false;
 	}
 	//if a day(day and night) past,but no sleep
-	if (!isDay && !Player::GetInstance()->GetSlept() && time <= 0.01)
+	if (!isDay && !Player::GetInstance()->GetSlept() && time <= 0.001)
 	{
 		switch (Player::GetInstance()->fatigue)
 		{
@@ -872,7 +866,7 @@ void SceneText::RenderPassMain()
 
 	ms.PushMatrix();
 	ms.Translate(0, (float)halfWindowHeight * 0.98f, 0);
-	ms.Scale((float)halfWindowWidth * generatorCoreScale, 10.f, 0);
+	ms.Scale(core->GetHealth(), 10.f, 0);
 	RenderHelper::RenderMesh(generatorCoreHealthBar);
 	ms.PopMatrix();
 
