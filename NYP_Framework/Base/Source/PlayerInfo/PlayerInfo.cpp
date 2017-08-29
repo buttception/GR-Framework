@@ -1144,7 +1144,8 @@ void Player::CollisionResponse(GenericEntity *thatEntity)
 	   break;
 	case PROJECTILE:{
 		Projectile* p = dynamic_cast<Projectile*>(thatEntity);
-		ParticleManager::GetInstance()->GenerateBlood(position);
+		if (p->source == Projectile::ENEMY_SOURCE)
+			ParticleManager::GetInstance()->GenerateBlood(position);
 		if (p) {
 			switch (p->source) {
 			case Projectile::ENEMY_SOURCE:

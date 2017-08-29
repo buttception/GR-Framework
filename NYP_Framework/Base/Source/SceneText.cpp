@@ -195,7 +195,8 @@ void SceneText::Init()
 	MeshBuilder::GetInstance()->GenerateOBJ("Auck", "OBJ//cube.obj");
 	MeshBuilder::GetInstance()->GenerateOBJ("Buck", "OBJ//cube.obj");
 
-	sun = MeshBuilder::GetInstance()->GenerateSphere("sphere", Color(1, 1, 1), 24, 24, 1);
+	MeshBuilder::GetInstance()->GenerateSphere("sphere", Color(1, 1, 1), 24, 24, 1.f);
+	MeshList::GetInstance()->GetMesh("sphere")->textureID[0] = LoadTGA("Image//Yellow.tga");
 	MeshBuilder::GetInstance()->GenerateSphere("blood", Color(1, 0, 0), 24, 24, 1);
 	MeshBuilder::GetInstance()->GenerateSphere("explosion", Color(1, 1, 0), 24, 24, 1);
 	generatorCoreHealthBar = MeshBuilder::GetInstance()->GenerateQuad("generatorCoreHealthBar", Color(1, 0, 0), 1.f);
