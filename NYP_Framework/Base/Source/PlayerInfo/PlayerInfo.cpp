@@ -314,9 +314,9 @@ void Player::changeSecondaryWeapon(int weaponID)
 	switch (weaponID)
 	{
 	case 1:
-		std::cout << weaponList.size() << std::endl;
-	/*	weaponManager[2] = weaponList[1];
-		weaponManager[2]->Init();*/
+		//std::cout << weaponList.size() << std::endl;
+		weaponManager[2] = weaponList[1];
+		weaponManager[2]->Init();
 		break;
 	case 2:
 		weaponManager[2] = weaponList[2];

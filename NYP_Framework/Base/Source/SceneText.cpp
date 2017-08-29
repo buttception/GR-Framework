@@ -959,7 +959,7 @@ void SceneText::RenderPassMain()
 		ms.Translate((float)halfWindowWidth * 0.88f, (float)halfWindowHeight * -0.78f, 0);
 		ms.Translate(0.f, 0.f, 0.f);
 		ms.Scale((float)Application::GetInstance().GetWindowWidth() * 0.08f, (float)Application::GetInstance().GetWindowHeight() * 0.06f, 0.f);
-		RenderHelper::RenderMesh(railgun);
+		RenderHelper::RenderMesh(machinegun);
 		ms.PopMatrix();
 		break;
 	case 7:
@@ -967,9 +967,9 @@ void SceneText::RenderPassMain()
 		ms.Translate((float)halfWindowWidth * 0.88f, (float)halfWindowHeight * -0.78f, 0);
 		ms.Translate(0.f, 0.f, 0.f);
 		ms.Scale((float)Application::GetInstance().GetWindowWidth() * 0.08f, (float)Application::GetInstance().GetWindowHeight() * 0.06f, 0.f);
-		RenderHelper::RenderMesh(machinegun);
+		RenderHelper::RenderMesh(railgun);
 		ms.PopMatrix();
-		break;
+		break;	
 	case 8:
 		ms.PushMatrix();
 		ms.Translate((float)halfWindowWidth * 0.88f, (float)halfWindowHeight * -0.78f, 0);
