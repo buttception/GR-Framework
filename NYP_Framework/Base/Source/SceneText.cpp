@@ -158,7 +158,8 @@ void SceneText::Init()
 	MeshList::GetInstance()->GetMesh("GRASS_LIGHTGREEN")->textureID[0] = LoadTGA("Image//grass_lightgreen.tga");
 
 	//Building Meshes
-	MeshBuilder::GetInstance()->GenerateOBJ("core", "OBJ//cube.obj");
+	MeshBuilder::GetInstance()->GenerateOBJ("core", "OBJ//core.obj");
+	MeshList::GetInstance()->GetMesh("core")->textureID[0] = LoadTGA("Image//Green.tga");
 	MeshBuilder::GetInstance()->GenerateOBJ("wall", "OBJ//cube.obj");
 	MeshList::GetInstance()->GetMesh("wall")->textureID[0] = LoadTGA("image//wall.tga");
 	MeshBuilder::GetInstance()->GenerateOBJ("cover", "OBJ//cube.obj"); //remember to change obj
@@ -182,7 +183,6 @@ void SceneText::Init()
 	MeshList::GetInstance()->GetMesh("sunMoon")->textureID[0] = LoadTGA("Image//sunMoon.tga");
 	MeshBuilder::GetInstance()->GenerateQuad("calendar", Color(1, 1, 1), 1.f);
 	MeshList::GetInstance()->GetMesh("calendar")->textureID[0] = LoadTGA("Image//wood.tga");
-
 	//Shop
 	/*MeshBuilder::GetInstance()->GenerateQuad("Shop", Color(1, 1, 1), 1.f);
 	MeshList::GetInstance()->GetMesh("Shop")->textureID[0] = LoadTGA("Image//towertab.tga");*/

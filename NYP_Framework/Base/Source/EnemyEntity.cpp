@@ -77,10 +77,8 @@ float EnemyEntity::GetSpeed()
 void EnemyEntity::Reset()
 {
 	attacking = false;
-	while (!stateStack.empty())
-		stateStack.pop();
-	if (!optimalRoute.empty())
-		optimalRoute.pop();
+	stateStack = std::stack<STATE_TYPE>();
+	optimalRoute = std::stack<Vector3>();
 	if (!possibleRoutes.empty())
 		possibleRoutes.clear();
 	attackElaspedTime = 0;
