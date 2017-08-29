@@ -198,9 +198,37 @@ void SceneText::Init()
 	playerHealthBar = MeshBuilder::GetInstance()->GenerateQuad("playerHealthBar", Color(1, 0.64706f, 0), 1.f);
 	wireFrameBox = MeshBuilder::GetInstance()->GenerateQuad("wireFrameBox", Color(1, 0, 0), 1.f);
 
-	//Building,Equipment,Weapon UI
-	BEW_UI = MeshBuilder::GetInstance()->GenerateQuad("BEW_UI", Color(1, 1, 1), 1.0f);
-	BEW_UI->textureID[0] = LoadTGA("Image//weapon//pistol.tga");
+	// current weapon UI
+
+	pistol = MeshBuilder::GetInstance()->GenerateQuad("pistol", Color(1, 1, 1), 1.0f);
+	pistol->textureID[0] = LoadTGA("Image//weapon//pistol.tga");
+
+	rifle = MeshBuilder::GetInstance()->GenerateQuad("rifle", Color(1, 1, 1), 1.0f);
+	rifle->textureID[0] = LoadTGA("Image//weapon//rifle.tga");
+
+	sniper = MeshBuilder::GetInstance()->GenerateQuad("sniper", Color(1, 1, 1), 1.0f);
+	sniper->textureID[0] = LoadTGA("Image//weapon//sniper.tga");
+
+	machinegun = MeshBuilder::GetInstance()->GenerateQuad("machinegun", Color(1, 1, 1), 1.0f);
+	machinegun->textureID[0] = LoadTGA("Image//weapon//machinegun.tga");
+
+	railgun = MeshBuilder::GetInstance()->GenerateQuad("railgun", Color(1, 1, 1), 1.0f);
+	railgun->textureID[0] = LoadTGA("Image//weapon//railgun.tga");
+
+	rocketlauncher = MeshBuilder::GetInstance()->GenerateQuad("rocketlauncher", Color(1, 1, 1), 1.0f);
+	rocketlauncher->textureID[0] = LoadTGA("Image//weapon//rocketlauncher.tga");
+
+	nailgun = MeshBuilder::GetInstance()->GenerateQuad("nailgun", Color(1, 1, 1), 1.0f);
+	nailgun->textureID[0] = LoadTGA("Image//weapon//nailgun.tga");
+
+	gravitygun = MeshBuilder::GetInstance()->GenerateQuad("gravitygun", Color(1, 1, 1), 1.0f);
+	gravitygun->textureID[0] = LoadTGA("Image//weapon//gravitygun.tga");
+
+	chickengun = MeshBuilder::GetInstance()->GenerateQuad("chickengun", Color(1, 1, 1), 1.0f);
+	chickengun->textureID[0] = LoadTGA("Image//weapon//chickengun.tga");
+
+	redquad = MeshBuilder::GetInstance()->GenerateQuad("redquad", Color(1, 1, 1), 1.0f);
+	redquad->textureID[0] = LoadTGA("Image//Red.tga");
 
 	//Minimap
 	theMiniMap = Create::Minimap();
@@ -616,36 +644,6 @@ void SceneText::Update(double dt)
 	//}
 	// <THERE>
 
-	switch (Player::GetInstance()->CurrentWeaponID())
-	{
-	case 1:
-		BEW_UI->textureID[0] = LoadTGA("Image//weapon//pistol.tga");
-		break;
-	case 2:
-		BEW_UI->textureID[0] = LoadTGA("Image//weapon//rifle.tga");
-		break;
-	case 3:
-		BEW_UI->textureID[0] = LoadTGA("Image//weapon//sniper.tga");
-		break;
-	case 4:
-		BEW_UI->textureID[0] = LoadTGA("Image//weapon//nailgun.tga");
-		break;
-	case 5:
-		BEW_UI->textureID[0] = LoadTGA("Image//weapon//rocketlauncher.tga");
-		break;
-	case 6:
-		BEW_UI->textureID[0] = LoadTGA("Image//weapon//machinegun.tga");
-		break;
-	case 7:
-		BEW_UI->textureID[0] = LoadTGA("Image//weapon//railgun.tga");
-		break;
-	case 8:
-		BEW_UI->textureID[0] = LoadTGA("Image//weapon//gravitygun.tga");
-		break;
-	case 9:
-		BEW_UI->textureID[0] = LoadTGA("Image//weapon//chickengun.tga");
-		break;
-	}
 	// Update the player position and other details based on keyboard and mouse inputs
 	Player::GetInstance()->Update(dt);
 
@@ -754,7 +752,9 @@ void SceneText::Update(double dt)
 
 	Delay += (float)dt;
 	if (Delay > 0.5f)
+	{
 		Delay = 0.5f;
+	}
 
 	if (KeyboardController::GetInstance()->IsKeyDown('P') && Delay >= ButtonCooldown)
 	{
@@ -772,6 +772,12 @@ void SceneText::Update(double dt)
 	{
 		Render_Quad = false;
 		std::cout << "Shop not Rendered" << std::endl;
+	}
+
+	if (KeyboardController::GetInstance()->IsKeyDown('Z') && Render_Quad)
+	{
+		std::cout << "hi" << std::endl;
+		Player::GetInstance()->changeSecondaryWeapon(1);
 	}
 }
 
@@ -914,7 +920,7 @@ void SceneText::RenderPassMain()
 	RenderHelper::RenderMesh(MeshList::GetInstance()->GetMesh("sunMoon"));
 	ms.PopMatrix();
 
-	if (Render_Quad)
+	if (Render_Quad == true)
 	{
 		ms.PushMatrix();
 		//ms.Translate((float)-halfWindowWidth, (float)halfWindowHeight * 0.92f, 0.f);
@@ -924,13 +930,82 @@ void SceneText::RenderPassMain()
 		ms.PopMatrix();
 	}
 
-	//Building,Equipment,Weapon UI
-	ms.PushMatrix();
-	ms.Translate((float)halfWindowWidth * 0.88f, (float)halfWindowHeight * -0.78f, 0);
-	ms.Translate(0.f, 0.f, 0.f);
-	ms.Scale((float)Application::GetInstance().GetWindowWidth() * 0.08f, (float)Application::GetInstance().GetWindowHeight() * 0.06f, 0.f);
-	RenderHelper::RenderMesh(BEW_UI);
-	ms.PopMatrix();
+	switch (Player::GetInstance()->CurrentWeaponID())
+	{
+	case 1:
+		ms.PushMatrix();
+		ms.Translate((float)halfWindowWidth * 0.88f, (float)halfWindowHeight * -0.78f, 0);
+		ms.Translate(0.f, 0.f, 0.f);
+		ms.Scale((float)Application::GetInstance().GetWindowWidth() * 0.08f, (float)Application::GetInstance().GetWindowHeight() * 0.06f, 0.f);
+		RenderHelper::RenderMesh(pistol);
+		ms.PopMatrix();
+		break;
+	case 2:
+		ms.PushMatrix();
+		ms.Translate((float)halfWindowWidth * 0.88f, (float)halfWindowHeight * -0.78f, 0);
+		ms.Translate(0.f, 0.f, 0.f);
+		ms.Scale((float)Application::GetInstance().GetWindowWidth() * 0.08f, (float)Application::GetInstance().GetWindowHeight() * 0.06f, 0.f);
+		RenderHelper::RenderMesh(rifle);
+		ms.PopMatrix();
+		break;
+	case 3:
+		ms.PushMatrix();
+		ms.Translate((float)halfWindowWidth * 0.88f, (float)halfWindowHeight * -0.78f, 0);
+		ms.Translate(0.f, 0.f, 0.f);
+		ms.Scale((float)Application::GetInstance().GetWindowWidth() * 0.08f, (float)Application::GetInstance().GetWindowHeight() * 0.06f, 0.f);
+		RenderHelper::RenderMesh(sniper);
+		ms.PopMatrix();
+		break;
+	case 4:
+		ms.PushMatrix();
+		ms.Translate((float)halfWindowWidth * 0.88f, (float)halfWindowHeight * -0.78f, 0);
+		ms.Translate(0.f, 0.f, 0.f);
+		ms.Scale((float)Application::GetInstance().GetWindowWidth() * 0.08f, (float)Application::GetInstance().GetWindowHeight() * 0.06f, 0.f);
+		RenderHelper::RenderMesh(nailgun);
+		ms.PopMatrix();
+		break;
+	case 5:
+		ms.PushMatrix();
+		ms.Translate((float)halfWindowWidth * 0.88f, (float)halfWindowHeight * -0.78f, 0);
+		ms.Translate(0.f, 0.f, 0.f);
+		ms.Scale((float)Application::GetInstance().GetWindowWidth() * 0.08f, (float)Application::GetInstance().GetWindowHeight() * 0.06f, 0.f);
+		RenderHelper::RenderMesh(rocketlauncher);
+		ms.PopMatrix();
+		break;
+	case 6:
+		ms.PushMatrix();
+		ms.Translate((float)halfWindowWidth * 0.88f, (float)halfWindowHeight * -0.78f, 0);
+		ms.Translate(0.f, 0.f, 0.f);
+		ms.Scale((float)Application::GetInstance().GetWindowWidth() * 0.08f, (float)Application::GetInstance().GetWindowHeight() * 0.06f, 0.f);
+		RenderHelper::RenderMesh(machinegun);
+		ms.PopMatrix();
+		break;
+	case 7:
+		ms.PushMatrix();
+		ms.Translate((float)halfWindowWidth * 0.88f, (float)halfWindowHeight * -0.78f, 0);
+		ms.Translate(0.f, 0.f, 0.f);
+		ms.Scale((float)Application::GetInstance().GetWindowWidth() * 0.08f, (float)Application::GetInstance().GetWindowHeight() * 0.06f, 0.f);
+		RenderHelper::RenderMesh(railgun);
+		ms.PopMatrix();
+		break;	
+	case 8:
+		ms.PushMatrix();
+		ms.Translate((float)halfWindowWidth * 0.88f, (float)halfWindowHeight * -0.78f, 0);
+		ms.Translate(0.f, 0.f, 0.f);
+		ms.Scale((float)Application::GetInstance().GetWindowWidth() * 0.08f, (float)Application::GetInstance().GetWindowHeight() * 0.06f, 0.f);
+		RenderHelper::RenderMesh(gravitygun);
+		ms.PopMatrix();
+		break;
+	case 9:
+		ms.PushMatrix();
+		ms.Translate((float)halfWindowWidth * 0.88f, (float)halfWindowHeight * -0.78f, 0);
+		ms.Translate(0.f, 0.f, 0.f);
+		ms.Scale((float)Application::GetInstance().GetWindowWidth() * 0.08f, (float)Application::GetInstance().GetWindowHeight() * 0.06f, 0.f);
+		RenderHelper::RenderMesh(chickengun);
+		ms.PopMatrix();
+		break;
+
+	}
 	
 	if (Player::GetInstance()->Render_Another_qUAD)
 	{
@@ -938,7 +1013,9 @@ void SceneText::RenderPassMain()
 		ms.Scale((float)Application::GetInstance().GetWindowWidth() * 0.75f, (float)Application::GetInstance().GetWindowHeight() * 0.75f, 0.f);
 		RenderHelper::RenderMesh(Constrain);
 		ms.PopMatrix();
+
 	}
+
 
 	//RenderHelper::RenderTextOnScreen(text, std::to_string(fps), Color(0, 1, 0), 2, 0, 0);
 	glEnable(GL_DEPTH_TEST);
