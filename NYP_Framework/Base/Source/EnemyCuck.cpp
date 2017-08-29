@@ -208,9 +208,6 @@ void EnemyCuck::Attack(GenericEntity * thatEntity, double dt)
 				else
 					target = nullptr;
 			}
-			else if (thatEntity->objectType == PLAYER) {
-				Player::GetInstance()->SetPlayerHealth(Player::GetInstance()->GetPlayerHealth() - damage);
-			}
 			else {
 				if (stateStack.top() == CHASE_STATE)
 					target = Player::GetInstance();
