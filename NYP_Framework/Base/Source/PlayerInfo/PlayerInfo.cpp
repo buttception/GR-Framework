@@ -1047,18 +1047,21 @@ bool Player::Interact()
 			// Floor
 			if (isBuilding && currentBuilding == BuildingEntity::BUILDING_FLOOR)
 			{
-				BuildingTile* tile = BuildingManager::GetInstance()->GetBuildingArray()[(int)(250 / CELL_SIZE)][(int)(250 / CELL_SIZE)];
-				if (tile->floor != nullptr)
+				if (x == (int)(250 / CELL_SIZE) && z == (int)(250 / CELL_SIZE))
 				{
-					slept = true;
-					//CSoundEngine::GetInstance()->playthesound("Remove", 0.2f);
-					//std::cout << "Remove Sound Played" << std::endl;
+					BuildingTile* tile = BuildingManager::GetInstance()->GetBuildingArray()[(int)(250 / CELL_SIZE)][(int)(250 / CELL_SIZE)];
+					if (tile->floor != nullptr)
+					{
+						slept = true;
+						//CSoundEngine::GetInstance()->playthesound("Remove", 0.2f);
+						//std::cout << "Remove Sound Played" << std::endl;
+					}
+					//else
+					//{
+					//	CSoundEngine::GetInstance()->playsinglesound("NULL", 0.2f);
+					//	std::cout << "Null Sound Played" << std::endl;
+					//}
 				}
-				//else
-				//{
-				//	CSoundEngine::GetInstance()->playsinglesound("NULL", 0.2f);
-				//	std::cout << "Null Sound Played" << std::endl;
-				//}
 			}
 			else if (isEquipment)
 			{
@@ -1071,6 +1074,8 @@ bool Player::Interact()
 						if (Player::GetInstance()->GetMaterial() >= 400)
 						{
 							tile->equipment->SetLevel(2);
+							if (tile->equipment->type == EquipmentEntity::EQUIPMENT_TURRET)
+								tile->equipment->SetHealth(150);
 							Player::GetInstance()->SetMaterial(Math::Max(0, Player::GetInstance()->GetMaterial() - 400));
 						}
 						break;
@@ -1078,6 +1083,8 @@ bool Player::Interact()
 						if (Player::GetInstance()->GetMaterial() >= 600)
 						{
 							tile->equipment->SetLevel(3);
+							if(tile->equipment->type == EquipmentEntity::EQUIPMENT_TURRET)
+								tile->equipment->SetHealth(200);
 							Player::GetInstance()->SetMaterial(Math::Max(0, Player::GetInstance()->GetMaterial() - 600));
 						}
 						break;

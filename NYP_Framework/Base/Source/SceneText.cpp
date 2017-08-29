@@ -179,7 +179,9 @@ void SceneText::Init()
 	//Calendar Mesh
 	MeshBuilder::GetInstance()->GenerateQuad("sunMoon", Color(1, 1, 1), 1.f);
 	MeshList::GetInstance()->GetMesh("sunMoon")->textureID[0] = LoadTGA("Image//sunMoon.tga");
-	
+	MeshBuilder::GetInstance()->GenerateQuad("calendar", Color(1, 1, 1), 1.f);
+	MeshList::GetInstance()->GetMesh("calendar")->textureID[0] = LoadTGA("Image//wood.tga");
+
 	//Shop
 	/*MeshBuilder::GetInstance()->GenerateQuad("Shop", Color(1, 1, 1), 1.f);
 	MeshList::GetInstance()->GetMesh("Shop")->textureID[0] = LoadTGA("Image//towertab.tga");*/
@@ -203,8 +205,7 @@ void SceneText::Init()
 	playerHealthBar = MeshBuilder::GetInstance()->GenerateQuad("playerHealthBar", Color(1, 0.64706f, 0), 1.f);
 	wireFrameBox = MeshBuilder::GetInstance()->GenerateQuad("wireFrameBox", Color(1, 0, 0), 1.f);
 
-	// current weapon UI
-
+	// Building,Equipment,Weapon UI
 	BEW_UI = MeshBuilder::GetInstance()->GenerateQuad("pistol", Color(1, 1, 1), 1.0f);
 	BEW_UI->textureID[0] = LoadTGA("Image//weapon//pistol.tga");
 
@@ -699,7 +700,8 @@ void SceneText::Update(double dt)
 		ss << noOfDays << "th";
 		break;
 	}
-	textObj[2]->SetPosition(Vector3(halfWindowWidth - 30.f, halfWindowHeight * 0.4f, 0.0f));
+	textObj[2]->SetPosition(Vector3(-20.f, halfWindowHeight * 0.865f, 0.0f));
+	textObj[2]->SetScale(Vector3(40, 40, 40));
 	textObj[2]->SetText(ss.str());
 
 	ss.str("");
@@ -737,9 +739,6 @@ void SceneText::Update(double dt)
 				break;
 			case EquipmentEntity::EQUIPMENT_FLOOR_SPIKE:
 				ss << "Current Equipment: Floor Spike";
-				break;
-			case EquipmentEntity::EQUIPMENT_SHIELD:
-				ss << "Current Equipment: Shield";
 				break;
 			}
 		}
@@ -896,6 +895,21 @@ void SceneText::RenderPassMain()
 	GraphicsManager::GetInstance()->DetachCamera();
 
 	glDisable(GL_DEPTH_TEST);
+
+	ms.PushMatrix();
+	ms.Translate(0.f, (float)halfWindowHeight * 0.775f, 0.f);
+	ms.Rotate(180.f + 135.f, 0, 0, -1);
+	ms.Rotate((calendarTime - 180.f), 0, 0, -1);
+	ms.Scale(130.f, 130.f, 0.f);
+	RenderHelper::RenderMesh(MeshList::GetInstance()->GetMesh("sunMoon"));
+	ms.PopMatrix();
+
+	ms.PushMatrix();
+	ms.Translate(0.f, (float)halfWindowHeight * 0.865f, 0.f);
+	ms.Scale(200.f, 100.f, 0.f);
+	RenderHelper::RenderMesh(MeshList::GetInstance()->GetMesh("calendar"));
+	ms.PopMatrix();
+
 	EntityManager::GetInstance()->RenderUI();
 	theMiniMap->Init(halfWindowHeight, halfWindowWidth);
 	theMiniMap->RenderUI();
@@ -916,14 +930,6 @@ void SceneText::RenderPassMain()
 	ms.Translate((float)-halfWindowWidth + 50.f, (float)halfWindowHeight * 0.82f, 0.f);
 	ms.Scale(50.f, 50.f, 0.f);
 	RenderHelper::RenderMesh(MeshList::GetInstance()->GetMesh("Fatigue"));
-	ms.PopMatrix();
-
-	ms.PushMatrix();
-	ms.Translate((float)halfWindowWidth, (float)halfWindowHeight * 0.4f, 0.f);
-	ms.Rotate(180.f + 45.f, 0, 0, -1);
-	ms.Rotate(calendarTime, 0, 0, -1);
-	ms.Scale(130.f, 130.f, 0.f);
-	RenderHelper::RenderMesh(MeshList::GetInstance()->GetMesh("sunMoon"));
 	ms.PopMatrix();
 
 	if (Render_Quad)

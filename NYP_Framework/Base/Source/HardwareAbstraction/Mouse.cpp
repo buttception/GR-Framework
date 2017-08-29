@@ -80,9 +80,6 @@ int Mouse::Read(const float deltaTime)
 				case 3:
 					Player::GetInstance()->SetCurrentEquipment(EquipmentEntity::EQUIPMENT_FLOOR_SPIKE);
 					break;
-				case 4:
-					Player::GetInstance()->SetCurrentEquipment(EquipmentEntity::EQUIPMENT_SHIELD);
-					break;
 				}
 			}
 			else if (Player::GetInstance()->GetIsWeapon())
