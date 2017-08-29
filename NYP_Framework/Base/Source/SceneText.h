@@ -36,6 +36,14 @@ public:
 
 	static bool isDay;
 	bool Render_Quad = false;
+
+	enum Menu
+	{
+		Return,
+		Exit_to_Main_Menu,
+	};
+	
+	Vector3 arrowPosition;
 private:
 	SceneText(SceneManager* _sceneMgr); // This is used to register to SceneManager
 	
@@ -55,6 +63,10 @@ private:
 	void RenderPassMain();//MAIN RENDER PASS
 	void RenderWorld();
 
+	bool b_Return;
+	bool b_Exit_to_Main_Menu;
+	Menu SelectedOptions = Return;
+
 	Mesh* ground;
 	Mesh* background;
 	Mesh* sun;
@@ -66,7 +78,11 @@ private:
 	Mesh* BEW_UI; //Building,Equipment,Weapon UI
 	Mesh* redquad;
 	Mesh* Constrain;
+	Mesh* MainMenu;
+	Mesh* Arrow;
 	CMinimap* theMiniMap;
+
+	bool pause;
 
 	BuildingEntity* core;
 
@@ -74,6 +90,7 @@ private:
 	Vector3 ghostPos, ghostScale;
 	double time, dayDuration, calendarTime;
 	int noOfDays;
+	float delay;
 	const float ButtonCooldown = 0.20f;
 
 

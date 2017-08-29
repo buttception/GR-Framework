@@ -55,6 +55,8 @@ void SceneText::Init()
 {
 	currProg = GraphicsManager::GetInstance()->LoadShader("default", "Shader//Shadow.vertexshader", "Shader//Shadow.fragmentshader");
 
+
+	pause = false;
 	// Tell the shader program to store these uniform locations
 	currProg->AddUniform("MVP");
 	currProg->AddUniform("MV");
@@ -213,6 +215,7 @@ void SceneText::Init()
 	redquad = MeshBuilder::GetInstance()->GenerateQuad("redquad", Color(1, 1, 1), 1.0f);
 	redquad->textureID[0] = LoadTGA("Image//Red.tga");
 
+
 	//Minimap
 	theMiniMap = Create::Minimap();
 	theMiniMap->SetTarget(MeshBuilder::GetInstance()->GenerateQuad("miniMapTarget", Color(1, 1, 1), 0.0625f));
@@ -278,6 +281,16 @@ void SceneText::Init()
 		textObj[i] = Create::Text2DObject("text", Vector3(-halfWindowWidth, -halfWindowHeight + fontSize*i + halfFontSize, 0.0f), "", Vector3(fontSize, fontSize, fontSize), Color(0.0f,1.0f,0.0f));
 	}
 
+	//Main Menu
+	MainMenu = MeshBuilder::GetInstance()->GenerateQuad("Scene_Pause", Color(1, 1, 1), 1.f);
+	MeshList::GetInstance()->GetMesh("Scene_Pause")->textureID[0] = LoadTGA("Image//Menu/Pause.tga");
+
+	Arrow = MeshBuilder::GetInstance()->GenerateQuad("ARROW", Color(1, 1, 1), 1.f);
+	MeshList::GetInstance()->GetMesh("ARROW")->textureID[0] = LoadTGA("Image//Menu/Arrow.tga");
+
+	MeshBuilder::GetInstance()->GenerateQuad("TEXT", Color(1, 1, 1), 1.f);
+	MeshList::GetInstance()->GetMesh("TEXT")->textureID[0] = LoadTGA("Image//calibri.tga");
+
 	Player::GetInstance()->Init();
 	camera = new TopDownCamera();
 	fpscamera = new FPSCamera();
@@ -314,476 +327,561 @@ void SceneText::Init()
 
 void SceneText::Update(double dt)
 {
-	float halfWindowWidth = Application::GetInstance().GetWindowWidth() / 2.0f;
-	float halfWindowHeight = Application::GetInstance().GetWindowHeight() / 2.0f;
-	float fontSize = 25.0f;
-	float halfFontSize = fontSize / 2.0f;
-	static float angle = 0;
+	if (!pause) {
+		float halfWindowWidth = Application::GetInstance().GetWindowWidth() / 2.0f;
+		float halfWindowHeight = Application::GetInstance().GetWindowHeight() / 2.0f;
+		float fontSize = 25.0f;
+		float halfFontSize = fontSize / 2.0f;
+		static float angle = 0;
 
-	if (KeyboardController::GetInstance()->IsKeyDown(VK_OEM_PLUS))
-		dt *= 10.f;
+		if (KeyboardController::GetInstance()->IsKeyDown(VK_OEM_PLUS))
+			dt *= 10.f;
 
-	for (int i = 0; i < 6; ++i)
-	{
-		textObj[i]->SetPosition(Vector3(-halfWindowWidth, -halfWindowHeight + fontSize*i + halfFontSize, 0.0f));
-	}
-	// Update our entities
-	EntityManager::GetInstance()->Update(dt);
-
-	if (isDay) {
-		if (EnemyManager::GetInstance()->active) {
-			EnemyManager::GetInstance()->End();
-			CSoundEngine::GetInstance()->StopBackground();
-			CSoundEngine::GetInstance()->PlayBackground("DAY");
-			lights[0]->position.Set(0, MAX_CELLS * CELL_SIZE, 0);
-			angle = 0;
+		for (int i = 0; i < 6; ++i)
+		{
+			textObj[i]->SetPosition(Vector3(-halfWindowWidth, -halfWindowHeight + fontSize*i + halfFontSize, 0.0f));
 		}
-	}
-	else {
-		if (!EnemyManager::GetInstance()->active) {
-			EnemyManager::GetInstance()->Init();
-			CSoundEngine::GetInstance()->StopBackground();
-			CSoundEngine::GetInstance()->PlayBackground("NIGHT");
-			lights[0]->position.Set(0, MAX_CELLS * CELL_SIZE, 0);
-			lights[0]->color.Set(0.25, 0.25, 0.5);
-		}
-		EnemyManager::GetInstance()->Update(dt);
-	}
+		// Update our entities
+		EntityManager::GetInstance()->Update(dt);
 
-	// THIS WHOLE CHUNK TILL <THERE> CAN REMOVE INTO ENTITIES LOGIC! Or maybe into a scene function to keep the update clean
-	if(KeyboardController::GetInstance()->IsKeyDown('1'))
-		glEnable(GL_CULL_FACE);
-	if(KeyboardController::GetInstance()->IsKeyDown('2'))
-		glDisable(GL_CULL_FACE);
-	if(KeyboardController::GetInstance()->IsKeyDown('3'))
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-	if(KeyboardController::GetInstance()->IsKeyDown('4'))
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	
-	if(KeyboardController::GetInstance()->IsKeyDown('5'))
-	{
-		lights[0]->type = Light::LIGHT_POINT;
-	}
-	else if(KeyboardController::GetInstance()->IsKeyDown('6'))
-	{
-		lights[0]->type = Light::LIGHT_DIRECTIONAL;
-	}
-	else if(KeyboardController::GetInstance()->IsKeyDown('7'))
-	{
-		lights[0]->type = Light::LIGHT_SPOT;
-	}
-
-	//==========================================================================Light Feature=====================================================//
-	float speed = 180 / dayDuration;
-	Mtx44 rotate;
-	rotate.SetToRotation(speed * (float)dt, 1, 0, 0);
-	Vector3 pos(lights[0]->position.x, lights[0]->position.y, lights[0]->position.z);
-	lights[0]->position = rotate * lights[0]->position;
-
-	static double r = 1;
-	static double g = 0.6;
-	static double b = 0;
-	angle += speed* dt;
-	static bool change = false;
-	if (isDay) {
-		lights[0]->color.Set(r, g, b);
-		if (b > 0)
-			b = Math::Min((float)b, 1.f);
-		else
-			b = Math::Max((float)b, 0.f);
-		if (!change) {
-			g += dt / dayDuration * 2 * 0.4;
-			if (g > 0.7)
-				b += dt / dayDuration * 16;
-			if (g >= 1)
-				change = true;
+		if (isDay) {
+			if (EnemyManager::GetInstance()->active) {
+				EnemyManager::GetInstance()->End();
+				CSoundEngine::GetInstance()->StopBackground();
+				CSoundEngine::GetInstance()->PlayBackground("DAY");
+				lights[0]->position.Set(0, MAX_CELLS * CELL_SIZE, 0);
+				angle = 0;
+			}
 		}
 		else {
-			if (angle > 140) {
-				if (g > 0.6)
-				g -= dt / dayDuration * 16;
-				if (g > 0.7)
-					if (b > 0)
-						b -= dt / dayDuration * 16;
+			if (!EnemyManager::GetInstance()->active) {
+				EnemyManager::GetInstance()->Init();
+				CSoundEngine::GetInstance()->StopBackground();
+				CSoundEngine::GetInstance()->PlayBackground("NIGHT");
+				lights[0]->position.Set(0, MAX_CELLS * CELL_SIZE, 0);
+				lights[0]->color.Set(0.25, 0.25, 0.5);
 			}
+			EnemyManager::GetInstance()->Update(dt);
+		}
+
+		// THIS WHOLE CHUNK TILL <THERE> CAN REMOVE INTO ENTITIES LOGIC! Or maybe into a scene function to keep the update clean
+		if (KeyboardController::GetInstance()->IsKeyDown('1'))
+			glEnable(GL_CULL_FACE);
+		if (KeyboardController::GetInstance()->IsKeyDown('2'))
+			glDisable(GL_CULL_FACE);
+		if (KeyboardController::GetInstance()->IsKeyDown('3'))
+			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		if (KeyboardController::GetInstance()->IsKeyDown('4'))
+			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
+		if (KeyboardController::GetInstance()->IsKeyDown('5'))
+		{
+			lights[0]->type = Light::LIGHT_POINT;
+		}
+		else if (KeyboardController::GetInstance()->IsKeyDown('6'))
+		{
+			lights[0]->type = Light::LIGHT_DIRECTIONAL;
+		}
+		else if (KeyboardController::GetInstance()->IsKeyDown('7'))
+		{
+			lights[0]->type = Light::LIGHT_SPOT;
+		}
+
+		//==========================================================================Light Feature=====================================================//
+		float speed = 180 / dayDuration;
+		Mtx44 rotate;
+		rotate.SetToRotation(speed * (float)dt, 1, 0, 0);
+		Vector3 pos(lights[0]->position.x, lights[0]->position.y, lights[0]->position.z);
+		lights[0]->position = rotate * lights[0]->position;
+
+		static double r = 1;
+		static double g = 0.6;
+		static double b = 0;
+		angle += speed* dt;
+		static bool change = false;
+		if (isDay) {
+			lights[0]->color.Set(r, g, b);
+			if (b > 0)
+				b = Math::Min((float)b, 1.f);
+			else
+				b = Math::Max((float)b, 0.f);
+			if (!change) {
+				g += dt / dayDuration * 2 * 0.4;
+				if (g > 0.7)
+					b += dt / dayDuration * 16;
+				if (g >= 1)
+					change = true;
+			}
+			else {
+				if (angle > 140) {
+					if (g > 0.6)
+						g -= dt / dayDuration * 16;
+					if (g > 0.7)
+						if (b > 0)
+							b -= dt / dayDuration * 16;
+				}
+			}
+		}
+		else {
+			change = false;
+		}
+		// old light code
+		/*
+		if (lights[0]->position.z <= 210  ) {
+			lights[0]->color.Set(255 / 255, (float)165 / (float)255, 0); //keep it this way for now
+			//std::cout << "Light Color is Orange" << std::endl;
+		}
+		else if (lights[0]->position.z >= 490) {
+			//lights[0]->color.Set(255/255, 255/255, 0);
+			//std::cout << "Light Color is Yellow" << std::endl;
+			lights[0]->color.Set(1, 1, 1);
+			//std::cout << "Light Color is White" << std::endl;
+		}
+		*/
+
+		//============================================================================================================================================//
+
+		//if (KeyboardController::GetInstance()->IsKeyPressed(VK_F1)){
+		//	//Debug mode
+		//	//MouseController::GetInstance()->SetKeepMouseCentered(true);
+		//	Player::GetInstance()->DetachCamera();
+		//	Player::GetInstance()->AttachCamera(fpscamera);
+		//	GraphicsManager::GetInstance()->DetachCamera();
+		//	GraphicsManager::GetInstance()->AttachCamera(fpscamera);
+		//}
+		//if (KeyboardController::GetInstance()->IsKeyPressed(VK_F2)) {
+		//	//Debug mode
+		//	//MouseController::GetInstance()->SetKeepMouseCentered(false);
+		//	Player::GetInstance()->DetachCamera();
+		//	Player::GetInstance()->AttachCamera(camera);
+		//	GraphicsManager::GetInstance()->DetachCamera();
+		//	GraphicsManager::GetInstance()->AttachCamera(camera);
+		//}
+		// Debug purpose - changing to day / night
+		if (KeyboardController::GetInstance()->IsKeyPressed(VK_F3) && isDay)
+		{
+			isDay = false;
+			time = dayDuration;
+			calendarTime = 0.0;
+		}
+		if (KeyboardController::GetInstance()->IsKeyPressed(VK_F4) && !isDay)
+		{
+			isDay = true;
+			time = dayDuration;
+			calendarTime = dayDuration;
+			noOfDays++;
+			core->SetHealth(core->GetHealth() - 100);
+		}
+		if (core->GetHealth() <= 0)
+		{
+			core->SetIsDone(true);
+			SceneManager::GetInstance()->SetActiveScene("Lose");
+		}
+		if (noOfDays >= 6)
+			SceneManager::GetInstance()->SetActiveScene("Win");
+		if (KeyboardController::GetInstance()->IsKeyPressed(VK_F6))
+		{
+			Player::GetInstance()->fatigue = Player::FATIGUE::TIRED;
+			MeshList::GetInstance()->GetMesh("Fatigue")->textureID[0] = LoadTGA("Image//Fatigue//Tired.tga");
+		}
+		if (KeyboardController::GetInstance()->IsKeyPressed(VK_F7))
+		{
+			Player::GetInstance()->fatigue = Player::FATIGUE::NORMAL;
+			MeshList::GetInstance()->GetMesh("Fatigue")->textureID[0] = LoadTGA("Image//Fatigue//Normal.tga");
+		}
+		if (KeyboardController::GetInstance()->IsKeyPressed(VK_F8))
+		{
+			Player::GetInstance()->fatigue = Player::FATIGUE::ENERGETIC;
+			MeshList::GetInstance()->GetMesh("Fatigue")->textureID[0] = LoadTGA("Image//Fatigue//Energetic.tga");
+		}
+		if (KeyboardController::GetInstance()->IsKeyPressed(VK_F9))
+			Player::GetInstance()->SetSlept(false);
+		if (KeyboardController::GetInstance()->IsKeyPressed(VK_F10))
+			Player::GetInstance()->SetSlept(true);
+		if (KeyboardController::GetInstance()->IsKeyPressed(VK_F11))
+			SceneManager::GetInstance()->SetActiveScene("Lose");
+
+		//day night shift
+		time -= dt;
+		calendarTime -= dt;
+		if (calendarTime <= -180.f)
+			calendarTime = dayDuration;
+		if ((time <= 0.00 || Player::GetInstance()->GetSlept()) && isDay)
+		{
+			time = dayDuration;
+			isDay = false;
+		}
+		//if a day(day and night) past,but no sleep
+		if (!isDay && !Player::GetInstance()->GetSlept() && time <= 0.001)
+		{
+			switch (Player::GetInstance()->fatigue)
+			{
+			case Player::FATIGUE::ENERGETIC:
+				Player::GetInstance()->fatigue = Player::FATIGUE::NORMAL;
+				MeshList::GetInstance()->GetMesh("Fatigue")->textureID[0] = LoadTGA("Image//Fatigue//Normal.tga");
+				break;
+			case Player::FATIGUE::NORMAL:
+				Player::GetInstance()->fatigue = Player::FATIGUE::TIRED;
+				MeshList::GetInstance()->GetMesh("Fatigue")->textureID[0] = LoadTGA("Image//Fatigue//Tired.tga");
+				break;
+			}
+		}
+		//got sleep
+		if (Player::GetInstance()->GetSlept())
+		{
+			switch (Player::GetInstance()->fatigue)
+			{
+			case Player::FATIGUE::TIRED:
+				Player::GetInstance()->fatigue = Player::FATIGUE::NORMAL;
+				MeshList::GetInstance()->GetMesh("Fatigue")->textureID[0] = LoadTGA("Image//Fatigue//Normal.tga");
+				break;
+			case Player::FATIGUE::NORMAL:
+				Player::GetInstance()->fatigue = Player::FATIGUE::ENERGETIC;
+				MeshList::GetInstance()->GetMesh("Fatigue")->textureID[0] = LoadTGA("Image//Fatigue//Energetic.tga");
+				break;
+			}
+			calendarTime = 0.0;
+			Player::GetInstance()->SetSlept(false);
+		}
+		if (time <= 0.00 && !isDay)
+		{
+			time = dayDuration;
+			isDay = true;
+			noOfDays++;
+		}
+
+		//convert mouse pos on window onto world
+		double mouseX, mouseY;
+		MouseController::GetInstance()->GetMousePosition(mouseX, mouseY);
+		MouseController::GetInstance()->UpdateMousePosition(mouseX, Application::GetInstance().GetWindowHeight() - mouseY);
+		MouseController::GetInstance()->GetMousePosition(mouseX, mouseY);
+
+		float windowWidth = (float)Application::GetInstance().GetWindowWidth();
+		float windowHeight = (float)Application::GetInstance().GetWindowHeight();
+		//for minimap icon to rotate
+		Vector3 Up_Direction = Vector3(windowWidth / 2.f, windowHeight, 0.f) - Vector3(windowWidth / 2.f, windowHeight / 2.f, 0.f);
+		Vector3 playerMouse_Direction = Vector3((float)mouseX, (float)mouseY, 0.f) - Vector3(windowWidth / 2.f, windowHeight / 2.f, 0.f);
+
+		try
+		{
+			playerMouse_Direction.Normalize();
+			float angle = Math::RadianToDegree(acosf(playerMouse_Direction.Dot(Up_Direction) / (playerMouse_Direction.Length() * Up_Direction.Length())));
+			if (playerMouse_Direction.x < 0)
+				angle = -angle;
+			//std::cout << "angle: " << angle << std::endl;
+			CMinimap::GetInstance()->SetAngle(angle);
+
+			//Set & Update wireFrameBox's position & scale
+			{
+				Vector3 pPos = Player::GetInstance()->GetPosition();
+				int x = (int)(pPos.x / CELL_SIZE);
+				int z = (int)(pPos.z / CELL_SIZE);
+
+				// Buildings except floor
+				if (Player::GetInstance()->GetIsBuilding() &&
+					Player::GetInstance()->GetCurrentBuilding() != BuildingEntity::BUILDING_FLOOR)
+				{
+					// Up
+					if (angle >= -53.f && angle <= 53.f)
+					{
+						ghostPos.Set(x * CELL_SIZE + CELL_SIZE / 2, 1, z * CELL_SIZE);
+						ghostScale.Set(CELL_SIZE, 10, 2);
+					}
+					// Left
+					else if (angle >= -127.f && angle <= -53.f)
+					{
+						ghostPos.Set(x * CELL_SIZE, 1, z * CELL_SIZE + CELL_SIZE / 2);
+						ghostScale.Set(2, 10, CELL_SIZE);
+					}
+					// Right
+					else if (angle >= 53.f && angle <= 127.f)
+					{
+						ghostPos.Set(x * CELL_SIZE + CELL_SIZE, 1, z * CELL_SIZE + CELL_SIZE / 2);
+						ghostScale.Set(2, 10, CELL_SIZE);
+					}
+					// Down
+					else if ((angle >= -180.f && angle <= -127.f) || (angle >= 127.f && angle <= 180.f))
+					{
+						ghostPos.Set(x * CELL_SIZE + CELL_SIZE / 2, 1, z * CELL_SIZE + CELL_SIZE);
+						ghostScale.Set(CELL_SIZE, 10, 2);
+					}
+				}
+				// Floor and Equipment
+				else if ((Player::GetInstance()->GetIsBuilding() &&
+					Player::GetInstance()->GetCurrentBuilding() == BuildingEntity::BUILDING_FLOOR) ||
+					Player::GetInstance()->GetIsEquipment())
+				{
+					ghostPos.Set(x * CELL_SIZE + CELL_SIZE / 2, 1, z * CELL_SIZE + CELL_SIZE / 2);
+					ghostScale.Set(CELL_SIZE, 10, CELL_SIZE);
+				}
+				//Weapon
+				else
+				{
+					ghostPos.SetZero();
+					ghostScale.SetZero();
+				}
+			}
+
+		}
+		catch (DivideByZero)
+		{
+			std::cout << "Cannot move mouse to center, divide by zero(Normalize for minimap icon to rotate)" << std::endl;
+		}
+
+		//if (MouseController::GetInstance()->IsButtonReleased(MouseController::RMB))
+		//{
+		//	std::cout << "Right Mouse Button was released!" << std::endl;
+		//}
+		//if (MouseController::GetInstance()->IsButtonReleased(MouseController::MMB))
+		//{
+		//	std::cout << "Middle Mouse Button was released!" << std::endl;
+		//}
+		//if (MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_XOFFSET) != 0.0)
+		//{
+		//	std::cout << "Mouse Wheel has offset in X-axis of " << MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_XOFFSET) << std::endl;
+		//}
+		//if (MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_YOFFSET) != 0.0)
+		//{
+		//	std::cout << "Mouse Wheel has offset in Y-axis of " << MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_YOFFSET) << std::endl;
+		//}
+		// <THERE>
+		switch (Player::GetInstance()->CurrentWeaponID())
+		{
+		case 1:
+			BEW_UI->textureID[0] = LoadTGA("Image//weapon//pistol.tga");
+			break;
+		case 2:
+			BEW_UI->textureID[0] = LoadTGA("Image//weapon//rifle.tga");
+			break;
+		case 3:
+			BEW_UI->textureID[0] = LoadTGA("Image//weapon//sniper.tga");
+			break;
+		case 4:
+			BEW_UI->textureID[0] = LoadTGA("Image//weapon//nailgun.tga");
+			break;
+		case 5:
+			BEW_UI->textureID[0] = LoadTGA("Image//weapon//rocketlauncher.tga");
+			break;
+		case 6:
+			BEW_UI->textureID[0] = LoadTGA("Image//weapon//machinegun.tga");
+			break;
+		case 7:
+			BEW_UI->textureID[0] = LoadTGA("Image//weapon//railgun.tga");
+			break;
+		case 8:
+			BEW_UI->textureID[0] = LoadTGA("Image//weapon//gravitygun.tga");
+			break;
+		case 9:
+			BEW_UI->textureID[0] = LoadTGA("Image//weapon//chickengun.tga");
+			break;
+		}
+		// Update the player position and other details based on keyboard and mouse inputs
+		Player::GetInstance()->Update(dt);
+
+		//camera.Update(dt); // Can put the camera into an entity rather than here (Then we don't have to write this)
+
+		GraphicsManager::GetInstance()->UpdateLights(dt);
+
+		// Update the 2 text object values. NOTE: Can do this in their own class but i'm lazy to do it now :P
+		// Eg. FPSRenderEntity or inside RenderUI for LightEntity
+		std::ostringstream ss;
+		ss << std::fixed;
+		ss.precision(3);
+		float fps = (float)(1.f / dt);
+		ss << "FPS: " << fps;
+		textObj[0]->SetText(ss.str());
+
+		// Update the player position into textObj[2]
+		ss.str("");
+		ss.precision(1);
+		ss << Player::GetInstance()->CurrentWeaponMagRound() << "/" << Player::GetInstance()->CurrentWeaponTotalRound();//Vector3(-halfWindowWidth, -halfWindowHeight + fontSize*i + halfFontSize, 0.0f)
+		textObj[1]->SetPosition(Vector3(halfWindowWidth - 100, -halfWindowHeight + fontSize + halfFontSize, 0.0f));
+		textObj[1]->SetText(ss.str());
+
+		ss.str("");
+		ss.precision(0);
+		switch (noOfDays)
+		{
+		case 1:
+			ss << noOfDays << "st";
+			break;
+		case 2:
+			ss << noOfDays << "nd";
+			break;
+		case 3:
+			ss << noOfDays << "rd";
+			break;
+		default:
+			ss << noOfDays << "th";
+			break;
+		}
+		textObj[2]->SetPosition(Vector3(-20.f, halfWindowHeight * 0.865f, 0.0f));
+		textObj[2]->SetScale(Vector3(40, 40, 40));
+		textObj[2]->SetText(ss.str());
+
+		ss.str("");
+		ss << "Material: " << Player::GetInstance()->GetMaterial();
+		textObj[3]->SetPosition(Vector3(-halfWindowWidth, -halfWindowHeight + fontSize * 1 + halfFontSize, 0.0f));
+		textObj[3]->SetText(ss.str());
+
+		ss.str("");
+		if (isDay)
+		{
+			if (Player::GetInstance()->GetIsBuilding())
+			{
+				switch (Player::GetInstance()->GetCurrentBuilding())
+				{
+				case BuildingEntity::BUILDING_WALL:
+					ss << "Current Building: Wall";
+					break;
+				case BuildingEntity::BUILDING_COVER:
+					ss << "Current Building: Cover";
+					break;
+				case BuildingEntity::BUILDING_FLOOR:
+					ss << "Current Building: Floor";
+					break;
+				}
+			}
+			else if (Player::GetInstance()->GetIsEquipment())
+			{
+				switch (Player::GetInstance()->GetCurrentEquipment())
+				{
+				case EquipmentEntity::EQUIPMENT_TURRET:
+					ss << "Current Equipment: Turret";
+					break;
+				case EquipmentEntity::EQUIPMENT_HEALING_STATION:
+					ss << "Current Equipment: Healing Station";
+					break;
+				case EquipmentEntity::EQUIPMENT_FLOOR_SPIKE:
+					ss << "Current Equipment: Floor Spike";
+					break;
+				}
+			}
+			else if (Player::GetInstance()->GetIsWeapon())
+			{
+				switch (Player::GetInstance()->GetCurrentWeapon())
+				{
+				case 1:
+					ss << "Current Weapon: ";
+					break;
+				case 2:
+					ss << "Current Weapon: ";
+					break;
+				case 3:
+					ss << "Current Weapon: ";
+					break;
+				case 4:
+					ss << "Current Weapon: ";
+					break;
+				}
+			}
+		}
+		textObj[4]->SetPosition(Vector3(-halfWindowWidth, -halfWindowHeight + fontSize * 2 + halfFontSize, 0.0f));
+		textObj[4]->SetText(ss.str());
+
+		Delay += (float)dt;
+		if (Delay > 0.5f)
+			Delay = 0.5f;
+		if (KeyboardController::GetInstance()->IsKeyDown('P') && Delay >= ButtonCooldown)
+		{
+			pause = true;
+		}
+
+		if (KeyboardController::GetInstance()->IsKeyReleased('B') && !Render_Quad)
+		{
+			Render_Quad = true;
+			std::cout << "Shop Rendered" << std::endl;
+		}
+		else if (KeyboardController::GetInstance()->IsKeyReleased('B') && Render_Quad)
+		{
+			Render_Quad = false;
+			std::cout << "Shop not Rendered" << std::endl;
 		}
 	}
 	else {
-		change = false;
-	}
-	// old light code
-	/*
-	if (lights[0]->position.z <= 210  ) {
-		lights[0]->color.Set(255 / 255, (float)165 / (float)255, 0); //keep it this way for now
-		//std::cout << "Light Color is Orange" << std::endl;
-	}
-	else if (lights[0]->position.z >= 490) {
-		//lights[0]->color.Set(255/255, 255/255, 0);
-		//std::cout << "Light Color is Yellow" << std::endl;
-		lights[0]->color.Set(1, 1, 1);
-		//std::cout << "Light Color is White" << std::endl;
-	}
-	*/
-	
-	//============================================================================================================================================//
+		Delay += (float)dt;
 
-	//if (KeyboardController::GetInstance()->IsKeyPressed(VK_F1)){
-	//	//Debug mode
-	//	//MouseController::GetInstance()->SetKeepMouseCentered(true);
-	//	Player::GetInstance()->DetachCamera();
-	//	Player::GetInstance()->AttachCamera(fpscamera);
-	//	GraphicsManager::GetInstance()->DetachCamera();
-	//	GraphicsManager::GetInstance()->AttachCamera(fpscamera);
-	//}
-	//if (KeyboardController::GetInstance()->IsKeyPressed(VK_F2)) {
-	//	//Debug mode
-	//	//MouseController::GetInstance()->SetKeepMouseCentered(false);
-	//	Player::GetInstance()->DetachCamera();
-	//	Player::GetInstance()->AttachCamera(camera);
-	//	GraphicsManager::GetInstance()->DetachCamera();
-	//	GraphicsManager::GetInstance()->AttachCamera(camera);
-	//}
-	// Debug purpose - changing to day / night
-	if (KeyboardController::GetInstance()->IsKeyPressed(VK_F3) && isDay)
-	{
-		isDay = false;
-		time = dayDuration;
-		calendarTime = 0.0;
-	}
-	if (KeyboardController::GetInstance()->IsKeyPressed(VK_F4) && !isDay)
-	{
-		isDay = true;
-		time = dayDuration;
-		calendarTime = dayDuration;
-		noOfDays++;
-		core->SetHealth(core->GetHealth() - 100);
-	}
-	if (core->GetHealth() <= 0)
-	{
-		core->SetIsDone(true);
-		SceneManager::GetInstance()->SetActiveScene("Lose");
-	}
-	if (noOfDays >= 6)
-		SceneManager::GetInstance()->SetActiveScene("Win");
-	if (KeyboardController::GetInstance()->IsKeyPressed(VK_F6))
-	{
-		Player::GetInstance()->fatigue = Player::FATIGUE::TIRED;
-		MeshList::GetInstance()->GetMesh("Fatigue")->textureID[0] = LoadTGA("Image//Fatigue//Tired.tga");
-	}
-	if (KeyboardController::GetInstance()->IsKeyPressed(VK_F7))
-	{
-		Player::GetInstance()->fatigue = Player::FATIGUE::NORMAL;
-		MeshList::GetInstance()->GetMesh("Fatigue")->textureID[0] = LoadTGA("Image//Fatigue//Normal.tga");
-	}
-	if (KeyboardController::GetInstance()->IsKeyPressed(VK_F8))
-	{
-		Player::GetInstance()->fatigue = Player::FATIGUE::ENERGETIC;
-		MeshList::GetInstance()->GetMesh("Fatigue")->textureID[0] = LoadTGA("Image//Fatigue//Energetic.tga");
-	}
-	if (KeyboardController::GetInstance()->IsKeyPressed(VK_F9))
-		Player::GetInstance()->SetSlept(false);
-	if (KeyboardController::GetInstance()->IsKeyPressed(VK_F10))
-		Player::GetInstance()->SetSlept(true);
-	if (KeyboardController::GetInstance()->IsKeyPressed(VK_F11))
-		SceneManager::GetInstance()->SetActiveScene("Lose");
 
-	//day night shift
-	time -= dt;
-	calendarTime -= dt;
-	if (calendarTime <= -180.f)
-		calendarTime = dayDuration;
-	if ((time <= 0.00 || Player::GetInstance()->GetSlept()) && isDay)
-	{
-		time = dayDuration;
-		isDay = false;
-	}
-	//if a day(day and night) past,but no sleep
-	if (!isDay && !Player::GetInstance()->GetSlept() && time <= 0.001)
-	{
-		switch (Player::GetInstance()->fatigue)
+		if (Delay > 0.5f)
 		{
-		case Player::FATIGUE::ENERGETIC:
-			Player::GetInstance()->fatigue = Player::FATIGUE::NORMAL;
-			MeshList::GetInstance()->GetMesh("Fatigue")->textureID[0] = LoadTGA("Image//Fatigue//Normal.tga");
+			Delay = 0.5f;
+		}
+
+		if (KeyboardController::GetInstance()->IsKeyDown(VK_UP) && Delay >= ButtonCooldown ||
+			KeyboardController::GetInstance()->IsKeyDown('W') && Delay >= ButtonCooldown)
+		{
+			if (SelectedOptions == Return)
+			{
+				SelectedOptions = Exit_to_Main_Menu;
+			}
+			else if (SelectedOptions == Exit_to_Main_Menu)
+			{
+				SelectedOptions = Return;
+			}
+
+			Delay = 0.0f;
+		}
+
+		if (KeyboardController::GetInstance()->IsKeyDown(VK_DOWN) && Delay >= ButtonCooldown ||
+			KeyboardController::GetInstance()->IsKeyDown('S') && Delay >= ButtonCooldown)
+		{
+			if (SelectedOptions == Exit_to_Main_Menu)
+			{
+				SelectedOptions = Return;
+			}
+			else if (SelectedOptions == Return)
+			{
+				SelectedOptions = Exit_to_Main_Menu;
+			}
+
+			Delay = 0.0f;
+		}
+
+		if (KeyboardController::GetInstance()->IsKeyDown(VK_RETURN) && Delay >= ButtonCooldown)
+		{
+			if (SelectedOptions == Return)
+			{
+				pause = false;
+			}
+			else if (SelectedOptions == Exit_to_Main_Menu)
+			{
+				SceneManager::GetInstance()->SetActiveScene("MainMenu");
+				std::cout << "Main Menu Selected" << std::endl;
+			}
+
+			Delay = 0.0f;
+		}
+		/*if (KeyboardController::GetInstance()->IsKeyDown('P'))
+		{
+		SceneManager::GetInstance()->SetActiveScene("Start");
+		std::cout << "Return to Game" << std::endl;
+		}
+		*/
+		switch (SelectedOptions)
+		{
+		case Return:
+			b_Return = true;
+			b_Exit_to_Main_Menu = false;
 			break;
-		case Player::FATIGUE::NORMAL:
-			Player::GetInstance()->fatigue = Player::FATIGUE::TIRED;
-			MeshList::GetInstance()->GetMesh("Fatigue")->textureID[0] = LoadTGA("Image//Fatigue//Tired.tga");
+		case Exit_to_Main_Menu:
+			b_Return = false;
+			b_Exit_to_Main_Menu = true;
 			break;
 		}
-	}
-	//got sleep
-	if (Player::GetInstance()->GetSlept())
-	{
-		switch (Player::GetInstance()->fatigue)
+
+
+		if (b_Return)
 		{
-		case Player::FATIGUE::TIRED:
-			Player::GetInstance()->fatigue = Player::FATIGUE::NORMAL;
-			MeshList::GetInstance()->GetMesh("Fatigue")->textureID[0] = LoadTGA("Image//Fatigue//Normal.tga");
-			break;
-		case Player::FATIGUE::NORMAL:
-			Player::GetInstance()->fatigue = Player::FATIGUE::ENERGETIC;
-			MeshList::GetInstance()->GetMesh("Fatigue")->textureID[0] = LoadTGA("Image//Fatigue//Energetic.tga");
-			break;
+			arrowPosition = Vector3((float)Application::GetInstance().GetWindowWidth() / 7.2f,
+				(float)Application::GetInstance().GetWindowHeight() / 3.875f, 2.f);
 		}
-		calendarTime = 0.0;
-		Player::GetInstance()->SetSlept(false);
-	}
-	if (time <= 0.00 && !isDay)
-	{
-		time = dayDuration;
-		isDay = true;
-		noOfDays++;
-	}
-
-	//convert mouse pos on window onto world
-	double mouseX, mouseY;
-	MouseController::GetInstance()->GetMousePosition(mouseX, mouseY);
-	MouseController::GetInstance()->UpdateMousePosition(mouseX, Application::GetInstance().GetWindowHeight() - mouseY);
-	MouseController::GetInstance()->GetMousePosition(mouseX, mouseY);
-
-	float windowWidth = (float)Application::GetInstance().GetWindowWidth();
-	float windowHeight = (float)Application::GetInstance().GetWindowHeight();
-	//for minimap icon to rotate
-	Vector3 Up_Direction = Vector3(windowWidth / 2.f, windowHeight, 0.f) - Vector3(windowWidth / 2.f, windowHeight / 2.f, 0.f);
-	Vector3 playerMouse_Direction = Vector3((float)mouseX, (float)mouseY, 0.f) - Vector3(windowWidth / 2.f, windowHeight / 2.f, 0.f);
-	
-	try
-	{
-		playerMouse_Direction.Normalize();
-		float angle = Math::RadianToDegree(acosf(playerMouse_Direction.Dot(Up_Direction) / (playerMouse_Direction.Length() * Up_Direction.Length())));
-		if (playerMouse_Direction.x < 0)
-			angle = -angle;
-		//std::cout << "angle: " << angle << std::endl;
-		CMinimap::GetInstance()->SetAngle(angle);
-
-		//Set & Update wireFrameBox's position & scale
+		if (b_Exit_to_Main_Menu)
 		{
-			Vector3 pPos = Player::GetInstance()->GetPosition();
-			int x = (int)(pPos.x / CELL_SIZE);
-			int z = (int)(pPos.z / CELL_SIZE);
-
-			// Buildings except floor
-			if (Player::GetInstance()->GetIsBuilding() &&
-				Player::GetInstance()->GetCurrentBuilding() != BuildingEntity::BUILDING_FLOOR)
-			{
-				// Up
-				if (angle >= -53.f && angle <= 53.f)
-				{
-					ghostPos.Set(x * CELL_SIZE + CELL_SIZE / 2, 1, z * CELL_SIZE);
-					ghostScale.Set(CELL_SIZE, 10, 2);
-				}
-				// Left
-				else if (angle >= -127.f && angle <= -53.f)
-				{
-					ghostPos.Set(x * CELL_SIZE, 1, z * CELL_SIZE + CELL_SIZE / 2);
-					ghostScale.Set(2, 10, CELL_SIZE);
-				}
-				// Right
-				else if (angle >= 53.f && angle <= 127.f)
-				{
-					ghostPos.Set(x * CELL_SIZE + CELL_SIZE, 1, z * CELL_SIZE + CELL_SIZE / 2);
-					ghostScale.Set(2, 10, CELL_SIZE);
-				}
-				// Down
-				else if ((angle >= -180.f && angle <= -127.f) || (angle >= 127.f && angle <= 180.f))
-				{
-					ghostPos.Set(x * CELL_SIZE + CELL_SIZE / 2, 1, z * CELL_SIZE + CELL_SIZE);
-					ghostScale.Set(CELL_SIZE, 10, 2);
-				}
-			}
-			// Floor and Equipment
-			else if ((Player::GetInstance()->GetIsBuilding() &&
-				Player::GetInstance()->GetCurrentBuilding() == BuildingEntity::BUILDING_FLOOR) ||
-				Player::GetInstance()->GetIsEquipment())
-			{
-				ghostPos.Set(x * CELL_SIZE + CELL_SIZE / 2, 1, z * CELL_SIZE + CELL_SIZE / 2);
-				ghostScale.Set(CELL_SIZE, 10, CELL_SIZE);
-			}
-			//Weapon
-			else
-			{
-				ghostPos.SetZero();
-				ghostScale.SetZero();
-			}
+			arrowPosition = Vector3((float)Application::GetInstance().GetWindowWidth() / 7.2f,
+				(float)Application::GetInstance().GetWindowHeight() / 8.5f, 2.f);
 		}
-		
-	}
-	catch (DivideByZero)
-	{
-		std::cout << "Cannot move mouse to center, divide by zero(Normalize for minimap icon to rotate)" << std::endl;
-	}
 
-	//if (MouseController::GetInstance()->IsButtonReleased(MouseController::RMB))
-	//{
-	//	std::cout << "Right Mouse Button was released!" << std::endl;
-	//}
-	//if (MouseController::GetInstance()->IsButtonReleased(MouseController::MMB))
-	//{
-	//	std::cout << "Middle Mouse Button was released!" << std::endl;
-	//}
-	//if (MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_XOFFSET) != 0.0)
-	//{
-	//	std::cout << "Mouse Wheel has offset in X-axis of " << MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_XOFFSET) << std::endl;
-	//}
-	//if (MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_YOFFSET) != 0.0)
-	//{
-	//	std::cout << "Mouse Wheel has offset in Y-axis of " << MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_YOFFSET) << std::endl;
-	//}
-	// <THERE>
-	switch(Player::GetInstance()->CurrentWeaponID())
-	{
-	case 1:
-		BEW_UI->textureID[0] = LoadTGA("Image//weapon//pistol.tga");
-		break;
-	case 2:
-		BEW_UI->textureID[0] = LoadTGA("Image//weapon//rifle.tga");
-		break;
-	case 3:
-		BEW_UI->textureID[0] = LoadTGA("Image//weapon//sniper.tga");
-		break;
-	case 4:
-		BEW_UI->textureID[0] = LoadTGA("Image//weapon//nailgun.tga");
-		break;
-	case 5:
-		BEW_UI->textureID[0] = LoadTGA("Image//weapon//rocketlauncher.tga");
-		break;
-	case 6:
-		BEW_UI->textureID[0] = LoadTGA("Image//weapon//machinegun.tga");
-		break;
-	case 7:
-		BEW_UI->textureID[0] = LoadTGA("Image//weapon//railgun.tga");
-		break;
-	case 8:
-		BEW_UI->textureID[0] = LoadTGA("Image//weapon//gravitygun.tga");
-		break;
-	case 9:
-		BEW_UI->textureID[0] = LoadTGA("Image//weapon//chickengun.tga");
-		break;
-	}
-	// Update the player position and other details based on keyboard and mouse inputs
-	Player::GetInstance()->Update(dt);
 
-	//camera.Update(dt); // Can put the camera into an entity rather than here (Then we don't have to write this)
-
-	GraphicsManager::GetInstance()->UpdateLights(dt);
-
-	// Update the 2 text object values. NOTE: Can do this in their own class but i'm lazy to do it now :P
-	// Eg. FPSRenderEntity or inside RenderUI for LightEntity
-	std::ostringstream ss;
-	ss << std::fixed;
-	ss.precision(3);
-	float fps = (float)(1.f / dt);
-	ss << "FPS: " << fps;
-	textObj[0]->SetText(ss.str());
-
-	// Update the player position into textObj[2]
-	ss.str("");
-	ss.precision(1);
-	ss << Player::GetInstance()->CurrentWeaponMagRound() << "/" << Player::GetInstance()->CurrentWeaponTotalRound();//Vector3(-halfWindowWidth, -halfWindowHeight + fontSize*i + halfFontSize, 0.0f)
-	textObj[1]->SetPosition(Vector3(halfWindowWidth - 100, -halfWindowHeight + fontSize + halfFontSize, 0.0f));
-	textObj[1]->SetText(ss.str());
-
-	ss.str("");
-	ss.precision(0);
-	switch (noOfDays)
-	{
-	case 1:
-		ss << noOfDays << "st";
-		break;
-	case 2:
-		ss << noOfDays << "nd";
-		break;
-	case 3:
-		ss << noOfDays << "rd";
-		break;
-	default:
-		ss << noOfDays << "th";
-		break;
-	}
-	textObj[2]->SetPosition(Vector3(-20.f, halfWindowHeight * 0.865f, 0.0f));
-	textObj[2]->SetScale(Vector3(40, 40, 40));
-	textObj[2]->SetText(ss.str());
-
-	ss.str("");
-	ss << "Material: " << Player::GetInstance()->GetMaterial();
-	textObj[3]->SetPosition(Vector3(-halfWindowWidth, -halfWindowHeight + fontSize * 1 + halfFontSize, 0.0f));
-	textObj[3]->SetText(ss.str());
-
-	ss.str("");
-	if (isDay)
-	{
-		if (Player::GetInstance()->GetIsBuilding())
-		{
-			switch (Player::GetInstance()->GetCurrentBuilding())
-			{
-			case BuildingEntity::BUILDING_WALL:
-				ss << "Current Building: Wall";
-				break;
-			case BuildingEntity::BUILDING_COVER:
-				ss << "Current Building: Cover";
-				break;
-			case BuildingEntity::BUILDING_FLOOR:
-				ss << "Current Building: Floor";
-				break;
-			}
-		}
-		else if (Player::GetInstance()->GetIsEquipment())
-		{
-			switch (Player::GetInstance()->GetCurrentEquipment())
-			{
-			case EquipmentEntity::EQUIPMENT_TURRET:
-				ss << "Current Equipment: Turret";
-				break;
-			case EquipmentEntity::EQUIPMENT_HEALING_STATION:
-				ss << "Current Equipment: Healing Station";
-				break;
-			case EquipmentEntity::EQUIPMENT_FLOOR_SPIKE:
-				ss << "Current Equipment: Floor Spike";
-				break;
-			}
-		}
-		else if (Player::GetInstance()->GetIsWeapon())
-		{
-			switch (Player::GetInstance()->GetCurrentWeapon())
-			{
-			case 1:
-				ss << "Current Weapon: ";
-				break;
-			case 2:
-				ss << "Current Weapon: ";
-				break;
-			case 3:
-				ss << "Current Weapon: ";
-				break;
-			case 4:
-				ss << "Current Weapon: ";
-				break;
-			}
-		}
-	}
-	textObj[4]->SetPosition(Vector3(-halfWindowWidth, -halfWindowHeight + fontSize * 2 + halfFontSize, 0.0f));
-	textObj[4]->SetText(ss.str());
-
-	Delay += (float)dt;
-	if (Delay > 0.5f)
-		Delay = 0.5f;
-	if (KeyboardController::GetInstance()->IsKeyDown('P') && Delay >= ButtonCooldown)
-	{
-		SceneManager::GetInstance()->SetActiveScene("Pause");
-		CSoundEngine::GetInstance()->StopBackground();
-		std::cout << "Pause Selected" << std::endl;
-	}
-
-	if (KeyboardController::GetInstance()->IsKeyReleased('B') && !Render_Quad)
-	{
-		Render_Quad = true;
-		std::cout << "Shop Rendered" << std::endl;
-	}
-	else if (KeyboardController::GetInstance()->IsKeyReleased('B') && Render_Quad)
-	{
-		Render_Quad = false;
-		std::cout << "Shop not Rendered" << std::endl;
 	}
 }
 
@@ -804,11 +902,58 @@ void SceneText::Render()
 	//GraphicsManager::GetInstance()->SetOrthographicProjection(-halfWindowWidth, halfWindowWidth, -halfWindowHeight, halfWindowHeight, -10, 10);
 	//GraphicsManager::GetInstance()->DetachCamera();
 	//EntityManager::GetInstance()->RenderUI();
+	if (!pause) {
+		//******************************* PRE RENDER PASS *************************************
+		RenderPassGPass();
+		//******************************* MAIN RENDER PASS ************************************
+		RenderPassMain();
+	}
+	else {
+		GraphicsManager* g = GraphicsManager::GetInstance();
+		MS& ms = GraphicsManager::GetInstance()->GetModelStack();
 
-	//******************************* PRE RENDER PASS *************************************
-	RenderPassGPass();
-	//******************************* MAIN RENDER PASS ************************************
-	RenderPassMain();
+		g->m_renderPass = g->RENDER_PASS_MAIN;
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		glViewport(0, 0, Application::GetInstance().GetWindowWidth(),
+			Application::GetInstance().GetWindowHeight());
+		glEnable(GL_CULL_FACE);
+		glCullFace(GL_BACK);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glUseProgram(g->GetActiveShader()->GetProgramID());
+		//pass light depth texture
+		g->m_lightDepthFBO.BindForReading(GL_TEXTURE8);
+		glUniform1i(g->GetActiveShader()->GetUniform("shadowMap"), 8);
+		//... old stuffs
+
+		GraphicsManager::GetInstance()->UpdateLightUniforms();
+
+		GraphicsManager::GetInstance()->SetPerspectiveProjection(60.f, (float)(Application::GetInstance().m_window_width) / (float)(Application::GetInstance().m_window_height), 0.1f, 10000.0f);
+		GraphicsManager::GetInstance()->AttachCamera(camera);
+
+		ms.LoadIdentity();
+
+		Light* light = dynamic_cast<Light*>(g->GetLight("lights[0]"));
+
+		int halfWindowWidth = Application::GetInstance().GetWindowWidth() / 2;
+		int halfWindowHeight = Application::GetInstance().GetWindowHeight() / 2;
+
+
+		GraphicsManager::GetInstance()->SetOrthographicProjection(-halfWindowWidth, halfWindowWidth, -halfWindowHeight, halfWindowHeight, -10, 10);
+		GraphicsManager::GetInstance()->DetachCamera();
+
+		glDisable(GL_DEPTH_TEST);
+
+		ms.PushMatrix();
+		ms.Scale(halfWindowWidth + halfWindowWidth, halfWindowHeight + halfWindowHeight, 0);
+		RenderHelper::RenderMesh(MainMenu);
+		ms.PopMatrix();
+
+		ms.PushMatrix();
+		ms.Translate(arrowPosition.x - halfWindowWidth, arrowPosition.y - halfWindowHeight, arrowPosition.z);
+		ms.Scale(25.0f, 25.0f, 25.0f);
+		RenderHelper::RenderMesh(Arrow);
+		ms.PopMatrix();
+	}
 }
 
 void SceneText::RenderPassGPass()
