@@ -173,9 +173,6 @@
     <ClCompile Include="Source\EnemyBuck.cpp">
       <Filter>Enemy</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Turret.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Source\SceneLose.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
@@ -186,6 +183,9 @@
       <Filter>Manager</Filter>
     </ClCompile>
     <ClCompile Include="Source\ParticleEntity.cpp">
+      <Filter>Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Turret.cpp">
       <Filter>Entity</Filter>
     </ClCompile>
   </ItemGroup>
@@ -310,9 +310,6 @@
     <ClInclude Include="Source\EnemyBuck.h">
       <Filter>Enemy</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Turret.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Source\SceneLose.h">
       <Filter>Scene</Filter>
     </ClInclude>
@@ -323,6 +320,9 @@
       <Filter>Manager</Filter>
     </ClInclude>
     <ClInclude Include="Source\ParticleEntity.h">
+      <Filter>Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Turret.h">
       <Filter>Entity</Filter>
     </ClInclude>
   </ItemGroup>
