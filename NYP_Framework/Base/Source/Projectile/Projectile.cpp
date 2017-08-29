@@ -15,6 +15,7 @@ Projectile::Projectile(std::string _meshName) : GenericEntity(MeshList::GetInsta
 , damage(0)
 , size(0.5)
 , pent(0)
+,weap(nullptr)
 {
 
 }
@@ -133,32 +134,37 @@ Projectile * Create::Bullet(std::string _meshName)
 void Projectile::CollisionResponse(GenericEntity * thatEntity)
 {
 	EnemyEntity* enemy = dynamic_cast<EnemyEntity*>(thatEntity);
-
-	if (weap->GetWeaponID() == 5) {
-		if (thatEntity->objectType == ENEMY) {
-			ParticleManager::GetInstance()->GenerateExplosion(position);
-			this->SetIsDone(true);
-			for (auto it : EntityManager::GetInstance()->GetEntityList()) {
-				if (it->objectType == ENEMY) {
-					enemy = dynamic_cast<EnemyEntity*>(it);
-					if (enemy->GetActive()) {
-						if ((it->GetPosition() - position).LengthSquared() < 400) {
-							ParticleManager::GetInstance()->GenerateBlood(enemy->GetPosition());
-							enemy->SetHealth(enemy->GetHealth() - damage);
-							std::cout << "hito\n";
-							if (enemy->GetHealth() <= 0)
-							{
-								enemy->SetActive(false);
-								enemy->Reset();
-								Player::GetInstance()->SetMaterial(Player::GetInstance()->GetMaterial() + 200);
+	
+	if (weap != nullptr) {
+		if (weap->GetWeaponID() == 5) {
+			if (thatEntity->objectType == ENEMY) {
+				ParticleManager::GetInstance()->GenerateExplosion(position);
+				this->SetIsDone(true);
+				for (auto it : EntityManager::GetInstance()->GetEntityList()) {
+					if (it->objectType == ENEMY) {
+						enemy = dynamic_cast<EnemyEntity*>(it);
+						if (enemy->GetActive()) {
+							if ((it->GetPosition() - position).LengthSquared() < 400) {
+								ParticleManager::GetInstance()->GenerateBlood(enemy->GetPosition());
+								enemy->SetHealth(enemy->GetHealth() - damage);
+								std::cout << "hito\n";
+								if (enemy->GetHealth() <= 0)
+								{
+									enemy->SetActive(false);
+									enemy->Reset();
+									Player::GetInstance()->SetMaterial(Player::GetInstance()->GetMaterial() + 200);
+								}
 							}
 						}
 					}
 				}
 			}
 		}
+		else
+			goto here;
 	}
 	else {
+		here:
 		switch (thatEntity->objectType) {
 		case ENEMY:
 			if (source != ENEMY_SOURCE) {
