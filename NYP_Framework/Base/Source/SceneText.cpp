@@ -430,30 +430,47 @@ void SceneText::Update(double dt)
 	{
 		isDay = false;
 		time = dayDuration;
+		calendarTime = 0.0;
 	}
 	if (KeyboardController::GetInstance()->IsKeyPressed(VK_F4) && !isDay)
 	{
 		isDay = true;
 		time = dayDuration;
+		calendarTime = dayDuration;
 		noOfDays++;
-		core->SetHealth(core->GetHealth() - 10);
+		core->SetHealth(core->GetHealth() - 100);
 	}
 	if (core->GetHealth() <= 0)
 	{
 		core->SetIsDone(true);
 		SceneManager::GetInstance()->SetActiveScene("Lose");
 	}
+	if (noOfDays >= 6)
+	{
+		SceneManager::GetInstance()->SetActiveScene("Win");
+	}
 	if (KeyboardController::GetInstance()->IsKeyPressed(VK_F6))
+	{
 		Player::GetInstance()->fatigue = Player::FATIGUE::TIRED;
+		MeshList::GetInstance()->GetMesh("Fatigue")->textureID[0] = LoadTGA("Image//Fatigue//Tired.tga");
+	}
 	if (KeyboardController::GetInstance()->IsKeyPressed(VK_F7))
+	{
 		Player::GetInstance()->fatigue = Player::FATIGUE::NORMAL;
+		MeshList::GetInstance()->GetMesh("Fatigue")->textureID[0] = LoadTGA("Image//Fatigue//Normal.tga");
+	}
 	if (KeyboardController::GetInstance()->IsKeyPressed(VK_F8))
+	{
 		Player::GetInstance()->fatigue = Player::FATIGUE::ENERGETIC;
+		MeshList::GetInstance()->GetMesh("Fatigue")->textureID[0] = LoadTGA("Image//Fatigue//Energetic.tga");
+	}
 	if (KeyboardController::GetInstance()->IsKeyPressed(VK_F9))
 		Player::GetInstance()->SetSlept(false);
 	if (KeyboardController::GetInstance()->IsKeyPressed(VK_F10))
 		Player::GetInstance()->SetSlept(true);
-	
+	if (KeyboardController::GetInstance()->IsKeyPressed(VK_F11))
+		SceneManager::GetInstance()->SetActiveScene("Lose");
+
 	//day night shift
 	time -= dt;
 	calendarTime -= dt;
@@ -493,6 +510,7 @@ void SceneText::Update(double dt)
 			MeshList::GetInstance()->GetMesh("Fatigue")->textureID[0] = LoadTGA("Image//Fatigue//Energetic.tga");
 			break;
 		}
+		calendarTime = 0.0;
 		Player::GetInstance()->SetSlept(false);
 	}
 	if (time <= 0.00 && !isDay)
@@ -673,7 +691,7 @@ void SceneText::Update(double dt)
 
 	ss.str("");
 	ss << "Material: " << Player::GetInstance()->GetMaterial();
-	textObj[3]->SetPosition(Vector3(-halfWindowWidth, -halfWindowHeight + fontSize * 2 + halfFontSize, 0.0f));
+	textObj[3]->SetPosition(Vector3(-halfWindowWidth, -halfWindowHeight + fontSize * 1 + halfFontSize, 0.0f));
 	textObj[3]->SetText(ss.str());
 
 	ss.str("");
@@ -731,7 +749,7 @@ void SceneText::Update(double dt)
 			}
 		}
 	}
-	textObj[4]->SetPosition(Vector3(-halfWindowWidth, -halfWindowHeight + fontSize * 3 + halfFontSize, 0.0f));
+	textObj[4]->SetPosition(Vector3(-halfWindowWidth, -halfWindowHeight + fontSize * 2 + halfFontSize, 0.0f));
 	textObj[4]->SetText(ss.str());
 
 	Delay += (float)dt;
