@@ -63,16 +63,7 @@ private:
 	Mesh* playerHealthBar;
 	Mesh* wireFrameBox;
 	Mesh* Shop;
-	Mesh* pistol;
-	Mesh* rifle;
-	Mesh* sniper;
-	Mesh* chickengun;
-	Mesh* gravitygun;
-	Mesh* machinegun;
-	Mesh* nailgun;
-	Mesh* rocketlauncher;
-	Mesh* railgun;
-	Mesh* redquad;
+	Mesh* BEW_UI; //Building,Equipment,Weapon UI
 	Mesh* Constrain;
 	CMinimap* theMiniMap;
 
