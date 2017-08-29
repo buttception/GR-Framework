@@ -47,9 +47,6 @@ public:
 	void AttachCamera(CameraBase* _cameraPtr);
 	void DetachCamera();
 
-	//shop tab
-	int tab;
-
 	// Movement
 	bool MoveFrontBack(const float deltaTime, const bool direction, const float speedMultiplier = 1.0f);
 	bool MoveLeftRight(const float deltaTime, const bool direction, const float speedMultiplier = 1.0f);

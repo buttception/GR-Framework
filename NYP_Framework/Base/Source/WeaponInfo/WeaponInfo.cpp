@@ -140,7 +140,7 @@ void CWeaponInfo::Init(void)
 	//maxTotalRounds = 999;
 
 	// The time between shots
-	timeBetweenShots = 0.2;
+	timeBetweenShots = 0.5;
 	// The elapsed time (between shots)
 	elapsedTime = 0.0;
 	// Boolean flag to indicate if weapon can fire now
