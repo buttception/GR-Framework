@@ -148,7 +148,7 @@ void EnemyTuck::CollisionResponse(GenericEntity * thatEntity)
 				break;
 			}
 		}
-									break;
+			break;
 		default:
 			return;
 		}

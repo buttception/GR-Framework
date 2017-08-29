@@ -25,13 +25,13 @@ bool CMinimap::isResizing = false;
 
 Player::Player(void)
 	: m_dSpeed(40.0)
-	, GenericEntity(MeshList::GetInstance()->GetMesh("wall"))
+	, GenericEntity(MeshList::GetInstance()->GetMesh("yee"))
 	, m_dAcceleration(10.0)
 	, m_dElapsedTime(0.0)
 	, attachedCamera(NULL)
 	, m_pTerrain(NULL)
 	, speedMultiplier(1.0)
-	, size(5)
+	, size(3)
 	, maxPlayerHealth(100)
 	, playerHealth(100)
 	, material(30000)
@@ -196,6 +196,15 @@ void Player::Update(double dt)
 {
 	keyboard->Read((float)dt);
 	mouse->Read((float)dt);
+
+	double mouseX, mouseY;
+	MouseController::GetInstance()->GetMousePosition(mouseX, mouseY);
+	MouseController::GetInstance()->UpdateMousePosition(mouseX, mouseY);//Application::GetInstance().GetWindowHeight() - 
+	MouseController::GetInstance()->GetMousePosition(mouseX, mouseY);
+
+	float windowWidth = (float)Application::GetInstance().GetWindowWidth();
+	float windowHeight = (float)Application::GetInstance().GetWindowHeight();
+	direction = Vector3((float)mouseX, (float)mouseY, 0.f) - Vector3(windowWidth / 2.f, windowHeight / 2.f, 0.f);
 
 	for (auto it : interactionList) {
 		it->Update();

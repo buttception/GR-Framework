@@ -114,9 +114,9 @@ public:
 	bool turretUnlock;
 
 	std::vector<InteractionEntity*>interactionList;
+	Vector3 direction;
 private:
 	Vector3 defaultPosition;
-	Vector3 direction;
 	Vector3 target;
 	Vector3 maxBoundary, minBoundary;
 	GroundEntity* m_pTerrain;
