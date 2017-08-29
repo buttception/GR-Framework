@@ -185,6 +185,24 @@ void EnemyCuck::Attack(GenericEntity * thatEntity, double dt)
 							target = nullptr;
 					}
 				}
+				else if (thatEntity->objectType == EQUIPMENT) {
+					EquipmentEntity* e;
+					if (e = dynamic_cast<EquipmentEntity*>(thatEntity)) {
+						if (e->type == EquipmentEntity::EQUIPMENT_TURRET) {
+							e->SetHealth(building->GetHealth() - damage);
+							if (e->GetHealth() <= 0) {
+								e->SetIsDone(true);
+								if (e->tile->equipment == e) {
+									e->tile->equipment = nullptr;
+								}
+							}
+						}
+					}
+					if (stateStack.top() == CHASE_STATE)
+						target = Player::GetInstance();
+					else
+						target = nullptr;
+				}
 				//}
 			}
 			else {

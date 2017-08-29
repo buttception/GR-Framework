@@ -15,6 +15,11 @@ BuildingEntity::~BuildingEntity()
 {
 }
 
+void BuildingEntity::Update(double dt)
+{
+	return;
+}
+
 void BuildingEntity::Render()
 {
 	MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();

@@ -19,6 +19,7 @@ public:
 		BUILDING_CORE
 	}type;
 
+	void Update(double dt);
 	void Render();
 
 	int GetHealth();
