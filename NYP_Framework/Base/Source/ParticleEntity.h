@@ -10,7 +10,8 @@ public:
 	virtual ~ParticleEntity();
 
 	enum PARTICLE_TYPE {
-		BLOOD
+		BLOOD,
+		EXPLOSION
 	}particleType;
 
 	void Update(double dt);

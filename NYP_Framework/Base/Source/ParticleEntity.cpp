@@ -27,6 +27,14 @@ void ParticleEntity::Update(double dt)
 			if (elaspedTime >= duration)
 				active = false;
 			break;
+		case EXPLOSION:
+			position += direction * velocity * dt;
+			if (velocity > 0)
+				velocity -= 1 * dt;
+			elaspedTime += dt;
+			if (elaspedTime >= duration)
+				active = false;
+			break;
 		default:
 			return;
 		}
@@ -38,11 +46,20 @@ void ParticleEntity::Render()
 	if (active) {
 		if (modelMesh) {
 			MS&ms = GraphicsManager::GetInstance()->GetModelStack();
-			ms.PushMatrix();
-			ms.Translate(position.x, position.y, position.z);
-			ms.Scale(scale.x, scale.y, scale.z);
-			RenderHelper::RenderMeshWithLight(modelMesh);
-			ms.PopMatrix();
+			if (particleType == BLOOD) {
+				ms.PushMatrix();
+				ms.Translate(position.x, position.y, position.z);
+				ms.Scale(scale.x, scale.y, scale.z);
+				RenderHelper::RenderMeshWithLight(modelMesh);
+				ms.PopMatrix();
+			}
+			else {
+				ms.PushMatrix();
+				ms.Translate(position.x, position.y, position.z);
+				ms.Scale(scale.x, scale.y, scale.z);
+				RenderHelper::RenderMesh(modelMesh);
+				ms.PopMatrix();
+			}
 		}
 	}
 }

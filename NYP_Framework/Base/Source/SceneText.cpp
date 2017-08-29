@@ -197,6 +197,7 @@ void SceneText::Init()
 
 	sun = MeshBuilder::GetInstance()->GenerateSphere("sphere", Color(1, 1, 1), 24, 24, 1);
 	MeshBuilder::GetInstance()->GenerateSphere("blood", Color(1, 0, 0), 24, 24, 1);
+	MeshBuilder::GetInstance()->GenerateSphere("explosion", Color(1, 1, 0), 24, 24, 1);
 	generatorCoreHealthBar = MeshBuilder::GetInstance()->GenerateQuad("generatorCoreHealthBar", Color(1, 0, 0), 1.f);
 	playerHealthBar = MeshBuilder::GetInstance()->GenerateQuad("playerHealthBar", Color(1, 0.64706f, 0), 1.f);
 	wireFrameBox = MeshBuilder::GetInstance()->GenerateQuad("wireFrameBox", Color(1, 0, 0), 1.f);

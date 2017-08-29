@@ -4,6 +4,7 @@
 #include "../Source/Sound_Engine.h"
 #include "PlayerInfo\PlayerInfo.h"
 #include "SceneText.h"
+#include "ParticleManager.h"
 
 EnemyAuck::EnemyAuck(std::string _meshName, Vector3 position) : EnemyEntity(_meshName)
 {
@@ -153,6 +154,7 @@ void EnemyAuck::Attack(GenericEntity * thatEntity, double dt)
 	attackElaspedTime += (float)dt;
 	if (attackElaspedTime >= attackSpeed) {
 		CSoundEngine::GetInstance()->playsinglesound("ALLAH", 0.1f);
+		ParticleManager::GetInstance()->GenerateExplosion(position);
 		//check if still in contact with its target
 		//test if this is too weak against player
 		if (target)

@@ -15,6 +15,7 @@ public:
 	void Render();
 	
 	void GenerateBlood(Vector3 _pos);
+	void GenerateExplosion(Vector3 _pos);
 
 	ParticleEntity* AddParticle(ParticleEntity::PARTICLE_TYPE _p, Mesh* _mesh, Vector3 _pos);
 
