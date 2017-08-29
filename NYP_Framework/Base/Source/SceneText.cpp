@@ -495,13 +495,13 @@ void SceneText::Update(double dt)
 	calendarTime -= dt;
 	if (calendarTime <= -180.f)
 		calendarTime = dayDuration;
-	if ((time <= 0.00 || Player::GetInstance()->GetSlept()) && isDay)
+	if ((time <= 0.001 || Player::GetInstance()->GetSlept()) && isDay)
 	{
 		time = dayDuration;
 		isDay = false;
 	}
 	//if a day(day and night) past,but no sleep
-	if (!isDay && !Player::GetInstance()->GetSlept() && time <= 0.001)
+	if (!isDay && !Player::GetInstance()->GetSlept() && time <= 0.002)
 	{
 		switch (Player::GetInstance()->fatigue)
 		{
@@ -532,7 +532,7 @@ void SceneText::Update(double dt)
 		calendarTime = 0.0;
 		Player::GetInstance()->SetSlept(false);
 	}
-	if (time <= 0.00 && !isDay)
+	if (time <= 0.001 && !isDay)
 	{
 		time = dayDuration;
 		isDay = true;

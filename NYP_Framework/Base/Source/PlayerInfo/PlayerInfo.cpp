@@ -52,7 +52,7 @@ Player::Player(void)
 	, spikesUnlock(false)
 {
 	//EntityManager::GetInstance()->AddEntity(this);
-	//objectType = GenericEntity::PLAYER;
+	objectType = GenericEntity::PLAYER;
 }
 
 Player::~Player(void)
