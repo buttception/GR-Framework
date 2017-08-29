@@ -36,7 +36,7 @@ void EnemyManager::Init()
 	// find a random angle to start spawning enemies
 	spawningAngle = Math::RandIntMinMax(0, 360);
 	// set the angle size
-	spawningSize = Math::RandIntMinMax(40, 60);
+	spawningSize = Math::RandIntMinMax(60, 80);
 	
 	//int angle = spawningAngle + spawningSize / 2;
 	//int x, y;	x = y = MAX_CELLS / 2;
@@ -107,9 +107,8 @@ void EnemyManager::Init()
 		//enemyMap["Ruck"].push_back(Create::Ruck("Ruck", Vector3(0, 0, 0)));
 		//enemyMap["Cuck"].push_back(Create::Cuck("Cuck", Vector3(0, 0, 0)));
 		//enemyMap["Tuck"].push_back(Create::Tuck("Tuck", Vector3(0, 0, 0)));
-		//enemyMap["Auck"].push_back(Create::Auck("Auck", Vector3(0, 0, 0)));
-		enemyMap["Buck"].push_back(Create::Buck("Buck", Vector3(0, 0, 0)));
-		//enemyMap["Ruck"].push_back(Create::Ruck("Ruck", Vector3(0, 0, 0)));
+		enemyMap["Auck"].push_back(Create::Auck("Auck", Vector3(0, 0, 0)));
+		//enemyMap["Buck"].push_back(Create::Buck("Buck", Vector3(0, 0, 0)));
 	}
 	else {
 		//this is for the game itself

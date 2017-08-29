@@ -198,6 +198,24 @@ void EnemyBuck::Attack(GenericEntity * thatEntity, double dt)
 				}
 				//}
 			}
+			else if (thatEntity->objectType == EQUIPMENT) {
+				EquipmentEntity* e;
+				if (e = dynamic_cast<EquipmentEntity*>(thatEntity)) {
+					if (e->type == EquipmentEntity::EQUIPMENT_TURRET) {
+						e->SetHealth(e->GetHealth() - damage);
+						if (e->GetHealth() <= 0) {
+							e->SetIsDone(true);
+							if (e->tile->equipment == e) {
+								e->tile->equipment = nullptr;
+							}
+						}
+					}
+				}
+				if (stateStack.top() == CHASE_STATE)
+					target = Player::GetInstance();
+				else
+					target = nullptr;
+			}
 			else {
 				if (stateStack.top() == CHASE_STATE)
 					target = Player::GetInstance();

@@ -46,6 +46,23 @@ void ParticleManager::GenerateBlood(Vector3 _pos)
 	}
 }
 
+void ParticleManager::GenerateExplosion(Vector3 _pos)
+{
+	for (size_t i = 0; i < 20; ++i) {
+		ParticleEntity* p;
+		if (p = AddParticle(ParticleEntity::EXPLOSION, MeshList::GetInstance()->GetMesh("explosion"), _pos)) {
+			float dX, dZ;
+			float scale;
+			dX = Math::RandFloatMinMax(-10, 10);
+			dZ = Math::RandFloatMinMax(-10, 10);
+			scale = Math::RandFloatMinMax(0.5, 1);
+			p->SetDirection(Vector3(dX, 0, dZ).Normalized());
+			p->SetVelocity(Math::RandFloatMinMax(5, 15));
+			p->SetScale(Vector3(scale, scale, scale));
+		}
+	}
+}
+
 ParticleEntity* ParticleManager::AddParticle(ParticleEntity::PARTICLE_TYPE _p, Mesh* _mesh, Vector3 _pos)
 {
 	ParticleEntity* p;

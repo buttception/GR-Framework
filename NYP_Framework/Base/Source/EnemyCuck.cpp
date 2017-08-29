@@ -109,14 +109,6 @@ void EnemyCuck::CollisionResponse(GenericEntity * thatEntity)
 		case EntityBase::EQUIPMENT: {
 			EquipmentEntity* equipment = dynamic_cast<EquipmentEntity*>(thatEntity);
 			// Attack Equipment except floor spike and healing station
-			if (stateStack.top() != ATTACK_STATE &&
-				equipment->type != EquipmentEntity::EQUIPMENT_FLOOR_SPIKE &&
-				equipment->type != EquipmentEntity::EQUIPMENT_HEALING_STATION)
-			{
-				stateStack.push(ATTACK_STATE);
-				target = thatEntity;
-			}
-			break;
 			switch (equipment->type) {
 			case EquipmentEntity::EQUIPMENT_TURRET:
 				if (!stateStack.empty())
@@ -166,9 +158,9 @@ void EnemyCuck::Attack(GenericEntity * thatEntity, double dt)
 		if (target)
 		{
 		//if (CollisionManager::GetInstance()->CheckAABBCollision(this, thatEntity)){
+			BuildingEntity* building;
 			if (thatEntity->objectType == BUILDING) {
-				BuildingEntity* building = dynamic_cast<BuildingEntity*>(thatEntity);
-				if (building) {
+				if (building = dynamic_cast<BuildingEntity*>(thatEntity)) {
 					// damage the building
 					building->SetHealth(building->GetHealth() - damage);
 					std::cout << "building health: " << building->GetHealth() << std::endl;
@@ -197,6 +189,24 @@ void EnemyCuck::Attack(GenericEntity * thatEntity, double dt)
 					}
 				}
 				//}
+			}
+			else if (thatEntity->objectType == EQUIPMENT) {
+				EquipmentEntity* e;
+				if (e = dynamic_cast<EquipmentEntity*>(thatEntity)) {
+					if (e->type == EquipmentEntity::EQUIPMENT_TURRET) {
+						e->SetHealth(e->GetHealth() - damage);
+						if (e->GetHealth() <= 0) {
+							e->SetIsDone(true);
+							if (e->tile->equipment == e) {
+								e->tile->equipment = nullptr;
+							}
+						}
+					}
+				}
+				if (stateStack.top() == CHASE_STATE)
+					target = Player::GetInstance();
+				else
+					target = nullptr;
 			}
 			else {
 				if (stateStack.top() == CHASE_STATE)

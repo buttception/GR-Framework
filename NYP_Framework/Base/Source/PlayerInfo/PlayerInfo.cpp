@@ -16,6 +16,7 @@
 #include "../EnemyEntity.h"
 #include "LoadTGA.cpp"
 #include "../InteractionEntity.h"
+#include "../ParticleManager.h"
 
 bool SceneText::isDay = true;
 bool CMinimap::isResizing = false;
@@ -1150,6 +1151,7 @@ void Player::CollisionResponse(GenericEntity *thatEntity)
 	   break;
 	case PROJECTILE:{
 		Projectile* p = dynamic_cast<Projectile*>(thatEntity);
+		ParticleManager::GetInstance()->GenerateBlood(position);
 		if (p) {
 			switch (p->source) {
 			case Projectile::ENEMY_SOURCE:

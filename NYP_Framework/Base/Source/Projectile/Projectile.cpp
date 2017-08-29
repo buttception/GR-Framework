@@ -150,15 +150,18 @@ void Projectile::CollisionResponse(GenericEntity * thatEntity)
 			}
 		}
 		break;
-	case BUILDING:
-		if (source == ENEMY_SOURCE) {
-			BuildingEntity* b = dynamic_cast<BuildingEntity*>(thatEntity);
-			b->SetHealth(b->GetHealth() - damage);
-			if (b->GetHealth() <= 0) {
-				b->SetIsDone(true);
+	case BUILDING: {
+		BuildingEntity* b = dynamic_cast<BuildingEntity*>(thatEntity);
+		if (b->type != BuildingEntity::BUILDING_COVER) {
+			if (source == ENEMY_SOURCE) {
+				b->SetHealth(b->GetHealth() - damage);
+				if (b->GetHealth() <= 0) {
+					b->SetIsDone(true);
+				}
 			}
+			this->SetIsDone(true);
 		}
-		this->SetIsDone(true);
+	}
 		break;
 	case EQUIPMENT:
 		if (source == PLAYER_SOURCE) {

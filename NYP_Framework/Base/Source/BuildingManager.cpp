@@ -38,17 +38,29 @@ BuildingEntity* BuildingManager::AddBuilding(int _x, int _y, BuildingTile::TILE_
 		wall = new BuildingEntity("floor");
 	else if (type == BuildingEntity::BUILDING_CORE)
 		wall = new BuildingEntity("core");
-	wall->SetHealth(100);
-	wall->SetGrid(_x, _y);
-	wall->SetLevel(1);
-	wall->objectType = GenericEntity::BUILDING;
-	wall->type = type;
+	if (type != BuildingEntity::BUILDING_COVER) {
+		wall->SetHealth(100);
+		wall->SetGrid(_x, _y);
+		wall->SetLevel(1);
+		wall->objectType = GenericEntity::BUILDING;
+		wall->type = type;
+	}
+	else {
+		wall->SetHealth(75);
+		wall->SetGrid(_x, _y);
+		wall->SetLevel(1);
+		wall->objectType = GenericEntity::BUILDING;
+		wall->type = type;
+	}
 
 	if (type != BuildingEntity::BUILDING_FLOOR && type != BuildingEntity::BUILDING_CORE)
 	{
 		//where 1 -> left, 2 -> top, 3 -> right, 4 ->bottom
 		if (direction == BuildingTile::LEFT) {
-			wall->SetScale(Vector3(2, 10, CELL_SIZE));
+			if (type == BuildingEntity::BUILDING_COVER)
+				wall->SetScale(Vector3(2, 5, CELL_SIZE));
+			else
+				wall->SetScale(Vector3(2, 10, CELL_SIZE));
 			wall->SetPosition(Vector3((float)_x * CELL_SIZE, 0.f, (float)_y * CELL_SIZE + CELL_SIZE / 2.f));
 			Vector3 max(wall->GetPosition().x + wall->GetScale().x / 2, 1, wall->GetPosition().z + wall->GetScale().z / 2);
 			Vector3 min(wall->GetPosition().x - wall->GetScale().x / 2, 0, wall->GetPosition().z - wall->GetScale().z / 2);
@@ -56,7 +68,10 @@ BuildingEntity* BuildingManager::AddBuilding(int _x, int _y, BuildingTile::TILE_
 			buildingArray[_x][_y]->AddWall(wall, BuildingTile::LEFT);
 		}
 		else if (direction == BuildingTile::TOP) {
-			wall->SetScale(Vector3(CELL_SIZE, 10, 2));
+			if (type == BuildingEntity::BUILDING_COVER)
+				wall->SetScale(Vector3(CELL_SIZE, 5, 2));
+			else
+				wall->SetScale(Vector3(CELL_SIZE, 10, 2));
 			wall->SetPosition(Vector3((float)_x * CELL_SIZE + CELL_SIZE / 2.f, 0.f, (float)_y * CELL_SIZE));
 			Vector3 max(wall->GetPosition().x + wall->GetScale().x / 2, 1, wall->GetPosition().z + wall->GetScale().z / 2);
 			Vector3 min(wall->GetPosition().x - wall->GetScale().x / 2, 0, wall->GetPosition().z - wall->GetScale().z / 2);
@@ -64,7 +79,10 @@ BuildingEntity* BuildingManager::AddBuilding(int _x, int _y, BuildingTile::TILE_
 			buildingArray[_x][_y]->AddWall(wall, BuildingTile::TOP);
 		}
 		else if (direction == BuildingTile::RIGHT) {
-			wall->SetScale(Vector3(2, 10, CELL_SIZE));
+			if (type == BuildingEntity::BUILDING_COVER)
+				wall->SetScale(Vector3(2, 5, CELL_SIZE));
+			else
+				wall->SetScale(Vector3(2, 10, CELL_SIZE));
 			//if it is on the right, which is the next tile set unless is end
 			if (_x + 1 != MAX_CELLS) {
 				delete wall;
@@ -79,7 +97,10 @@ BuildingEntity* BuildingManager::AddBuilding(int _x, int _y, BuildingTile::TILE_
 			}
 		}
 		else if (direction == BuildingTile::BOTTOM) {
-			wall->SetScale(Vector3(CELL_SIZE, 10, 2));
+			if (type == BuildingEntity::BUILDING_COVER)
+				wall->SetScale(Vector3(CELL_SIZE, 5, 2));
+			else
+				wall->SetScale(Vector3(CELL_SIZE, 10, 2));
 			//if it is on the bottom, which is the bottom tile set unless is end
 			if (_y >= 0) {
 				delete wall;
