@@ -37,6 +37,7 @@ public:
 			maxAABB.Set(position.x + scale.x / 2, position.y + scale.y / 2, 0);
 		}
 	}
+
 	int x, y;
 	int xFull, yFull;
 	float posX, posY;

@@ -8,6 +8,7 @@
 #include "../PlayerInfo/PlayerInfo.h"
 
 class Player;
+class CWeaponInfo;
 
 class Projectile : public GenericEntity {
 public:
@@ -21,6 +22,10 @@ public:
 		ENEMY_SOURCE,
 		PLAYER_SOURCE
 	}source;
+
+	CWeaponInfo* weap;
+
+	bool pent;
 
 	// Activate the projectile. true == active, false == inactive
 	void SetStatus(const bool m_bStatus);

@@ -29,8 +29,8 @@ public:
 	int GetWindowWidth();
 	
 	// Should make these not hard-coded :P
-	int m_window_width = GetSystemMetrics(SM_CXSCREEN);
-	int m_window_height = GetSystemMetrics(SM_CYSCREEN);
+	int m_window_width = 800;
+	int m_window_height = 600;
 private:
 	Application();
 	~Application();

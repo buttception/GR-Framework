@@ -14,6 +14,7 @@ Projectile::Projectile(std::string _meshName) : GenericEntity(MeshList::GetInsta
 , m_fSpeed(40.0f)
 , damage(0)
 , size(0.5)
+, pent(0)
 {
 
 }
@@ -133,43 +134,72 @@ void Projectile::CollisionResponse(GenericEntity * thatEntity)
 {
 	EnemyEntity* enemy = dynamic_cast<EnemyEntity*>(thatEntity);
 
-	switch (thatEntity->objectType) {
-	case ENEMY:
-		if (source != ENEMY_SOURCE) {
+	if (weap->GetWeaponID() == 5) {
+		if (thatEntity->objectType == ENEMY) {
+			ParticleManager::GetInstance()->GenerateExplosion(position);
 			this->SetIsDone(true);
-			ParticleManager::GetInstance()->GenerateBlood(enemy->GetPosition());
-			if (enemy->GetActive()) {
-				enemy->SetHealth(enemy->GetHealth() - damage);
-				std::cout << "hito\n";
-				if (enemy->GetHealth() <= 0)
-				{
-					enemy->SetActive(false);
-					enemy->Reset();
-					Player::GetInstance()->SetMaterial(Player::GetInstance()->GetMaterial() + 100);
+			for (auto it : EntityManager::GetInstance()->GetEntityList()) {
+				if (it->objectType == ENEMY) {
+					enemy = dynamic_cast<EnemyEntity*>(it);
+					if (enemy->GetActive()) {
+						if ((it->GetPosition() - position).LengthSquared() < 400) {
+							ParticleManager::GetInstance()->GenerateBlood(enemy->GetPosition());
+							enemy->SetHealth(enemy->GetHealth() - damage);
+							std::cout << "hito\n";
+							if (enemy->GetHealth() <= 0)
+							{
+								enemy->SetActive(false);
+								enemy->Reset();
+								Player::GetInstance()->SetMaterial(Player::GetInstance()->GetMaterial() + 200);
+							}
+						}
+					}
 				}
 			}
-		}
-		break;
-	case BUILDING: {
-		BuildingEntity* b = dynamic_cast<BuildingEntity*>(thatEntity);
-		if (b->type != BuildingEntity::BUILDING_COVER) {
-			if (source == ENEMY_SOURCE) {
-				b->SetHealth(b->GetHealth() - damage);
-				if (b->GetHealth() <= 0) {
-					b->SetIsDone(true);
-				}
-			}
-			this->SetIsDone(true);
 		}
 	}
-		break;
-	case EQUIPMENT:
-		if (source == PLAYER_SOURCE) {
+	else {
+		switch (thatEntity->objectType) {
+		case ENEMY:
+			if (source != ENEMY_SOURCE) {
+				this->SetIsDone(true);
+				ParticleManager::GetInstance()->GenerateBlood(enemy->GetPosition());
+				if (enemy->GetActive()) {
+					enemy->SetHealth(enemy->GetHealth() - damage);
+					std::cout << "hito\n";
+					if (enemy->GetHealth() <= 0)
+					{
+						enemy->SetActive(false);
+						enemy->Reset();
+						Player::GetInstance()->SetMaterial(Player::GetInstance()->GetMaterial() + 200);
+					}
+				}
+			}
 			break;
+		case BUILDING: {
+			BuildingEntity* b = dynamic_cast<BuildingEntity*>(thatEntity);
+			if (pent) {
+				break;
+			}
+			if (b->type != BuildingEntity::BUILDING_COVER) {
+				if (source == ENEMY_SOURCE) {
+					b->SetHealth(b->GetHealth() - damage);
+					if (b->GetHealth() <= 0) {
+						b->SetIsDone(true);
+					}
+				}
+				this->SetIsDone(true);
+			}
 		}
+					   break;
+		case EQUIPMENT:
+			if (source == PLAYER_SOURCE) {
+				break;
+			}
 
-		this->SetIsDone(true);
-	default:
-		return;
+			this->SetIsDone(true);
+		default:
+			return;
+		}
 	}
 }

@@ -112,14 +112,14 @@ void Player::Init(void)
 		(int)(Player::GetInstance()->GetPosition().z / CELL_SIZE),
 		BuildingTile::TOP, BuildingEntity::BUILDING_CORE);
 
-	interactionList.push_back(InteractionEntity(-0.53f, 0.25f, 0.12f, 0.07f));
-	interactionList.push_back(InteractionEntity(-0.53f, 0.05, 0.12f, 0.07f));
-	interactionList.push_back(InteractionEntity(-0.53f, -0.21, 0.12f, 0.07f));
-	interactionList.push_back(InteractionEntity(-0.53f, -0.44, 0.12f, 0.07f));
-	interactionList.push_back(InteractionEntity(0.15, 0.25f, 0.12f, 0.07f));
-	interactionList.push_back(InteractionEntity(0.15, 0.05, 0.12f, 0.07f));
-	interactionList.push_back(InteractionEntity(0.15f, -0.21, 0.12f, 0.07f));
-	interactionList.push_back(InteractionEntity(0.15f, -0.44, 0.12f, 0.07f));
+	interactionList.push_back(new InteractionEntity(-0.53f, 0.25f, 0.12f, 0.07f));
+	interactionList.push_back(new InteractionEntity(-0.53f, 0.05, 0.12f, 0.07f));
+	interactionList.push_back(new InteractionEntity(-0.53f, -0.21, 0.12f, 0.07f));
+	interactionList.push_back(new InteractionEntity(-0.53f, -0.44, 0.12f, 0.07f));
+	interactionList.push_back(new InteractionEntity(0.15, 0.25f, 0.12f, 0.07f));
+	interactionList.push_back(new InteractionEntity(0.15, 0.05, 0.12f, 0.07f));
+	interactionList.push_back(new InteractionEntity(0.15f, -0.21, 0.12f, 0.07f));
+	interactionList.push_back(new InteractionEntity(0.15f, -0.44, 0.12f, 0.07f));
 }
 
 // Set the boundary for the player info
@@ -154,6 +154,10 @@ void Player::Update(double dt)
 {
 	keyboard->Read((float)dt);
 	mouse->Read((float)dt);
+
+	for (auto it : interactionList) {
+		it->Update();
+	}
 
 	if (attachedCamera == NULL)
 		std::cout << "No camera attached! Please make sure to attach one" << std::endl;
@@ -559,14 +563,17 @@ bool Player::LeftClick(float dt)
 					//x -= Application::GetInstance().GetWindowWidth() / 2.0f;
 					//y -= Application::GetInstance().GetWindowHeight() / 2.0f;
 
+					x -= halfWindowWidth;
+					y -= halfWindowHeight;
+
 					//std::cout << "X:" << x - halfWindowWidth << std::endl;
 					//std::cout << "Y:" << y - halfWindowHeight << std::endl;
 					//std::cout << "max X:" << interactionList[i].GetMaxAABB().x << std::endl;
 					//std::cout << "min X:" << interactionList[i].GetMinAABB().x << std::endl;
 					//std::cout << "max Y:" << interactionList[i].GetMaxAABB().y << std::endl;
 					//std::cout << "min Y:" << interactionList[i].GetMinAABB().y << std::endl;
-					if (x - halfWindowWidth <= interactionList[i].GetMaxAABB().x && x - halfWindowWidth >= interactionList[i].GetMinAABB().x &&
-						y - halfWindowHeight <= interactionList[i].GetMaxAABB().y && y - halfWindowHeight >= interactionList[i].GetMinAABB().y) {
+					if (x <= interactionList[i]->GetMaxAABB().x && x >= interactionList[i]->GetMinAABB().x &&
+						y <= interactionList[i]->GetMaxAABB().y && y >= interactionList[i]->GetMinAABB().y) {
 						//based on what is i
 						//based on the push order, u need to noe what button they clicked
 						std::cout << "true\n";

@@ -26,6 +26,7 @@
 #include "HardwareAbstraction\Keyboard.h"
 #include "BuildingManager.h" 
 #include "../Source/Sound_Engine.h"
+#include "InteractionEntity.h"
 
 #include <iostream>
 #include "RenderHelper.h"
@@ -959,6 +960,13 @@ void SceneText::RenderPassMain()
 
 	}
 
+	for (int i = 0; i < Player::GetInstance()->interactionList.size(); ++i) {
+		ms.PushMatrix();
+		ms.Translate(Player::GetInstance()->interactionList[i]->GetPosition().x, Player::GetInstance()->interactionList[i]->GetPosition().y, Player::GetInstance()->interactionList[i]->GetPosition().z);
+		ms.Scale(Player::GetInstance()->interactionList[i]->GetScale().x, Player::GetInstance()->interactionList[i]->GetScale().y, Player::GetInstance()->interactionList[i]->GetScale().z);
+		//RenderHelper::RenderMesh(redquad);
+		ms.PopMatrix();
+	}
 
 	//RenderHelper::RenderTextOnScreen(text, std::to_string(fps), Color(0, 1, 0), 2, 0, 0);
 	glEnable(GL_DEPTH_TEST);

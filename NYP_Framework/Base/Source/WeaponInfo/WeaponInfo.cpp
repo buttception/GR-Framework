@@ -185,6 +185,8 @@ void CWeaponInfo::Discharge(Vector3 position, Vector3 target, Player* _source)
 			aProjectile->SetCollider(true);
 			aProjectile->SetLifetime(10);
 			aProjectile->SetDamage(GetWeaponDamage());
+			aProjectile->weap = this;
+			aProjectile->pent = penetration;
 			aProjectile->SetDirection(target);
 			aProjectile->SetStatus(true);
 			aProjectile->SetAABB(Vector3(0.5f, 0.5f, 0.5f), Vector3(-0.5f, -0.5f, -0.5f));

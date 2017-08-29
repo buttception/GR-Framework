@@ -107,7 +107,7 @@ public:
 	}fatigue;
 
 	float size;
-	std::vector<InteractionEntity>interactionList;
+	std::vector<InteractionEntity*>interactionList;
 private:
 	Vector3 defaultPosition;
 	Vector3 direction;
