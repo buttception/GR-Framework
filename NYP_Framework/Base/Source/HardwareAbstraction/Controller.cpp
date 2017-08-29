@@ -76,7 +76,7 @@ bool Controller::MoveRight(double dt)
 
 bool Controller::Interact(double dt)
 {
-	std::cout << "Interact" << std::endl;
+	thePlayerInfo->Interact();
 	return false;
 }
 

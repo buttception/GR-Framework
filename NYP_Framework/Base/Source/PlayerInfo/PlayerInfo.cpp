@@ -809,6 +809,296 @@ bool Player::MapResize()
 	return false;
 }
 
+bool Player::Interact()
+{
+	//convert mouse pos on window onto world
+	double mouseX, mouseY;
+	MouseController::GetInstance()->GetMousePosition(mouseX, mouseY);
+	MouseController::GetInstance()->UpdateMousePosition(mouseX, Application::GetInstance().GetWindowHeight() - mouseY);
+	MouseController::GetInstance()->GetMousePosition(mouseX, mouseY);
+
+	float windowWidth = (float)Application::GetInstance().GetWindowWidth();
+	float windowHeight = (float)Application::GetInstance().GetWindowHeight();
+	//for the direction player is pointing at
+	Vector3 Up_Direction = Vector3(windowWidth / 2.f, windowHeight, 0.f) - Vector3(windowWidth / 2.f, windowHeight / 2.f, 0.f);
+	Vector3 playerMouse_Direction = Vector3((float)mouseX, (float)mouseY, 0.f) - Vector3(windowWidth / 2.f, windowHeight / 2.f, 0.f);
+
+	try
+	{
+		playerMouse_Direction.Normalize();
+		float angle = Math::RadianToDegree(acosf(playerMouse_Direction.Dot(Up_Direction) / (playerMouse_Direction.Length() * Up_Direction.Length())));
+		if (playerMouse_Direction.x < 0)
+			angle = -angle;
+
+		int x = (int)(position.x / CELL_SIZE);
+		int z = (int)(position.z / CELL_SIZE);
+
+		if (SceneText::isDay)
+		{
+			if (isBuilding && currentBuilding != BuildingEntity::BUILDING_FLOOR)
+			{
+				BuildingTile* tile = BuildingManager::GetInstance()->GetBuildingArray()[x][z];
+				// Up
+				if ((angle >= -180.f && angle <= -127.f) || (angle <= 180.f && angle >= 127.f))
+				{
+					if (tile->topWall != nullptr)
+					{
+						switch (tile->topWall->GetLevel())
+						{
+						case 1:
+							if (Player::GetInstance()->GetMaterial() >= 200)
+							{
+								tile->topWall->SetLevel(2);
+								tile->topWall->SetHealth(200);
+								Player::GetInstance()->SetMaterial(Math::Max(0, Player::GetInstance()->GetMaterial() - 200));
+							}
+							break;
+						case 2:
+							if (Player::GetInstance()->GetMaterial() >= 300)
+							{
+								tile->topWall->SetLevel(3);
+								tile->topWall->SetHealth(300);
+								Player::GetInstance()->SetMaterial(Math::Max(0, Player::GetInstance()->GetMaterial() - 300));
+							}
+							break;
+						}
+						//CSoundEngine::GetInstance()->playthesound("Remove", 0.2f);
+						//std::cout << "Remove Sound Played" << std::endl;
+					}
+					//else
+					//{
+					//	CSoundEngine::GetInstance()->playsinglesound("NULL", 0.2f);
+					//	std::cout << "Null Sound Played" << std::endl;
+					//}
+				}
+				// Left
+				else if (angle >= -127.f && angle <= -53.f)
+				{
+					if (tile->leftWall != nullptr)
+					{
+						switch (tile->leftWall->GetLevel())
+						{
+						case 1:
+							if (Player::GetInstance()->GetMaterial() >= 200)
+							{
+								tile->leftWall->SetLevel(2);
+								tile->leftWall->SetHealth(200);
+								Player::GetInstance()->SetMaterial(Math::Max(0, Player::GetInstance()->GetMaterial() - 200));
+							}
+							break;
+						case 2:
+							if (Player::GetInstance()->GetMaterial() >= 300)
+							{
+								tile->leftWall->SetLevel(3);
+								tile->leftWall->SetHealth(300);
+								Player::GetInstance()->SetMaterial(Math::Max(0, Player::GetInstance()->GetMaterial() - 300));
+							}
+							break;
+						}
+						//CSoundEngine::GetInstance()->playthesound("Remove", 0.2f);
+						//std::cout << "Remove Sound Played" << std::endl;
+					}
+					//else
+					//{
+					//	CSoundEngine::GetInstance()->playsinglesound("NULL", 0.2f);
+					//	std::cout << "Null Sound Played" << std::endl;
+					//}
+				}
+				// Right
+				else if (angle >= 53.f && angle <= 127.f)
+				{
+					if (x + 1 != MAX_CELLS)
+					{
+						BuildingTile* nextTile = BuildingManager::GetInstance()->GetBuildingArray()[x + 1][z];
+						if (nextTile->leftWall != nullptr)
+						{
+							switch (nextTile->leftWall->GetLevel())
+							{
+							case 1:
+								if (Player::GetInstance()->GetMaterial() >= 200)
+								{
+									nextTile->leftWall->SetLevel(2);
+									nextTile->leftWall->SetHealth(200);
+									Player::GetInstance()->SetMaterial(Math::Max(0, Player::GetInstance()->GetMaterial() - 200));
+								}
+								break;
+							case 2:
+								if (Player::GetInstance()->GetMaterial() >= 300)
+								{
+									nextTile->leftWall->SetLevel(3);
+									nextTile->leftWall->SetHealth(300);
+									Player::GetInstance()->SetMaterial(Math::Max(0, Player::GetInstance()->GetMaterial() - 300));
+								}
+								break;
+							}
+							//CSoundEngine::GetInstance()->playthesound("Remove", 0.2f);
+							//std::cout << "Remove Sound Played" << std::endl;
+						}
+						//else
+						//{
+						//	CSoundEngine::GetInstance()->playsinglesound("NULL", 0.2f);
+						//	std::cout << "Null Sound Played" << std::endl;
+						//}
+					}
+					else
+					{
+						if (tile->rightWall != nullptr)
+						{
+							switch (tile->rightWall->GetLevel())
+							{
+							case 1:
+								if (Player::GetInstance()->GetMaterial() >= 200)
+								{
+									tile->rightWall->SetLevel(2);
+									tile->rightWall->SetHealth(200);
+									Player::GetInstance()->SetMaterial(Math::Max(0, Player::GetInstance()->GetMaterial() - 200));
+								}
+								break;
+							case 2:
+								if (Player::GetInstance()->GetMaterial() >= 300)
+								{
+									tile->rightWall->SetLevel(3);
+									tile->rightWall->SetHealth(300);
+									Player::GetInstance()->SetMaterial(Math::Max(0, Player::GetInstance()->GetMaterial() - 300));
+								}
+								break;
+							}
+							//CSoundEngine::GetInstance()->playthesound("Remove", 0.2f);
+							//std::cout << "Remove Sound Played" << std::endl;
+						}
+						//else
+						//{
+						//	CSoundEngine::GetInstance()->playsinglesound("NULL", 0.2f);
+						//	std::cout << "Null Sound Played" << std::endl;
+						//}
+					}
+				}
+				// Down
+				else if (angle >= -53.f && angle <= 53.f)
+				{
+					if (z >= 0)
+					{
+						BuildingTile* nextTile = BuildingManager::GetInstance()->GetBuildingArray()[x][z + 1];
+						if (nextTile->topWall != nullptr)
+						{
+							switch (nextTile->topWall->GetLevel())
+							{
+							case 1:
+								if (Player::GetInstance()->GetMaterial() >= 200)
+								{
+									nextTile->topWall->SetLevel(2);
+									nextTile->topWall->SetHealth(200);
+									Player::GetInstance()->SetMaterial(Math::Max(0, Player::GetInstance()->GetMaterial() - 200));
+								}
+								break;
+							case 2:
+								if (Player::GetInstance()->GetMaterial() >= 300)
+								{
+									nextTile->topWall->SetLevel(3);
+									nextTile->topWall->SetHealth(300);
+									Player::GetInstance()->SetMaterial(Math::Max(0, Player::GetInstance()->GetMaterial() - 300));
+								}
+								break;
+							}
+							//CSoundEngine::GetInstance()->playthesound("Remove", 0.2f);
+							//std::cout << "Remove Sound Played" << std::endl;
+						}
+						//else
+						//{
+						//	CSoundEngine::GetInstance()->playsinglesound("NULL", 0.2f);
+						//	std::cout << "Null Sound Played" << std::endl;
+						//}
+					}
+					else
+					{
+						if (tile->bottomWall != nullptr)
+						{
+							switch (tile->bottomWall->GetLevel())
+							{
+							case 1:
+								if (Player::GetInstance()->GetMaterial() >= 200)
+								{
+									tile->bottomWall->SetLevel(2);
+									tile->bottomWall->SetHealth(200);
+									Player::GetInstance()->SetMaterial(Math::Max(0, Player::GetInstance()->GetMaterial() - 200));
+								}
+								break;
+							case 2:
+								if (Player::GetInstance()->GetMaterial() >= 300)
+								{
+									tile->bottomWall->SetLevel(3);
+									tile->bottomWall->SetHealth(300);
+									Player::GetInstance()->SetMaterial(Math::Max(0, Player::GetInstance()->GetMaterial() - 300));
+								}
+								break;
+							}
+							//CSoundEngine::GetInstance()->playthesound("Remove", 0.2f);
+							//std::cout << "Remove Sound Played" << std::endl;
+						}
+						//else
+						//{
+						//	CSoundEngine::GetInstance()->playsinglesound("NULL", 0.2f);
+						//	std::cout << "Null Sound Played" << std::endl;
+						//}
+					}
+				}
+			}
+			// Floor
+			if (isBuilding && currentBuilding == BuildingEntity::BUILDING_FLOOR)
+			{
+				BuildingTile* tile = BuildingManager::GetInstance()->GetBuildingArray()[(int)(250 / CELL_SIZE)][(int)(250 / CELL_SIZE)];
+				if (tile->floor != nullptr)
+				{
+					slept = true;
+					//CSoundEngine::GetInstance()->playthesound("Remove", 0.2f);
+					//std::cout << "Remove Sound Played" << std::endl;
+				}
+				//else
+				//{
+				//	CSoundEngine::GetInstance()->playsinglesound("NULL", 0.2f);
+				//	std::cout << "Null Sound Played" << std::endl;
+				//}
+			}
+			else if (isEquipment)
+			{
+				BuildingTile* tile = BuildingManager::GetInstance()->GetBuildingArray()[x][z];
+				if (tile->equipment != nullptr)
+				{
+					switch (tile->equipment->GetLevel())
+					{
+					case 1:
+						if (Player::GetInstance()->GetMaterial() >= 400)
+						{
+							tile->equipment->SetLevel(2);
+							Player::GetInstance()->SetMaterial(Math::Max(0, Player::GetInstance()->GetMaterial() - 400));
+						}
+						break;
+					case 2:
+						if (Player::GetInstance()->GetMaterial() >= 600)
+						{
+							tile->equipment->SetLevel(3);
+							Player::GetInstance()->SetMaterial(Math::Max(0, Player::GetInstance()->GetMaterial() - 600));
+						}
+						break;
+					}
+					//CSoundEngine::GetInstance()->playthesound("Remove", 0.2f);
+					//std::cout << "Remove Sound Played" << std::endl;
+				}
+				//else
+				//{
+				//	CSoundEngine::GetInstance()->playsinglesound("NULL", 0.2f);
+				//	std::cout << "Null Sound Played" << std::endl;
+				//}
+			}
+		}
+	}
+	catch (DivideByZero)
+	{
+		std::cout << "Cannot move mouse to center, divide by zero(Normalize to find angle)" << std::endl;
+	}
+	return false;
+}
+
 void Player::CollisionResponse(GenericEntity *thatEntity)
 {
 	switch (thatEntity->objectType)
@@ -826,7 +1116,18 @@ void Player::CollisionResponse(GenericEntity *thatEntity)
 			if (equipment->healTimer >= equipment->healCoolDown &&
 				!SceneText::isDay)
 			{
-				playerHealth = Math::Min(maxPlayerHealth, playerHealth + 20);
+				switch (equipment->GetLevel())
+				{
+				case 1:
+					playerHealth = Math::Min(maxPlayerHealth, playerHealth + 20);
+					break;
+				case 2:
+					playerHealth = Math::Min(maxPlayerHealth, playerHealth + 40);
+					break;
+				case 3:
+					playerHealth = Math::Min(maxPlayerHealth, playerHealth + 60);
+					break;
+				}
 				equipment->healTimer = 0.f;
 			}
 			break;

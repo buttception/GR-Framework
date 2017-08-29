@@ -53,6 +53,7 @@ public:
 	bool LeftClick(float dt);
 	bool RightClick();
 	bool MapResize();
+	bool Interact();
 	void CollisionResponse(GenericEntity* thatEntity);
 
 	int GetMaterial(void) const { return material; }

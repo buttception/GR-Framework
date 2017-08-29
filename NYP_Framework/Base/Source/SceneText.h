@@ -64,6 +64,7 @@ private:
 	Mesh* wireFrameBox;
 	Mesh* Shop;
 	Mesh* BEW_UI; //Building,Equipment,Weapon UI
+	Mesh* redquad;
 	Mesh* Constrain;
 	CMinimap* theMiniMap;
 

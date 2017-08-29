@@ -201,9 +201,13 @@ void SceneText::Init()
 	playerHealthBar = MeshBuilder::GetInstance()->GenerateQuad("playerHealthBar", Color(1, 0.64706f, 0), 1.f);
 	wireFrameBox = MeshBuilder::GetInstance()->GenerateQuad("wireFrameBox", Color(1, 0, 0), 1.f);
 
-	//Building,Equipment,Weapon UI
-	BEW_UI = MeshBuilder::GetInstance()->GenerateQuad("BEW_UI", Color(1, 1, 1), 1.0f);
+	// current weapon UI
+
+	BEW_UI = MeshBuilder::GetInstance()->GenerateQuad("pistol", Color(1, 1, 1), 1.0f);
 	BEW_UI->textureID[0] = LoadTGA("Image//weapon//pistol.tga");
+
+	redquad = MeshBuilder::GetInstance()->GenerateQuad("redquad", Color(1, 1, 1), 1.0f);
+	redquad->textureID[0] = LoadTGA("Image//Red.tga");
 
 	//Minimap
 	theMiniMap = Create::Minimap();
@@ -440,30 +444,45 @@ void SceneText::Update(double dt)
 	{
 		isDay = false;
 		time = dayDuration;
+		calendarTime = 0.0;
 	}
 	if (KeyboardController::GetInstance()->IsKeyPressed(VK_F4) && !isDay)
 	{
 		isDay = true;
 		time = dayDuration;
+		calendarTime = dayDuration;
 		noOfDays++;
-		core->SetHealth(core->GetHealth() - 10);
+		core->SetHealth(core->GetHealth() - 100);
 	}
 	if (core->GetHealth() <= 0)
 	{
 		core->SetIsDone(true);
 		SceneManager::GetInstance()->SetActiveScene("Lose");
 	}
+	if (noOfDays >= 6)
+		SceneManager::GetInstance()->SetActiveScene("Win");
 	if (KeyboardController::GetInstance()->IsKeyPressed(VK_F6))
+	{
 		Player::GetInstance()->fatigue = Player::FATIGUE::TIRED;
+		MeshList::GetInstance()->GetMesh("Fatigue")->textureID[0] = LoadTGA("Image//Fatigue//Tired.tga");
+	}
 	if (KeyboardController::GetInstance()->IsKeyPressed(VK_F7))
+	{
 		Player::GetInstance()->fatigue = Player::FATIGUE::NORMAL;
+		MeshList::GetInstance()->GetMesh("Fatigue")->textureID[0] = LoadTGA("Image//Fatigue//Normal.tga");
+	}
 	if (KeyboardController::GetInstance()->IsKeyPressed(VK_F8))
+	{
 		Player::GetInstance()->fatigue = Player::FATIGUE::ENERGETIC;
+		MeshList::GetInstance()->GetMesh("Fatigue")->textureID[0] = LoadTGA("Image//Fatigue//Energetic.tga");
+	}
 	if (KeyboardController::GetInstance()->IsKeyPressed(VK_F9))
 		Player::GetInstance()->SetSlept(false);
 	if (KeyboardController::GetInstance()->IsKeyPressed(VK_F10))
 		Player::GetInstance()->SetSlept(true);
-	
+	if (KeyboardController::GetInstance()->IsKeyPressed(VK_F11))
+		SceneManager::GetInstance()->SetActiveScene("Lose");
+
 	//day night shift
 	time -= dt;
 	calendarTime -= dt;
@@ -503,6 +522,7 @@ void SceneText::Update(double dt)
 			MeshList::GetInstance()->GetMesh("Fatigue")->textureID[0] = LoadTGA("Image//Fatigue//Energetic.tga");
 			break;
 		}
+		calendarTime = 0.0;
 		Player::GetInstance()->SetSlept(false);
 	}
 	if (time <= 0.00 && !isDay)
@@ -607,8 +627,7 @@ void SceneText::Update(double dt)
 	//	std::cout << "Mouse Wheel has offset in Y-axis of " << MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_YOFFSET) << std::endl;
 	//}
 	// <THERE>
-
-	switch (Player::GetInstance()->CurrentWeaponID())
+	switch(Player::GetInstance()->CurrentWeaponID())
 	{
 	case 1:
 		BEW_UI->textureID[0] = LoadTGA("Image//weapon//pistol.tga");
@@ -683,7 +702,7 @@ void SceneText::Update(double dt)
 
 	ss.str("");
 	ss << "Material: " << Player::GetInstance()->GetMaterial();
-	textObj[3]->SetPosition(Vector3(-halfWindowWidth, -halfWindowHeight + fontSize * 2 + halfFontSize, 0.0f));
+	textObj[3]->SetPosition(Vector3(-halfWindowWidth, -halfWindowHeight + fontSize * 1 + halfFontSize, 0.0f));
 	textObj[3]->SetText(ss.str());
 
 	ss.str("");
@@ -741,13 +760,12 @@ void SceneText::Update(double dt)
 			}
 		}
 	}
-	textObj[4]->SetPosition(Vector3(-halfWindowWidth, -halfWindowHeight + fontSize * 3 + halfFontSize, 0.0f));
+	textObj[4]->SetPosition(Vector3(-halfWindowWidth, -halfWindowHeight + fontSize * 2 + halfFontSize, 0.0f));
 	textObj[4]->SetText(ss.str());
 
 	Delay += (float)dt;
 	if (Delay > 0.5f)
 		Delay = 0.5f;
-
 	if (KeyboardController::GetInstance()->IsKeyDown('P') && Delay >= ButtonCooldown)
 	{
 		SceneManager::GetInstance()->SetActiveScene("Pause");
@@ -930,7 +948,9 @@ void SceneText::RenderPassMain()
 		ms.Scale((float)Application::GetInstance().GetWindowWidth() * 0.75f, (float)Application::GetInstance().GetWindowHeight() * 0.75f, 0.f);
 		RenderHelper::RenderMesh(Constrain);
 		ms.PopMatrix();
+
 	}
+
 
 	//RenderHelper::RenderTextOnScreen(text, std::to_string(fps), Color(0, 1, 0), 2, 0, 0);
 	glEnable(GL_DEPTH_TEST);
