@@ -17,6 +17,7 @@ EquipmentTurret * Create::Turret(Vector3 pos)
 	Vector3 minV(t->GetPosition().x - t->GetScale().x / 2, 0, t->GetPosition().z - t->GetScale().z / 2);
 	t->SetAABB(maxV, minV);
 	t->SetHealth(100);
+	t->SetLevel(1);
 	t->SetDirection(Vector3(1, 0, 0));
 	return t;
 }
@@ -48,6 +49,24 @@ void EquipmentTurret::Update(double dt)
 		break;
 	case SEARCH:
 		search();
+		break;
+	}
+	switch (GetLevel())
+	{
+	case 1:
+		attackSpeed = 1;
+		damage = 20;
+		range = 40;
+		break;
+	case 2:
+		attackSpeed = 3;
+		damage = 40;
+		range = 80;
+		break;
+	case 3:
+		attackSpeed = 5;
+		damage = 60;
+		range = 120;
 		break;
 	}
 }

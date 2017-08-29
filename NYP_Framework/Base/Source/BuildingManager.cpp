@@ -130,9 +130,6 @@ void BuildingManager::AddEquipment(int _x, int _y, EquipmentEntity::EQUIPMENT_TY
 		case EquipmentEntity::EQUIPMENT_HEALING_STATION:
 			e = new EquipmentEntity("Healing Station");
 			break;
-		case EquipmentEntity::EQUIPMENT_SHIELD:
-			e = new EquipmentEntity("Shield");
-			break;
 		case EquipmentEntity::EQUIPMENT_TURRET:
 			EquipmentTurret* t = Create::Turret(Vector3((float)_x * CELL_SIZE + CELL_SIZE / 2.f, 0.2f, (float)_y * CELL_SIZE + CELL_SIZE / 2.f));
 			buildingArray[_x][_y]->AddEquipment(t);
@@ -141,6 +138,8 @@ void BuildingManager::AddEquipment(int _x, int _y, EquipmentEntity::EQUIPMENT_TY
 		}
 		e->type = _type;
 		e->objectType = GenericEntity::EQUIPMENT;
+		e->SetGrid(_x, _y);
+		e->SetLevel(1);
 		e->SetScale(Vector3(CELL_SIZE, 1.f, CELL_SIZE));
 		e->SetPosition(Vector3((float)_x * CELL_SIZE + CELL_SIZE / 2.f, 0.2f, (float)_y * CELL_SIZE + CELL_SIZE / 2.f));
 		Vector3 max(e->GetPosition().x + e->GetScale().x / 2, 1, e->GetPosition().z + e->GetScale().z / 2);

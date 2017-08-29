@@ -127,15 +127,23 @@ void EnemyBuck::CollisionResponse(GenericEntity * thatEntity)
 			case EquipmentEntity::EQUIPMENT_FLOOR_SPIKE:
 				if (equipment->spikeTimer >= equipment->spikeCoolDown)
 				{
-					health = Math::Max(0, health - 10);
+					switch (equipment->GetLevel())
+					{
+					case 1:
+						health = Math::Max(0, health - 10);
+						break;
+					case 2:
+						health = Math::Max(0, health - 20);
+						break;
+					case 3:
+						health = Math::Max(0, health - 30);
+						break;
+					}
 					speed = 2.f;
 					equipment->spikeTimer = 0.f;
 				}
 				if (health == 0)
 					SetIsDone(true);
-				break;
-			case EquipmentEntity::EQUIPMENT_SHIELD:
-				std::cout << "collided with shield" << std::endl;
 				break;
 			}
 		}
