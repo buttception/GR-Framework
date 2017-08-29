@@ -1,4 +1,5 @@
 #include "BuildingManager.h"
+#include "PlayerInfo/PlayerInfo.h"
 
 #include "Turret.h"
 
@@ -12,9 +13,9 @@ BuildingManager::BuildingManager()
 	for (size_t i = 0; i < MAX_CELLS; ++i) {
 		for (size_t j = 0; j < MAX_CELLS; ++j) {
 			buildingArray[i][j] = new BuildingTile();
-			Vector3 max(((float)i + 1.f) * CELL_SIZE, 1, ((float)j + 1.f) * CELL_SIZE);
-			Vector3 min((float)i * CELL_SIZE, - 1.f, (float)j * CELL_SIZE);
-			buildingArray[i][j]->hitbox.SetAABB(max, min);
+			Vector3 maxV(((float)i + 1.f) * CELL_SIZE, 1, ((float)j + 1.f) * CELL_SIZE);
+			Vector3 minV((float)i * CELL_SIZE, - 1.f, (float)j * CELL_SIZE);
+			buildingArray[i][j]->hitbox.SetAABB(maxV, minV);
 		}
 	}
 }
@@ -62,9 +63,9 @@ BuildingEntity* BuildingManager::AddBuilding(int _x, int _y, BuildingTile::TILE_
 			else
 				wall->SetScale(Vector3(2, 10, CELL_SIZE));
 			wall->SetPosition(Vector3((float)_x * CELL_SIZE, 0.f, (float)_y * CELL_SIZE + CELL_SIZE / 2.f));
-			Vector3 max(wall->GetPosition().x + wall->GetScale().x / 2, 1, wall->GetPosition().z + wall->GetScale().z / 2);
-			Vector3 min(wall->GetPosition().x - wall->GetScale().x / 2, 0, wall->GetPosition().z - wall->GetScale().z / 2);
-			wall->SetAABB(max, min);
+			Vector3 maxV(wall->GetPosition().x + wall->GetScale().x / 2, 1, wall->GetPosition().z + wall->GetScale().z / 2);
+			Vector3 minV(wall->GetPosition().x - wall->GetScale().x / 2, 0, wall->GetPosition().z - wall->GetScale().z / 2);
+			wall->SetAABB(maxV, minV);
 			buildingArray[_x][_y]->AddWall(wall, BuildingTile::LEFT);
 		}
 		else if (direction == BuildingTile::TOP) {
@@ -73,9 +74,9 @@ BuildingEntity* BuildingManager::AddBuilding(int _x, int _y, BuildingTile::TILE_
 			else
 				wall->SetScale(Vector3(CELL_SIZE, 10, 2));
 			wall->SetPosition(Vector3((float)_x * CELL_SIZE + CELL_SIZE / 2.f, 0.f, (float)_y * CELL_SIZE));
-			Vector3 max(wall->GetPosition().x + wall->GetScale().x / 2, 1, wall->GetPosition().z + wall->GetScale().z / 2);
-			Vector3 min(wall->GetPosition().x - wall->GetScale().x / 2, 0, wall->GetPosition().z - wall->GetScale().z / 2);
-			wall->SetAABB(max, min);
+			Vector3 maxV(wall->GetPosition().x + wall->GetScale().x / 2, 1, wall->GetPosition().z + wall->GetScale().z / 2);
+			Vector3 minV(wall->GetPosition().x - wall->GetScale().x / 2, 0, wall->GetPosition().z - wall->GetScale().z / 2);
+			wall->SetAABB(maxV, minV);
 			buildingArray[_x][_y]->AddWall(wall, BuildingTile::TOP);
 		}
 		else if (direction == BuildingTile::RIGHT) {
@@ -90,9 +91,9 @@ BuildingEntity* BuildingManager::AddBuilding(int _x, int _y, BuildingTile::TILE_
 			}
 			else {
 				wall->SetPosition(Vector3(MAX_CELLS * CELL_SIZE, 0.f, (float)_y * CELL_SIZE + CELL_SIZE / 2.f));
-				Vector3 max(wall->GetPosition().x + wall->GetScale().x / 2, 1, wall->GetPosition().z + wall->GetScale().z / 2);
-				Vector3 min(wall->GetPosition().x - wall->GetScale().x / 2, 0, wall->GetPosition().z - wall->GetScale().z / 2);
-				wall->SetAABB(max, min);
+				Vector3 maxV(wall->GetPosition().x + wall->GetScale().x / 2, 1, wall->GetPosition().z + wall->GetScale().z / 2);
+				Vector3 minV(wall->GetPosition().x - wall->GetScale().x / 2, 0, wall->GetPosition().z - wall->GetScale().z / 2);
+				wall->SetAABB(maxV, minV);
 				buildingArray[_x][_y]->AddWall(wall, BuildingTile::RIGHT);
 			}
 		}
@@ -108,9 +109,9 @@ BuildingEntity* BuildingManager::AddBuilding(int _x, int _y, BuildingTile::TILE_
 			}
 			else {
 				wall->SetPosition(Vector3((float)_x * CELL_SIZE + CELL_SIZE / 2.f, 0.f, MAX_CELLS * CELL_SIZE));
-				Vector3 max(wall->GetPosition().x + wall->GetScale().x / 2, 1, wall->GetPosition().z + wall->GetScale().z / 2);
-				Vector3 min(wall->GetPosition().x - wall->GetScale().x / 2, 0, wall->GetPosition().z - wall->GetScale().z / 2);
-				wall->SetAABB(max, min);
+				Vector3 maxV(wall->GetPosition().x + wall->GetScale().x / 2, 1, wall->GetPosition().z + wall->GetScale().z / 2);
+				Vector3 minV(wall->GetPosition().x - wall->GetScale().x / 2, 0, wall->GetPosition().z - wall->GetScale().z / 2);
+				wall->SetAABB(maxV, minV);
 				buildingArray[_x][_y]->AddWall(wall, BuildingTile::BOTTOM);
 			}
 		}
@@ -133,9 +134,9 @@ BuildingEntity* BuildingManager::AddBuilding(int _x, int _y, BuildingTile::TILE_
 		wall->SetPosition(Vector3((float)_x * CELL_SIZE + CELL_SIZE / 2.f, 0.1f, (float)_y * CELL_SIZE + CELL_SIZE / 2.f));
 		buildingArray[_x][_y]->AddCore(wall);
 
-		Vector3 max(wall->GetPosition().x + wall->GetScale().x / 2, 1, wall->GetPosition().z + wall->GetScale().z / 2);
-		Vector3 min(wall->GetPosition().x - wall->GetScale().x / 2, 0, wall->GetPosition().z - wall->GetScale().z / 2);
-		wall->SetAABB(max, min);
+		Vector3 maxV(wall->GetPosition().x + wall->GetScale().x / 2, 1, wall->GetPosition().z + wall->GetScale().z / 2);
+		Vector3 minV(wall->GetPosition().x - wall->GetScale().x / 2, 0, wall->GetPosition().z - wall->GetScale().z / 2);
+		wall->SetAABB(maxV, minV);
 	}
 	return wall;
 }
@@ -146,27 +147,43 @@ void BuildingManager::AddEquipment(int _x, int _y, EquipmentEntity::EQUIPMENT_TY
 		EquipmentEntity* e;
 		switch (_type) {
 		case EquipmentEntity::EQUIPMENT_FLOOR_SPIKE:
-			e = new EquipmentEntity("Floor Spike");
+			if (Player::GetInstance()->spikesUnlock)
+				e = new EquipmentEntity("Floor Spike");
+			else
+				e = nullptr;
 			break;
 		case EquipmentEntity::EQUIPMENT_HEALING_STATION:
-			e = new EquipmentEntity("Healing Station");
+			if (Player::GetInstance()->healUnlock)
+				e = new EquipmentEntity("Healing Station");
+			else
+				e = nullptr;
 			break;
 		case EquipmentEntity::EQUIPMENT_TURRET:
-			EquipmentTurret* t = Create::Turret(Vector3((float)_x * CELL_SIZE + CELL_SIZE / 2.f, 0.2f, (float)_y * CELL_SIZE + CELL_SIZE / 2.f));
-			buildingArray[_x][_y]->AddEquipment(t);
+			if (Player::GetInstance()->turretUnlock)
+			{
+				EquipmentTurret* t = Create::Turret(Vector3((float)_x * CELL_SIZE + CELL_SIZE / 2.f, 0.2f, (float)_y * CELL_SIZE + CELL_SIZE / 2.f));
+				buildingArray[_x][_y]->AddEquipment(t);
+			}
+			else
+				e = nullptr;
 			return;
 			break;
 		}
-		e->type = _type;
-		e->objectType = GenericEntity::EQUIPMENT;
-		e->SetGrid(_x, _y);
-		e->SetLevel(1);
-		e->SetScale(Vector3(CELL_SIZE, 1.f, CELL_SIZE));
-		e->SetPosition(Vector3((float)_x * CELL_SIZE + CELL_SIZE / 2.f, 0.2f, (float)_y * CELL_SIZE + CELL_SIZE / 2.f));
-		Vector3 max(e->GetPosition().x + e->GetScale().x / 2, 1, e->GetPosition().z + e->GetScale().z / 2);
-		Vector3 min(e->GetPosition().x - e->GetScale().x / 2, 0, e->GetPosition().z - e->GetScale().z / 2);
-		e->SetAABB(max, min);
-		buildingArray[_x][_y]->AddEquipment(e);
+		if (e != nullptr)
+		{
+			e->type = _type;
+			e->objectType = GenericEntity::EQUIPMENT;
+			e->SetGrid(_x, _y);
+			e->SetLevel(1);
+			e->SetScale(Vector3(CELL_SIZE, 1.f, CELL_SIZE));
+			e->SetPosition(Vector3((float)_x * CELL_SIZE + CELL_SIZE / 2.f, 0.2f, (float)_y * CELL_SIZE + CELL_SIZE / 2.f));
+			Vector3 maxV(e->GetPosition().x + e->GetScale().x / 2, 1, e->GetPosition().z + e->GetScale().z / 2);
+			Vector3 minV(e->GetPosition().x - e->GetScale().x / 2, 0, e->GetPosition().z - e->GetScale().z / 2);
+			e->SetAABB(maxV, minV);
+			buildingArray[_x][_y]->AddEquipment(e);
+		}
+		else
+			std::cout << "Equipment locked." << std::endl;
 	}
 	else
 		std::cout << "No floor to place equipment on\n";
@@ -182,9 +199,9 @@ void BuildingManager::Clear()
 	for (size_t i = 0; i < MAX_CELLS; ++i) {
 		for (size_t j = 0; j < MAX_CELLS; ++j) {
 			buildingArray[i][j] = new BuildingTile();
-			Vector3 max(((float)i + 1.f) * CELL_SIZE, 1, ((float)j + 1.f) * CELL_SIZE);
-			Vector3 min((float)i * CELL_SIZE, -1.f, (float)j * CELL_SIZE);
-			buildingArray[i][j]->hitbox.SetAABB(max, min);
+			Vector3 maxV(((float)i + 1.f) * CELL_SIZE, 1, ((float)j + 1.f) * CELL_SIZE);
+			Vector3 minV((float)i * CELL_SIZE, -1.f, (float)j * CELL_SIZE);
+			buildingArray[i][j]->hitbox.SetAABB(maxV, minV);
 		}
 	}
 }

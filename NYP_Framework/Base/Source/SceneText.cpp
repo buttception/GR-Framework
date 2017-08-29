@@ -287,6 +287,9 @@ void SceneText::Init()
 	Shop = MeshBuilder::GetInstance()->GenerateQuad("Shop", Color(1, 1, 1), 1.0f);
 	Shop->textureID[0] = LoadTGA("Image//towertab.tga");
 
+	Shop2 = MeshBuilder::GetInstance()->GenerateQuad("Shop2", Color(1, 1, 1), 1.0f);
+	Shop2->textureID[0] = LoadTGA("Image//defensetab.tga");
+
 	core = Player::GetInstance()->core;
 
 	Constrain = MeshBuilder::GetInstance()->GenerateQuad("Constrain", Color(1, 1, 1), 1.0f);
@@ -933,13 +936,22 @@ void SceneText::RenderPassMain()
 	RenderHelper::RenderMesh(MeshList::GetInstance()->GetMesh("Fatigue"));
 	ms.PopMatrix();
 
-	if (Render_Quad)
+	if (Render_Quad && Player::GetInstance()->tab == 1)
 	{
 		ms.PushMatrix();
 		//ms.Translate((float)-halfWindowWidth, (float)halfWindowHeight * 0.92f, 0.f);
 		ms.Translate(0.f, 0.f, 0.f);
 		ms.Scale((float)Application::GetInstance().GetWindowWidth() * 0.75f, (float)Application::GetInstance().GetWindowHeight() * 0.75f, 0.f);
 		RenderHelper::RenderMesh(Shop);
+		ms.PopMatrix();
+	}
+	else if (Render_Quad && Player::GetInstance()->tab == 2)
+	{
+		ms.PushMatrix();
+		//ms.Translate((float)-halfWindowWidth, (float)halfWindowHeight * 0.92f, 0.f);
+		ms.Translate(0.f, 0.f, 0.f);
+		ms.Scale((float)Application::GetInstance().GetWindowWidth() * 0.75f, (float)Application::GetInstance().GetWindowHeight() * 0.75f, 0.f);
+		RenderHelper::RenderMesh(Shop2);
 		ms.PopMatrix();
 	}
 

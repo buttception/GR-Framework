@@ -36,3 +36,6 @@
 # Etc
 *.tlog
 *.log
+*.ipch
+*.db-shm
+*.db-wal

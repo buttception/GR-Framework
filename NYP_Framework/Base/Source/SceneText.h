@@ -63,6 +63,7 @@ private:
 	Mesh* playerHealthBar;
 	Mesh* wireFrameBox;
 	Mesh* Shop;
+	Mesh* Shop2;
 	Mesh* BEW_UI; //Building,Equipment,Weapon UI
 	Mesh* redquad;
 	Mesh* Constrain;

@@ -107,6 +107,12 @@ public:
 	}fatigue;
 
 	float size;
+	int tab;
+	bool unlockWeapon[5];
+	bool healUnlock;
+	bool spikesUnlock;
+	bool turretUnlock;
+
 	std::vector<InteractionEntity*>interactionList;
 private:
 	Vector3 defaultPosition;

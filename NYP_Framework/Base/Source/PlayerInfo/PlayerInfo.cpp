@@ -34,7 +34,7 @@ Player::Player(void)
 	, size(5)
 	, maxPlayerHealth(100)
 	, playerHealth(100)
-	, material(3000)
+	, material(30000)
 	, currentBuilding(BuildingEntity::BUILDING_WALL)
 	, isBuilding(true)
 	, isEquipment(false)
@@ -46,6 +46,10 @@ Player::Player(void)
 	, m_iCurrentWeapon(1)
 	, fatigue(FATIGUE::NORMAL)
 	, slept(false)
+	, tab(1)
+	, turretUnlock(false)
+	, healUnlock(false)
+	, spikesUnlock(false)
 {
 	//EntityManager::GetInstance()->AddEntity(this);
 	//objectType = GenericEntity::PLAYER;
@@ -118,8 +122,46 @@ void Player::Init(void)
 	interactionList.push_back(new InteractionEntity(-0.53f, -0.44, 0.12f, 0.07f));
 	interactionList.push_back(new InteractionEntity(0.15, 0.25f, 0.12f, 0.07f));
 	interactionList.push_back(new InteractionEntity(0.15, 0.05, 0.12f, 0.07f));
-	interactionList.push_back(new InteractionEntity(0.15f, -0.21, 0.12f, 0.07f));
-	interactionList.push_back(new InteractionEntity(0.15f, -0.44, 0.12f, 0.07f));
+	interactionList.push_back(new InteractionEntity(-0.64f, 0.60f, 0.10f, 0.12f));
+	interactionList.push_back(new InteractionEntity(-0.42f, 0.60, 0.10f, 0.12f));
+
+	interactionList.push_back(new InteractionEntity(-0.32f, 0.24, 0.04f, 0.05f));
+	interactionList.push_back(new InteractionEntity(-0.32f, 0.03, 0.04f, 0.05f));
+	interactionList.push_back(new InteractionEntity(-0.32f, -0.2, 0.04f, 0.05f));
+	interactionList.push_back(new InteractionEntity(-0.32f, -0.45, 0.04f, 0.05f));
+
+	interactionList.push_back(new InteractionEntity(-0.19f, 0.24, 0.04f, 0.05f));
+	interactionList.push_back(new InteractionEntity(-0.19f, 0.03, 0.04f, 0.05f));
+	interactionList.push_back(new InteractionEntity(-0.19f, -0.2, 0.04f, 0.05f));
+	interactionList.push_back(new InteractionEntity(-0.19f, -0.45, 0.04f, 0.05f));
+
+	interactionList.push_back(new InteractionEntity(0.43f, 0.24, 0.04f, 0.05f));
+	interactionList.push_back(new InteractionEntity(0.43f, 0.03, 0.04f, 0.05f));
+
+	interactionList.push_back(new InteractionEntity(0.55f, 0.24, 0.04f, 0.05f));
+	interactionList.push_back(new InteractionEntity(0.55f, 0.03, 0.04f, 0.05f));
+
+	interactionList.push_back(new InteractionEntity(-0.20f, 0.18, 0.04f, 0.05f));
+	interactionList.push_back(new InteractionEntity(-0.20f, -0.17, 0.04f, 0.05f));
+	interactionList.push_back(new InteractionEntity(-0.20f, -0.55, 0.04f, 0.05f));
+
+
+	//ms.PushMatrix();
+	//ms.Translate((float)halfWindowWidth * -0.64f, (float)halfWindowHeight * 0.60, 0);
+	//ms.Scale((float)Application::GetInstance().GetWindowWidth() * 0.10f, (float)Application::GetInstance().GetWindowHeight() * 0.12f, 0.f);
+	//RenderHelper::RenderMesh(redquad);
+	//ms.PopMatrix();
+
+	//ms.PushMatrix();
+	//ms.Translate((float)halfWindowWidth * -0.42f, (float)halfWindowHeight * 0.60, 0);
+	//ms.Scale((float)Application::GetInstance().GetWindowWidth() * 0.10f, (float)Application::GetInstance().GetWindowHeight() * 0.12f, 0.f);
+	//RenderHelper::RenderMesh(redquad);
+	//ms.PopMatrix();
+
+	for (int i = 0; i < sizeof(unlockWeapon); i++)
+	{
+		unlockWeapon[i] = false;
+	}
 }
 
 // Set the boundary for the player info
@@ -577,38 +619,166 @@ bool Player::LeftClick(float dt)
 						//based on what is i
 						//based on the push order, u need to noe what button they clicked
 						std::cout << "true\n";
-						if (i == 0)
+						 if (i == 6)
 						{
-							changeSecondaryWeapon(1);
-						}
-						else if (i == 1)
-						{
-							changeSecondaryWeapon(2);
-						}
-						else if (i == 2)
-						{
-							changeSecondaryWeapon(3);
-						}
-						else if (i == 3)
-						{
-							changeSecondaryWeapon(4);
-						}
-						else if (i == 4)
-						{
-							changeSecondaryWeapon(5);
-						}
-						else if (i == 5)
-						{
-							changeSecondaryWeapon(6);
-						}
-						else if (i == 6)
-						{
-							changeSecondaryWeapon(7);
+							tab = 1;
 						}
 						else if (i == 7)
 						{
-							changeSecondaryWeapon(8);
+							tab = 2;
 						}
+
+						 if (tab == 1)
+						 {
+							 if (i == 0 && unlockWeapon[0])
+							 {
+								 changeSecondaryWeapon(1);
+							 }
+							 else if (i == 1 && unlockWeapon[1])
+							 {
+								 changeSecondaryWeapon(2);
+							 }
+							 else if (i == 2 && unlockWeapon[2])
+							 {
+								 changeSecondaryWeapon(3);
+							 }
+							 else if (i == 3 && unlockWeapon[3])
+							 {
+								 changeSecondaryWeapon(4);
+							 }
+							 else if (i == 4 && unlockWeapon[4])
+							 {
+								 changeSecondaryWeapon(5);
+							 }
+							 else if (i == 5 && unlockWeapon[5])
+							 {
+								 changeSecondaryWeapon(6);
+							 }
+
+							 else if (i == 8 && !unlockWeapon[0])
+							 {
+								 if (material >= 200)
+								 {
+									 unlockWeapon[0] = true;
+									 material -= 200;
+								 }
+							 }
+							 else if (i == 9 && !unlockWeapon[1])
+							 {
+								 if (material >= 400)
+								 {
+									 unlockWeapon[1] = true;
+									 material -= 400;
+								 }
+							 }
+							 else if (i == 10 && !unlockWeapon[2])
+							 {
+								 if (material >= 800)
+								 {
+									 unlockWeapon[2] = true;
+									 material -= 800;
+								 }
+							 }
+							 else if (i == 11 && !unlockWeapon[3])
+							 {
+								 if (material >= 1200)
+								 {
+									 unlockWeapon[3] = true;
+									 material -= 1200;
+								 }
+							 }
+							 else if (i == 12)
+							 {
+								 if (material >= 30)
+								 {
+									 weaponList[1]->totalRounds += 100;
+									 material -= 30;
+								 }
+							 }
+							 else if (i == 13)
+							 {
+								 if (material >= 60)
+								 {
+									 weaponList[2]->totalRounds += 100;
+									 material -= 60;
+								 }
+							 }
+							 else if (i == 14)
+							 {
+								 if (material >= 60)
+								 {
+									 weaponList[3]->totalRounds += 100;
+									 material -= 60;
+								 }
+							 }
+							 else if (i == 15)
+							 {
+								 if (material >= 100)
+								 {
+									 weaponList[4]->totalRounds += 100;
+									 material -= 100;
+								 }
+							 }
+							 else if (i == 16 && !unlockWeapon[5])
+							 {
+								 if (material >= 1500)
+								 {
+									 unlockWeapon[5] = true;
+									 material -= 1500;
+								 }
+							 }
+							 else if (i == 17 && !unlockWeapon[6])
+							 {
+								 if (material >= 1800)
+								 {
+									 unlockWeapon[6] = true;
+									 material -= 1800;
+								 }
+							 }
+							 else if (i == 18)
+							 {
+								 if (material >= 120)
+								 {
+									 weaponList[5]->totalRounds += 100;
+									 material -= 120;
+								 }
+							 }
+							 else if (i == 19)
+							 {
+								 if (material >= 120)
+								 {
+									 weaponList[6]->totalRounds += 100;
+									 material -= 120;
+								 }
+							 }
+						 }
+						 else if (tab == 2)
+						 {
+							 if (i == 20)
+							 {
+								 if (material >= 500)
+								 {
+									 healUnlock = true;
+									 material -= 500;
+								 }
+							 }
+							 if (i == 21)
+							 {
+								 if (material >= 800)
+								 {
+									 spikesUnlock = true;
+									 material -= 800;
+								 }
+							 }
+							 if (i == 22)
+							 {
+								 if (material >= 1000)
+								 {
+									 turretUnlock = true;
+									 material -= 1000;
+								 }
+							 }
+						 }
 					}
 					else
 					{
