@@ -902,7 +902,29 @@ void SceneText::RenderPassMain()
 	RenderHelper::RenderMesh(MeshList::GetInstance()->GetMesh("sunMoon"));
 	ms.PopMatrix();
 
-	if (Render_Quad == true)
+
+	//ms.PushMatrix();
+	//ms.Translate((float)halfWindowWidth * -0.64f, (float)halfWindowHeight * 0.6, 0);
+	//ms.Translate(0.f, 0.f, 0.f);
+	//ms.Scale((float)Application::GetInstance().GetWindowWidth() * 0.1f, (float)Application::GetInstance().GetWindowHeight() * 0.12f, 0.f);
+	//RenderHelper::RenderMesh(redquad);
+	//ms.PopMatrix(); 
+
+	//ms.PushMatrix();
+	//ms.Translate((float)halfWindowWidth * -0.42f, (float)halfWindowHeight * 0.6, 0);
+	//ms.Translate(0.f, 0.f, 0.f);
+	//ms.Scale((float)Application::GetInstance().GetWindowWidth() * 0.1f, (float)Application::GetInstance().GetWindowHeight() * 0.12f, 0.f);
+	//RenderHelper::RenderMesh(redquad);
+	//ms.PopMatrix();
+
+	//ms.PushMatrix();
+	//ms.Translate((float)halfWindowWidth * -0.20f, (float)halfWindowHeight * 0.6, 0);
+	//ms.Translate(0.f, 0.f, 0.f);
+	//ms.Scale((float)Application::GetInstance().GetWindowWidth() * 0.1f, (float)Application::GetInstance().GetWindowHeight() * 0.12f, 0.f);
+	//RenderHelper::RenderMesh(redquad);
+	//ms.PopMatrix();
+
+	if (Render_Quad == true && Player::GetInstance()->tab == 1)
 	{
 		ms.PushMatrix();
 		//ms.Translate((float)-halfWindowWidth, (float)halfWindowHeight * 0.92f, 0.f);

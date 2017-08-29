@@ -11,6 +11,7 @@
 #include "GenericEntity.h"
 #include "BuildingManager.h"
 #include "SpriteEntity.h"
+#include "PlayerInfo/PlayerInfo.h"
 
 class ShaderProgram;
 class SceneManager;

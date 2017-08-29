@@ -45,6 +45,7 @@ Player::Player(void)
 	, m_iCurrentWeapon(1)
 	, fatigue(FATIGUE::NORMAL)
 	, slept(false)
+	, tab(1)
 {
 	//EntityManager::GetInstance()->AddEntity(this);
 	//objectType = GenericEntity::PLAYER;
@@ -569,42 +570,45 @@ bool Player::LeftClick(float dt)
 						//based on what is i
 						//based on the push order, u need to noe what button they clicked
 						std::cout << "true\n";
-						if (i == 0)
+						if (tab == 1)
 						{
-							changeSecondaryWeapon(1);
+							if (i == 0)
+							{
+								changeSecondaryWeapon(1);
+							}
+							else if (i == 1)
+							{
+								changeSecondaryWeapon(2);
+							}
+							else if (i == 2)
+							{
+								changeSecondaryWeapon(3);
+							}
+							else if (i == 3)
+							{
+								changeSecondaryWeapon(4);
+							}
+							else if (i == 4)
+							{
+								changeSecondaryWeapon(5);
+							}
+							else if (i == 5)
+							{
+								changeSecondaryWeapon(6);
+							}
+							else if (i == 6)
+							{
+								changeSecondaryWeapon(7);
+							}
+							else if (i == 7)
+							{
+								changeSecondaryWeapon(8);
+							}
 						}
-						else if (i == 1)
+						else
 						{
-							changeSecondaryWeapon(2);
+							std::cout << "yee\n";
 						}
-						else if (i == 2)
-						{
-							changeSecondaryWeapon(3);
-						}
-						else if (i == 3)
-						{
-							changeSecondaryWeapon(4);
-						}
-						else if (i == 4)
-						{
-							changeSecondaryWeapon(5);
-						}
-						else if (i == 5)
-						{
-							changeSecondaryWeapon(6);
-						}
-						else if (i == 6)
-						{
-							changeSecondaryWeapon(7);
-						}
-						else if (i == 7)
-						{
-							changeSecondaryWeapon(8);
-						}
-					}
-					else
-					{
-						std::cout << "yee\n";
 					}
 				}
 			}
