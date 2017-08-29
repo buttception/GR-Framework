@@ -642,32 +642,26 @@ bool Player::LeftClick(float dt)
 							 if (i == 0 && unlockWeapon[0])
 							 {
 								 changeSecondaryWeapon(1);
-								 ParticleManager::GetInstance()->GenerateUnlockFeedback();
 							 }
 							 else if (i == 1 && unlockWeapon[1])
 							 {
 								 changeSecondaryWeapon(2);
-								 ParticleManager::GetInstance()->GenerateUnlockFeedback();
 							 }
 							 else if (i == 2 && unlockWeapon[2])
 							 {
 								 changeSecondaryWeapon(3);
-								 ParticleManager::GetInstance()->GenerateUnlockFeedback();
 							 }
 							 else if (i == 3 && unlockWeapon[3])
 							 {
 								 changeSecondaryWeapon(4);
-								 ParticleManager::GetInstance()->GenerateUnlockFeedback();
 							 }
 							 else if (i == 4 && unlockWeapon[4])
 							 {
 								 changeSecondaryWeapon(5);
-								 ParticleManager::GetInstance()->GenerateUnlockFeedback();
 							 }
 							 else if (i == 5 && unlockWeapon[5])
 							 {
 								 changeSecondaryWeapon(6);
-								 ParticleManager::GetInstance()->GenerateUnlockFeedback();
 							 }
 
 							 else if (i == 8 && !unlockWeapon[0])
@@ -742,22 +736,22 @@ bool Player::LeftClick(float dt)
 									 ParticleManager::GetInstance()->GenerateAmmoFeedback();
 								 }
 							 }
-							 else if (i == 16 && !unlockWeapon[5])
+							 else if (i == 16 && !unlockWeapon[4])
 							 {
 								 if (material >= 1500)
 								 {
-									 unlockWeapon[5] = true;
+									 unlockWeapon[4] = true;
 									 material -= 1500;
-									 ParticleManager::GetInstance()->GenerateAmmoFeedback();
+									 ParticleManager::GetInstance()->GenerateUnlockFeedback();
 								 }
 							 }
-							 else if (i == 17 && !unlockWeapon[6])
+							 else if (i == 17 && !unlockWeapon[5])
 							 {
 								 if (material >= 1800)
 								 {
-									 unlockWeapon[6] = true;
+									 unlockWeapon[5] = true;
 									 material -= 1800;
-									 ParticleManager::GetInstance()->GenerateAmmoFeedback();
+									 ParticleManager::GetInstance()->GenerateUnlockFeedback();
 								 }
 							 }
 							 else if (i == 18)
@@ -783,7 +777,7 @@ bool Player::LeftClick(float dt)
 						 {
 							 if (i == 20)
 							 {
-								 if (material >= 500)
+								 if (material >= 500 && !healUnlock)
 								 {
 									 healUnlock = true;
 									 material -= 500;
@@ -792,7 +786,7 @@ bool Player::LeftClick(float dt)
 							 }
 							 if (i == 21)
 							 {
-								 if (material >= 800)
+								 if (material >= 800 && !spikesUnlock)
 								 {
 									 spikesUnlock = true;
 									 material -= 800;
@@ -801,7 +795,7 @@ bool Player::LeftClick(float dt)
 							 }
 							 if (i == 22)
 							 {
-								 if (material >= 1000)
+								 if (material >= 1000 && !turretUnlock)
 								 {
 									 turretUnlock = true;
 									 material -= 1000;
