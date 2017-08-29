@@ -9,9 +9,17 @@ public:
 	ParticleEntity();
 	virtual ~ParticleEntity();
 
+	enum RENDER_MODE {
+		MODE_2D,
+		MODE_3D
+	}mode;
+
 	enum PARTICLE_TYPE {
 		BLOOD,
-		EXPLOSION
+		EXPLOSION,
+		FEEDBACK_AMMO,
+		FEEDBACK_UNLOCK,
+		FEEDBACK_TOWER
 	}particleType;
 
 	void Update(double dt);

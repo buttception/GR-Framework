@@ -183,6 +183,11 @@ void SceneText::Init()
 	MeshList::GetInstance()->GetMesh("sunMoon")->textureID[0] = LoadTGA("Image//sunMoon.tga");
 	MeshBuilder::GetInstance()->GenerateQuad("calendar", Color(1, 1, 1), 1.f);
 	MeshList::GetInstance()->GetMesh("calendar")->textureID[0] = LoadTGA("Image//wood.tga");
+
+	MeshBuilder::GetInstance()->GenerateQuad("ammoFeedback", Color(1, 1, 1), 1.f);
+	MeshList::GetInstance()->GetMesh("ammoFeedback")->textureID[0] = LoadTGA("Image//ammo.tga");
+	MeshBuilder::GetInstance()->GenerateQuad("unlockFeedback", Color(1, 1, 1), 1.f);
+	MeshList::GetInstance()->GetMesh("unlockFeedback")->textureID[0] = LoadTGA("Image//unlock.tga");
 	//Shop
 	/*MeshBuilder::GetInstance()->GenerateQuad("Shop", Color(1, 1, 1), 1.f);
 	MeshList::GetInstance()->GetMesh("Shop")->textureID[0] = LoadTGA("Image//towertab.tga");*/
@@ -990,6 +995,7 @@ void SceneText::RenderPassMain()
 	GraphicsManager::GetInstance()->DetachCamera();
 
 	glDisable(GL_DEPTH_TEST);
+	glEnable(GL_ALPHA_TEST);
 
 	ms.PushMatrix();
 	ms.Translate(0.f, (float)halfWindowHeight * 0.775f, 0.f);
@@ -1071,8 +1077,11 @@ void SceneText::RenderPassMain()
 		ms.PopMatrix();
 	}
 
+	EntityManager::GetInstance()->RenderUI();
+
 	//RenderHelper::RenderTextOnScreen(text, std::to_string(fps), Color(0, 1, 0), 2, 0, 0);
 	glEnable(GL_DEPTH_TEST);
+	glDisable(GL_ALPHA_TEST);
 }
 
 void SceneText::RenderWorld()

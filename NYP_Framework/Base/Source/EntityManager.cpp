@@ -63,6 +63,7 @@ void EntityManager::RenderUI()
 	{
 		(*it)->RenderUI();
 	}
+	ParticleManager::GetInstance()->RenderUI();
 }
 
 // Add an entity to this EntityManager

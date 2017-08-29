@@ -13,9 +13,13 @@ public:
 
 	void Update(double dt);
 	void Render();
+	void RenderUI();
 	
 	void GenerateBlood(Vector3 _pos);
 	void GenerateExplosion(Vector3 _pos);
+
+	void GenerateAmmoFeedback();
+	void GenerateUnlockFeedback();
 
 	ParticleEntity* AddParticle(ParticleEntity::PARTICLE_TYPE _p, Mesh* _mesh, Vector3 _pos);
 

@@ -642,26 +642,32 @@ bool Player::LeftClick(float dt)
 							 if (i == 0 && unlockWeapon[0])
 							 {
 								 changeSecondaryWeapon(1);
+								 ParticleManager::GetInstance()->GenerateUnlockFeedback();
 							 }
 							 else if (i == 1 && unlockWeapon[1])
 							 {
 								 changeSecondaryWeapon(2);
+								 ParticleManager::GetInstance()->GenerateUnlockFeedback();
 							 }
 							 else if (i == 2 && unlockWeapon[2])
 							 {
 								 changeSecondaryWeapon(3);
+								 ParticleManager::GetInstance()->GenerateUnlockFeedback();
 							 }
 							 else if (i == 3 && unlockWeapon[3])
 							 {
 								 changeSecondaryWeapon(4);
+								 ParticleManager::GetInstance()->GenerateUnlockFeedback();
 							 }
 							 else if (i == 4 && unlockWeapon[4])
 							 {
 								 changeSecondaryWeapon(5);
+								 ParticleManager::GetInstance()->GenerateUnlockFeedback();
 							 }
 							 else if (i == 5 && unlockWeapon[5])
 							 {
 								 changeSecondaryWeapon(6);
+								 ParticleManager::GetInstance()->GenerateUnlockFeedback();
 							 }
 
 							 else if (i == 8 && !unlockWeapon[0])
@@ -670,6 +676,7 @@ bool Player::LeftClick(float dt)
 								 {
 									 unlockWeapon[0] = true;
 									 material -= 200;
+									 ParticleManager::GetInstance()->GenerateUnlockFeedback();
 								 }
 							 }
 							 else if (i == 9 && !unlockWeapon[1])
@@ -678,6 +685,7 @@ bool Player::LeftClick(float dt)
 								 {
 									 unlockWeapon[1] = true;
 									 material -= 400;
+									 ParticleManager::GetInstance()->GenerateUnlockFeedback();
 								 }
 							 }
 							 else if (i == 10 && !unlockWeapon[2])
@@ -686,6 +694,7 @@ bool Player::LeftClick(float dt)
 								 {
 									 unlockWeapon[2] = true;
 									 material -= 800;
+									 ParticleManager::GetInstance()->GenerateUnlockFeedback();
 								 }
 							 }
 							 else if (i == 11 && !unlockWeapon[3])
@@ -694,6 +703,7 @@ bool Player::LeftClick(float dt)
 								 {
 									 unlockWeapon[3] = true;
 									 material -= 1200;
+									 ParticleManager::GetInstance()->GenerateUnlockFeedback();
 								 }
 							 }
 							 else if (i == 12)
@@ -702,6 +712,7 @@ bool Player::LeftClick(float dt)
 								 {
 									 weaponList[1]->totalRounds += 100;
 									 material -= 30;
+									 ParticleManager::GetInstance()->GenerateAmmoFeedback();
 								 }
 							 }
 							 else if (i == 13)
@@ -710,6 +721,7 @@ bool Player::LeftClick(float dt)
 								 {
 									 weaponList[2]->totalRounds += 100;
 									 material -= 60;
+									 ParticleManager::GetInstance()->GenerateAmmoFeedback();
 								 }
 							 }
 							 else if (i == 14)
@@ -718,6 +730,7 @@ bool Player::LeftClick(float dt)
 								 {
 									 weaponList[3]->totalRounds += 100;
 									 material -= 60;
+									 ParticleManager::GetInstance()->GenerateAmmoFeedback();
 								 }
 							 }
 							 else if (i == 15)
@@ -726,6 +739,7 @@ bool Player::LeftClick(float dt)
 								 {
 									 weaponList[4]->totalRounds += 100;
 									 material -= 100;
+									 ParticleManager::GetInstance()->GenerateAmmoFeedback();
 								 }
 							 }
 							 else if (i == 16 && !unlockWeapon[5])
@@ -734,6 +748,7 @@ bool Player::LeftClick(float dt)
 								 {
 									 unlockWeapon[5] = true;
 									 material -= 1500;
+									 ParticleManager::GetInstance()->GenerateAmmoFeedback();
 								 }
 							 }
 							 else if (i == 17 && !unlockWeapon[6])
@@ -742,6 +757,7 @@ bool Player::LeftClick(float dt)
 								 {
 									 unlockWeapon[6] = true;
 									 material -= 1800;
+									 ParticleManager::GetInstance()->GenerateAmmoFeedback();
 								 }
 							 }
 							 else if (i == 18)
@@ -750,6 +766,7 @@ bool Player::LeftClick(float dt)
 								 {
 									 weaponList[5]->totalRounds += 100;
 									 material -= 120;
+									 ParticleManager::GetInstance()->GenerateAmmoFeedback();
 								 }
 							 }
 							 else if (i == 19)
@@ -758,6 +775,7 @@ bool Player::LeftClick(float dt)
 								 {
 									 weaponList[6]->totalRounds += 100;
 									 material -= 120;
+									 ParticleManager::GetInstance()->GenerateAmmoFeedback();
 								 }
 							 }
 						 }
@@ -769,6 +787,7 @@ bool Player::LeftClick(float dt)
 								 {
 									 healUnlock = true;
 									 material -= 500;
+									 ParticleManager::GetInstance()->GenerateUnlockFeedback();
 								 }
 							 }
 							 if (i == 21)
@@ -777,6 +796,7 @@ bool Player::LeftClick(float dt)
 								 {
 									 spikesUnlock = true;
 									 material -= 800;
+									 ParticleManager::GetInstance()->GenerateUnlockFeedback();
 								 }
 							 }
 							 if (i == 22)
@@ -785,6 +805,7 @@ bool Player::LeftClick(float dt)
 								 {
 									 turretUnlock = true;
 									 material -= 1000;
+									 ParticleManager::GetInstance()->GenerateUnlockFeedback();
 								 }
 							 }
 						 }

@@ -35,6 +35,22 @@ void ParticleEntity::Update(double dt)
 			if (elaspedTime >= duration)
 				active = false;
 			break;
+		case FEEDBACK_AMMO:
+			position += direction * velocity * dt;
+			if (velocity > 0)
+				velocity -= 1 * dt;
+			elaspedTime += dt;
+			if (elaspedTime >= duration)
+				active = false;
+			break;
+		case FEEDBACK_UNLOCK:
+			position += direction * velocity * dt;
+			if (velocity > 0)
+				velocity -= 1 * dt;
+			elaspedTime += dt;
+			if (elaspedTime >= duration)
+				active = false;
+			break;
 		default:
 			return;
 		}

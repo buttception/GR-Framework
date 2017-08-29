@@ -1,6 +1,7 @@
 #include "ParticleManager.h"
 
 #include "MeshList.h"
+#include "Application.h"
 
 ParticleEntity * ParticleManager::FetchParticle()
 {
@@ -24,7 +25,18 @@ void ParticleManager::Render()
 {
 	for (auto it : particleList) {
 		if (it->GetActive()) {
-			it->Render();
+			if (it->mode == ParticleEntity::MODE_3D)
+				it->Render();
+		}
+	}
+}
+
+void ParticleManager::RenderUI()
+{
+	for (auto it : particleList) {
+		if (it->GetActive()) {
+			if (it->mode == ParticleEntity::MODE_2D)
+				it->Render();
 		}
 	}
 }
@@ -42,6 +54,7 @@ void ParticleManager::GenerateBlood(Vector3 _pos)
 			p->SetDirection(Vector3(dX, 0, dZ).Normalized());
 			p->SetVelocity(Math::RandFloatMinMax(5, 10));
 			p->SetScale(Vector3(scale, scale, scale));
+			p->mode = ParticleEntity::MODE_3D;
 		}
 	}
 }
@@ -59,7 +72,40 @@ void ParticleManager::GenerateExplosion(Vector3 _pos)
 			p->SetDirection(Vector3(dX, 0, dZ).Normalized());
 			p->SetVelocity(Math::RandFloatMinMax(5, 15));
 			p->SetScale(Vector3(scale, scale, scale));
+			p->mode = ParticleEntity::MODE_3D;
 		}
+	}
+}
+
+void ParticleManager::GenerateAmmoFeedback()
+{
+	ParticleEntity* p;
+	if (p = AddParticle(ParticleEntity::FEEDBACK_AMMO, MeshList::GetInstance()->GetMesh("ammoFeedback"), Vector3(0,0,Math::RandFloatMinMax(1, 2)))) {
+		float dX, dZ;
+		float scale;
+		dX = 0;
+		dZ = 1;
+		scale = Application::GetInstance().GetWindowWidth();
+		p->SetDirection(Vector3(dX, dZ, 0).Normalized());
+		p->SetVelocity(Math::RandFloatMinMax(30, 50));
+		p->SetScale(Vector3(scale, scale, scale));
+		p->mode = ParticleEntity::MODE_2D;
+	}
+}
+
+void ParticleManager::GenerateUnlockFeedback()
+{
+	ParticleEntity* p;
+	if (p = AddParticle(ParticleEntity::FEEDBACK_UNLOCK, MeshList::GetInstance()->GetMesh("unlockFeedback"), Vector3(0, 0, Math::RandFloatMinMax(1, 2)))) {
+		float dX, dZ;
+		float scale;
+		dX = 0;
+		dZ = 1;
+		scale = Application::GetInstance().GetWindowWidth();
+		p->SetDirection(Vector3(dX, dZ, 0).Normalized());
+		p->SetVelocity(Math::RandFloatMinMax(30, 50));
+		p->SetScale(Vector3(scale, scale, scale));
+		p->mode = ParticleEntity::MODE_2D;
 	}
 }
 
