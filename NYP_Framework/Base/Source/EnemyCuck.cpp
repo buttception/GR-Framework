@@ -119,7 +119,10 @@ void EnemyCuck::CollisionResponse(GenericEntity * thatEntity)
 			break;
 			switch (equipment->type) {
 			case EquipmentEntity::EQUIPMENT_TURRET:
-				std::cout << "collided with turret" << std::endl;
+				if (!stateStack.empty())
+					if (stateStack.top() != ATTACK_STATE)
+						stateStack.push(ATTACK_STATE);
+				target = thatEntity;
 				break;
 			case EquipmentEntity::EQUIPMENT_FLOOR_SPIKE:
 				if (equipment->spikeTimer >= equipment->spikeCoolDown)
@@ -130,9 +133,6 @@ void EnemyCuck::CollisionResponse(GenericEntity * thatEntity)
 				}
 				if (health == 0)
 					SetIsDone(true);
-				break;
-			case EquipmentEntity::EQUIPMENT_SHIELD:
-				std::cout << "collided with shield" << std::endl;
 				break;
 			}
 		}

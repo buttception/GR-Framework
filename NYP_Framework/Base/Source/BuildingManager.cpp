@@ -154,16 +154,6 @@ void BuildingManager::AddEquipment(int _x, int _y, EquipmentEntity::EQUIPMENT_TY
 
 void BuildingManager::Clear()
 {
-	for (size_t i = 0; i < MAX_CELLS; ++i)
-	{
-		for (size_t j = 0; j < MAX_CELLS; ++j) 
-		{
-			delete[] buildingArray[i][j];
-		}
-	}
-
-	delete []buildingArray;
-
 	// new all the buildingtiles
 	buildingArray = new BuildingTile**[MAX_CELLS];
 	for (size_t i = 0; i < MAX_CELLS; ++i)

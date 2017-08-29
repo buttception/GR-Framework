@@ -11,6 +11,12 @@ EquipmentTurret * Create::Turret(Vector3 pos)
 	EquipmentTurret* t = new EquipmentTurret(pos);
 
 	t->SetScale(Vector3(CELL_SIZE/4, CELL_SIZE/4, CELL_SIZE/4));
+	t->type = EquipmentEntity::EQUIPMENT_TURRET;
+	t->objectType = GenericEntity::EQUIPMENT;
+	Vector3 maxV(t->GetPosition().x + t->GetScale().x / 2, 1, t->GetPosition().z + t->GetScale().z / 2);
+	Vector3 minV(t->GetPosition().x - t->GetScale().x / 2, 0, t->GetPosition().z - t->GetScale().z / 2);
+	t->SetAABB(maxV, minV);
+	t->SetHealth(100);
 	t->SetDirection(Vector3(1, 0, 0));
 	return t;
 }

@@ -159,8 +159,10 @@ void SceneText::Init()
 	//Building Meshes
 	MeshBuilder::GetInstance()->GenerateOBJ("core", "OBJ//cube.obj");
 	MeshBuilder::GetInstance()->GenerateOBJ("wall", "OBJ//cube.obj");
+	MeshList::GetInstance()->GetMesh("wall")->textureID[0] = LoadTGA("image//wall.tga");
 	MeshBuilder::GetInstance()->GenerateOBJ("cover", "OBJ//cube.obj"); //remember to change obj
 	MeshBuilder::GetInstance()->GenerateOBJ("floor", "OBJ//cube.obj"); //remember to change texture
+	MeshList::GetInstance()->GetMesh("floor")->textureID[0] = LoadTGA("Image//wood.tga");
 
 	//Equipment Meshes
 	MeshBuilder::GetInstance()->GenerateOBJ("Turret", "OBJ//turret.obj");
@@ -194,6 +196,7 @@ void SceneText::Init()
 	MeshBuilder::GetInstance()->GenerateOBJ("Buck", "OBJ//cube.obj");
 
 	sun = MeshBuilder::GetInstance()->GenerateSphere("sphere", Color(1, 1, 1), 24, 24, 1);
+	MeshBuilder::GetInstance()->GenerateSphere("blood", Color(1, 0, 0), 24, 24, 1);
 	generatorCoreHealthBar = MeshBuilder::GetInstance()->GenerateQuad("generatorCoreHealthBar", Color(1, 0, 0), 1.f);
 	playerHealthBar = MeshBuilder::GetInstance()->GenerateQuad("playerHealthBar", Color(1, 0.64706f, 0), 1.f);
 	wireFrameBox = MeshBuilder::GetInstance()->GenerateQuad("wireFrameBox", Color(1, 0, 0), 1.f);
@@ -307,6 +310,7 @@ void SceneText::Update(double dt)
 	float halfWindowHeight = Application::GetInstance().GetWindowHeight() / 2.0f;
 	float fontSize = 25.0f;
 	float halfFontSize = fontSize / 2.0f;
+	static float angle = 0;
 
 	if (KeyboardController::GetInstance()->IsKeyDown(VK_OEM_PLUS))
 		dt *= 10.f;
@@ -324,6 +328,7 @@ void SceneText::Update(double dt)
 			CSoundEngine::GetInstance()->StopBackground();
 			CSoundEngine::GetInstance()->PlayBackground("DAY");
 			lights[0]->position.Set(0, MAX_CELLS * CELL_SIZE, 0);
+			angle = 0;
 		}
 	}
 	else {
@@ -370,6 +375,7 @@ void SceneText::Update(double dt)
 	static double r = 1;
 	static double g = 0.6;
 	static double b = 0;
+	angle += speed* dt;
 	static bool change = false;
 	if (isDay) {
 		lights[0]->color.Set(r, g, b);
@@ -385,9 +391,13 @@ void SceneText::Update(double dt)
 				change = true;
 		}
 		else {
-			g -= dt / dayDuration * 2 * 0.4;
-			if (g > 0.7)
-				b -= dt / dayDuration * 16;
+			if (angle > 140) {
+				if (g > 0.6)
+				g -= dt / dayDuration * 16;
+				if (g > 0.7)
+					if (b > 0)
+						b -= dt / dayDuration * 16;
+			}
 		}
 	}
 	else {
@@ -970,7 +980,9 @@ void SceneText::Exit()
 	// Detach camera from other entities
 	GraphicsManager::GetInstance()->DetachCamera();
 
-
+	BuildingManager::GetInstance()->Clear();
+	EnemyManager::GetInstance()->ClearAll();
+	EntityManager::GetInstance()->ClearEntities();
 	// Delete the lights
 	//delete lights[0];
 }

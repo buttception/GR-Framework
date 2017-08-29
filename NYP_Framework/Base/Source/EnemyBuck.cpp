@@ -119,7 +119,10 @@ void EnemyBuck::CollisionResponse(GenericEntity * thatEntity)
 			break;
 			switch (equipment->type) {
 			case EquipmentEntity::EQUIPMENT_TURRET:
-				std::cout << "collided with turret" << std::endl;
+				if (!stateStack.empty())
+					if (stateStack.top() != ATTACK_STATE)
+						stateStack.push(ATTACK_STATE);
+				target = thatEntity;
 				break;
 			case EquipmentEntity::EQUIPMENT_FLOOR_SPIKE:
 				if (equipment->spikeTimer >= equipment->spikeCoolDown)

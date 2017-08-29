@@ -13,6 +13,8 @@ class MeshBuilder : public Singleton<MeshBuilder>
 {
 	friend Singleton<MeshBuilder>;
 public:
+	bool checkMesh(std::string meshName);
+
 	Mesh* GenerateAxes(const std::string &meshName, float lengthX=0.0f, float lengthY=0.0f, float lengthZ=0.0f);
 	Mesh* GenerateCrossHair(const std::string &meshName, float colour_r=1.0f, float colour_g=1.0f, float colour_b=0.0f, float length=1.0f);
 	Mesh* GenerateQuad(const std::string &meshName, Color color, float length = 1.f);

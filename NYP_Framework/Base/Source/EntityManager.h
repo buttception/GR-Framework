@@ -18,6 +18,8 @@ public:
 	void AddEntity(EntityBase* _newEntity);
 	bool RemoveEntity(EntityBase* _existingEntity);
 
+	void ClearEntities();
+
 	std::list<EntityBase*>GetEntityList();
 
 private:

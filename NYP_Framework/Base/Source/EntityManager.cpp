@@ -92,6 +92,14 @@ bool EntityManager::RemoveEntity(EntityBase* _existingEntity)
 	return false;
 }
 
+void EntityManager::ClearEntities()
+{
+	for (auto it : entityList) {
+		delete it;
+	}
+	entityList.clear();
+}
+
 std::list<EntityBase*> EntityManager::GetEntityList()
 {
 	return entityList;

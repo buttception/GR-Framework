@@ -33,12 +33,12 @@ void ParticleManager::GenerateBlood(Vector3 _pos)
 {
 	for (size_t i = 0; i < 10; ++i) {
 		ParticleEntity* p;
-		if (p = AddParticle(ParticleEntity::BLOOD, MeshList::GetInstance()->GetMesh("sphere"), _pos)){
+		if (p = AddParticle(ParticleEntity::BLOOD, MeshList::GetInstance()->GetMesh("blood"), _pos)){
 			float dX, dZ;
 			float scale;
 			dX = Math::RandFloatMinMax(-10, 10);
 			dZ = Math::RandFloatMinMax(-10, 10);
-			scale = Math::RandFloatMinMax(0.2, 1);
+			scale = Math::RandFloatMinMax(0.2, 0.5);
 			p->SetDirection(Vector3(dX, 0, dZ).Normalized());
 			p->SetVelocity(Math::RandFloatMinMax(5, 10));
 			p->SetScale(Vector3(scale, scale, scale));
